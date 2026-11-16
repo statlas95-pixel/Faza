@@ -1,0 +1,53 @@
+# Каталог первичных технических и нормативных документов (поиск «по каталогу платформы»).
+# Сюда попадают только документы, существование и адрес которых проверены редактором.
+# checked — как и когда проверено. Заявления производителей о свойствах сырья — это заявления производителя.
+
+- id: lubrizol-bulletin-5
+  title: "Pharmaceutical Bulletin 5: Neutralization Procedures"
+  org: Lubrizol Advanced Materials
+  year: "ред. уточняйте в документе"
+  type: Документация производителя
+  url: https://www.lubrizol.com/-/media/Lubrizol/Health/Literature/Bulletin-05---Neutralization-Procedures.pdf
+  scope: "Только полимеры Carbopol®/Pemulen® компании Lubrizol: порядок и выбор нейтрализаторов."
+  keywords: карбомер carbomer carbopol нейтрализация neutralization pH гель загуститель полимер
+  checked: "Адрес найден поиском 16.11.2026; файл из среды разработки не открывался."
+
+- id: lubrizol-bulletin-6
+  title: "Pharmaceutical Bulletin 6: Thickening Properties"
+  org: Lubrizol Advanced Materials
+  year: "ред. уточняйте в документе"
+  type: Документация производителя
+  url: https://www.lubrizol.com/-/media/Lubrizol/Health/Literature/Bulletin-06---Thickening-Properties.pdf
+  scope: "Только полимеры Carbopol® компании Lubrizol: зависимость вязкости от концентрации, pH, электролитов."
+  keywords: карбомер carbomer carbopol вязкость viscosity электролиты electrolyte соль загущение thickening реология
+  checked: "Адрес найден поиском 16.11.2026; файл из среды разработки не открывался."
+
+- id: iso-tr-18811
+  title: "ISO/TR 18811:2018 Cosmetics — Guidelines on the stability testing of cosmetic products"
+  org: ISO/TC 217
+  year: "2018"
+  type: Стандарт / руководство
+  url: https://www.iso.org/standard/63465.html
+  scope: "Международный технический отчёт; условий и критериев испытаний не задаёт. Полный текст платный."
+  keywords: стабильность испытания ускоренные хранение центрифуга stability
+  checked: "Карточка на iso.org подтверждена поиском 16.11.2026."
+
+- id: nist-ehandbook
+  title: "NIST/SEMATECH e-Handbook of Statistical Methods"
+  org: National Institute of Standards and Technology (США)
+  year: "2012"
+  type: Официальное руководство
+  url: https://www.itl.nist.gov/div898/handbook/
+  scope: "Открытое руководство по статистическим методам; гл. 5 — планирование эксперимента."
+  keywords: планирование эксперимента DoE факторный план статистика эффекты взаимодействие
+  checked: "Адрес приведён по памяти; из среды разработки не открывался — подтвердите при первом использовании."
+
+- id: trts-009
+  title: "ТР ТС 009/2011 «О безопасности парфюмерно-косметической продукции»"
+  org: Евразийская экономическая комиссия
+  year: "2011, с изменениями"
+  type: Нормативный акт (ЕАЭС)
+  url: https://eec.eaeunion.org/comission/department/deptexreg/tr/bezopParfum.php
+  scope: "Обязательные требования безопасности для рынка ЕАЭС; проверяйте действующую редакцию."
+  keywords: регламент безопасность требования ЕАЭС нормативы микробиология
+  checked: "Страница ЕЭК найдена поиском 16.11.2026."

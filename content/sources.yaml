@@ -1,0 +1,266 @@
+# Реестр источников. Каждая запись — один источник.
+# Поля:
+#   id        — короткий идентификатор; в тексте темы на него ссылаются так: [@id]
+#   type      — textbook | review | paper | standard | regulation | manufacturer | method
+#   supports  — какое именно утверждение на платформе подтверждает источник
+#   verified  — как и до какой глубины источник проверен (каталог, аннотация, полный текст)
+#   doi / url — указывайте только то, что сами проверили
+
+- id: tadros2013
+  type: textbook
+  authors: Tadros T. F. (ред.)
+  title: "Emulsion Formation and Stability"
+  where: "Wiley-VCH, Weinheim. Гл. 1: Tadros T. F. «Emulsion Formation, Stability, and Rheology»"
+  year: 2013
+  doi: 10.1002/9783527647941
+  supports: "Классификация процессов разрушения эмульсий (седиментация/кримирование, флокуляция, оствальдово созревание, коалесценция, инверсия фаз); закон Стокса и способы замедления кримирования."
+  verified: "Существование книги, состав глав и DOI книги подтверждены по библиотечным каталогам (ноябрь 2026). Полный текст при подготовке не открывался — формулировки на платформе ограничены общеизвестным учебным материалом."
+
+- id: mcclements2015
+  type: textbook
+  authors: McClements D. J.
+  title: "Food Emulsions: Principles, Practices, and Techniques, 3rd ed."
+  where: "CRC Press, Boca Raton. ISBN 978-1-4987-2668-9"
+  year: 2015
+  doi: 10.1201/b18868
+  supports: "Гравитационное разделение, поправки к закону Стокса для концентрированных систем, роль реологии непрерывной фазы. Книга написана для пищевых эмульсий; физика гравитационного разделения от отрасли не зависит, но примеры составов — пищевые."
+  verified: "Издание и ISBN подтверждены по странице издателя; DOI подтверждён записью Crossref (16.11.2026). Полный текст не открывался."
+
+- id: taylor1998
+  type: review
+  authors: Taylor P.
+  title: "Ostwald ripening in emulsions"
+  where: "Advances in Colloid and Interface Science, 75(2), 107–163"
+  year: 1998
+  doi: 10.1016/S0001-8686(98)00035-9
+  supports: "Механизм оствальдова созревания и применение теории Лифшица — Слёзова — Вагнера (LSW) к эмульсиям."
+  verified: "Библиографические данные и DOI подтверждены по двум независимым базам. Содержание — на уровне аннотации."
+
+- id: walstra1993
+  type: review
+  authors: Walstra P.
+  title: "Principles of emulsion formation"
+  where: "Chemical Engineering Science, 48(2), 333–349"
+  year: 1993
+  doi: 10.1016/0009-2509(93)80021-H
+  supports: "Процессы при образовании эмульсии; дробление капель в ламинарном и турбулентном потоке; роль ПАВ при эмульгировании."
+  verified: "Библиографические данные и DOI подтверждены (NASA ADS). Содержание — на уровне аннотации."
+
+- id: hinze1955
+  type: paper
+  authors: Hinze J. O.
+  title: "Fundamentals of the hydrodynamic mechanism of splitting in dispersion processes"
+  where: "AIChE Journal, 1(3), 289–295"
+  year: 1955
+  doi: 10.1002/aic.690010303
+  supports: "Критическое число Вебера и оценка максимального устойчивого размера капли в турбулентном потоке (подход Колмогорова — Хинце)."
+  verified: "Библиографические данные и DOI подтверждены (NASA ADS, Scilit). Содержание — на уровне аннотации."
+
+- id: hall2011ces
+  type: paper
+  authors: Hall S., Cooke M., El-Hamouz A., Kowalski A. J.
+  title: "Droplet break-up by in-line Silverson rotor–stator mixer"
+  where: "Chemical Engineering Science, 66(10), 2068–2079"
+  year: 2011
+  doi: 10.1016/j.ces.2011.01.054
+  supports: "Экспериментально: в проточном роторно-статорном смесителе Silverson на размер капель сильнее всего влияют частота вращения ротора и вязкость дисперсной фазы; расход, исходный размер капель и доля дисперсной фазы влияют слабее. Опыты — на силиконовых маслах 9,4–969 мПа·с."
+  verified: "DOI подтверждён несколькими источниками. Выводы приведены по аннотации; относятся к конкретной конструкции (проточный Silverson) и модельной системе."
+
+- id: hall2011cjce
+  type: paper
+  authors: Hall S., Cooke M., Pacek A. W., Kowalski A. J., Rothman D.
+  title: "Scaling up of Silverson rotor–stator mixers"
+  where: "The Canadian Journal of Chemical Engineering, 89(5), 1040–1050"
+  year: 2011
+  doi: 10.1002/cjce.20556
+  supports: "Сравнение распределений капель в лабораторном и промышленном проточных смесителях Silverson; обсуждение критериев масштабирования (окружная скорость, число Вебера, скорость диссипации энергии)."
+  verified: "Проверено только по аннотации в агрегаторах. Важно: журнальная аннотация называет предпочтительным параметром число Вебера, а тезисы той же группы (конференция Mixing XXII, 2010) и более поздняя работа 2013 г. — окружную скорость. Расхождение разобрано в теме «Масштабирование»."
+  note: "Перед цитированием в официальных документах сверьте с полным текстом."
+
+- id: atiemo2004
+  type: textbook
+  authors: Atiemo-Obeng V. A., Calabrese R. V.
+  title: "Rotor–Stator Mixing Devices (гл. 8)"
+  where: "Paul E. L., Atiemo-Obeng V. A., Kresta S. M. (ред.) Handbook of Industrial Mixing: Science and Practice. Wiley. ISBN 0-471-26919-0"
+  year: 2004
+  supports: "Конструкции роторно-статорных аппаратов, гидродинамика, подходы к масштабированию (раздел 8.4 «Process Scale-up and Design Configurations»)."
+  verified: "Глава и её разделы подтверждены по оглавлению книги. DOI главы поиском не подтверждён и не указан."
+
+- id: barnes1999
+  type: review
+  authors: Barnes H. A.
+  title: "The yield stress — a review or ‘παντα ρει’ — everything flows?"
+  where: "Journal of Non-Newtonian Fluid Mechanics, 81(1–2), 133–178"
+  year: 1999
+  doi: 10.1016/S0377-0257(98)00094-9
+  supports: "Предел текучести как инженерно полезная, но зависящая от метода и времени наблюдения величина; при достаточно точных измерениях ниже «предела» обнаруживается очень медленное течение."
+  verified: "Библиографические данные и DOI подтверждены; тезис приведён по аннотации."
+
+- id: brummer2006
+  type: textbook
+  authors: Brummer R.
+  title: "Rheology Essentials of Cosmetic and Food Emulsions"
+  where: "Springer (Springer Laboratory), Berlin–Heidelberg"
+  year: 2006
+  doi: 10.1007/3-540-29087-7
+  supports: "Практика реологических измерений косметических эмульсий; связь результатов с прокачиваемостью, ощущением на коже и стабильностью."
+  verified: "Книга, оглавление и DOI подтверждены по каталогам (год издания в каталогах — 2005/2006). Конкретные числа на платформе из книги не заимствованы."
+
+- id: mezger2020
+  type: textbook
+  authors: Mezger T. G.
+  title: "The Rheology Handbook: For users of rotational and oscillatory rheometers, 5th ed."
+  where: "Vincentz Network, Hannover"
+  year: 2020
+  doi: 10.1515/9783748603702
+  supports: "Определения и методы: кривые течения, модели (в т. ч. Гершеля — Балкли), тесты на тиксотропию, амплитудная развёртка, измерительные системы."
+  verified: "Издание, оглавление и DOI подтверждены (De Gruyter). Конкретные числа на платформе из книги не заимствованы."
+
+- id: eccleston1997
+  type: review
+  authors: Eccleston G. M.
+  title: "Functions of mixed emulsifiers and emulsifying waxes in dermatological lotions and creams"
+  where: "Colloids and Surfaces A: Physicochemical and Engineering Aspects, 123–124, 169–182"
+  year: 1997
+  doi: 10.1016/S0927-7757(96)03846-0
+  supports: "Теория гелевой сети: избыток смешанного эмульгатора (жирный спирт + ПАВ) образует с водой ламеллярные фазы в непрерывной среде, которые определяют консистенцию и стабильность O/W-кремов."
+  verified: "Выходные данные и DOI подтверждены записью Crossref (16.11.2026). Содержание изложено по вторичному пересказу — утверждения ограничены общепринятым ядром теории."
+
+- id: iwata2017
+  type: textbook
+  authors: Iwata T.
+  title: "Lamellar Gel Network (гл. 25)"
+  where: "Sakamoto K., Lochhead R. Y., Maibach H. I., Yamashita Y. (ред.) Cosmetic Science and Technology: Theoretical Principles and Applications. Elsevier. ISBN 978-0-12-802005-0"
+  year: 2017
+  doi: 10.1016/B978-0-12-802005-0.00025-2
+  supports: "Строение ламеллярной гелевой сети (α-гель, Lβ) и её использование в косметических кремах и кондиционерах."
+  verified: "Книга и название главы подтверждены по оглавлению издателя; автор, название и DOI главы подтверждены записью Crossref (16.11.2026). Полный текст не открывался."
+
+- id: cunningham2021
+  type: paper
+  authors: Cunningham G. E., Alberini F., Simmons M. J. H., O'Sullivan J. J.
+  title: "Understanding the effects of processing conditions on the formation of lamellar gel networks using a rheological approach"
+  where: "Chemical Engineering Science, 242, 116752"
+  year: 2021
+  doi: 10.1016/j.ces.2021.116752
+  supports: "Экспериментально (реометр с лопастной геометрией): скорость перемешивания, температура и время при формировании ламеллярной гелевой сети влияют на кинетику нарастания вязкости и на итоговый предел текучести."
+  verified: "По аннотации и записи в репозитории Бирмингемского университета. Работа НЕ изучает прямо случай «гомогенизатор включён при охлаждении промышленной партии» — она подтверждает только общий тезис о чувствительности структуры к режиму обработки."
+
+- id: lerche2011
+  type: paper
+  authors: Lerche D., Sobisch T.
+  title: "Direct and Accelerated Characterization of Formulation Stability"
+  where: "Journal of Dispersion Science and Technology, 32(12), 1799–1811"
+  year: 2011
+  doi: 10.1080/01932691.2011.616365
+  supports: "Обзор методов ускоренной оценки стабильности суспензий и эмульсий и обсуждение связи между «ускоренным» результатом и поведением в обычных условиях."
+  verified: "DOI и аннотация подтверждены; название и состав авторов — по памяти и косвенным данным страницы журнала, сверьте перед официальным цитированием."
+
+- id: isotr18811
+  type: standard
+  authors: ISO/TC 217
+  title: "ISO/TR 18811:2018 Cosmetics — Guidelines on the stability testing of cosmetic products"
+  where: "International Organization for Standardization, 1-е изд., февраль 2018. Технический отчёт (не стандарт требований); международный, добровольного применения"
+  year: 2018
+  url: https://www.iso.org/standard/63465.html
+  supports: "Рамка для испытаний стабильности: документ НЕ задаёт условий, параметров и критериев — протокол обязан определить и обосновать производитель."
+  verified: "Статус, редакция и область применения подтверждены по карточке на iso.org. Полный текст платный и при подготовке не использовался."
+
+- id: iso22716
+  type: standard
+  authors: ISO/TC 217
+  title: "ISO 22716:2007 Cosmetics — Good Manufacturing Practices (GMP) — Guidelines on Good Manufacturing Practices"
+  where: "International Organization for Standardization, 1-е изд., 2007. Международный; в ЕАЭС действует идентичный ГОСТ ISO 22716"
+  year: 2007
+  supports: "Наличие в GMP отдельного раздела об отклонениях (разд. 13 «Deviations») и требования документировать производство. Не распространяется на исследования и разработку."
+  verified: "Область применения и наличие раздела 13 подтверждены по оглавлению национального издания (DIN EN ISO 22716). Текст раздела при подготовке не открывался — на платформе нет пересказа его конкретных требований."
+
+- id: trts009
+  type: regulation
+  authors: Комиссия Таможенного союза / ЕЭК
+  title: "ТР ТС 009/2011 «О безопасности парфюмерно-косметической продукции»"
+  where: "Принят Решением КТС от 23.09.2011 № 799; юрисдикция — ЕАЭС. Регламент неоднократно изменялся — проверяйте действующую редакцию"
+  year: 2011
+  url: https://eec.eaeunion.org/comission/department/deptexreg/tr/bezopParfum.php
+  supports: "Упоминается как обязательная нормативная рамка для продукции на рынке ЕАЭС. Конкретные требования на платформе не пересказываются."
+  verified: "Страница ЕЭК найдена поиском; актуальная редакция при подготовке не сверялась."
+
+- id: griffin1949
+  type: paper
+  authors: Griffin W. C.
+  title: "Classification of Surface-Active Agents by «HLB»"
+  where: "Journal of the Society of Cosmetic Chemists, 1(5), 311–326"
+  year: 1949
+  url: https://library.scconline.org/
+  supports: "Происхождение шкалы ГЛБ как эмпирического способа подбора неионогенных эмульгаторов."
+  verified: "Статья найдена в электронной библиотеке Society of Cosmetic Chemists; выходные данные подтверждены."
+
+- id: lubrizol-neutral
+  type: manufacturer
+  authors: Lubrizol Advanced Materials
+  title: "TDS-237 «Neutralizing Carbopol® and Pemulen® Polymers in Aqueous and Hydroalcoholic Systems»; Pharmaceutical Bulletin 5 «Neutralization Procedures»; Bulletin 6 «Thickening Properties»"
+  where: "Техническая документация производителя; относится только к полимерам Carbopol®/Pemulen® компании Lubrizol"
+  year: "ред. 2002 (TDS-237) — сверяйте с действующей"
+  url: https://www.lubrizol.com/-/media/Lubrizol/Health/Literature/Bulletin-05---Neutralization-Procedures.pdf
+  supports: "Загущение карбомеров требует нейтрализации; ди- и поливалентные ионы (Ca²⁺, Mg²⁺) осаждают полимер, электролиты снижают вязкость геля."
+  verified: "Документы найдены на сайте производителя и в открытых копиях; доступная редакция TDS-237 — январь 2002 г. Данные о чувствительности к электролитам — заявление производителя для его марок."
+
+- id: podolefsky2013
+  type: method
+  authors: Podolefsky N. S., Moore E. B., Perkins K. K.
+  title: "Implicit scaffolding in interactive simulations: Design strategies to support multiple educational goals"
+  where: "arXiv:1306.6544 (препринт группы PhET, University of Colorado Boulder)"
+  year: 2013
+  url: https://arxiv.org/abs/1306.6544
+  supports: "Принцип «неявной поддержки»: обратная связь и ограничения интерфейса направляют исследование без явных инструкций. Использован при проектировании интерактивов платформы."
+  verified: "Аннотация на arXiv. Препринт, не рецензируемая статья."
+
+- id: dreiss2007
+  type: review
+  authors: Dreiss C. A.
+  title: "Wormlike micelles: where do we stand? Recent developments, linear rheology and scattering techniques"
+  where: "Soft Matter, 3, 956–970"
+  year: 2007
+  doi: 10.1039/B705775J
+  supports: "Червеобразные мицеллы: рост и переплетение мицелл как причина вязкоупругости растворов ПАВ; влияние соли и состава; ветвление как причина падения вязкости после максимума."
+  verified: "Выходные данные и DOI подтверждены записью Crossref (16.11.2026). Содержание — на уровне общеизвестных положений обзора, полный текст не открывался."
+
+- id: cates1990
+  type: review
+  authors: Cates M. E., Candau S. J.
+  title: "Statics and dynamics of worm-like surfactant micelles"
+  where: "Journal of Physics: Condensed Matter, 2(33), 6869–6892"
+  year: 1990
+  doi: 10.1088/0953-8984/2/33/001
+  supports: "Модель «живых полимеров» для червеобразных мицелл: мицеллы обратимо рвутся и рекомбинируют, вязкость определяется их длиной и переплетением."
+  verified: "Выходные данные и DOI подтверждены записью Crossref (16.11.2026). Полный текст не открывался."
+
+- id: williams2020
+  type: paper
+  authors: Williams A. P., King J. P., Sokolova A. V., de Campo L. и др.
+  title: "In Situ Nanostructural Analysis of Concentrated Wormlike Micellar Fluids Comprising Sodium Laureth Sulfate and Cocamidopropyl Betaine Using Small-Angle Neutron Scattering"
+  where: "Langmuir, 36, 14296–14305"
+  year: 2020
+  doi: 10.1021/acs.langmuir.0c02530
+  supports: "Смеси SLES и кокамидопропилбетаина в концентрированных растворах образуют червеобразные мицеллы (подтверждено малоугловым рассеянием нейтронов)."
+  verified: "Найдена поиском по Crossref через платформу (16.11.2026): подтверждены авторы, название, журнал и DOI. Аннотация и полный текст не открывались — утверждение ограничено тем, что следует из названия."
+
+- id: montgomery2017
+  type: textbook
+  authors: Montgomery D. C.
+  title: "Design and Analysis of Experiments, 9th ed."
+  where: "Wiley, Hoboken. ISBN 978-1-119-11347-8"
+  year: 2017
+  supports: "Факторные планы 2^k, расчёт главных эффектов и взаимодействий, роль повторных опытов для оценки ошибки, недостатки поочерёдного изменения факторов."
+  verified: "Учебник общеизвестен; DOI у издания нет (поиск в Crossref 16.11.2026 его не нашёл). Номер издания и ISBN указаны по памяти — сверьте по своему экземпляру."
+
+- id: nist-handbook
+  type: standard
+  authors: NIST/SEMATECH
+  title: "e-Handbook of Statistical Methods, гл. 5 «Process Improvement»"
+  where: "National Institute of Standards and Technology (США); открытое онлайн-руководство"
+  year: 2012
+  doi: 10.18434/M32189
+  url: https://www.itl.nist.gov/div898/handbook/
+  supports: "Определения и расчёт эффектов в двухуровневых факторных планах; рекомендации по выбору плана, повторам и рандомизации."
+  verified: "Адрес и DOI приведены по памяти: DOI зарегистрирован в DataCite, поэтому в Crossref не ищется; сайт NIST из среды разработки недоступен. Откройте ссылку и подтвердите перед официальным цитированием."

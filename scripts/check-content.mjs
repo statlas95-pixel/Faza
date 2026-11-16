@@ -1,0 +1,71 @@
+// Проверка целостности контента: npm run check
+// Находит битые ссылки на термины, источники, темы, занятия, изображения и ошибки в сценариях.
+import fs from 'node:fs'
+import path from 'node:path'
+import YAML from 'yaml'
+
+const C = 'content'
+const errors = [], warns = []
+const err = (f, m) => errors.push(`${f}: ${m}`)
+const readY = (f) => { try { return YAML.parse(fs.readFileSync(path.join(C, f), 'utf8')) } catch (e) { err(f, `не читается YAML — ${e.message.split('\n')[0]}`); return null } }
+
+const sources = readY('sources.yaml') ?? [], terms = readY('glossary.yaml') ?? [], media = readY('media.yaml') ?? [], site = readY('site.yaml') ?? {}
+const srcIds = new Set(sources.map((s) => s.id)), termIds = new Set(terms.map((t) => t.id))
+const dup = (arr, f) => arr.forEach((x, i) => arr.findIndex((y) => y.id === x.id) !== i && err(f, `повтор id «${x.id}»`))
+dup(sources, 'sources.yaml'); dup(terms, 'glossary.yaml')
+for (const s of sources) for (const k of ['type', 'authors', 'title', 'where', 'year', 'supports', 'verified']) if (!s[k]) err('sources.yaml', `у «${s.id}» нет поля ${k}`)
+for (const s of sources) if (!s.doi && !s.url) warns.push(`sources.yaml: у «${s.id}» нет ни DOI, ни URL`)
+
+const topics = fs.readdirSync(path.join(C, 'topics')).filter((f) => f.endsWith('.md')).map((f) => {
+  const raw = fs.readFileSync(path.join(C, 'topics', f), 'utf8'), m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/)
+  if (!m) { err(f, 'нет шапки ---'); return null }
+  try { return { file: `topics/${f}`, ...YAML.parse(m[1]), body: m[2] } } catch (e) { err(f, `шапка не читается — ${e.message.split('\n')[0]}`); return null }
+}).filter(Boolean)
+const labs = fs.readdirSync(path.join(C, 'labs')).filter((f) => f.endsWith('.yaml')).map((f) => ({ file: `labs/${f}`, ...(readY(`labs/${f}`) ?? {}) }))
+const topicIds = new Set(topics.map((t) => t.id)), labIds = new Set(labs.map((l) => l.id))
+const mediaFiles = new Set(fs.readdirSync(path.join(C, 'media')))
+for (const m of media) { if (!mediaFiles.has(m.file)) err('media.yaml', `нет файла media/${m.file}`); for (const k of ['author', 'source', 'license', 'attribution', 'alt']) if (!m[k]) err('media.yaml', `у «${m.file}» нет поля ${k}`) }
+for (const f of mediaFiles) if (!media.find((m) => m.file === f)) err('media.yaml', `файл media/${f} не внесён в реестр`)
+
+function checkText(file, text) {
+  for (const m of text.matchAll(/\[\[([\w-]+)(?:\|[^\]]+)?\]\]/g)) if (!termIds.has(m[1])) err(file, `неизвестный термин [[${m[1]}]]`)
+  for (const m of text.matchAll(/\[@([^\]]+)\]/g)) for (const x of m[1].split(';')) { const id = x.trim().replace(/^@/, ''); if (!srcIds.has(id)) err(file, `неизвестный источник [@${id}]`) }
+  for (const m of text.matchAll(/\(#\/(topics|labs)\/([\w-]+)\)/g)) if (!(m[1] === 'topics' ? topicIds : labIds).has(m[2])) err(file, `ссылка на несуществующую страницу #/${m[1]}/${m[2]}`)
+  for (const m of text.matchAll(/\(media:([^\s)"]+)/g)) if (!mediaFiles.has(m[1])) err(file, `нет изображения media/${m[1]}`)
+  if ((text.match(/^:::/gm) ?? []).length % 2) err(file, 'непарный блок :::')
+}
+for (const t of topics) {
+  for (const k of ['id', 'title', 'summary', 'area', 'domain', 'order', 'review']) if (t[k] === undefined) err(t.file, `нет поля ${k}`)
+  checkText(t.file, t.body)
+  if (!/\[@/.test(t.body)) err(t.file, 'в теме нет ни одной ссылки на источник')
+  for (const l of t.labs ?? []) if (!labIds.has(l)) err(t.file, `labs: нет занятия «${l}»`)
+  for (const r of t.related ?? []) if (!topicIds.has(r)) err(t.file, `related: нет темы «${r}»`)
+  for (const [i, c] of (t.checks ?? []).entries()) if ((c.options ?? []).filter((o) => o.correct).length !== 1) err(t.file, `проверочный вопрос ${i + 1}: должен быть ровно один верный вариант`)
+}
+for (const t of terms) { for (const x of t.topics ?? []) if (!topicIds.has(x)) err('glossary.yaml', `«${t.id}»: нет темы ${x}`); for (const x of t.sources ?? []) if (!srcIds.has(x)) err('glossary.yaml', `«${t.id}»: нет источника ${x}`) }
+for (const l of labs) {
+  for (const k of ['id', 'engine', 'title', 'summary', 'role', 'skill', 'brief', 'dataNote']) if (!l[k]) err(l.file, `нет поля ${k}`)
+  for (const x of l.topics ?? []) if (!topicIds.has(x)) err(l.file, `topics: нет темы ${x}`)
+  checkText(l.file, JSON.stringify(l))
+  const qs = [...(l.questions ?? []), ...(typeof l.transfer === 'object' ? l.transfer?.questions ?? [] : [])]
+  qs.forEach((q, i) => { if (q.type === 'mc' && q.options.filter((o) => o.correct).length !== 1) err(l.file, `вопрос ${i + 1}: нужен ровно один верный вариант`); if (q.type === 'num' && typeof q.answer !== 'number') err(l.file, `вопрос ${i + 1}: нет числового ответа`) })
+  if (l.engine === 'investigation') {
+    const ev = new Set(l.requests.map((r) => r.id))
+    for (const d of l.documents) { for (const s of d.sections) for (const r of s.rows) { if (r.id) ev.add(r.id); if (r.cells.length !== s.columns.length) err(l.file, `документ «${d.id}», раздел «${s.title}»: в строке ${r.cells.length} ячеек при ${s.columns.length} столбцах`) } for (const n of d.notes ?? []) ev.add(n.id) }
+    const cost = l.requests.reduce((a, r) => a + r.cost, 0)
+    if (cost <= l.budget) warns.push(`${l.file}: бюджета хватает на все запросы — выбор исчезает`)
+    for (const h of l.hypotheses) for (const [st, v] of Object.entries(h.statuses)) { if (!['ok', 'weak', 'wrong'].includes(v.verdict)) err(l.file, `гипотеза ${h.id}/${st}: verdict`); for (const n of v.needs ?? []) if (!ev.has(n)) err(l.file, `гипотеза ${h.id}/${st}: основание «${n}» не найдено в документах и запросах`) }
+    for (const h of l.hypotheses) for (const st of ['main', 'contrib', 'excluded', 'untested']) if (!h.statuses[st]) err(l.file, `гипотеза ${h.id}: нет статуса ${st}`)
+    for (const d of l.dispositions) for (const v of d.variants ?? []) for (const w of v.when) if (!(w.startsWith('main:') ? l.hypotheses.some((h) => h.id === w.slice(5)) : ev.has(w))) err(l.file, `решение ${d.id}: условие «${w}» не найдено`)
+    if (l.transfer && !labIds.has(l.transfer)) err(l.file, `transfer: нет занятия ${l.transfer}`)
+  }
+}
+for (const t of site.tasks ?? []) { const m = t.to.match(/^\/(topics|labs)\/(.+)$/); if (m && !(m[1] === 'topics' ? topicIds : labIds).has(m[2])) err('site.yaml', `tasks: нет страницы ${t.to}`) }
+for (const s of site.track?.steps ?? []) { if (s.topic && !topicIds.has(s.topic)) err('site.yaml', `track: нет темы ${s.topic}`); if (s.lab && !labIds.has(s.lab)) err('site.yaml', `track: нет занятия ${s.lab}`) }
+const unused = sources.filter((s) => !topics.some((t) => t.body.includes(`@${s.id}`)) && !labs.some((l) => JSON.stringify(l).includes(`@${s.id}`)) && !terms.some((t) => (t.sources ?? []).includes(s.id)) && !fs.readFileSync(path.join(C, 'about.md'), 'utf8').includes(`@${s.id}`))
+for (const s of unused) warns.push(`sources.yaml: источник «${s.id}» нигде не используется`)
+
+console.log(`Темы: ${topics.length} · занятия: ${labs.length} · термины: ${terms.length} · источники: ${sources.length} · изображения: ${media.length}`)
+warns.forEach((w) => console.log('  предупреждение — ' + w))
+if (errors.length) { errors.forEach((e) => console.error('  ОШИБКА — ' + e)); console.error(`\nНайдено ошибок: ${errors.length}`); process.exit(1) }
+console.log('Ошибок не найдено.')
