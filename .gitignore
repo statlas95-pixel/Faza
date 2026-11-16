@@ -4,3 +4,5 @@ node_modules
 artifact
 data
 .env
+dist
+~$*
