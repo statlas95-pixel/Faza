@@ -29,7 +29,7 @@ const cell = (c: string) => (typeof c === 'string' && c.startsWith('~') ? `${c.s
  * что уже доступно ученику (вводная, открытые им документы, полученные запросы). Тексты разбора,
  * вердикты, правильные ответы и пояснения к вариантам сюда не попадают — их нельзя выдать даже случайно.
  */
-export function buildContext(c: Content, req: { kind: 'topic' | 'lab'; id: string; opened?: string[]; bought?: string[]; finished?: boolean }): { title: string; fragments: Fragment[] } | null {
+export function buildContext(c: Content, req: { kind: 'topic' | 'lab'; id: string; opened?: string[]; bought?: string[]; finished?: boolean; theory?: boolean }): { title: string; fragments: Fragment[] } | null {
   const srcFr = (ids: string[], start: number): Fragment[] => ids.map((id) => c.sources.find((s) => s.id === id)).filter(Boolean).map((s: any, i) => ({ id: `S${start + i}`, kind: 'source' as const, title: `${s.authors} (${s.year}). ${s.title}`, path: `/sources/${s.id}`, text: `Что подтверждает: ${s.supports}\nКак проверен: ${s.verified}` }))
   const cited = (body: string) => [...new Set([...body.matchAll(/\[@([^\]]+)\]/g)].flatMap((m) => m[1].split(';').map((x) => x.trim().replace(/^@/, ''))))]
   if (req.kind === 'topic') {
@@ -50,7 +50,8 @@ export function buildContext(c: Content, req: { kind: 'topic' | 'lab'; id: strin
   if (l.hypotheses) fr.push({ id: `M${n++}`, kind: 'material', title: 'Гипотезы, между которыми выбирает ученик', path: `/labs/${l.id}`, text: l.hypotheses.map((h: any) => `— ${h.title}`).join('\n') })
   if (req.finished && l.debrief) fr.push({ id: `M${n++}`, kind: 'material', title: 'Разбор занятия (ученик его уже видел)', path: `/labs/${l.id}`, text: clean(`${l.debrief.story}\n${l.debrief.principle}`) })
   let f = 1
-  for (const tid of (l.topics ?? []).slice(0, 2)) { const t = c.topics.find((x) => x.id === tid); if (t) for (const x of topicFragments(t)) fr.push({ ...x, id: `F${f++}` }) }
+  // до самостоятельной попытки намёк и разбор рассуждения опираются только на то, что ученик уже открыл: теория темы подсказывала бы ответ
+  if (req.theory !== false) for (const tid of (l.topics ?? []).slice(0, 2)) { const t = c.topics.find((x) => x.id === tid); if (t) for (const x of topicFragments(t)) fr.push({ ...x, id: `F${f++}` }) }
   return { title: l.title, fragments: fr }
 }
 

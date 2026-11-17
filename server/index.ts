@@ -12,7 +12,7 @@ const tutor = createTutor(cfg)
 const app = createApp({ cfg, db, auth, content: loadContent(), tutor })
 app.listen(cfg.port, () => {
   const st = tutor.status()
-  console.log(`Фаза 0.2 — сервер запущен: ${cfg.baseUrl}`)
+  console.log(`Фаза 0.3 — сервер запущен: ${cfg.baseUrl}`)
   console.log(`  данные: ${cfg.dataDir} · почта: ${cfg.smtp ? 'SMTP' : `папка ${cfg.dataDir}/outbox`}`)
   console.log(`  ИИ-наставник: ${st.configured ? st.models.map((m) => m.id).join(', ') : 'не настроен (см. .env.example)'}`)
 })

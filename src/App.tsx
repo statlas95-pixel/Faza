@@ -74,7 +74,7 @@ function Shell() {
       {m && ctx && <Tutor kind={m[1] === 'topics' ? 'topic' : 'lab'} id={ctx.id} title={ctx.title} />}
       {!inLab && (
         <footer className="foot">
-          <p><b>{site.name}</b> · версия 0.2 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.</p>
+          <p><b>{site.name}</b> · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.</p>
           <p><Link to="/about">О платформе, методике и изображениях</Link> · <Link to="/about#authoring">Как редактировать материалы</Link></p>
         </footer>)}
     </>)

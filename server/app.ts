@@ -1,3 +1,4 @@
+import compression from 'compression'
 import express, { type Request, type Response, type NextFunction } from 'express'
 import path from 'node:path'
 import fs from 'node:fs'
@@ -15,6 +16,10 @@ export interface Deps { cfg: Config; db: Db; auth: Auth; content: Content; tutor
 export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
   const app = express()
   app.disable('x-powered-by')
+  app.set('trust proxy', 1)
+  app.use(compression())
+  // Переезд на новый адрес: запросы на прежний хост перенаправляются на основной (FAZA_BASE_URL).
+  if (cfg.canonicalRedirect) { const host = new URL(cfg.baseUrl).host; app.use((req, res, next) => { const h = req.headers.host; if (h && h !== host && req.path !== '/api/health' && req.method === 'GET') return void res.redirect(301, cfg.baseUrl + req.originalUrl); next() }) }
   const search = createSearch(cfg, db, fetchImpl)
 
   // Защита изменяющих запросов: только с доверенного источника (cookie SameSite + проверка Origin).
@@ -46,7 +51,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     next()
   }
 
-  app.get('/api/health', (_req, res) => { res.json({ ok: true, version: '0.2', mail: cfg.smtp ? 'smtp' : 'outbox' }) })
+  app.get('/api/health', (_req, res) => { res.json({ ok: true, version: '0.3', mail: cfg.smtp ? 'smtp' : 'outbox' }) })
 
   // ---------- Личные данные ----------
   app.get('/api/me', requireUser, (req, res) => { const u = (req as Authed).user; res.json({ user: u, ...readState(u.id) }) })
@@ -107,13 +112,13 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     if (used >= cfg.ai.dailyLimit) return void fail(new AiError('limit', `Дневной лимит обращений к наставнику (${cfg.ai.dailyLimit}) исчерпан. Он обновится завтра.`))
     // Завершено ли занятие, сервер определяет сам — по записанной попытке, а не по словам клиента.
     const finished = b.kind === 'lab' && !!db.prepare('SELECT 1 FROM attempts WHERE user_id = ? AND lab_id = ? LIMIT 1').get(u.id, String(b.id))
-    const ctx = buildContext(content, { kind: b.kind, id: String(b.id), opened: Array.isArray(b.opened) ? b.opened.map(String) : [], bought: Array.isArray(b.bought) ? b.bought.map(String) : [], finished })
+    const ctx = buildContext(content, { kind: b.kind, id: String(b.id), opened: Array.isArray(b.opened) ? b.opened.map(String) : [], bought: Array.isArray(b.bought) ? b.bought.map(String) : [], finished, theory: !(b.kind === 'lab' && !finished && (b.mode === 'hint' || b.mode === 'review')) })
     if (!ctx) return void res.status(404).json({ error: 'not_found', message: 'Учебный материал не найден' })
     const ac = new AbortController()
     res.on('close', () => { if (!res.writableEnded) ac.abort() })
     try {
       const external = b.external && typeof b.external.text === 'string' ? { title: String(b.external.title ?? 'Внешний материал').slice(0, 300), text: b.external.text.slice(0, 6000) } : undefined
-      const r = await tutor.ask(String(b.model), ctx.title, ctx.fragments, { mode: b.mode, level: ['novice', 'practitioner', 'expert'].includes(b.level) ? b.level : 'practitioner', hintStep: Number(b.hintStep) || 1, message: b.message.trim(), finished, kind: b.kind, external }, ac.signal)
+      const r = await tutor.ask(String(b.model), ctx.title, ctx.fragments, { mode: b.mode, level: ['novice', 'practitioner', 'expert'].includes(b.level) ? b.level : 'practitioner', hintStep: Number(b.hintStep) || 1, message: b.message.trim(), finished, kind: b.kind, stage: typeof b.stage === 'string' ? b.stage.slice(0, 80) : undefined, actions: typeof b.actions === 'string' ? b.actions.slice(0, 1200) : undefined, external }, ac.signal)
       db.prepare('INSERT INTO ai_usage (user_id, day, count) VALUES (?, ?, 1) ON CONFLICT(user_id, day) DO UPDATE SET count = count + 1').run(u.id, day)
       res.json({ text: r.text, model: r.model, usage: r.usage, finished, used: used + 1, limit: cfg.ai.dailyLimit, fragments: ctx.fragments.map(({ id, kind, title, path }) => ({ id, kind, title, path })) })
     } catch (e) {
@@ -125,7 +130,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
   app.use('/api', (_req, res) => { res.status(404).json({ error: 'not_found', message: 'Нет такого адреса API' }) })
   // ---------- Статика (производственная сборка) ----------
   const dist = path.resolve('dist')
-  if (fs.existsSync(path.join(dist, 'index.html'))) { app.use(express.static(dist, { index: 'index.html', maxAge: 0 })) }
+  if (fs.existsSync(path.join(dist, 'index.html'))) { app.use(express.static(dist, { index: 'index.html', setHeaders: (res, file) => { res.setHeader('Cache-Control', /[\\/]assets[\\/]/.test(file) ? 'public, max-age=31536000, immutable' : 'no-cache') } })) }
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => { res.status(err?.type === 'entity.too.large' ? 413 : err?.status === 400 ? 400 : 500).json({ error: 'internal', message: err?.type === 'entity.too.large' ? 'Слишком большой запрос' : 'Ошибка обработки запроса' }) })
   return app
 }

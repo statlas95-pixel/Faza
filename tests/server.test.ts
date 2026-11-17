@@ -150,7 +150,7 @@ describe('ИИ-наставник', () => {
     await U.req('POST', '/api/auth/sign-up/email', { name: 'У', email: 'u@example.com', password: 'tutor-pass-123' })
     const r = await ask({ opened: ['qc'], bought: [], finished: true /* клиенту не верим */ }); expect(r.status).toBe(200); expect(r.json.finished).toBe(false)
     const p = prompts.at(-1)!.user
-    expect(p).toContain('29,5 °C'); expect(p).toContain('не называй правильный ответ')
+    expect(p).toContain('29,5 °C'); expect(p).toContain('не называй правильный ответ'); expect(p).not.toContain('<фрагмент id="F1"'); expect(p).not.toContain('теория гелевой сети')
     for (const leak of ['Что произошло в этом сценарии', '24 600', 'захоложенной водой (9 °C', 'Совпадение по времени', 'гомогенизатор выкл. 08:52', 'Устраняет причину технически']) expect(p).not.toContain(leak)
     expect(r.json.fragments.some((f: any) => f.kind === 'material' && f.title.includes('Протокол испытаний ОКК'))).toBe(true)
   })

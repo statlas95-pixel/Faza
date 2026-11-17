@@ -4,7 +4,7 @@ cd /d "%~dp0"
 where node >nul 2>nul
 if errorlevel 1 (
   echo Не найден Node.js. Установите LTS-версию ^(22.13 или новее^) с https://nodejs.org и запустите файл снова.
-  echo Без установки можно открыть dist\index.html двойным щелчком: темы и занятия работают, аккаунты и поиск — нет.
+  echo Без сервера приложение собирается одним файлом командой npm run build:single.
   pause
   exit /b 1
 )

@@ -9,7 +9,7 @@ const env = process.env
 const list = (v?: string) => (v ?? '').split(',').map((s) => s.trim()).filter(Boolean)
 
 export interface Config {
-  port: number; dataDir: string; baseUrl: string; authSecret: string; trustedOrigins: string[]; production: boolean
+  port: number; dataDir: string; baseUrl: string; authSecret: string; trustedOrigins: string[]; production: boolean; canonicalRedirect: boolean
   smtp?: { url: string; from: string }
   search: { crossrefMailto?: string; openalexKey?: string; timeoutMs: number; cacheHours: number; minGapMs: number }
   ai: { anthropicKey?: string; anthropicModels: string[]; openaiKey?: string; openaiBaseUrl?: string; openaiModels: string[]; dailyLimit: number; maxTokens: number; timeoutMs: number; maxInputChars: number }
@@ -27,7 +27,7 @@ export function loadConfig(over: Partial<Config> = {}): Config {
   const port = Number(env.PORT ?? 8787)
   const baseUrl = (env.FAZA_BASE_URL ?? `http://localhost:${port}`).replace(/\/$/, '')
   return {
-    port, dataDir, baseUrl, authSecret, production: env.NODE_ENV === 'production',
+    port, dataDir, baseUrl, authSecret, production: env.NODE_ENV === 'production', canonicalRedirect: env.FAZA_CANONICAL_REDIRECT === '1',
     trustedOrigins: [baseUrl, 'http://localhost:5173', 'http://127.0.0.1:5173', ...list(env.FAZA_TRUSTED_ORIGINS)],
     smtp: env.SMTP_URL ? { url: env.SMTP_URL, from: env.SMTP_FROM ?? 'faza@localhost' } : undefined,
     search: { crossrefMailto: env.CROSSREF_MAILTO || undefined, openalexKey: env.OPENALEX_API_KEY || undefined, timeoutMs: Number(env.SEARCH_TIMEOUT_MS ?? 15000), cacheHours: Number(env.SEARCH_CACHE_HOURS ?? 168), minGapMs: Number(env.SEARCH_MIN_GAP_MS ?? 1200) },

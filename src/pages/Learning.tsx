@@ -57,8 +57,8 @@ export function RoutePage() {
       <h1>Мой маршрут</h1>
       {!L.diagDone && <div className="notice">{L.diagAnswered ? `Диагностика пройдена частично (${L.diagAnswered} ответов) — рекомендации предварительные.` : 'Диагностика не пройдена — маршрут идёт по порядку цели, рекомендации предварительные.'} <Link className="btn small" to="/diagnostic">{L.diagAnswered ? 'Продолжить диагностику' : 'Пройти диагностику · 5 минут'}</Link></div>}
       {now ? <StepCard r={now} main /> : <div className="notice ok">Все навыки маршрута подтверждены действием. Загляните в <Link to="/map">карту знаний</Link> — там видно, что запланировано дальше.</div>}
-      <h2>Последовательность</h2>
-      <ol className="steps-list">{L.route.map((r) => <li key={r.topic} className={r.status}><StepCard r={r} /></li>)}</ol>
+      <h2>Дальше по маршруту</h2>
+      <ol className="steps-list" start={2}>{L.route.filter((r) => r !== now).map((r) => <li key={r.topic} className={r.status}><StepCard r={r} /></li>)}</ol>
       <h2>Профиль навыков</h2>
       <p className="small">Уровень — что вы делаете сами; он считается по действиям, а не по открытым страницам. Рядом — насколько оценка подтверждена независимыми свидетельствами.</p>
       <div className="table-wrap" tabIndex={0}><table className="skills"><thead><tr><th>Навык</th><th>Уровень и уверенность оценки</th><th>На чём основано</th></tr></thead>
