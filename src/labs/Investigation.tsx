@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import { LabMeta, labById } from '../content'
 import { MdInline, Md } from '../md'
 import { VerdictTag, Verdict } from '../ui'
-import { LabFrame, Brief, useLabState, DebriefLinks, markFinished } from './LabPage'
+import { LabFrame, Brief, useLabState, DebriefLinks, markFinished, Transfer } from './LabPage'
 
 interface S {
   phase: 'brief' | 'work' | 'conclude' | 'debrief'
   view: string; opened: Record<string, boolean>; marks: Record<string, boolean>; bought: string[]
-  hyp: Record<string, string>; disp?: string; capa: string[]; missing?: string; zoom: number; plain: boolean; finished?: boolean
+  hyp: Record<string, string>; disp?: string; capa: string[]; missing?: string; zoom: number; plain: boolean; finished?: boolean; tq?: Record<number, any>
 }
 const STATUS: Record<string, string> = { main: 'Основная причина', contrib: 'Возможный вклад', excluded: 'Исключена данными', untested: 'Не проверена' }
 const Cell = ({ v }: { v: string }) => v?.startsWith?.('~') ? <span className="hand">{v.slice(1)}</span> : <>{v}</>
@@ -136,7 +136,7 @@ export default function Investigation({ lab }: { lab: LabMeta }) {
       setWarn('')
       set((x) => { x.phase = 'debrief'; x.finished = true })
       const sc = score()
-      markFinished(lab.id, sc.map((c) => `${c.title}: ${c.level}`).join('; '))
+      markFinished(lab.id, sc.map((c) => `${c.title}: ${c.level}`).join('; '), { bought: s.bought, hyp: s.hyp, disp: s.disp }, sc.reduce((a, c) => a + c.value, 0) / sc.length)
       window.scrollTo(0, 0)
     }
     return frame(
@@ -258,6 +258,7 @@ export default function Investigation({ lab }: { lab: LabMeta }) {
       <section className="panel story"><h3>Что было на самом деле и какой принцип за этим стоит</h3>
         <Md text={lab.debrief.story} className="prose small" /><Md text={lab.debrief.principle} className="prose small" /></section>
 
+      {lab.transferQuiz && <Transfer lab={{ ...lab, transfer: lab.transferQuiz }} answers={s.tq ?? {}} onAnswer={(i, v) => set((x) => { (x.tq ??= {})[i] = v })} />}
       <DebriefLinks lab={lab} />
       <div className="row end">
         <button className="btn" onClick={() => set((x) => { x.phase = 'conclude' })}>Пересмотреть выводы</button>

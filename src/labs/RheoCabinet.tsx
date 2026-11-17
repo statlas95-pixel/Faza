@@ -59,7 +59,7 @@ export default function RheoCabinet({ lab }: { lab: LabMeta }) {
       if (miss || !isFinite(parseNum(s.rate))) { setWarn(`Не заполнено: ${miss ? `${miss} жалоб(ы)` : ''}${miss && !isFinite(parseNum(s.rate)) ? ', ' : ''}${!isFinite(parseNum(s.rate)) ? 'расчёт скорости сдвига' : ''}.`); return }
       set((x) => { x.phase = 'debrief'; x.finished = true }); window.scrollTo(0, 0)
       const okN = claims.filter((c) => s.claims[c.id].sample === c.answer && c.proof.includes(s.claims[c.id].proof) && s.tests.includes(s.claims[c.id].proof!)).length
-      markFinished(lab.id, `доказано ${okN} из ${claims.length}`)
+      markFinished(lab.id, `доказано ${okN} из ${claims.length}`, { tests: s.tests }, (okN + 0.5 * claims.filter((c) => s.claims[c.id].sample === c.answer && !(c.proof.includes(s.claims[c.id].proof) && s.tests.includes(s.claims[c.id].proof!))).length) / claims.length)
     }
     return frame(
       <div className="rheo">

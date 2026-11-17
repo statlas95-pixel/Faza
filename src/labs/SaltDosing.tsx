@@ -89,7 +89,7 @@ export default function SaltDosing({ lab }: { lab: LabMeta }) {
       <fieldset className="qcard"><legend className="q">{co.q}</legend>
         {co.options.map((o: any, i: number) => <label key={i} className={`opt ${s.concl === i ? 'sel' : ''}`}><input type="radio" name="concl" checked={s.concl === i} onChange={() => set((x) => { x.concl = i })} /><span>{o.text}</span></label>)}</fieldset>
       {journal}
-      <button className="btn primary" disabled={s.concl === undefined} onClick={() => { set((x) => { x.phase = 'debrief'; x.finished = true }); markFinished(lab.id, `${inSpec(lastEta) ? 'в норме' : 'вне нормы'}: ${fmt(lastEta, 4)} мПа·с за ${s.used} мин`, { log: s.log, eta: lastEta, used: s.used }); window.scrollTo(0, 0) }}>К разбору</button>
+      <button className="btn primary" disabled={s.concl === undefined} onClick={() => { set((x) => { x.phase = 'debrief'; x.finished = true }); markFinished(lab.id, `${inSpec(lastEta) ? 'в норме' : 'вне нормы'}: ${fmt(lastEta, 4)} мПа·с за ${s.used} мин`, { log: s.log, eta: lastEta, used: s.used }, 0.7 * (inSpec(lastEta) ? (s.sTotal <= c.sPeak ? 1 : 0.6) : 0.15) + 0.3 * ({ ok: 1, weak: 0.5, wrong: 0 } as any)[co.options[s.concl!].verdict]); window.scrollTo(0, 0) }}>К разбору</button>
     </div>)
 
   // ---------- Разбор ----------

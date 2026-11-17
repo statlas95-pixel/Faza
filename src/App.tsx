@@ -9,6 +9,7 @@ import AccountPage, { ImportBanner } from './pages/Account'
 import { FindPage } from './features/Sources'
 import { Tutor } from './features/Tutor'
 import { init, useAccount } from './account'
+import { RoutePage, MapPage, DiagnosticPage } from './pages/Learning'
 import { topicById, labById } from './content'
 import { LabsIndex, LabPage } from './labs/LabPage'
 
@@ -45,11 +46,9 @@ function Shell() {
         <header className="top">
           <Link to="/" className="logo" aria-label={`${site.name} — на главную`}><span className="logo-drop" aria-hidden />{site.name}</Link>
           <nav aria-label="Основные разделы">
-            <NavLink to="/catalog">Темы</NavLink><NavLink to="/labs">Занятия</NavLink><NavLink to="/glossary">Термины</NavLink>
-            <NavLink to="/sources">Источники</NavLink><NavLink to="/find">Поиск источников</NavLink><NavLink to="/journal">Мой журнал</NavLink>
+            <NavLink to="/route">Мой маршрут</NavLink><NavLink to="/map">Карта знаний</NavLink><NavLink to="/catalog">Найти ответ</NavLink><NavLink to="/journal">Журнал</NavLink>
             <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? 'Без сервера' : 'Войти'}</NavLink>
           </nav>
-          <SearchBox />
         </header>)}
       <ImportBanner />
       <main id="main" tabIndex={-1}>
@@ -63,6 +62,9 @@ function Shell() {
           <Route path="/sources" element={<Sources />} /><Route path="/sources/:id" element={<Sources />} />
           <Route path="/journal" element={<Journal />} />
           <Route path="/about" element={<About />} />
+          <Route path="/route" element={<RoutePage />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/diagnostic" element={<DiagnosticPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/find" element={<FindPage />} />
           <Route path="/attempts/:id" element={<AttemptPage />} />

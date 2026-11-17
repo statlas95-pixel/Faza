@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { type Progress, type Attempt, type SavedSource, type Settings, normalize, emptyProgress } from '../shared/merge'
+import type { Evidence } from '../shared/mastery'
 export type { Progress, Attempt, SavedSource, Settings }
 
 // Прогресс всегда лежит в localStorage браузера — приложение работает и без сервера.
@@ -26,7 +27,7 @@ export function update(fn: (p: Progress) => void) {
   fn(next); state = next; save(); notify(); changeHooks.forEach((h) => h(state))
 }
 export function getProgress() { return state }
-export function resetProgress() { const s = state.settings; state = { ...emptyProgress(), settings: s }; save(); notify(); changeHooks.forEach((h) => h(state)) }
+export function resetProgress() { const s = state.settings; state = { ...emptyProgress(), settings: s, profile: state.profile }; save(); notify(); changeHooks.forEach((h) => h(state)) }
 export function useProgress(): Progress {
   return useSyncExternalStore((cb) => { listeners.add(cb); return () => listeners.delete(cb) }, () => state)
 }
@@ -36,15 +37,30 @@ export function toggleBookmark(path: string, title: string, kind: string) {
 export function saveLab(id: string, s: any) { update((p) => { p.labs[id] = { ...s, _at: Date.now() } }) }
 export function clearLab(id: string) { update((p) => { delete p.labs[id] }) }
 const uid = () => (globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`)
-/** Завершение занятия: счётчик и запись в историю попыток. */
-export function finishLab(id: string, summary?: string, detail?: any) {
+/** Свидетельство о навыке. Запись с тем же id заменяется — одна попытка не засчитывается дважды. */
+export function addEvidence(list: Evidence[]) {
+  if (!list.length) return
+  update((p) => { for (const e of list) { const i = p.evidence.findIndex((x) => x.id === e.id); if (i >= 0) p.evidence[i] = e; else p.evidence.unshift(e) } })
+}
+let labSkills: (labId: string) => { skills: string[]; title: string; transferOf?: string } = () => ({ skills: [], title: '' })
+export function registerLabSkills(fn: typeof labSkills) { labSkills = fn }
+/** Завершение занятия: счётчик, запись в историю попыток и свидетельства о навыках (score 0..1 считает движок занятия). */
+export function finishLab(id: string, summary?: string, detail?: any, score?: number) {
   update((p) => {
-    const prev = p.labDone[id], at = Date.now()
+    const prev = p.labDone[id], at = Date.now(), aid = uid()
     p.labDone[id] = { at, attempts: (prev?.attempts ?? 0) + 1, summary }
-    p.attempts.unshift({ id: uid(), labId: id, at, summary: summary ?? '', detail })
+    p.attempts.unshift({ id: aid, labId: id, at, summary: summary ?? '', detail: { ...(detail ?? {}), score, hints: p.hints[id] ?? 0 } })
     if (p.attempts.length > 200) p.attempts.length = 200
+    const info = labSkills(id)
+    if (score !== undefined) for (const skill of info.skills) {
+      p.evidence.unshift({ id: `lab:${aid}:${skill}`, skill, kind: 'lab', item: 'lab', result: score >= 0.8 ? 'ok' : score >= 0.5 ? 'partial' : 'wrong', score, hints: p.hints[id] ?? 0, src: id, label: `занятие «${info.title}»`, at })
+      // занятие-перенос, пройденное самостоятельно, — это и есть перенос принципа
+      if (info.transferOf && score >= 0.8) p.evidence.unshift({ id: `transfer:${id}:${skill}`, skill, kind: 'transfer', item: 'transfer', result: 'ok', src: id, label: `перенос: «${info.title}»`, at })
+    }
+    p.hints[id] = 0
   })
 }
+export function bumpHints(labId: string) { update((p) => { p.hints[labId] = (p.hints[labId] ?? 0) + 1 }) }
 export function toggleSource(s: Omit<SavedSource, 'at'>) {
   update((p) => { const i = p.savedSources.findIndex((x) => x.key === s.key); if (i >= 0) p.savedSources.splice(i, 1); else p.savedSources.unshift({ ...s, at: Date.now() }) })
 }

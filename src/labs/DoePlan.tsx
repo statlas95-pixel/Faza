@@ -72,7 +72,7 @@ export default function DoePlan({ lab }: { lab: LabMeta }) {
       const miss = [...F.map((f) => f.id), 'AB'].filter((k) => !s.ans[k]).length
       if (miss || !s.level || !isFinite(parseNum(s.pred))) { setWarn('Заполните все выводы, выбор уровня загустителя и прогноз вязкости.'); return }
       set((x) => { x.phase = 'debrief'; x.finished = true }); window.scrollTo(0, 0)
-      markFinished(lab.id, `варок ${s.runs.length}; уровень загустителя ${s.level === 'high' ? '0,5 %' : s.level === 'low' ? '0,3 %' : 'не выбран'}; прогноз ${s.pred} ${lab.unit}`, { runs: s.runs, answers: s.ans, pred: s.pred, level: s.level })
+      markFinished(lab.id, `варок ${s.runs.length}; уровень загустителя ${s.level === 'high' ? '0,5 %' : s.level === 'low' ? '0,3 %' : 'не выбран'}; прогноз ${s.pred} ${lab.unit}`, { runs: s.runs, answers: s.ans, pred: s.pred, level: s.level }, (s.level === 'high' ? 0.3 : 0) + (Math.abs(parseNum(s.pred) - doeTrue(m, 1, 1, -1)) <= 2 * m.sigma ? 0.25 : Math.abs(parseNum(s.pred) - doeTrue(m, 1, 1, -1)) <= 4 * m.sigma ? 0.12 : 0) + (eff.AB.estimable ? 0.25 : 0) + (cells.df >= 1 ? 0.2 : 0))
     }
     return frame(
       <div className="conclude">

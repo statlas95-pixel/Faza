@@ -24,7 +24,9 @@ export default function ScaleUp({ lab }: { lab: LabMeta }) {
       const miss = [!s.crit && 'критерий', !isFinite(rpm) && 'обороты', !isFinite(minutes) && 'время гомогенизации', !isFinite(coolPred) && 'оценка времени охлаждения', !s.cool && 'способ охлаждения', s.verif.length === 0 && 'план проверки'].filter(Boolean)
       if (miss.length) { setWarn(`Не заполнено: ${miss.join(', ')}.`); return }
       set((x) => { x.phase = 'debrief'; x.finished = true }); window.scrollTo(0, 0)
-      markFinished(lab.id, `обороты ${fmt(rpmEff, 4)}, проходов ${fmt(passes, 2)}`)
+      { const c = (lab.criteria as any[]).find((x) => x.id === s.crit), t20 = P.coolingMinutes(p.plant.m, p.plant.cp, p.plant.U, p.plant.A, p.plant.T0, p.plant.T1, 20), ce = Math.abs(coolPred - t20) / t20
+        const sc = ((c.verdict === 'ok' ? 1 : c.verdict === 'weak' ? 0.5 : 0) + (passes >= 4 && passes <= 12 ? 1 : passes >= 2.5 && passes <= 20 ? 0.5 : 0) + (ce <= 0.25 ? 1 : ce <= 0.6 ? 0.5 : 0) + (s.verif.includes('scaledown') ? 1 : s.verif.includes('criteria') || s.verif.includes('pilot') ? 0.5 : 0)) / 4
+        markFinished(lab.id, `обороты ${fmt(rpmEff, 4)}, проходов ${fmt(passes, 2)}`, { rpm: rpmEff, passes }, sc) }
     }
     return frame(
       <div className="scale">

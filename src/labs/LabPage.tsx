@@ -5,12 +5,16 @@ import { MdInline } from '../md'
 import { BookmarkButton, Quiz, Question, isCorrect, ConfirmButton } from '../ui'
 import { getProgress, saveLab, clearLab, finishLab, useProgress } from '../store'
 import { useTitle } from '../pages/util'
+import { recordTransfer, useLearning, skillsOfLab } from '../learning'
+import { LevelBar, StepCard } from '../pages/Learning'
+import { LEVELS } from '../../shared/mastery'
 import Investigation from './Investigation'
 import StabilityBench from './StabilityBench'
 import ScaleUp from './ScaleUp'
 import RheoCabinet from './RheoCabinet'
 import SaltDosing from './SaltDosing'
 import DoePlan from './DoePlan'
+import Worksheet from './Worksheet'
 
 export function LabsIndex() {
   useTitle('Занятия')
@@ -91,26 +95,39 @@ export function Transfer({ lab, answers, onAnswer }: { lab: LabMeta; answers: Re
       <p className="eyebrow">Перенос принципа</p>
       <h2>{t.title}</h2>
       <MdInline text={t.intro} />
-      <Quiz questions={qs} answers={answers} onAnswer={onAnswer} />
+      <Quiz questions={qs} answers={answers} onAnswer={(i, v) => { onAnswer(i, v); const a = { ...answers, [i]: v }; if (qs.every((_, k) => a[k] !== undefined)) recordTransfer(lab.id, qs.every((q, k) => isCorrect(q, a[k]))) }} />
       {Object.keys(answers).length === qs.length && <p className="transfer-sum" role="status">{right === qs.length ? 'Принцип перенесён: все ответы сходятся.' : `Сходится ${right} из ${qs.length}. Вернитесь к вопросам с пометкой «не так» — ответ можно изменить.`}</p>}
     </section>)
 }
 
 export function DebriefLinks({ lab }: { lab: LabMeta }) {
+  const L = useLearning()
+  const sks = skillsOfLab(lab.id)
+  const last = L.p.attempts.find((t) => t.labId === lab.id)
+  const next = L.route.find((r) => r.status === 'now')
   return (
-    <section className="panel"><h3>Открыть теорию по спорным местам</h3>
-      <ul className="linklist">{lab.topics.map((t: string) => topicById(t)).filter(Boolean).map((t: any) => <li key={t.id}><Link to={`/topics/${t.id}`}>{t.title}</Link> — {t.summary}</li>)}</ul>
-    </section>)
+    <>
+      <section className="panel skillupd"><h3>Что это занятие говорит о ваших навыках</h3>
+        {sks.map((sk) => { const s = L.states[sk.id]; return (
+          <div key={sk.id} className="skillrow"><div><b>{sk.name}</b><p className="small">{LEVELS[s.level].text}{last?.detail?.hints ? ` В этой попытке запрошено подсказок: ${last.detail.hints} — поэтому она засчитана как решение с опорой.` : ''}{s.level === 3 ? ' Чтобы подтвердить перенос, решите блок переноса выше.' : s.level === 2 ? ' До самостоятельного уровня — попытка без подсказок с результатом не ниже 80 %.' : ''}</p></div><LevelBar s={s} /></div>) })}
+        {last?.detail?.score !== undefined && <p className="small num">Результат попытки: {Math.round(last.detail.score * 100)} %. Повтор той же попытки уровень не меняет; новая попытка учитывается отдельно, но уверенность оценки растёт только от независимых свидетельств.</p>}
+      </section>
+      {next ? <section className="panel"><h3>Следующий шаг по вашему маршруту</h3><StepCard r={next} main /></section>
+        : !L.goal ? <section className="panel"><h3>Следующий шаг</h3><p>Выберите цель — платформа соберёт маршрут с учётом этого результата.</p><Link className="btn primary" to="/route">Собрать мой маршрут</Link></section> : null}
+      <section className="panel"><h3>Открыть теорию по спорным местам</h3>
+        <ul className="linklist">{lab.topics.map((t: string) => topicById(t)).filter(Boolean).map((t: any) => <li key={t.id}><Link to={`/topics/${t.id}`}>{t.title}</Link> — {t.summary}</li>)}</ul>
+      </section>
+    </>)
 }
 
-export function markFinished(id: string, summary: string, detail?: any) { finishLab(id, summary, detail) }
+export function markFinished(id: string, summary: string, detail?: any, score?: number) { finishLab(id, summary, detail, score) }
 
 export function LabPage() {
   const { id = '' } = useParams()
   const lab = labById(id)
   useTitle(lab?.title ?? 'Занятие не найдено')
   if (!lab) return <div className="page"><h1>Занятие не найдено</h1><Link to="/labs">К занятиям</Link></div>
-  const E = { investigation: Investigation, stability: StabilityBench, scaleup: ScaleUp, rheo: RheoCabinet, salt: SaltDosing, doe: DoePlan }[lab.engine as string]
+  const E = { investigation: Investigation, stability: StabilityBench, scaleup: ScaleUp, rheo: RheoCabinet, salt: SaltDosing, doe: DoePlan, worksheet: Worksheet }[lab.engine as string]
   if (!E) return <div className="page"><h1>Неизвестный тип занятия: {lab.engine}</h1></div>
   return <E key={lab.id} lab={lab} />
 }

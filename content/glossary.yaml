@@ -224,3 +224,32 @@
   en: replicate
   short: Независимое повторение опыта при тех же условиях; даёт оценку случайной ошибки.
   sources: [nist-handbook]
+
+- id: undissociated
+  term: Недиссоциированная форма
+  en: undissociated (protonated) acid
+  short: Незаряженная молекула слабой кислоты; у органических кислот-консервантов антимикробное действие связывают именно с ней.
+  long: Её доля задаётся разностью pH и pKa (уравнение Гендерсона — Хассельбальха) и резко падает, когда pH поднимается выше pKa.
+  topics: [preservation]
+  sources: [halla2018]
+
+- id: challenge-test
+  term: Тест эффективности консервирования
+  en: preservation efficacy (challenge) test
+  short: Испытание, в котором продукт намеренно заражают тест-микроорганизмами и следят за снижением их числа во времени.
+  topics: [preservation]
+  sources: [iso11930]
+
+- id: reynolds-mix
+  term: Число Рейнольдса для мешалки
+  en: impeller Reynolds number
+  short: "Re = ρ·N·D²/μ — отношение инерционных сил к вязким в аппарате с мешалкой; N — частота вращения в с⁻¹, D — диаметр мешалки."
+  topics: [mixing-basics]
+  sources: [him2003]
+
+- id: cavern
+  term: Каверна
+  en: cavern
+  short: Область вокруг мешалки, где вязкая или структурированная среда движется, тогда как остальной объём остаётся неподвижным.
+  topics: [mixing-basics]
+  sources: [him2003]

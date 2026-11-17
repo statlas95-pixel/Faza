@@ -1,0 +1,77 @@
+# Карта знаний: Раздел → Модуль → Тема. Тема живёт в одном файле content/topics/<id>.md;
+# если она важна для другого модуля, укажите его в also — страница останется общей.
+# prereq — темы-предпосылки (влияют на рекомендации). planned — темы из плана, ещё не опубликованы.
+goals:
+  - id: prod
+    name: Увереннее вести процесс на производстве
+    hint: Аппараты, режимы, отклонения партий
+    order: [mixing-basics, emulsification, lamellar-gel-network, surfactant-thickening, scale-up, preservation, rheology-basics, emulsion-stability, stability-testing, doe-basics]
+  - id: rnd
+    name: Разрабатывать рецептуры
+    hint: Стабильность, реология, эксперимент
+    order: [emulsion-stability, rheology-basics, lamellar-gel-network, stability-testing, preservation, doe-basics, surfactant-thickening, emulsification, scale-up, mixing-basics]
+  - id: bridge
+    name: Перейти из производства в R&D
+    hint: От процесса — к причинам и эксперименту
+    order: [rheology-basics, emulsion-stability, doe-basics, stability-testing, preservation, lamellar-gel-network, surfactant-thickening, scale-up, emulsification, mixing-basics]
+  - id: base
+    name: Освоить основы с начала
+    hint: По порядку карты знаний
+    order: [emulsion-stability, rheology-basics, surfactant-thickening, lamellar-gel-network, stability-testing, preservation, doe-basics, mixing-basics, emulsification, scale-up]
+contexts:
+  - { id: floor, name: Работаю на варочном участке или в цехе }
+  - { id: lab, name: Работаю в лаборатории или R&D }
+  - { id: study, name: Учусь или только начинаю }
+sections:
+  - id: chem
+    name: Основы косметической химии
+    text: От свойств сырья и растворов — к дисперсным системам, реологии, стабильности и микробиологической чистоте.
+    color: apricot
+    modules:
+      - id: chem-raw
+        name: Сырьё и водные растворы
+        topics: []
+        planned: ["Функции сырья в рецептуре", "pH, буферные свойства и электролиты"]
+      - id: chem-surf
+        name: Поверхностные явления и ПАВ
+        topics: [{ id: surfactant-thickening, prereq: [rheology-basics] }]
+        planned: ["Мицеллообразование и ККМ", "ГЛБ и выбор эмульгатора"]
+      - id: chem-disp
+        name: Дисперсные системы и эмульсии
+        topics: [{ id: emulsion-stability }, { id: lamellar-gel-network, prereq: [rheology-basics] }]
+      - id: chem-rheo
+        name: Полимеры и реология
+        topics: [{ id: rheology-basics }]
+        planned: ["Полимерные загустители: карбомеры, камеди, производные целлюлозы"]
+      - id: chem-stab
+        name: Стабильность и эксперимент
+        topics: [{ id: stability-testing, prereq: [emulsion-stability, rheology-basics] }, { id: doe-basics }]
+        planned: ["Дробные планы и поверхность отклика"]
+      - id: chem-micro
+        name: Консервирование и микробиологическая чистота
+        topics: [{ id: preservation }]
+        planned: ["Вода как сырьё и санитарная обработка оборудования"]
+  - id: proc
+    name: Процессы и аппараты
+    text: Что происходит в аппарате физически, чем управляет технолог и по чему судить о результате.
+    color: teal
+    modules:
+      - id: proc-mix
+        name: Гидродинамика и перемешивание
+        topics: [{ id: mixing-basics }]
+        planned: ["Геометрия аппаратов и типы мешалок", "Растворение и массообмен"]
+      - id: proc-disp
+        name: Диспергирование и гомогенизация
+        topics: [{ id: emulsification, prereq: [emulsion-stability] }]
+      - id: proc-heat
+        name: Теплообмен
+        topics: []
+        also: [scale-up]
+        planned: ["Нагрев и охлаждение через рубашку", "Плавление и ввод жировой фазы"]
+      - id: proc-scale
+        name: Масштабирование
+        topics: [{ id: scale-up, prereq: [emulsification, mixing-basics] }]
+      - id: proc-aux
+        name: Вспомогательные операции
+        topics: []
+        planned: ["Перекачивание вязких сред", "Деаэрация и вакуумирование", "Фильтрование"]

@@ -6,6 +6,8 @@ import { BookmarkButton, Quiz, Question } from '../ui'
 import { update, useProgress, getProgress } from '../store'
 import { useTitle } from './util'
 import { SourceFinder } from '../features/Sources'
+import { recordCheck, skillOfTopic, moduleOfTopic, useLearning } from '../learning'
+import { LevelBar } from './Learning'
 
 export function Catalog() {
   const [sp, setSp] = useSearchParams()
@@ -17,7 +19,8 @@ export function Catalog() {
   const list = topics.filter((t) => area === 'all' || t.area === area || t.area === 'both')
   return (
     <div className="page">
-      <h1>{q ? 'Результаты поиска' : 'Каталог тем'}</h1>
+      <h1>{q ? 'Результаты поиска' : 'Найти ответ на рабочий вопрос'}</h1>
+      {!q && <p className="lead">Опишите ситуацию своими словами. Поиск идёт по темам, рабочим вопросам, терминам, занятиям и источникам платформы.</p>}
       <form className="bigsearch" role="search" onSubmit={(e) => e.preventDefault()}>
         <label htmlFor="cs">Поиск по темам, рабочим вопросам, терминам, источникам и занятиям</label>
         <input id="cs" type="search" value={q} autoFocus={!!q} placeholder="Например: расслоение, предел текучести, охлаждение"
@@ -35,6 +38,7 @@ export function Catalog() {
         </div>
       ) : (
         <>
+          <p className="quick"><Link to="/labs">Все занятия</Link> · <Link to="/glossary">Термины</Link> · <Link to="/sources">Проверенные источники</Link> · <Link to="/find">Поиск во внешних научных базах</Link> · <Link to="/map">Карта знаний</Link></p>
           <div className="filters" role="group" aria-label="Фильтр по направлению">
             {[['all', 'Все'], ['production', 'Производство'], ['rnd', 'R&D']].map(([k, l]) => (
               <button key={k} className={`chip ${area === k ? 'on' : ''}`} aria-pressed={area === k} onClick={() => setArea(k)}>{l}</button>))}
@@ -55,7 +59,7 @@ export function Catalog() {
 export function TopicPage() {
   const { id = '' } = useParams()
   const t = topicById(id)
-  const p = useProgress()
+  const p = useProgress(), L = useLearning()
   const ref = useRef<HTMLDivElement>(null)
   const [saved] = useState(() => getProgress().scroll[id] ?? 0)
   const [resumeShown, setResumeShown] = useState(true)
@@ -71,6 +75,7 @@ export function TopicPage() {
     return () => { window.removeEventListener('scroll', onScroll); clearTimeout(timer) }
   }, [t])
   if (!t) return <div className="page"><h1>Тема не найдена</h1><Link to="/catalog">К каталогу</Link></div>
+  const sk = skillOfTopic(t.id)
   const cited = citedIds(t.body).map(sourceById).filter(Boolean)
   const answers = p.checks[t.id] ?? {}
   const qs: Question[] = t.checks.map((c) => ({ type: 'mc', ...c }))
@@ -79,10 +84,11 @@ export function TopicPage() {
       <header className={`topic-head sw-${t.swatch}`}>
         <span className={`swatch ${t.swatch} big`} aria-hidden />
         <div>
-          <p className="eyebrow"><Link to="/catalog">Темы</Link> · {t.domain}</p>
+          <p className="eyebrow"><Link to="/map">Карта знаний</Link> · {moduleOfTopic(t.id)?.section.name ?? t.domain} · {moduleOfTopic(t.id)?.module.name}</p>
           <h1>{t.title}</h1>
           <p className="lead">{t.summary}</p>
           <p className="meta num">{t.minutes} мин чтения · {areaLabel[t.area]} · обновлено {t.updated}</p>
+          {sk && <p className="outcome-line"><b>После темы вы сможете</b> {sk.outcome}. <LevelBar s={L.states[sk.id]} /></p>}
           <div className="row"><BookmarkButton title={t.title} kind="Тема" />
             {t.labs[0] && <Link className="btn" to={`/labs/${t.labs[0]}`}>К практике: {labById(t.labs[0])?.title}</Link>}</div>
         </div>
@@ -105,7 +111,7 @@ export function TopicPage() {
           <section id="check" className="check">
             <h2>Проверка понимания</h2>
             <p className="small">Пояснение даётся к каждому выбранному варианту. Ответы сохраняются.</p>
-            <Quiz questions={qs} answers={answers} onAnswer={(i, v) => update((s) => { (s.checks[t.id] ??= {})[i] = v })} />
+            <Quiz questions={qs} answers={answers} onAnswer={(i, v) => { update((s) => { (s.checks[t.id] ??= {})[i] = v }); recordCheck(t.id) }} />
             {Object.keys(answers).length > 0 && <button className="btn ghost small" onClick={() => update((s) => { delete s.checks[t.id] })}>Сбросить ответы и пройти заново</button>}
           </section>
           {t.labs.length > 0 && (

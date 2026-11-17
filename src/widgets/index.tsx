@@ -200,6 +200,47 @@ function InteractionW() {
     </Frame>)
 }
 
+function PreservativeW() {
+  const [ph, setPh] = useState(5.0), [pka, setPka] = useState(4.76)
+  const f = (x: number, k: number) => 1 / (1 + Math.pow(10, x - k))
+  const xs = range(3, 8, 60)
+  return (
+    <Frame title="Доля действующей формы кислоты-консерванта" note="Расчёт по уравнению Гендерсона — Хассельбальха. Значения pKa справочные (25 °C); расчёт — ориентир, защиту подтверждают испытанием.">
+      <div className="wgrid">
+        <div>
+          <Slider label="pH продукта" value={ph} min={3} max={8} step={0.1} onChange={setPh} show={fmt(ph, 2)} />
+          <div className="seg" role="group" aria-label="Кислота">{[['Сорбиновая, pKa ≈ 4,76', 4.76], ['Бензойная, pKa ≈ 4,2', 4.2]].map(([l, k]) => <label key={l as string} className={pka === k ? 'on' : ''}><input type="radio" name="pka" checked={pka === k} onChange={() => setPka(k as number)} />{l}</label>)}</div>
+          <dl className="readout">
+            <div><dt>Недиссоциированная форма</dt><dd className="num">{fmt(f(ph, pka) * 100, 3)} <small>%</small></dd></div>
+            <div><dt>Относительно pH 5,0</dt><dd className="num">× {fmt(f(ph, pka) / f(5, pka), 2)}</dd></div>
+          </dl>
+        </div>
+        <Chart title="Доля недиссоциированной кислоты от pH" xDomain={[3, 8]} yDomain={[0, 100]} xLabel="pH" yLabel="Недиссоциированная форма, %" cursor={ph}
+          series={[{ name: 'сорбиновая', color: 'var(--teal)', points: xs.map((x) => [x, f(x, 4.76) * 100]) }, { name: 'бензойная', color: 'var(--coral)', dash: '7 4', points: xs.map((x) => [x, f(x, 4.2) * 100]) }]} />
+      </div>
+    </Frame>)
+}
+function MixReW() {
+  const [lmu, setLmu] = useState(-3), [rpm, setRpm] = useState(120), [D, setD] = useState(0.4)
+  const mu = Math.pow(10, lmu), N = rpm / 60, Re = (1000 * N * D * D) / mu
+  const regime = Re > 1e4 ? 'турбулентный' : Re < 10 ? 'ламинарный' : 'переходный'
+  return (
+    <Frame title="Число Рейнольдса для мешалки" note="Плотность 1000 кг/м³. Границы режимов — типичные ориентиры для аппаратов с мешалками, а не точные значения для вашего аппарата.">
+      <div className="wgrid">
+        <div>
+          <Slider label="Вязкость (лог. шкала)" value={lmu} min={-3} max={2} step={0.1} onChange={setLmu} show={`${fmt(mu, 2)} Па·с`} />
+          <Slider label="Обороты" value={rpm} min={10} max={240} step={5} onChange={setRpm} show={`${rpm} об/мин = ${fmt(N, 3)} с⁻¹`} />
+          <Slider label="Диаметр мешалки" value={D} min={0.2} max={1.2} step={0.02} onChange={setD} show={`${fmt(D, 3)} м`} />
+        </div>
+        <dl className="readout">
+          <div><dt>Re = ρ·N·D²/μ</dt><dd className="num">{fmt(Re, 3)}</dd></div>
+          <div><dt>Режим</dt><dd>{regime}</dd></div>
+          <div><dt>Как мощность зависит от оборотов</dt><dd className="num">{Re > 1e4 ? 'P ∝ N³, от вязкости не зависит' : Re < 10 ? 'P ∝ μ·N²' : 'между N² и N³'}</dd></div>
+        </dl>
+      </div>
+    </Frame>)
+}
+
 function MediaRegistry() {
   return (
     <div className="table-wrap" tabIndex={0}>
@@ -213,6 +254,6 @@ function MediaRegistry() {
 }
 
 export const widgets: Record<string, ComponentType> = {
-  'media-registry': MediaRegistry, saltcurve: SaltCurveW, interaction: InteractionW,
+  'media-registry': MediaRegistry, saltcurve: SaltCurveW, interaction: InteractionW, preservative: PreservativeW, mixre: MixReW,
   stokes: Stokes, flowcurve: FlowCurve, passes: Passes, cooling: Cooling, 'demo-destabilization': Demo,
 }

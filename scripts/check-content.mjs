@@ -47,7 +47,7 @@ for (const l of labs) {
   for (const k of ['id', 'engine', 'title', 'summary', 'role', 'skill', 'brief', 'dataNote']) if (!l[k]) err(l.file, `нет поля ${k}`)
   for (const x of l.topics ?? []) if (!topicIds.has(x)) err(l.file, `topics: нет темы ${x}`)
   checkText(l.file, JSON.stringify(l))
-  const qs = [...(l.questions ?? []), ...(typeof l.transfer === 'object' ? l.transfer?.questions ?? [] : [])]
+  const qs = [...(l.questions ?? []), ...(l.transferQuiz?.questions ?? []), ...(l.steps ?? []).flatMap((x) => x.questions ?? []), ...(typeof l.transfer === 'object' ? l.transfer?.questions ?? [] : [])]
   qs.forEach((q, i) => { if (q.type === 'mc' && q.options.filter((o) => o.correct).length !== 1) err(l.file, `вопрос ${i + 1}: нужен ровно один верный вариант`); if (q.type === 'num' && typeof q.answer !== 'number') err(l.file, `вопрос ${i + 1}: нет числового ответа`) })
   if (l.engine === 'investigation') {
     const ev = new Set(l.requests.map((r) => r.id))
@@ -65,6 +65,16 @@ for (const s of site.track?.steps ?? []) { if (s.topic && !topicIds.has(s.topic)
 const unused = sources.filter((s) => !topics.some((t) => t.body.includes(`@${s.id}`)) && !labs.some((l) => JSON.stringify(l).includes(`@${s.id}`)) && !terms.some((t) => (t.sources ?? []).includes(s.id)) && !fs.readFileSync(path.join(C, 'about.md'), 'utf8').includes(`@${s.id}`))
 for (const s of unused) warns.push(`sources.yaml: источник «${s.id}» нигде не используется`)
 
+// карта знаний, навыки, диагностика
+const cur = readY('curriculum.yaml') ?? { sections: [], goals: [] }, skills = readY('skills.yaml') ?? [], diag = readY('diagnostic.yaml') ?? []
+const mapped = cur.sections.flatMap((s) => s.modules.flatMap((m) => m.topics.map((t) => t.id)))
+for (const t of topics) if (!mapped.includes(t.id)) err('curriculum.yaml', `тема «${t.id}» не размещена ни в одном модуле карты знаний`)
+for (const id of mapped) if (!topicIds.has(id)) err('curriculum.yaml', `в карте указана несуществующая тема «${id}»`)
+for (const t of topics) if (!skills.some((s) => s.topics.includes(t.id))) err('skills.yaml', `у темы «${t.id}» нет навыка`)
+for (const s of skills) { for (const x of s.topics) if (!topicIds.has(x)) err('skills.yaml', `навык ${s.id}: нет темы ${x}`); for (const x of s.labs) if (!labIds.has(x)) err('skills.yaml', `навык ${s.id}: нет занятия ${x}`) }
+for (const l of labs) if (!skills.some((s) => s.labs.includes(l.id))) warns.push(`skills.yaml: занятие «${l.id}» не привязано к навыку — его результат не повлияет на профиль`)
+for (const g of cur.goals) for (const id of mapped) if (!g.order.includes(id)) err('curriculum.yaml', `цель ${g.id}: в порядке нет темы ${id}`)
+for (const d of diag) { if (!skills.some((s) => s.id === d.skill)) err('diagnostic.yaml', `${d.id}: нет навыка ${d.skill}`); if (d.after && !diag.some((x) => x.id === d.after.item)) err('diagnostic.yaml', `${d.id}: after ссылается на несуществующее задание`) }
 console.log(`Темы: ${topics.length} · занятия: ${labs.length} · термины: ${terms.length} · источники: ${sources.length} · изображения: ${media.length}`)
 warns.forEach((w) => console.log('  предупреждение — ' + w))
 if (errors.length) { errors.forEach((e) => console.error('  ОШИБКА — ' + e)); console.error(`\nНайдено ошибок: ${errors.length}`); process.exit(1) }

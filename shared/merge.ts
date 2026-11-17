@@ -2,6 +2,9 @@
 // Правило: ничего не теряем — объединяем, а при конфликте берём более позднее или более полное.
 export interface Attempt { id: string; labId: string; at: number; summary: string; detail?: any }
 export interface SavedSource { key: string; title: string; authors: string; year: string; type: string; doi?: string; url?: string; provider: string; access: string; note?: string; topic?: string; suggested?: boolean; at: number }
+import type { Evidence, Result } from './mastery'
+export interface Profile { goal?: string; context?: string; at?: number }
+export interface Diag { answers: Record<string, { result: Result; note?: string; value?: string; at: number }>; startedAt?: number; finishedAt?: number }
 export interface Settings { level: 'novice' | 'practitioner' | 'expert'; hints: boolean; aiModel?: string }
 export interface Progress {
   visited: Record<string, number>; scroll: Record<string, number>
@@ -11,16 +14,17 @@ export interface Progress {
   bookmarks: { path: string; title: string; kind: string; at: number }[]
   attempts: Attempt[]; savedSources: SavedSource[]; settings: Settings
   last?: { path: string; title: string; at: number }
+  profile: Profile; diag: Diag; evidence: Evidence[]; hints: Record<string, number>
 }
 export const emptyProgress = (): Progress => ({
   visited: {}, scroll: {}, checks: {}, labs: {}, labDone: {}, bookmarks: [], attempts: [], savedSources: [],
-  settings: { level: 'practitioner', hints: true },
+  settings: { level: 'practitioner', hints: true }, profile: {}, diag: { answers: {} }, evidence: [], hints: {},
 })
 /** Приводит объект любой прошлой версии к текущей форме (миграция данных 0.1 -> 0.2). */
 export function normalize(p: any): Progress {
   const e = emptyProgress()
   if (!p || typeof p !== 'object') return e
-  return { ...e, ...p, settings: { ...e.settings, ...(p.settings ?? {}) }, attempts: Array.isArray(p.attempts) ? p.attempts : [], savedSources: Array.isArray(p.savedSources) ? p.savedSources : [], bookmarks: Array.isArray(p.bookmarks) ? p.bookmarks : [] }
+  return { ...e, ...p, settings: { ...e.settings, ...(p.settings ?? {}) }, attempts: Array.isArray(p.attempts) ? p.attempts : [], savedSources: Array.isArray(p.savedSources) ? p.savedSources : [], bookmarks: Array.isArray(p.bookmarks) ? p.bookmarks : [], profile: p.profile ?? {}, diag: { answers: {}, ...(p.diag ?? {}) }, evidence: Array.isArray(p.evidence) ? p.evidence : [], hints: p.hints ?? {} }
 }
 const maxMap = (a: Record<string, number>, b: Record<string, number>) => {
   const o: Record<string, number> = { ...a }
@@ -54,6 +58,12 @@ export function mergeProgress(aRaw: any, bRaw: any): Progress {
   out.savedSources = byKey([...a.savedSources, ...b.savedSources], (x) => x.key, (x) => x.at)
   out.last = !a.last ? b.last : !b.last ? a.last : b.last.at >= a.last.at ? b.last : a.last
   out.settings = { ...a.settings, ...b.settings }
+  out.evidence = byKey([...a.evidence, ...b.evidence], (x) => x.id, (x) => x.at)
+  out.profile = (b.profile.at ?? 0) >= (a.profile.at ?? 0) ? b.profile : a.profile
+  const da = a.diag, db = b.diag
+  out.diag = { answers: { ...da.answers }, startedAt: da.startedAt ?? db.startedAt, finishedAt: Math.max(da.finishedAt ?? 0, db.finishedAt ?? 0) || undefined }
+  for (const [k, v] of Object.entries(db.answers)) if (!out.diag.answers[k] || v.at >= out.diag.answers[k].at) out.diag.answers[k] = v
+  out.hints = maxMap(a.hints, b.hints)
   for (const k of Object.keys(out.labDone)) out.labDone[k].attempts = Math.max(out.labDone[k].attempts, out.attempts.filter((t) => t.labId === k).length)
   return out
 }
@@ -64,7 +74,7 @@ export function summarize(pRaw: any) {
     topics: Object.keys(p.visited).length,
     answers: Object.values(p.checks).reduce((n, c) => n + Object.keys(c).length, 0),
     labsStarted: Object.keys(p.labs).length, labsDone: Object.keys(p.labDone).length,
-    attempts: p.attempts.length, bookmarks: p.bookmarks.length, sources: p.savedSources.length,
+    attempts: p.attempts.length, bookmarks: p.bookmarks.length, sources: p.savedSources.length, evidence: p.evidence.length,
   }
 }
 export const isEmpty = (p: any) => { const s = summarize(p); return Object.values(s).every((v) => v === 0) }

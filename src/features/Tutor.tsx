@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, ApiError, useAccount } from '../account'
-import { useProgress, getProgress } from '../store'
+import { useProgress, getProgress, bumpHints } from '../store'
 import { renderSafe } from '../md'
 
 type Mode = 'explain' | 'hint' | 'review' | 'ground'
@@ -34,6 +34,7 @@ export function Tutor({ kind, id, title }: { kind: 'topic' | 'lab'; id: string; 
     try {
       const r = await api('POST', '/api/ai/tutor', { model: chosen, mode, kind, id, level: p.settings.level, hintStep: step, message: text, opened: Object.keys(st.opened ?? {}).filter((k) => st.opened[k]), bought: st.bought ?? [] }, ctl.current.signal)
       setAns({ ...r, mode })
+      if (kind === 'lab' && mode === 'hint' && !r.finished) bumpHints(id)
     } catch (e: any) {
       if (e?.name === 'AbortError') setErr('Запрос отменён.')
       else setErr(e instanceof ApiError ? e.message : 'Не удалось получить ответ.')

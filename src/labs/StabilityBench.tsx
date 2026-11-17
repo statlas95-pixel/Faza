@@ -95,7 +95,7 @@ export default function StabilityBench({ lab }: { lab: LabMeta }) {
         <button className="btn primary" disabled={!all} onClick={() => {
           set((x) => { x.phase = 'debrief'; x.finished = true })
           const r = s.runs[s.chosen!].res
-          markFinished(lab.id, `${r.stableOk && r.sprayOk ? 'цель достигнута' : 'цель не достигнута'} за ${s.runs.length} прогонов`); window.scrollTo(0, 0)
+          markFinished(lab.id, `${r.stableOk && r.sprayOk ? 'цель достигнута' : 'цель не достигнута'} за ${s.runs.length} прогонов`, { runs: s.runs.length }, (r.stableOk && r.sprayOk ? 0.6 : 0.15) + 0.4 * (qs.filter((q, i) => isCorrect(q, s.answers[i])).length / qs.length)); window.scrollTo(0, 0)
         }}>К разбору</button>
       </div>)
   }
