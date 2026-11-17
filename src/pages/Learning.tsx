@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { topicById, labById, areaLabel, levelLabel, levelHint } from '../content'
-import { useLearning, curriculum, skills, skillById, skillOfTopic, diagItems, setGoal, answerDiag, restartDiag, moduleOfTopic } from '../learning'
-import { LEVELS, CONF, type SkillState, type RouteStep } from '../../shared/mastery'
-import { parseNum } from '../ui'
+import { useLearning, curriculum, skills, skillById, skillOfTopic, diagItems, diagTracks, diagDomainLabel, setGoal, answerDiag, restartDiag, moduleOfTopic } from '../learning'
+import { LEVELS, CONF, diagItemsForTrack, diagTotal, type SkillState, type RouteStep } from '../../shared/mastery'
+import { parseNum, ConfirmButton } from '../ui'
 import { useTitle } from './util'
 
 export function LevelBar({ s, compact }: { s?: SkillState; compact?: boolean }) {
@@ -55,7 +55,7 @@ export function RoutePage() {
     <div className="page route">
       <p className="eyebrow">Цель: {L.goal.name} · <button className="linkbtn" onClick={() => setPick(true)}>сменить</button></p>
       <h1>Мой маршрут</h1>
-      {!L.diagDone && <div className="notice">{L.diagAnswered ? `Диагностика пройдена частично (${L.diagAnswered} ответов) — рекомендации предварительные.` : 'Диагностика не пройдена — маршрут идёт по порядку цели, рекомендации предварительные.'} <Link className="btn small" to="/diagnostic">{L.diagAnswered ? 'Продолжить диагностику' : 'Пройти диагностику · 5 минут'}</Link></div>}
+      {!L.diagDone && <div className="notice">{L.diagAnswered ? `Диагностика пройдена частично (${L.diagAnswered} ответов) — рекомендации предварительные.` : 'Диагностика не пройдена — маршрут идёт по порядку цели, рекомендации предварительные.'} <Link className="btn small" to="/diagnostic">{L.diagAnswered ? 'Продолжить диагностику' : 'Выбрать вариант диагностики'}</Link></div>}
       {now ? <StepCard r={now} main /> : <div className="notice ok">Все навыки маршрута подтверждены действием. Загляните в <Link to="/map">карту знаний</Link> — там видно, что запланировано дальше.</div>}
       <h2>Дальше по маршруту</h2>
       <ol className="steps-list" start={2}>{L.route.filter((r) => r !== now).map((r) => <li key={r.topic} className={r.status}><StepCard r={r} /></li>)}</ol>
@@ -98,31 +98,56 @@ export function DiagnosticPage() {
   useTitle('Диагностика')
   const L = useLearning(), nav = useNavigate()
   const [val, setVal] = useState(''), [sel, setSel] = useState<number | null>(null)
+  const [choosing, setChoosing] = useState(false)
   if (!L.goal) return <div className="page"><h1>Диагностика</h1><p className="lead">Сначала выберите цель — от неё зависит, с каких заданий начать.</p><GoalPicker /></div>
+  const track = diagTracks.find((t) => t.id === L.p.diag.track)
+  const legacy = !track && Object.keys(L.p.diag.answers).length > 0
+  if (choosing || (!track && !legacy)) return (
+    <div className="page diag-start"><p className="eyebrow">Входная диагностика</p><h1>Выберите вариант под вашу подготовку</h1>
+      <p className="lead">Вариант задаёт начальную сложность и примеры, а не присваивает уровень навыка. Во всех вариантах есть теория и практика. Можно ответить «Не знаю», пропустить вопрос или вернуться позже.</p>
+      <div className="goals" role="group" aria-label="Вариант диагностики">{diagTracks.map((t) => {
+        const bank = diagItemsForTrack(diagItems, t.id).filter((i) => !i.after)
+        return <button className="goal" key={t.id} onClick={() => { restartDiag(t.id); setChoosing(false); setVal(''); setSel(null) }}>
+          <b>{t.name}</b><span>{t.description}</span><span className="small num">{bank.length} основных вопросов · теория: {bank.filter((i) => i.mode === 'theory').length} · практика: {bank.filter((i) => i.mode === 'practice').length} · {t.time}</span>
+        </button>
+      })}</div>
+      <p className="small">Это короткий срез подготовки, а не экзамен или аттестация. Неохваченные навыки уточняются в темах и занятиях; результаты разных вариантов не предназначены для рейтинга людей.</p>
+      {choosing && <button className="btn ghost" onClick={() => setChoosing(false)}>Вернуться к текущей диагностике</button>}
+      <p><Link to="/route">Пропустить диагностику — открыть предварительный маршрут</Link></p>
+    </div>)
   const item = L.nextItem
-  const n = Object.keys(L.p.diag.answers).length
+  const n = L.diagAnswered
+  const bank = diagItemsForTrack(diagItems, L.p.diag.track)
+  const change = <ConfirmButton label="Выбрать другой вариант" ask="При выборе нового варианта ответы диагностики будут сброшены. Занятия, закладки и остальные результаты сохранятся. Продолжить?" onConfirm={() => setChoosing(true)} />
   const go = (fn: () => void) => { fn(); setVal(''); setSel(null) }
   if (!item) {
     const ans = L.p.diag.answers
     return (
       <div className="page diag">
         <p className="eyebrow">Диагностика завершена</p><h1>Что показали ваши ответы</h1>
+        <p className="lead">{track?.name ?? 'Прежний вариант диагностики'}. Результат предварительный: это основание для выбора тем, а не подтверждение профессиональной квалификации.</p>
+        {track && <div className="diag-domains">{Object.entries(diagDomainLabel).map(([id, label]) => {
+          const xs = bank.filter((i) => i.domain === id && ans[i.id]), tested = xs.filter((i) => !['skip', 'unknown'].includes(ans[i.id].result))
+          return <section className="panel" key={id}><h2>{label}</h2><p>{tested.length ? `Верно ${tested.filter((i) => ans[i.id].result === 'ok').length} из ${tested.length} ответов` : 'Пока нет данных для оценки'}</p><p className="small">Не знаю: {xs.filter((i) => ans[i.id].result === 'unknown').length} · пропущено: {xs.filter((i) => ans[i.id].result === 'skip').length}</p></section>
+        })}</div>}
         <div className="table-wrap" tabIndex={0}><table><thead><tr><th>Задание</th><th>Навык</th><th>Ваш ответ</th><th>Что это значит</th></tr></thead>
-          <tbody>{diagItems.filter((i) => ans[i.id]).map((i) => { const a = ans[i.id]; return (
+          <tbody>{bank.filter((i) => ans[i.id]).map((i) => { const a = ans[i.id]; return (
             <tr key={i.id}><td>{i.short}</td><td className="small">{skillById(i.skill)?.name}</td><td>{a.result === 'skip' ? 'пропущено' : a.result === 'unknown' ? 'не знаю' : a.note ?? a.value}</td>
-              <td><span className={`verdict ${a.result === 'ok' ? 'ok' : a.result === 'partial' ? 'weak' : a.result === 'skip' ? 'weak' : 'wrong'}`}>{{ ok: i.kind === 'recognize' ? 'распознаёте' : 'решаете', partial: 'частично обосновано', wrong: 'затруднение', unknown: 'затруднение — честный ответ', skip: 'нет данных' }[a.result]}</span></td></tr>) })}</tbody></table></div>
+              <td><span className={`verdict ${a.result === 'ok' ? 'ok' : a.result === 'partial' ? 'weak' : a.result === 'skip' ? 'weak' : 'wrong'}`}>{{ ok: i.kind === 'recognize' ? 'распознаёте' : 'решаете', partial: 'частично обосновано', wrong: 'затруднение', unknown: 'затруднение — честный ответ', skip: 'нет данных' }[a.result]}</span>{(i.topic ?? skillById(i.skill)?.topics[0]) && <p><Link to={`/topics/${i.topic ?? skillById(i.skill)!.topics[0]}`}>Разобрать теорию →</Link></p>}</td></tr>) })}</tbody></table></div>
         <p className="small">Диагностика даёт не больше уровня «выполняет с опорой»: самостоятельность и перенос подтверждаются только занятиями. Пропущенные задания не считаются ошибкой — по ним просто нет данных.</p>
         {L.next && <><h2>С чего начать</h2><StepCard r={L.next} main /></>}
-        <div className="row"><Link className="btn" to="/route">Весь маршрут и профиль навыков</Link><button className="btn ghost" onClick={() => restartDiag()}>Пройти заново</button></div>
+        <div className="row"><Link className="btn" to="/route">Весь маршрут и профиль навыков</Link><ConfirmButton label="Пройти заново" ask="Сбросить ответы этой диагностики и начать заново? Остальной прогресс сохранится." onConfirm={() => go(() => restartDiag(L.p.diag.track))} />{change}</div>
       </div>)
   }
   const total = L.diagTotal
   return (
     <div className="page diag">
       <p className="eyebrow">Диагностика · цель: {L.goal.name}</p>
+      <p><b>{track?.name ?? 'Ранее начатая диагностика'}</b> · {change}</p>
+      {legacy && <p className="notice">Ваши прежние ответы сохранены. Можно завершить этот вариант или выбрать новый, подходящий по подготовке.</p>}
       <div className="dprog" role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={Math.min(n, total)} aria-label="Ход диагностики"><span style={{ width: `${Math.min(100, (n / total) * 100)}%` }} /></div>
-      <p className="small">{item.after ? 'Уточняющее задание — оно появилось, потому что на предыдущее вы ответили верно.' : `Задание ${Math.min(n + 1, total)} из примерно ${total}.`} Можно прерваться: ответы сохраняются.</p>
-      <article className="dq"><p className="skilltag">{skillById(item.skill)?.name}</p><h1>{item.q}</h1>
+      <p className="small">{item.after ? 'Уточняющее задание — оно появилось после ответа на основной вопрос.' : `Задание ${n + 1} из ${total}.`} Основная часть: {diagTotal(diagItems, L.p.diag.track)} вопросов; после верных ответов возможны уточнения. Можно прерваться: ответы сохраняются.</p>
+      <article className="dq">{item.domain && <p className="eyebrow">{diagDomainLabel[item.domain]} · {item.mode === 'theory' ? 'Теория' : 'Практика'}</p>}<p className="skilltag">{skillById(item.skill)?.name}</p><h1>{item.q}</h1>
         {item.options ? (
           <fieldset><legend className="sr">Варианты ответа</legend>{item.options.map((o, i) => <label key={i} className={`opt ${sel === i ? 'sel' : ''}`}><input type="radio" name="dq" checked={sel === i} onChange={() => setSel(i)} /><span>{o.text}</span></label>)}</fieldset>
         ) : (

@@ -46,7 +46,7 @@ export function skillState(skill: string, all: Evidence[], legacyLabs: string[] 
   // перенос поднимает до 4 только поверх самостоятельного решения; без него он равен решению с опорой
   const level = hasTransfer ? (direct >= 3 ? 4 : Math.max(direct, 2)) : direct
   const positive = [...bySrc.values()].filter((v) => v > 0).length
-  const confidence = Math.min(positive, 3)
+  const confidence = ev.every((e) => e.kind === 'diag') ? Math.min(positive, 1) : Math.min(positive, 3)
   // затруднение: последнее по времени неверное или «не знаю», после которого не было решения уровня 2+
   const bad = ev.find((e) => e.result === 'wrong' || e.result === 'unknown' || (e.kind === 'lab' && (e.score ?? 0) < 0.5))
   const gap = bad && !ev.some((e) => e.at > bad.at && supports(e) >= 2) && level < 2 ? bad : undefined
@@ -85,11 +85,20 @@ export function buildRoute(order: string[], topics: TopicRef[], states: Record<s
   }).map((x, i, a) => (x.status === 'next' && a.slice(0, i).filter((y) => y.status === 'next').length >= 2 ? { ...x, status: 'later' as const } : x))
 }
 
-export interface DiagItem { id: string; skill: string; kind: 'recognize' | 'decide' | 'calc'; first?: string[]; after?: { item: string; result: Result[] }; short: string; q: string; options?: { text: string; result: Result; note: string }[]; answer?: number; tol?: number; unit?: string }
+export const DIAG_TRACKS = ['graduate', 'starter', 'experienced'] as const
+export type DiagTrack = typeof DIAG_TRACKS[number]
+export type DiagDomain = 'physical' | 'colloid' | 'process' | 'cosmetics'
+export interface DiagItem { id: string; skill: string; kind: 'recognize' | 'decide' | 'calc'; tracks?: DiagTrack[]; domain?: DiagDomain; mode?: 'theory' | 'practice'; topic?: string; first?: string[]; after?: { item: string; result: Result[] }; short: string; q: string; options?: { text: string; result: Result; note: string }[]; answer?: number; tol?: number; unit?: string }
+/** Без track читаем только прежний банк: начатая диагностика не меняется после обновления. */
+export const diagItemsForTrack = (items: DiagItem[], track?: DiagTrack) => items.filter((i) => track ? i.tracks?.includes(track) : !i.tracks)
+export function diagProgress(items: DiagItem[], answers: Record<string, { result: Result }>, track?: DiagTrack) {
+  const eligible = diagItemsForTrack(items, track).filter((i) => !i.after || i.after.result.includes(answers[i.after.item]?.result))
+  return { answered: eligible.filter((i) => !!answers[i.id]).length, total: eligible.length }
+}
 /** Следующее задание диагностики: сначала различающие для цели, уточняющие — только если ответ на них повлияет. */
-export function nextDiagItem(items: DiagItem[], answers: Record<string, { result: Result }>, goal: string): DiagItem | undefined {
-  const open = items.filter((i) => !answers[i.id] && (!i.after || (answers[i.after.item] && i.after.result.includes(answers[i.after.item].result))))
+export function nextDiagItem(items: DiagItem[], answers: Record<string, { result: Result }>, goal: string, track?: DiagTrack): DiagItem | undefined {
+  const open = diagItemsForTrack(items, track).filter((i) => !answers[i.id] && (!i.after || (answers[i.after.item] && i.after.result.includes(answers[i.after.item].result))))
   // уточняющее задание идёт сразу после своего основного
   return open.find((i) => i.after) ?? open.find((i) => i.first?.includes(goal)) ?? open[0]
 }
-export const diagTotal = (items: DiagItem[]) => items.filter((i) => !i.after).length
+export const diagTotal = (items: DiagItem[], track?: DiagTrack) => diagItemsForTrack(items, track).filter((i) => !i.after).length
