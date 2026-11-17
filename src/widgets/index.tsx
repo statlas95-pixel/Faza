@@ -241,6 +241,134 @@ function MixReW() {
     </Frame>)
 }
 
+function DilutionW() {
+  const [w1, setW1] = useState(50), [w2, setW2] = useState(10), [m2, setM2] = useState(30), [rho, setRho] = useState(1.52)
+  const m1 = (m2 * w2) / w1, water = m2 - m1, v1 = m1 / rho
+  return (
+    <Frame title="Разбавление: сколько концентрата и воды" note="Сохраняется масса растворённого вещества: m₁·w₁ = m₂·w₂. Плотность нужна только для пересчёта массы концентрата в объём.">
+      <div className="wgrid">
+        <div>
+          <Slider label="Концентрация исходного раствора w₁" value={w1} min={5} max={99} step={1} onChange={(v) => { setW1(v); if (w2 >= v) setW2(Math.max(1, v - 1)) }} show={`${w1} %`} />
+          <Slider label="Нужная концентрация w₂" value={w2} min={1} max={Math.max(1, w1 - 1)} step={0.5} onChange={setW2} show={`${fmt(w2, 3)} %`} />
+          <Slider label="Нужная масса раствора m₂" value={m2} min={1} max={200} step={1} onChange={setM2} show={`${m2} кг`} />
+          <Slider label="Плотность исходного раствора" value={rho} min={0.8} max={1.9} step={0.01} onChange={setRho} show={`${fmt(rho, 3)} кг/л`} />
+        </div>
+        <dl className="readout">
+          <div><dt>Исходного раствора</dt><dd className="num">{fmt(m1, 3)} <small>кг · {fmt(v1, 3)} л</small></dd></div>
+          <div><dt>Воды</dt><dd className="num">{fmt(water, 3)} <small>кг</small></dd></div>
+          <div><dt>Если отмерить {fmt(m1, 3)} литров вместо килограммов</dt><dd className="num">{fmt((m1 * rho * w1) / (m1 * rho + water), 3)} <small>% вместо {fmt(w2, 3)} %</small></dd></div>
+        </dl>
+      </div>
+    </Frame>)
+}
+function BufferW() {
+  const [pka, setPka] = useState(3.86), [C, setC] = useState(0.1), [ph0, setPh0] = useState(4.5)
+  const xs = range(0, 0.06, 61)
+  // начальное соотношение форм задаётся pH0; добавляем сильную кислоту x моль/л
+  const r0 = Math.pow(10, ph0 - pka), A0 = (C * r0) / (1 + r0), HA0 = C - A0
+  const phBuf = (x: number) => { const A = A0 - x, HA = HA0 + x; if (A <= 1e-6) return Math.max(-Math.log10(Math.max(x - A0, 1e-9)), 0.5); return pka + Math.log10(A / HA) }
+  const phWater = (x: number) => (x < 1e-7 ? ph0 : Math.min(ph0, -Math.log10(x)))
+  const ka = Math.pow(10, -pka), h = Math.pow(10, -ph0), beta = (2.303 * C * ka * h) / Math.pow(ka + h, 2)
+  return (
+    <Frame title="Буфер против небуферированной системы" note="Учебная модель: одна слабая кислота и её соль, уравнение Гендерсона — Хассельбальха, концентрации вместо активностей. Для «без буфера» pH задаётся только добавленной сильной кислотой.">
+      <div className="wgrid">
+        <div>
+          <Slider label="pKa слабой кислоты" value={pka} min={2.5} max={7} step={0.01} onChange={setPka} show={fmt(pka, 3)} />
+          <Slider label="Общая концентрация буфера C" value={C} min={0.01} max={0.3} step={0.01} onChange={setC} show={`${fmt(C, 2)} моль/л`} />
+          <Slider label="Исходный pH" value={ph0} min={2.5} max={7} step={0.05} onChange={setPh0} show={fmt(ph0, 3)} />
+          <dl className="readout"><div><dt>Буферная ёмкость при исходном pH</dt><dd className="num">{fmt(beta, 2)} <small>моль/(л·ед. pH) · максимум {fmt(0.576 * C, 2)} при pH = pKa</small></dd></div></dl>
+        </div>
+        <Chart title="pH при добавлении сильной кислоты" xDomain={[0, 0.06]} yDomain={[0, 7.5]} xLabel="Добавлено сильной кислоты, моль/л" yLabel="pH"
+          series={[{ name: 'с буфером', color: 'var(--teal)', points: xs.map((x) => [x, phBuf(x)]) }, { name: 'без буфера', color: 'var(--coral)', dash: '7 4', points: xs.map((x) => [x, phWater(x)]) }]} />
+      </div>
+    </Frame>)
+}
+
+function DisperseW() {
+  const [ld, setLd] = useState(0) // lg d, мкм
+  const d = Math.pow(10, ld), r = (d * 1e-6) / 2, eta = 0.89e-3, kT = 4.11e-21
+  const S = 6 / (d * 1e-6) * 1e-6 // м² на 1 см³
+  const D = kT / (6 * Math.PI * eta * r), brown = Math.sqrt(2 * D) * 1e6 // мкм за 1 с
+  const stokes = (80 * 9.81 * Math.pow(d * 1e-6, 2)) / (18 * eta) * 1e6 // мкм/с
+  return (
+    <Frame title="Размер частицы: поверхность, броуновское движение и всплывание" note="Вода при 25 °C (0,89 мПа·с), разность плотностей 80 кг/м³. Броуновское смещение случайно и не накапливается в одну сторону; всплывание — направленное.">
+      <div className="wgrid">
+        <div><Slider label="Диаметр капли (лог. шкала)" value={ld} min={-1.7} max={1.7} step={0.05} onChange={setLd} show={`${fmt(d, 3)} мкм`} /></div>
+        <dl className="readout">
+          <div><dt>Поверхность капель из 1 см³ масла</dt><dd className="num">{fmt(S, 3)} <small>м²</small></dd></div>
+          <div><dt>Броуновское смещение за 1 с</dt><dd className="num">{fmt(brown, 3)} <small>мкм</small></dd></div>
+          <div><dt>Всплывание по Стоксу за 1 с · за сутки</dt><dd className="num">{fmt(stokes, 3)} <small>мкм · {fmt(stokes * 86400 / 1000, 3)} мм</small></dd></div>
+          <div><dt>Что преобладает за 1 с</dt><dd>{brown > stokes ? 'тепловое движение' : 'всплывание'}</dd></div>
+        </dl>
+      </div>
+    </Frame>)
+}
+function DebyeW() {
+  const [lc, setLc] = useState(-3), [type, setType] = useState<'11' | '21' | '22'>('11')
+  const c = Math.pow(10, lc), I = type === '11' ? c : type === '21' ? 3 * c : 4 * c, L = 0.304 / Math.sqrt(I)
+  const xs = range(-4, 0, 41)
+  const curve = (k: number) => xs.map((x) => [Math.pow(10, x), 0.304 / Math.sqrt(k * Math.pow(10, x))] as [number, number])
+  return (
+    <Frame title="Дебаевская длина и ионная сила" note="Водные растворы при 25 °C: κ⁻¹ ≈ 0,304/√I нм. Для CaCl₂ I = 3c, для MgSO₄ I = 4c.">
+      <div className="wgrid">
+        <div>
+          <div className="seg" role="group" aria-label="Электролит">{([['11', 'NaCl (1:1)'], ['21', 'CaCl₂ (2:1)'], ['22', 'MgSO₄ (2:2)']] as const).map(([k, l]) => <label key={k} className={type === k ? 'on' : ''}><input type="radio" name="el" checked={type === k} onChange={() => setType(k)} />{l}</label>)}</div>
+          <Slider label="Концентрация соли (лог. шкала)" value={lc} min={-4} max={0} step={0.05} onChange={setLc} show={`${fmt(c, 2)} моль/л`} />
+          <dl className="readout">
+            <div><dt>Ионная сила I</dt><dd className="num">{fmt(I, 3)} <small>моль/л</small></dd></div>
+            <div><dt>Дебаевская длина</dt><dd className="num">{fmt(L, 3)} <small>нм</small></dd></div>
+          </dl>
+        </div>
+        <Chart title="Дебаевская длина от концентрации соли" xLog yLog xDomain={[0.0001, 1]} yDomain={[0.1, 100]} xLabel="Концентрация соли, моль/л" yLabel="Дебаевская длина, нм" cursor={c}
+          series={[{ name: 'NaCl', color: 'var(--teal)', points: curve(1) }, { name: 'CaCl₂', color: 'var(--coral)', dash: '7 4', points: curve(3) }, { name: 'MgSO₄', color: '#6B4FC8', dash: '2 4', points: curve(4) }]} />
+      </div>
+    </Frame>)
+}
+function PipeW() {
+  const [mu, setMu] = useState(10), [Qh, setQh] = useState(2), [dmm, setDmm] = useState(50), [L, setL] = useState(10)
+  const Q = Qh / 3600, d = dmm / 1000, v = Q / (Math.PI * d * d / 4), Re = (1000 * v * d) / mu
+  const dp = (128 * mu * L * Q) / (Math.PI * Math.pow(d, 4)) / 1e5, gw = (32 * Q) / (Math.PI * Math.pow(d, 3))
+  return (
+    <Frame title="Перепад давления в шланге (уравнение Хагена — Пуазейля)" note="Ньютоновская оценка для ламинарного режима; для псевдопластичного продукта подставляйте кажущуюся вязкость при скорости сдвига у стенки. Местные сопротивления не учтены.">
+      <div className="wgrid">
+        <div>
+          <Slider label="Кажущаяся вязкость" value={mu} min={0.5} max={60} step={0.5} onChange={setMu} show={`${fmt(mu, 3)} Па·с`} />
+          <Slider label="Расход" value={Qh} min={0.2} max={6} step={0.1} onChange={setQh} show={`${fmt(Qh, 2)} м³/ч`} />
+          <Slider label="Внутренний диаметр" value={dmm} min={20} max={100} step={5} onChange={setDmm} show={`${dmm} мм`} />
+          <Slider label="Длина" value={L} min={1} max={50} step={1} onChange={setL} show={`${L} м`} />
+        </div>
+        <dl className="readout">
+          <div><dt>Перепад давления</dt><dd className="num">{fmt(dp, 3)} <small>бар</small></dd></div>
+          <div><dt>Число Рейнольдса</dt><dd className="num">{fmt(Re, 3)} <small>{Re < 2000 ? 'ламинарный режим' : 'формула неприменима: режим не ламинарный'}</small></dd></div>
+          <div><dt>Скорость · скорость сдвига у стенки</dt><dd className="num">{fmt(v, 3)} <small>м/с · {fmt(gw, 3)} с⁻¹</small></dd></div>
+        </dl>
+      </div>
+    </Frame>)
+}
+function WallW() {
+  const [a1, setA1] = useState(150), [a2, setA2] = useState(2000), [dl, setDl] = useState(6), [lam, setLam] = useState(16)
+  const r1 = 1 / a1, rw = dl / 1000 / lam, r2 = 1 / a2, sum = r1 + rw + r2, K = 1 / sum
+  const parts = [['продукт', r1, 'var(--coral)'], ['стенка', rw, '#8A7D9A'], ['хладагент', r2, 'var(--teal)']] as const
+  return (
+    <Frame title="Коэффициент теплопередачи как сумма сопротивлений" note="Учебные порядки величин. Самое большое сопротивление определяет результат: меняйте его — и K растёт заметно; меняйте малые — почти не растёт.">
+      <div className="wgrid">
+        <div>
+          <Slider label="Теплоотдача со стороны продукта α₁" value={a1} min={30} max={1500} step={10} onChange={setA1} show={`${a1} Вт/(м²·К)`} />
+          <Slider label="Теплоотдача со стороны хладагента α₂" value={a2} min={500} max={6000} step={100} onChange={setA2} show={`${a2} Вт/(м²·К)`} />
+          <Slider label="Толщина стенки" value={dl} min={2} max={15} step={0.5} onChange={setDl} show={`${fmt(dl, 3)} мм`} />
+          <Slider label="Теплопроводность стенки λ" value={lam} min={10} max={60} step={1} onChange={setLam} show={`${lam} Вт/(м·К)`} />
+        </div>
+        <div>
+          <dl className="readout"><div><dt>Коэффициент теплопередачи K</dt><dd className="num">{fmt(K, 3)} <small>Вт/(м²·К)</small></dd></div></dl>
+          <div className="stack" role="img" aria-label={parts.map(([n, r]) => `${n} ${Math.round((r / sum) * 100)} %`).join(', ')}>
+            {parts.map(([n, r, c]) => <span key={n} style={{ width: `${(r / sum) * 100}%`, background: c }} title={`${n}: ${Math.round((r / sum) * 100)} %`} />)}
+          </div>
+          <p className="small">{parts.map(([n, r]) => `${n} — ${Math.round((r / sum) * 100)} %`).join(' · ')}</p>
+        </div>
+      </div>
+    </Frame>)
+}
+
 function MediaRegistry() {
   return (
     <div className="table-wrap" tabIndex={0}>
@@ -254,6 +382,6 @@ function MediaRegistry() {
 }
 
 export const widgets: Record<string, ComponentType> = {
-  'media-registry': MediaRegistry, saltcurve: SaltCurveW, interaction: InteractionW, preservative: PreservativeW, mixre: MixReW,
+  'media-registry': MediaRegistry, saltcurve: SaltCurveW, interaction: InteractionW, preservative: PreservativeW, mixre: MixReW, dilution: DilutionW, buffer: BufferW, disperse: DisperseW, debye: DebyeW, pipe: PipeW, wall: WallW,
   stokes: Stokes, flowcurve: FlowCurve, passes: Passes, cooling: Cooling, 'demo-destabilization': Demo,
 }

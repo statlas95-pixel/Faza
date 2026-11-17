@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { topicById, labById, areaLabel } from '../content'
+import { topicById, labById, areaLabel, levelLabel, levelHint } from '../content'
 import { useLearning, curriculum, skills, skillById, skillOfTopic, diagItems, setGoal, answerDiag, restartDiag, moduleOfTopic } from '../learning'
 import { LEVELS, CONF, type SkillState, type RouteStep } from '../../shared/mastery'
 import { parseNum } from '../ui'
@@ -35,7 +35,7 @@ export function StepCard({ r, main }: { r: RouteStep; main?: boolean }) {
     <article className={`step ${r.status} ${main ? 'main' : ''}`}>
       <span className={`swatch ${t.swatch} sm`} aria-hidden />
       <div>
-        <p className="eyebrow">{r.status === 'now' ? 'Рекомендуем сейчас' : r.status === 'done' ? 'Навык подтверждён' : 'Дальше'} · {moduleOfTopic(t.id)?.module.name}</p>
+        <p className="eyebrow">{r.status === 'now' ? 'Рекомендуем сейчас' : r.status === 'done' ? 'Навык подтверждён' : 'Дальше'} · {moduleOfTopic(t.id)?.module.name} · <span className={`lvtag lv${t.level}`}>{levelLabel[t.level]}</span></p>
         <h3><Link to={`/topics/${t.id}`}>{t.title}</Link></h3>
         <p className="why"><b>Почему:</b> {r.reason}</p>
         {main && sk && <p><b>Результат:</b> вы сможете {sk.outcome}.</p>}
@@ -77,15 +77,16 @@ export function MapPage() {
   return (
     <div className="page map">
       <h1>Карта знаний</h1>
-      <p className="lead">Раздел → модуль → тема. Открыть можно любую тему в любом порядке; стрелка «после» показывает предпосылку.</p>
+      <p className="lead">Раздел → модуль → тема. Внутри модуля темы идут от простого к сложному. Открыть можно любую тему в любом порядке; «после» показывает предпосылку.</p>
+      <p className="legend-levels">{[1, 2, 3].map((n) => <span key={n}><span className={`lvtag lv${n}`}>{levelLabel[n]}</span> {levelHint[n]}</span>)}</p>
       {curriculum.sections.map((sec) => (
         <section key={sec.id} className={`mapsec c-${sec.color}`}>
           <header><span className={`swatch ${sec.color}`} aria-hidden /><div><h2>{sec.name}</h2><p>{sec.text}</p></div></header>
           <div className="modules">{sec.modules.map((m) => (
             <div key={m.id} className="module"><h3>{m.name}</h3>
-              <ul>{[...m.topics.map((t) => ({ ...t, shared: false })), ...(m.also ?? []).map((id) => ({ id, prereq: [] as string[], shared: true }))].map((ref) => { const t = topicById(ref.id); if (!t) return null; const sk = skillOfTopic(t.id), s = sk ? L.states[sk.id] : undefined, r = L.route.find((x) => x.topic === t.id); return (
+              <ul>{[...m.topics.map((t) => ({ ...t, shared: false })), ...(m.also ?? []).map((id) => ({ id, prereq: [] as string[], shared: true }))].sort((a, b) => (topicById(a.id)?.level ?? 2) - (topicById(b.id)?.level ?? 2)).map((ref) => { const t = topicById(ref.id); if (!t) return null; const sk = skillOfTopic(t.id), s = sk ? L.states[sk.id] : undefined, r = L.route.find((x) => x.topic === t.id); return (
                 <li key={ref.id} className={`mtopic ${r?.status ?? ''}`}><Link to={`/topics/${t.id}`}><b>{t.title}</b></Link>
-                  <span className="mmeta">{ref.shared && <span className="tag">общая с модулем «{moduleOfTopic(t.id)?.module.name}»</span>}{r?.status === 'now' && <span className="tag now">рекомендуем сейчас</span>}{L.p.visited[t.id] ? <span className="tag">открывалась</span> : null}<LevelBar s={s} compact /> {t.labs.length ? `практика: ${t.labs.length}` : ''}</span>
+                  <span className="mmeta"><span className={`lvtag lv${t.level}`} title={levelHint[t.level]}>{levelLabel[t.level]}</span>{ref.shared && <span className="tag">общая с модулем «{moduleOfTopic(t.id)?.module.name}»</span>}{r?.status === 'now' && <span className="tag now">рекомендуем сейчас</span>}{L.p.visited[t.id] ? <span className="tag">открывалась</span> : null}<LevelBar s={s} compact /> {t.labs.length ? `практика: ${t.labs.length}` : ''}</span>
                   {!!ref.prereq?.length && <span className="small prereq">после: {ref.prereq.map((x) => topicById(x)?.title).join('; ')}</span>}</li>) })}
                 {(m.planned ?? []).map((x) => <li key={x} className="mtopic planned"><b>{x}</b><span className="mmeta"><span className="tag">в плане, ещё не опубликована</span></span></li>)}</ul></div>))}</div>
         </section>))}

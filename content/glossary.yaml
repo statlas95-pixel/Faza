@@ -2,6 +2,8 @@
 # short — определение в одну фразу (показывается во всплывающей подсказке); long — подробнее.
 
 - id: creaming
+  area: colloid
+  level: base
   term: Кримирование
   en: creaming
   short: Всплывание капель дисперсной фазы, более лёгкой, чем среда; капли при этом остаются отдельными.
@@ -10,6 +12,8 @@
   sources: [tadros2013]
 
 - id: flocculation
+  area: colloid
+  level: base
   term: Флокуляция
   en: flocculation
   short: Слипание капель в агрегаты без разрушения разделяющих их плёнок.
@@ -18,6 +22,8 @@
   sources: [tadros2013]
 
 - id: coalescence
+  area: colloid
+  level: base
   term: Коалесценция
   en: coalescence
   short: Слияние капель в одну после разрыва плёнки между ними; необратимо.
@@ -25,6 +31,8 @@
   sources: [tadros2013]
 
 - id: ostwald
+  area: colloid
+  level: adv
   term: Оствальдово созревание
   en: Ostwald ripening
   short: Рост крупных капель за счёт растворения мелких и диффузии вещества через непрерывную фазу.
@@ -33,6 +41,8 @@
   sources: [taylor1998]
 
 - id: stokes
+  area: colloid
+  level: base
   term: Закон Стокса
   en: Stokes' law
   short: "Скорость движения одиночной сферы в вязкой среде: v = Δρ·g·d²/(18η)."
@@ -41,6 +51,8 @@
   sources: [tadros2013, mcclements2015]
 
 - id: yield-stress
+  area: rheo
+  level: base
   term: Предел текучести
   en: yield stress
   short: Напряжение, ниже которого материал за время наблюдения ведёт себя как твёрдое тело, а выше — течёт.
@@ -49,6 +61,8 @@
   sources: [barnes1999, mezger2020]
 
 - id: shear-rate
+  area: rheo
+  level: base
   term: Скорость сдвига
   en: shear rate
   short: Градиент скорости в слое текущего материала, с⁻¹; у каждого процесса — свой характерный диапазон.
@@ -56,6 +70,8 @@
   sources: [mezger2020]
 
 - id: shear-thinning
+  area: rheo
+  level: base
   term: Псевдопластичность
   en: shear thinning
   short: Снижение вязкости с ростом скорости сдвига.
@@ -63,6 +79,8 @@
   sources: [mezger2020]
 
 - id: thixotropy
+  area: rheo
+  level: base
   term: Тиксотропия
   en: thixotropy
   short: Обратимое во времени снижение вязкости под сдвигом и её восстановление в покое.
@@ -71,6 +89,8 @@
   sources: [mezger2020]
 
 - id: herschel-bulkley
+  area: rheo
+  level: adv
   term: Модель Гершеля — Балкли
   en: Herschel–Bulkley model
   short: "σ = σ_y + K·γ̇ⁿ — трёхпараметрическое описание кривой течения с пределом текучести."
@@ -78,6 +98,8 @@
   sources: [mezger2020]
 
 - id: lgn
+  area: colloid
+  level: adv
   term: Ламеллярная гелевая сеть
   en: lamellar gel network (LGN)
   short: Трёхмерная сеть из бислоёв жирного спирта и ПАВ со связанной межслоевой водой в непрерывной фазе O/W-крема.
@@ -86,6 +108,8 @@
   sources: [eccleston1997, iwata2017]
 
 - id: alpha-gel
+  area: colloid
+  level: adv
   term: α-гель
   en: α-gel (Lβ)
   short: Состояние бислоя, в котором углеводородные цепи застыли в гексагональной упаковке, но слой удерживает между собой воду.
@@ -93,6 +117,8 @@
   sources: [iwata2017]
 
 - id: hlb
+  area: colloid
+  level: base
   term: ГЛБ
   en: HLB, hydrophilic–lipophilic balance
   short: Эмпирическая шкала соотношения гидрофильной и липофильной частей молекулы ПАВ, предложенная Гриффином.
@@ -101,6 +127,8 @@
   sources: [griffin1949]
 
 - id: rotor-stator
+  area: process
+  level: base
   term: Роторно-статорный гомогенизатор
   en: rotor–stator mixer
   short: Аппарат, в котором быстро вращающийся ротор прогоняет продукт через узкий зазор и прорези неподвижного статора.
@@ -108,6 +136,8 @@
   sources: [atiemo2004]
 
 - id: tip-speed
+  area: process
+  level: base
   term: Окружная скорость
   en: tip speed
   short: "Линейная скорость кромки ротора: u = π·D·N."
@@ -115,6 +145,8 @@
   sources: [atiemo2004]
 
 - id: weber
+  area: process
+  level: adv
   term: Число Вебера
   en: Weber number
   short: "Отношение разрушающих инерционных сил к межфазному натяжению; для мешалки We = ρ·N²·D³/σ."
@@ -122,6 +154,8 @@
   sources: [hinze1955]
 
 - id: d32
+  area: colloid
+  level: adv
   term: Средний диаметр по Заутеру, d₃₂
   en: Sauter mean diameter
   short: Диаметр сферы с тем же отношением объёма к поверхности, что и у всей совокупности капель.
@@ -129,18 +163,24 @@
   sources: [walstra1993]
 
 - id: scale-down
+  area: process
+  level: adv
   term: Масштабирование «вниз»
   en: scale-down
   short: Воспроизведение в лаборатории тех условий, которые будут на производстве (время, сдвиг, скорость охлаждения), а не наоборот.
   topics: [scale-up]
 
 - id: turnover
+  area: process
+  level: base
   term: Кратность обработки
   en: number of passes / turnovers
   short: Сколько раз объём партии в среднем прошёл через гомогенизатор.
   topics: [scale-up, emulsification]
 
 - id: accelerated-test
+  area: stab
+  level: base
   term: Ускоренное испытание
   en: accelerated test
   short: Испытание в условиях повышенной нагрузки (температура, центробежное поле, циклы), позволяющее быстрее увидеть слабые места состава.
@@ -149,12 +189,16 @@
   sources: [isotr18811, lerche2011]
 
 - id: rcf
+  area: stab
+  level: base
   term: Относительное центробежное ускорение
   en: RCF
   short: "Во сколько раз ускорение в центрифуге больше g: RCF = ω²·r/g."
   topics: [stability-testing]
 
 - id: deviation
+  area: reg
+  level: base
   term: Отклонение
   en: deviation
   short: Документированное отступление от утверждённой инструкции, параметра или спецификации.
@@ -163,18 +207,24 @@
   sources: [iso22716]
 
 - id: capa
+  area: reg
+  level: base
   term: CAPA
   en: corrective and preventive actions
   short: Корректирующие и предупреждающие действия — меры, устраняющие причину отклонения и предотвращающие повторение.
   sources: [iso22716]
 
 - id: carbomer
+  area: raw
+  level: base
   term: Карбомер
   en: carbomer
   short: Сшитая полиакриловая кислота; загущает после нейтрализации, чувствителен к электролитам.
   sources: [lubrizol-neutral]
 
 - id: wormlike
+  area: colloid
+  level: adv
   term: Червеобразные мицеллы
   en: wormlike micelles
   short: Длинные гибкие цилиндрические мицеллы ПАВ, которые переплетаются подобно цепям полимера и придают раствору вязкость.
@@ -183,6 +233,8 @@
   sources: [dreiss2007, cates1990]
 
 - id: salt-curve
+  area: colloid
+  level: base
   term: Солевая кривая
   en: salt curve
   short: Зависимость вязкости раствора ПАВ от содержания электролита; имеет максимум.
@@ -191,6 +243,8 @@
   sources: [dreiss2007]
 
 - id: factorial
+  area: stat
+  level: base
   topics: [doe-basics]
   term: Полный факторный план
   en: full factorial design
@@ -198,6 +252,8 @@
   sources: [montgomery2017, nist-handbook]
 
 - id: main-effect
+  area: stat
+  level: base
   topics: [doe-basics]
   term: Главный эффект
   en: main effect
@@ -205,6 +261,8 @@
   sources: [nist-handbook]
 
 - id: interaction
+  area: stat
+  level: base
   topics: [doe-basics]
   term: Взаимодействие факторов
   en: interaction
@@ -212,6 +270,8 @@
   sources: [montgomery2017]
 
 - id: ofat
+  area: stat
+  level: base
   topics: [doe-basics]
   term: Поочерёдное изменение факторов
   en: one-factor-at-a-time (OFAT)
@@ -219,6 +279,8 @@
   sources: [montgomery2017]
 
 - id: replicate
+  area: stat
+  level: base
   topics: [doe-basics]
   term: Повторный опыт
   en: replicate
@@ -226,6 +288,8 @@
   sources: [nist-handbook]
 
 - id: undissociated
+  area: micro
+  level: base
   term: Недиссоциированная форма
   en: undissociated (protonated) acid
   short: Незаряженная молекула слабой кислоты; у органических кислот-консервантов антимикробное действие связывают именно с ней.
@@ -234,6 +298,8 @@
   sources: [halla2018]
 
 - id: challenge-test
+  area: micro
+  level: base
   term: Тест эффективности консервирования
   en: preservation efficacy (challenge) test
   short: Испытание, в котором продукт намеренно заражают тест-микроорганизмами и следят за снижением их числа во времени.
@@ -241,6 +307,8 @@
   sources: [iso11930]
 
 - id: reynolds-mix
+  area: process
+  level: base
   term: Число Рейнольдса для мешалки
   en: impeller Reynolds number
   short: "Re = ρ·N·D²/μ — отношение инерционных сил к вязким в аппарате с мешалкой; N — частота вращения в с⁻¹, D — диаметр мешалки."
@@ -248,8 +316,1829 @@
   sources: [him2003]
 
 - id: cavern
+  area: process
+  level: adv
   term: Каверна
   en: cavern
   short: Область вокруг мешалки, где вязкая или структурированная среда движется, тогда как остальной объём остаётся неподвижным.
   topics: [mixing-basics]
   sources: [him2003]
+
+# ---------- Версия 0.4: базовые и углублённые термины ----------
+
+- id: mass-fraction
+  term: "Массовая доля"
+  en: "mass fraction"
+  area: raw
+  level: base
+  short: "Отношение массы компонента к массе всей смеси; выражают в долях или процентах."
+  long: "Основная величина состава в рецептурах и картах взвешивания: не зависит от температуры и не требует знания плотности."
+  topics: [solutions-basics]
+  sources: [iupac-green]
+  see: [molarity, mass-balance]
+
+- id: molarity
+  term: "Молярная концентрация"
+  en: "amount concentration, molarity"
+  area: raw
+  level: base
+  short: "Количество вещества в единице объёма раствора, моль/л."
+  long: "Удобна для расчёта химических равновесий и pH; зависит от температуры, потому что меняется объём раствора."
+  topics: [solutions-basics]
+  sources: [iupac-green]
+  see: [molality]
+
+- id: molality
+  term: "Моляльность"
+  en: "molality"
+  area: raw
+  level: adv
+  short: "Количество растворённого вещества на килограмм растворителя, моль/кг."
+  long: "Не зависит от температуры; используется в точных физико-химических расчётах."
+  topics: [solutions-basics]
+  sources: [iupac-green]
+
+- id: ppm
+  term: "Миллионная доля (ppm)"
+  en: "parts per million"
+  area: raw
+  level: base
+  short: "Массовая доля, умноженная на миллион: 1 ppm = 1 мг/кг = 0,0001 %."
+  long: "Применяют для примесей и следовых компонентов. Важно указывать, массовая это доля или объёмная."
+  topics: [solutions-basics]
+
+- id: mass-balance
+  term: "Материальный баланс"
+  en: "mass balance"
+  area: raw
+  level: base
+  short: "Учёт того, что масса каждого компонента сохраняется при смешении, разбавлении и переработке."
+  long: "Основа расчёта разбавления (m₁w₁ = m₂w₂), баланса воды в партии и проверки загрузок по протоколу."
+  topics: [solutions-basics]
+  see: [mass-fraction]
+
+- id: density
+  term: "Плотность"
+  en: "density"
+  area: raw
+  level: base
+  short: "Масса единицы объёма вещества, кг/м³ или кг/л."
+  long: "Нужна для перехода от объёма к массе. У концентрированных растворов щелочей, кислот и солей плотность заметно больше 1 кг/л и зависит от температуры."
+  topics: [solutions-basics]
+
+- id: active-matter
+  term: "Активное вещество (основное вещество)"
+  en: "active matter, active content"
+  area: raw
+  level: base
+  short: "Доля целевого вещества в товарной форме сырья, например 70 % лауретсульфата натрия в пасте."
+  long: "Если рецептура задана «по активному веществу», массу товарного продукта находят делением; вода из товарной формы вычитается из загрузки воды."
+  topics: [solutions-basics]
+  see: [mass-balance]
+
+- id: hydrate
+  term: "Кристаллогидрат"
+  en: "hydrate"
+  area: raw
+  level: base
+  short: "Кристаллическое вещество, содержащее связанную воду, например лимонная кислота моногидрат."
+  long: "При пересчёте на безводную форму используют отношение молярных масс: для лимонной кислоты 210,14 / 192,12 ≈ 1,094."
+  topics: [solutions-basics]
+
+- id: solvent
+  term: "Растворитель"
+  en: "solvent"
+  area: raw
+  level: base
+  short: "Компонент, в котором растворены остальные; в косметике чаще всего вода, также гликоли и этанол."
+  topics: [raw-functions]
+
+- id: solubility
+  term: "Растворимость"
+  en: "solubility"
+  area: raw
+  level: base
+  short: "Наибольшее количество вещества, которое может раствориться в данном количестве растворителя при данной температуре."
+  long: "Зависит от температуры и состава среды. Выше предела растворимости вещество выпадает в осадок или кристаллизуется при хранении."
+  see: [solubilization]
+
+- id: ph
+  term: "pH"
+  en: "pH"
+  area: raw
+  level: base
+  short: "Отрицательный десятичный логарифм активности ионов водорода; шкала кислотности водных растворов."
+  long: "Практическая шкала задаётся стандартными буферами, по которым калибруют стеклянный электрод. Нейтральная точка зависит от температуры: около 7 при 25 °C и около 6,5 при 60 °C."
+  topics: [ph-buffers]
+  sources: [buck2002]
+  see: [pka, buffer]
+
+- id: pka
+  term: "pKa (показатель константы кислотности)"
+  en: "acid dissociation constant, pKa"
+  area: raw
+  level: base
+  short: "pKa = −lg Ka; значение pH, при котором слабая кислота диссоциирована наполовину."
+  long: "Чем меньше pKa, тем сильнее кислота. Определяет, в какой области pH кислота буферирует и какая её доля находится в недиссоциированной форме."
+  topics: [ph-buffers, preservation]
+  sources: [butler1998]
+  see: [henderson]
+
+- id: henderson
+  term: "Уравнение Гендерсона — Хассельбальха"
+  en: "Henderson–Hasselbalch equation"
+  area: raw
+  level: base
+  short: "pH = pKa + lg([A⁻]/[HA]) — связь pH с отношением сопряжённого основания и слабой кислоты."
+  long: "Использует концентрации вместо активностей, поэтому в концентрированных и солевых системах даёт ориентир, а не точное значение."
+  topics: [ph-buffers]
+  sources: [butler1998]
+  see: [buffer]
+
+- id: buffer
+  term: "Буферный раствор"
+  en: "buffer solution"
+  area: raw
+  level: base
+  short: "Смесь слабой кислоты и её соли (или слабого основания и его соли), сопротивляющаяся изменению pH."
+  long: "Работает примерно в области pKa ± 1. Примеры в косметике — цитратный, лактатный буферы."
+  topics: [ph-buffers]
+  sources: [butler1998]
+  see: [buffer-capacity]
+
+- id: buffer-capacity
+  term: "Буферная ёмкость"
+  en: "buffer capacity"
+  area: raw
+  level: adv
+  short: "Количество сильной кислоты или основания, меняющее pH на единицу; моль/(л·ед. pH)."
+  long: "Для одной слабой кислоты максимальна при pH = pKa и равна примерно 0,58·C. Объясняет, почему pH одних партий «прыгает» при доводке, а других — нет."
+  topics: [ph-buffers]
+  sources: [butler1998]
+
+- id: neutralization
+  term: "Нейтрализация"
+  en: "neutralization"
+  area: raw
+  level: base
+  short: "Реакция кислоты с основанием с образованием соли и воды."
+  long: "В косметике так «включают» загущение карбомеров и доводят pH; для слабых кислот в результате получается буферная смесь."
+  topics: [ph-buffers]
+  see: [carbomer]
+
+- id: polyprotic
+  term: "Многоосновная кислота"
+  en: "polyprotic acid"
+  area: raw
+  level: adv
+  short: "Кислота, отдающая несколько протонов ступенчато, с несколькими pKa."
+  long: "Лимонная кислота — трёхосновная (справочно pKa ≈ 3,13; 4,76; 6,40), поэтому цитратная система буферирует в широкой области pH."
+  topics: [ph-buffers]
+  sources: [butler1998]
+
+- id: ionic-strength
+  term: "Ионная сила"
+  en: "ionic strength"
+  area: raw
+  level: adv
+  short: "I = ½·Σ cᵢzᵢ² — мера общего содержания ионов в растворе с учётом их заряда."
+  long: "Определяет толщину двойного электрического слоя и отклонение активностей от концентраций. Для 0,1 моль/л NaCl I = 0,1; для 0,01 моль/л CaCl₂ I = 0,03."
+  topics: [colloid-stability, ph-buffers]
+  sources: [hiemenz1997]
+  see: [debye]
+
+- id: electrolyte
+  term: "Электролит"
+  en: "electrolyte"
+  area: raw
+  level: base
+  short: "Вещество, распадающееся в растворе на ионы и проводящее ток, например соли."
+  long: "В косметике электролиты загущают ПАВ-системы, но разжижают карбомерные гели и могут дестабилизировать дисперсии."
+  see: [ionic-strength]
+
+- id: hardness
+  term: "Жёсткость воды"
+  en: "water hardness"
+  area: raw
+  level: base
+  short: "Содержание в воде ионов кальция и магния."
+  long: "Ионы жёсткости осаждают мыла, снижают эффективность анионных ПАВ и разжижают карбомерные гели."
+  topics: [water-raw]
+  sources: [rosen2012, lubrizol-neutral]
+  see: [chelating]
+
+- id: conductivity
+  term: "Удельная электропроводность"
+  en: "electrical conductivity"
+  area: raw
+  level: base
+  short: "Способность раствора проводить ток; мкСм/см. Быстрый показатель содержания растворённых ионов."
+  long: "У идеально чистой воды при 25 °C около 0,055 мкСм/см. Сильно зависит от температуры, поэтому значения приводят к 25 °C. Микробиологию не отражает."
+  topics: [water-raw]
+  sources: [light2005]
+
+- id: reverse-osmosis
+  term: "Обратный осмос"
+  en: "reverse osmosis"
+  area: raw
+  level: base
+  short: "Очистка воды продавливанием через полупроницаемую мембрану, задерживающую большую часть растворённых солей и органики."
+  topics: [water-raw]
+  see: [deionization]
+
+- id: deionization
+  term: "Деионизация"
+  en: "deionization"
+  area: raw
+  level: base
+  short: "Удаление ионов из воды ионообменными смолами или электродеионизацией."
+  topics: [water-raw]
+  see: [reverse-osmosis]
+
+- id: purified-water
+  term: "Вода очищенная"
+  en: "purified water"
+  area: raw
+  level: base
+  short: "Вода, подготовленная для использования как сырьё, с контролируемыми химическими и микробиологическими показателями."
+  long: "Требования устанавливает спецификация предприятия; ориентиром часто служат фармакопейные статьи."
+  topics: [water-raw]
+  see: [conductivity, biofilm]
+
+- id: hygroscopic
+  term: "Гигроскопичность"
+  en: "hygroscopicity"
+  area: raw
+  level: base
+  short: "Способность вещества поглощать влагу из воздуха."
+  long: "Свойство увлажнителей (глицерин, пропандиол); требует плотно закрытой тары при хранении сырья."
+  topics: [raw-functions]
+  see: [humectant]
+
+- id: humectant
+  term: "Увлажнитель (хумектант)"
+  en: "humectant"
+  area: raw
+  level: base
+  short: "Гигроскопичный компонент, удерживающий воду, например глицерин, пропандиол, Sodium PCA."
+  topics: [raw-functions]
+  sources: [barel2009]
+  see: [emollient]
+
+- id: emollient
+  term: "Эмолент"
+  en: "emollient"
+  area: raw
+  level: base
+  short: "Компонент, смягчающий кожу и образующий липидную плёнку: масла, эфиры, силиконы."
+  topics: [raw-functions]
+  sources: [barel2009]
+  see: [humectant]
+
+- id: emulsifier
+  term: "Эмульгатор"
+  en: "emulsifier"
+  area: raw
+  level: base
+  short: "ПАВ, облегчающее образование эмульсии и стабилизирующее капли."
+  long: "Адсорбируется на поверхности капель, снижает межфазное натяжение и создаёт барьер против слияния."
+  topics: [raw-functions, emulsification]
+  sources: [barel2009]
+  see: [surfactant, hlb]
+
+- id: thickener
+  term: "Загуститель"
+  en: "thickener, rheology modifier"
+  area: raw
+  level: base
+  short: "Компонент, повышающий вязкость, чаще всего водной фазы: камеди, карбомеры, производные целлюлозы."
+  topics: [raw-functions]
+  sources: [barel2009]
+  see: [hydrocolloid]
+
+- id: chelating
+  term: "Хелатирующий агент"
+  en: "chelating agent"
+  area: raw
+  level: base
+  short: "Вещество, связывающее ионы металлов в прочные растворимые комплексы, например динатрий ЭДТА."
+  long: "Снижает влияние жёсткости воды и ионов переходных металлов, катализирующих окисление."
+  topics: [raw-functions, water-raw]
+  sources: [barel2009]
+  see: [hardness]
+
+- id: antioxidant
+  term: "Антиоксидант"
+  en: "antioxidant"
+  area: raw
+  level: base
+  short: "Компонент, замедляющий окисление масел и других чувствительных веществ, например токоферол."
+  topics: [raw-functions]
+  sources: [barel2009]
+  see: [rancidity]
+
+- id: ph-adjuster
+  term: "Регулятор pH"
+  en: "pH adjuster"
+  area: raw
+  level: base
+  short: "Кислота, основание или буфер для доведения pH: лимонная кислота, гидроксид натрия, лактаты."
+  topics: [raw-functions, ph-buffers]
+  see: [buffer]
+
+- id: inci
+  term: "INCI"
+  en: "International Nomenclature of Cosmetic Ingredients"
+  area: raw
+  level: base
+  short: "Международная номенклатура косметических ингредиентов — стандартные названия для маркировки состава."
+  topics: [raw-functions]
+  sources: [eu1223]
+  see: [inci-boundary]
+
+- id: inci-boundary
+  term: "Граница 1 % в списке INCI"
+  en: "1 % threshold in ingredient list"
+  area: raw
+  level: base
+  short: "Место в составе, после которого ингредиенты присутствуют не более чем в 1 %; ниже 1 % порядок может быть любым (ЕС)."
+  long: "Удобный маркер — компонент с известным максимумом не выше 1 %, например феноксиэтанол в ЕС."
+  topics: [raw-functions]
+  sources: [eu1223]
+  see: [inci]
+
+- id: fatty-alcohol
+  term: "Жирный спирт"
+  en: "fatty alcohol"
+  area: raw
+  level: base
+  short: "Спирт с длинной углеводородной цепью: цетиловый (C16), стеариловый (C18), их смесь — цетеариловый."
+  long: "Вместе с эмульгаторами образует ламеллярную гелевую сеть — основу консистенции кремов."
+  topics: [lamellar-gel-network]
+  sources: [eccleston1997]
+  see: [lgn]
+
+- id: triglyceride
+  term: "Триглицерид"
+  en: "triglyceride"
+  area: raw
+  level: base
+  short: "Сложный эфир глицерина и трёх жирных кислот; основа растительных масел и жиров."
+  see: [ester-oil]
+
+- id: ester-oil
+  term: "Синтетические эфиры (эмоленты)"
+  en: "ester emollients"
+  area: raw
+  level: base
+  short: "Эфиры жирных кислот и спиртов (например, изопропилмиристат, каприлик/каприк триглицерид) с заданными растекаемостью и ощущением на коже."
+  topics: [raw-functions]
+  see: [emollient]
+
+- id: silicone
+  term: "Силиконы"
+  en: "silicones"
+  area: raw
+  level: base
+  short: "Полимеры на основе цепи кремний — кислород, например диметикон; эмоленты с низким поверхностным натяжением."
+  topics: [raw-functions]
+
+- id: hydrocolloid
+  term: "Гидроколлоид (камедь)"
+  en: "hydrocolloid, gum"
+  area: raw
+  level: base
+  short: "Водорастворимый полимер, загущающий или структурирующий воду: ксантановая камедь, гуар, альгинаты."
+  topics: [raw-functions]
+  see: [xanthan]
+
+- id: xanthan
+  term: "Ксантановая камедь"
+  en: "xanthan gum"
+  area: raw
+  level: base
+  short: "Бактериальный полисахарид; загуститель с сильной псевдопластичностью, устойчивый к электролитам и в широком диапазоне pH."
+  topics: [emulsion-stability]
+  see: [shear-thinning]
+
+- id: cellulose-ether
+  term: "Производные целлюлозы"
+  en: "cellulose ethers"
+  area: raw
+  level: base
+  short: "Полимеры на основе целлюлозы (гидроксиэтилцеллюлоза, гидроксипропилметилцеллюлоза), загустители водной фазы."
+  see: [thickener]
+
+- id: rancidity
+  term: "Окисление масел (прогоркание)"
+  en: "rancidity, lipid oxidation"
+  area: raw
+  level: adv
+  short: "Окислительная порча масел с образованием пероксидов, затем альдегидов и кетонов с неприятным запахом."
+  long: "Ускоряется светом, теплом, кислородом и ионами переходных металлов; замедляется антиоксидантами и хелатирующими агентами."
+  sources: [barel2009]
+  see: [peroxide-value, antioxidant]
+
+- id: peroxide-value
+  term: "Перекисное число"
+  en: "peroxide value"
+  area: raw
+  level: adv
+  short: "Содержание пероксидов в масле или жире (обычно в миллиэквивалентах активного кислорода на килограмм); показатель начальной стадии окисления."
+  see: [rancidity]
+
+- id: acid-value
+  term: "Кислотное число"
+  en: "acid value"
+  area: raw
+  level: adv
+  short: "Масса гидроксида калия (мг), необходимая для нейтрализации свободных кислот в 1 г вещества."
+  long: "Рост кислотного числа масла или эфира указывает на гидролиз при хранении."
+
+- id: saponification-value
+  term: "Число омыления"
+  en: "saponification value"
+  area: raw
+  level: adv
+  short: "Масса гидроксида калия (мг), необходимая для омыления сложных эфиров и нейтрализации свободных кислот в 1 г жира."
+  long: "Обратно связано со средней молярной массой жирных кислот."
+
+- id: iodine-value
+  term: "Йодное число"
+  en: "iodine value"
+  area: raw
+  level: adv
+  short: "Масса иода (г), присоединяющаяся к 100 г вещества; мера ненасыщенности жирных кислот."
+  long: "Чем выше, тем больше двойных связей и тем выше склонность масла к окислению."
+  see: [rancidity]
+
+- id: hydroxyl-value
+  term: "Гидроксильное число"
+  en: "hydroxyl value"
+  area: raw
+  level: adv
+  short: "Масса гидроксида калия (мг), эквивалентная содержанию гидроксильных групп в 1 г вещества."
+  long: "Показатель входного контроля жирных спиртов и эмульгаторов."
+  topics: [lamellar-gel-network]
+
+- id: titration
+  term: "Титрование"
+  en: "titration"
+  area: raw
+  level: base
+  short: "Определение концентрации раствора постепенным добавлением реагента известной концентрации до точки эквивалентности."
+  long: "Так проверяют концентрацию приготовленных растворов щелочи и кислоты."
+  topics: [solutions-basics]
+
+- id: activity
+  term: "Активность (термодинамическая)"
+  en: "activity"
+  area: raw
+  level: adv
+  short: "Эффективная концентрация, учитывающая взаимодействие ионов; в разбавленных растворах близка к концентрации."
+  topics: [ph-buffers]
+  sources: [buck2002]
+  see: [ionic-strength]
+
+- id: disperse-system
+  term: "Дисперсная система"
+  en: "disperse system"
+  area: colloid
+  level: base
+  short: "Система, в которой одно вещество раздроблено (дисперсная фаза) и распределено в другом (дисперсионная среда)."
+  long: "Эмульсии, суспензии, пены и гели — дисперсные системы; их свойства во многом определяет огромная поверхность раздела."
+  topics: [disperse-systems]
+  sources: [hiemenz1997]
+  see: [disperse-phase]
+
+- id: disperse-phase
+  term: "Дисперсная фаза и дисперсионная среда"
+  en: "dispersed phase, continuous phase"
+  area: colloid
+  level: base
+  short: "Дисперсная фаза — раздробленная часть системы (капли, частицы, пузырьки); дисперсионная среда — непрерывная фаза, в которой они находятся."
+  topics: [disperse-systems]
+  sources: [hiemenz1997]
+
+- id: colloid
+  term: "Коллоидная система"
+  en: "colloid"
+  area: colloid
+  level: base
+  short: "Дисперсная система с частицами примерно от 1 нм до 1 мкм, в которой заметны броуновское движение и поверхностные эффекты."
+  topics: [disperse-systems]
+  sources: [hiemenz1997]
+  see: [brownian]
+
+- id: emulsion
+  term: "Эмульсия"
+  en: "emulsion"
+  area: colloid
+  level: base
+  short: "Дисперсная система из двух несмешивающихся жидкостей, одна из которых раздроблена в другой в виде капель."
+  topics: [disperse-systems, emulsion-stability]
+  sources: [tadros2013]
+  see: [ow-emulsion]
+
+- id: ow-emulsion
+  term: "Эмульсия «масло в воде» (М/В) и «вода в масле» (В/М)"
+  en: "oil-in-water (O/W), water-in-oil (W/O) emulsion"
+  area: colloid
+  level: base
+  short: "Тип эмульсии по непрерывной фазе: в М/В непрерывна вода, в В/М — масло."
+  long: "Тип определяет проводимость (М/В проводит ток), разбавляемость водой и ощущение на коже."
+  topics: [disperse-systems]
+  sources: [tadros2013]
+  see: [phase-inversion]
+
+- id: suspension
+  term: "Суспензия"
+  en: "suspension"
+  area: colloid
+  level: base
+  short: "Дисперсия твёрдых частиц в жидкости, например пигменты в основе или оксид цинка в масле."
+  topics: [disperse-systems]
+  sources: [hiemenz1997]
+
+- id: foam
+  term: "Пена"
+  en: "foam"
+  area: colloid
+  level: base
+  short: "Дисперсия газа в жидкости, где пузырьки разделены тонкими плёнками жидкости, стабилизированными ПАВ."
+  topics: [disperse-systems]
+
+- id: gel
+  term: "Гель"
+  en: "gel"
+  area: colloid
+  level: base
+  short: "Система, в которой трёхмерная сеть (полимерная, кристаллическая, мицеллярная) удерживает жидкость и придаёт ей свойства твёрдого тела при малых нагрузках."
+  topics: [disperse-systems]
+  see: [yield-stress]
+
+- id: specific-surface
+  term: "Удельная поверхность"
+  en: "specific surface area"
+  area: colloid
+  level: base
+  short: "Площадь поверхности раздела, приходящаяся на единицу объёма или массы дисперсной фазы; для сфер S/V = 6/d."
+  long: "При дроблении капли от 10 до 1 мкм поверхность раздела растёт в 10 раз — столько же нужно эмульгатора для её покрытия."
+  topics: [disperse-systems]
+  sources: [hiemenz1997]
+
+- id: brownian
+  term: "Броуновское движение"
+  en: "Brownian motion"
+  area: colloid
+  level: base
+  short: "Хаотическое движение мелких частиц под ударами молекул среды."
+  long: "Для частиц субмикронного размера противодействует оседанию и всплыванию; описано теорией Эйнштейна."
+  topics: [disperse-systems]
+  sources: [einstein1905]
+  see: [stokes-einstein]
+
+- id: stokes-einstein
+  term: "Уравнение Стокса — Эйнштейна"
+  en: "Stokes–Einstein equation"
+  area: colloid
+  level: adv
+  short: "D = kT / (6πηr) — коэффициент диффузии сферической частицы радиуса r в среде вязкостью η."
+  long: "Лежит в основе определения размера частиц методом динамического рассеяния света."
+  topics: [disperse-systems]
+  sources: [einstein1905]
+  see: [dls]
+
+- id: surface-tension
+  term: "Поверхностное натяжение"
+  en: "surface tension"
+  area: colloid
+  level: base
+  short: "Работа образования единицы площади поверхности жидкости; мН/м. У воды при 25 °C около 72 мН/м."
+  long: "Возникает потому, что молекулам на поверхности не хватает соседей. ПАВ снижают его, адсорбируясь на поверхности."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [interfacial-tension]
+
+- id: interfacial-tension
+  term: "Межфазное натяжение"
+  en: "interfacial tension"
+  area: colloid
+  level: base
+  short: "Аналог поверхностного натяжения на границе двух жидкостей, например масла и воды."
+  long: "Чем оно ниже, тем легче раздробить каплю: эмульгатор облегчает эмульгирование."
+  topics: [surface-tension, emulsification]
+  sources: [rosen2012]
+
+- id: surfactant
+  term: "ПАВ (поверхностно-активное вещество)"
+  en: "surfactant"
+  area: colloid
+  level: base
+  short: "Вещество с гидрофильной и гидрофобной частями в одной молекуле, накапливающееся на поверхностях раздела."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [micelle, cmc]
+
+- id: anionic-surf
+  term: "Анионные ПАВ"
+  en: "anionic surfactants"
+  area: colloid
+  level: base
+  short: "ПАВ, гидрофильная часть которых в воде заряжена отрицательно: лауретсульфат натрия, мыла."
+  long: "Основа моющих средств; чувствительны к жёсткости воды."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [hardness]
+
+- id: cationic-surf
+  term: "Катионные ПАВ"
+  en: "cationic surfactants"
+  area: colloid
+  level: base
+  short: "ПАВ с положительно заряженной гидрофильной частью, например четвертичные аммониевые соединения."
+  long: "Адсорбируются на отрицательно заряженных волосах и коже — основа кондиционеров."
+  topics: [surface-tension]
+  sources: [rosen2012]
+
+- id: nonionic-surf
+  term: "Неионогенные ПАВ"
+  en: "nonionic surfactants"
+  area: colloid
+  level: base
+  short: "ПАВ без заряда; гидрофильная часть — полиоксиэтиленовая цепь, сахарный остаток или полиглицерин."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [cloud-point]
+
+- id: amphoteric-surf
+  term: "Амфотерные ПАВ"
+  en: "amphoteric (zwitterionic) surfactants"
+  area: colloid
+  level: base
+  short: "ПАВ, несущие и положительный, и отрицательный заряд (например, кокамидопропилбетаин)."
+  long: "Смягчают действие анионных ПАВ и помогают загущению шампуней."
+  topics: [surfactant-thickening]
+  sources: [rosen2012]
+
+- id: micelle
+  term: "Мицелла"
+  en: "micelle"
+  area: colloid
+  level: base
+  short: "Агрегат молекул ПАВ в растворе: гидрофобные хвосты внутри, гидрофильные головы обращены к воде."
+  long: "Форма мицелл — сферы, цилиндры, бислои — зависит от геометрии молекулы и условий."
+  topics: [surface-tension, surfactant-thickening]
+  sources: [rosen2012]
+  see: [cmc, wormlike]
+
+- id: cmc
+  term: "ККМ (критическая концентрация мицеллообразования)"
+  en: "critical micelle concentration"
+  area: colloid
+  level: base
+  short: "Концентрация ПАВ, выше которой в растворе образуются мицеллы."
+  long: "Определяется по излому зависимостей поверхностного натяжения, проводимости и других свойств от концентрации. Выше ККМ поверхностное натяжение почти не меняется."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [micelle]
+
+- id: krafft
+  term: "Точка Крафта"
+  en: "Krafft point"
+  area: colloid
+  level: adv
+  short: "Температура, ниже которой растворимость ионного ПАВ меньше ККМ, и мицеллы не образуются — ПАВ выпадает в кристаллы."
+  long: "Объясняет помутнение и кристаллизацию растворов некоторых ПАВ на холоде."
+  topics: [surface-tension]
+  sources: [rosen2012]
+
+- id: cloud-point
+  term: "Точка помутнения"
+  en: "cloud point"
+  area: colloid
+  level: adv
+  short: "Температура, при нагреве выше которой раствор неионогенного ПАВ мутнеет из-за ухудшения гидратации полиоксиэтиленовых цепей."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [nonionic-surf]
+
+- id: adsorption
+  term: "Адсорбция"
+  en: "adsorption"
+  area: colloid
+  level: base
+  short: "Накопление вещества на поверхности раздела фаз."
+  long: "ПАВ адсорбируются на границах вода — воздух и вода — масло, снижая их натяжение."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [gibbs-adsorption]
+
+- id: gibbs-adsorption
+  term: "Уравнение адсорбции Гиббса"
+  en: "Gibbs adsorption equation"
+  area: colloid
+  level: adv
+  short: "Γ = −(1/nRT)·dγ/d ln c — связь поверхностного избытка ПАВ с наклоном зависимости поверхностного натяжения от логарифма концентрации."
+  long: "n = 1 для неионогенных ПАВ, n = 2 для ионных в отсутствие избытка соли."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [surface-excess]
+
+- id: surface-excess
+  term: "Поверхностный избыток"
+  en: "surface excess concentration"
+  area: colloid
+  level: adv
+  short: "Количество адсорбированного вещества на единицу площади поверхности, моль/м²."
+  long: "Обратная величина, делённая на число Авогадро, — площадь, занимаемая одной молекулой в адсорбционном слое."
+  topics: [surface-tension]
+  sources: [rosen2012]
+
+- id: szyszkowski
+  term: "Уравнение Шишковского"
+  en: "Szyszkowski equation"
+  area: colloid
+  level: adv
+  short: "Эмпирическая зависимость снижения поверхностного натяжения от концентрации ПАВ ниже ККМ: Δγ = B·ln(1 + c/a)."
+  topics: [surface-tension]
+  sources: [szyszkowski1908]
+
+- id: wetting
+  term: "Смачивание"
+  en: "wetting"
+  area: colloid
+  level: base
+  short: "Растекание жидкости по поверхности твёрдого тела или другой жидкости."
+  long: "Хорошее смачивание пигментов средой — условие их диспергирования."
+  sources: [hiemenz1997]
+  see: [contact-angle]
+
+- id: contact-angle
+  term: "Краевой угол"
+  en: "contact angle"
+  area: colloid
+  level: base
+  short: "Угол между поверхностью твёрдого тела и касательной к поверхности капли в точке контакта; мера смачивания."
+  long: "Угол меньше 90° — смачивание, больше 90° — несмачивание."
+  sources: [hiemenz1997]
+
+- id: laplace
+  term: "Давление Лапласа"
+  en: "Laplace pressure"
+  area: colloid
+  level: adv
+  short: "Избыточное давление внутри капли: Δp = 2γ / r."
+  long: "Чем мельче капля, тем больше давление и тем труднее её деформировать и дробить."
+  topics: [emulsification]
+  sources: [hiemenz1997]
+  see: [kelvin]
+
+- id: kelvin
+  term: "Уравнение Кельвина"
+  en: "Kelvin equation"
+  area: colloid
+  level: adv
+  short: "Связь растворимости (давления пара) вещества капли с её радиусом: у мелких капель растворимость выше."
+  long: "Движущая сила оствальдова созревания."
+  topics: [emulsion-stability]
+  sources: [taylor1998]
+  see: [ostwald]
+
+- id: solubilization
+  term: "Солюбилизация"
+  en: "solubilization"
+  area: colloid
+  level: base
+  short: "Растворение малорастворимого вещества внутри мицелл ПАВ, например отдушки в водном тонике."
+  sources: [rosen2012]
+  see: [micelle]
+
+- id: hydrotrope
+  term: "Гидротроп"
+  en: "hydrotrope"
+  area: colloid
+  level: adv
+  short: "Вещество, повышающее растворимость малорастворимых компонентов и ПАВ в воде без образования классических мицелл, например ксилолсульфонат натрия."
+
+- id: liquid-crystal
+  term: "Лиотропные жидкие кристаллы"
+  en: "lyotropic liquid crystals"
+  area: colloid
+  level: adv
+  short: "Упорядоченные фазы ПАВ и воды (ламеллярная, гексагональная, кубическая), образующиеся при высоких концентрациях ПАВ."
+  long: "Ламеллярные фазы под поляризационным микроскопом дают характерную картину двойного лучепреломления."
+  topics: [lamellar-gel-network]
+  sources: [iwata2017]
+  see: [lgn, microscopy-pol]
+
+- id: packing
+  term: "Критический параметр упаковки"
+  en: "critical packing parameter"
+  area: colloid
+  level: adv
+  short: "P = v / (a₀·l) — отношение объёма хвоста к произведению площади головы на длину хвоста; предсказывает форму агрегатов ПАВ."
+  long: "Ориентиры: меньше 1/3 — сферические мицеллы, 1/3–1/2 — цилиндрические, 1/2–1 — бислои."
+  topics: [surface-tension]
+  sources: [rosen2012]
+  see: [micelle, wormlike]
+
+- id: edl
+  term: "Двойной электрический слой"
+  en: "electric double layer"
+  area: colloid
+  level: adv
+  short: "Заряд поверхности частицы и компенсирующее его облако противоионов в растворе."
+  long: "Перекрытие двойных слоёв двух частиц создаёт электростатическое отталкивание."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+  see: [debye, zeta]
+
+- id: zeta
+  term: "Дзета-потенциал"
+  en: "zeta potential"
+  area: colloid
+  level: adv
+  short: "Электрический потенциал на плоскости скольжения частицы; измеряется по скорости её движения в электрическом поле."
+  long: "Большие по модулю значения (часто называют ориентир около 30 мВ) указывают на сильное электростатическое отталкивание; ориентир неприменим к стерически стабилизированным системам."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+  see: [edl]
+
+- id: debye
+  term: "Дебаевская длина"
+  en: "Debye length"
+  area: colloid
+  level: adv
+  short: "Характерная толщина диффузной части двойного электрического слоя; уменьшается с ростом ионной силы."
+  long: "Для симметричного электролита 1:1 в воде при 25 °C κ⁻¹ ≈ 0,304 / √I нм (I в моль/л): около 1 нм при 0,1 моль/л и около 10 нм при 0,001 моль/л."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+  see: [ionic-strength]
+
+- id: vdw
+  term: "Силы Ван-дер-Ваальса"
+  en: "van der Waals forces"
+  area: colloid
+  level: adv
+  short: "Слабые межмолекулярные силы притяжения, которые между частицами одинаковой природы в среде всегда притягивают их друг к другу."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+  see: [hamaker]
+
+- id: hamaker
+  term: "Константа Гамакера"
+  en: "Hamaker constant"
+  area: colloid
+  level: adv
+  short: "Параметр, определяющий величину ван-дер-ваальсова притяжения между частицами в данной среде."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+
+- id: dlvo
+  term: "Теория ДЛФО"
+  en: "DLVO theory"
+  area: colloid
+  level: adv
+  short: "Теория устойчивости лиофобных коллоидов (Дерягин, Ландау, Фервей, Овербек): энергия взаимодействия частиц — сумма ван-дер-ваальсова притяжения и электростатического отталкивания двойных слоёв."
+  long: "Объясняет, почему соль вызывает коагуляцию электростатически стабилизированных дисперсий."
+  topics: [colloid-stability]
+  sources: [verwey1948, hiemenz1997]
+  see: [schulze-hardy]
+
+- id: schulze-hardy
+  term: "Правило Шульце — Гарди"
+  en: "Schulze–Hardy rule"
+  area: colloid
+  level: adv
+  short: "Коагулирующая сила электролита резко растёт с зарядом противоиона; в предельном случае критическая концентрация коагуляции пропорциональна z⁻⁶."
+  long: "Двухзарядный противоион по этой оценке примерно в 64 раза эффективнее однозарядного."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+  see: [coagulation]
+
+- id: steric
+  term: "Стерическая стабилизация"
+  en: "steric stabilization"
+  area: colloid
+  level: adv
+  short: "Устойчивость частиц за счёт адсорбированных или привитых полимерных цепей, мешающих сближению."
+  long: "Мало чувствительна к соли — поэтому неионогенные ПАВ и полимеры стабилизируют системы с высоким содержанием электролитов."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+
+- id: coagulation
+  term: "Коагуляция"
+  en: "coagulation"
+  area: colloid
+  level: base
+  short: "Слипание частиц дисперсной фазы в агрегаты с потерей устойчивости системы."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+  see: [flocculation]
+
+- id: sedimentation
+  term: "Седиментация"
+  en: "sedimentation"
+  area: colloid
+  level: base
+  short: "Оседание частиц тяжелее среды под действием силы тяжести; противоположность кримированию."
+  topics: [disperse-systems, emulsion-stability]
+  sources: [tadros2013]
+  see: [creaming, stokes]
+
+- id: phase-inversion
+  term: "Инверсия фаз"
+  en: "phase inversion"
+  area: colloid
+  level: base
+  short: "Превращение эмульсии одного типа в другой, например М/В в В/М."
+  long: "Бывает вызвана изменением состава (доли фаз) или температуры; на этом основаны некоторые способы получения мелкодисперсных эмульсий."
+  topics: [emulsion-stability]
+  sources: [tadros2013]
+  see: [pit]
+
+- id: pit
+  term: "Температура инверсии фаз (PIT)"
+  en: "phase inversion temperature"
+  area: colloid
+  level: adv
+  short: "Температура, при которой эмульсия с неионогенным эмульгатором меняет тип из-за изменения гидратации полиоксиэтиленовых цепей."
+  long: "Используется в методе получения мелкодисперсных эмульсий охлаждением через эту температуру."
+  sources: [tadros2013]
+  see: [phase-inversion, cloud-point]
+
+- id: isoelectric
+  term: "Изоэлектрическая точка"
+  en: "isoelectric point"
+  area: colloid
+  level: adv
+  short: "Значение pH, при котором суммарный заряд поверхности частицы или молекулы белка равен нулю."
+  long: "Вблизи неё электростатическая стабилизация минимальна."
+  topics: [colloid-stability]
+  sources: [hiemenz1997]
+  see: [zeta]
+
+- id: polydispersity
+  term: "Полидисперсность"
+  en: "polydispersity"
+  area: colloid
+  level: base
+  short: "Разброс размеров частиц в системе; противоположность монодисперсности."
+  long: "Средний размер без ширины распределения мало говорит о поведении эмульсии: первыми всплывают и сливаются крупные капли."
+  topics: [disperse-systems]
+  see: [particle-size]
+
+- id: pickering
+  term: "Эмульсия Пикеринга"
+  en: "Pickering emulsion"
+  area: colloid
+  level: adv
+  short: "Эмульсия, стабилизированная твёрдыми частицами, адсорбированными на границе раздела, вместо ПАВ."
+
+- id: nanoemulsion
+  term: "Наноэмульсия"
+  en: "nanoemulsion"
+  area: colloid
+  level: adv
+  short: "Эмульсия с каплями около 20–200 нм; кинетически устойчивая, часто прозрачная или опалесцирующая."
+  see: [microemulsion]
+
+- id: microemulsion
+  term: "Микроэмульсия"
+  en: "microemulsion"
+  area: colloid
+  level: adv
+  short: "Термодинамически устойчивая прозрачная система масла, воды и ПАВ (часто с соПАВ), образующаяся самопроизвольно."
+  long: "В отличие от наноэмульсии не требует энергии на диспергирование и не расслаивается со временем."
+  see: [nanoemulsion]
+
+- id: lyophilic
+  term: "Лиофильные и лиофобные системы"
+  en: "lyophilic and lyophobic colloids"
+  area: colloid
+  level: base
+  short: "Лиофильные — дисперсные системы, образующиеся самопроизвольно и термодинамически устойчивые (растворы полимеров, мицеллярные растворы); лиофобные — неустойчивые термодинамически (эмульсии, суспензии)."
+  topics: [disperse-systems]
+  sources: [hiemenz1997]
+
+- id: viscosity
+  term: "Вязкость (динамическая)"
+  en: "dynamic viscosity"
+  area: rheo
+  level: base
+  short: "Отношение напряжения сдвига к скорости сдвига; сопротивление жидкости течению, Па·с (1 мПа·с = 1 сП)."
+  long: "У воды при 20 °C около 1 мПа·с."
+  topics: [rheology-basics, fluid-flow]
+  sources: [mezger2020]
+  see: [kinematic-viscosity, apparent-viscosity]
+
+- id: kinematic-viscosity
+  term: "Кинематическая вязкость"
+  en: "kinematic viscosity"
+  area: rheo
+  level: base
+  short: "Отношение динамической вязкости к плотности, м²/с; 1 мм²/с = 1 сСт."
+  long: "В сСт часто указывают вязкость силиконов и масел."
+  sources: [mezger2020]
+  see: [viscosity]
+
+- id: newtonian
+  term: "Ньютоновская жидкость"
+  en: "Newtonian fluid"
+  area: rheo
+  level: base
+  short: "Жидкость, вязкость которой не зависит от скорости сдвига: вода, масла, глицерин."
+  topics: [rheology-basics]
+  sources: [mezger2020]
+  see: [shear-thinning]
+
+- id: shear-stress
+  term: "Напряжение сдвига"
+  en: "shear stress"
+  area: rheo
+  level: base
+  short: "Сила, действующая по касательной на единицу площади слоя жидкости, Па."
+  topics: [rheology-basics]
+  sources: [mezger2020]
+  see: [shear-rate]
+
+- id: apparent-viscosity
+  term: "Кажущаяся вязкость"
+  en: "apparent viscosity"
+  area: rheo
+  level: base
+  short: "Отношение напряжения к скорости сдвига для неньютоновской жидкости при конкретной скорости сдвига."
+  long: "Число имеет смысл только вместе с условиями измерения."
+  topics: [rheology-basics]
+  sources: [mezger2020]
+
+- id: power-law
+  term: "Степенной закон (модель Оствальда — де Ваале)"
+  en: "power-law model"
+  area: rheo
+  level: adv
+  short: "σ = K·γ̇ⁿ; при n < 1 жидкость псевдопластична, при n > 1 — дилатантна."
+  topics: [rheology-basics, fluid-flow]
+  sources: [mezger2020, chhabra2008]
+  see: [herschel-bulkley]
+
+- id: viscoelasticity
+  term: "Вязкоупругость"
+  en: "viscoelasticity"
+  area: rheo
+  level: adv
+  short: "Сочетание вязкого течения и упругой деформации; свойственна кремам, гелям, растворам червеобразных мицелл."
+  topics: [rheology-basics]
+  sources: [mezger2020]
+  see: [storage-modulus]
+
+- id: storage-modulus
+  term: "Модули упругости G′ и потерь G″"
+  en: "storage and loss moduli"
+  area: rheo
+  level: adv
+  short: "G′ характеризует запасённую упругую энергию, G″ — рассеянную вязким течением; измеряются в осцилляционном тесте."
+  long: "Если G′ > G″, образец ведёт себя преимущественно как твёрдое тело."
+  topics: [rheology-basics]
+  sources: [mezger2020]
+  see: [oscillation]
+
+- id: oscillation
+  term: "Осцилляционный тест (амплитудная развёртка)"
+  en: "oscillatory test, amplitude sweep"
+  area: rheo
+  level: adv
+  short: "Измерение отклика образца на синусоидальную деформацию с растущей амплитудой; показывает границу линейной области и разрушение структуры."
+  topics: [rheology-basics]
+  sources: [mezger2020]
+  see: [lvr]
+
+- id: lvr
+  term: "Линейная вязкоупругая область"
+  en: "linear viscoelastic region"
+  area: rheo
+  level: adv
+  short: "Диапазон деформаций, в котором модули не зависят от амплитуды, и структура образца не разрушается измерением."
+  sources: [mezger2020]
+
+- id: creep
+  term: "Ползучесть"
+  en: "creep"
+  area: rheo
+  level: adv
+  short: "Медленная деформация образца под постоянным напряжением; тест на ползучесть чувствителен к поведению ниже предела текучести."
+  sources: [mezger2020, barnes1999]
+  see: [yield-stress]
+
+- id: dilatancy
+  term: "Дилатансия"
+  en: "shear thickening"
+  area: rheo
+  level: adv
+  short: "Рост вязкости с увеличением скорости сдвига; встречается у концентрированных суспензий."
+  sources: [mezger2020]
+  see: [shear-thinning]
+
+- id: rheopexy
+  term: "Реопексия"
+  en: "rheopexy"
+  area: rheo
+  level: adv
+  short: "Обратимый во времени рост вязкости под сдвигом; противоположность тиксотропии, встречается редко."
+  sources: [mezger2020]
+  see: [thixotropy]
+
+- id: spindle-viscometer
+  term: "Ротационный вискозиметр со шпинделем"
+  en: "spindle viscometer"
+  area: rheo
+  level: base
+  short: "Прибор, измеряющий момент сопротивления вращению шпинделя в образце; даёт кажущуюся вязкость в узком диапазоне скоростей сдвига."
+  long: "Результат сопоставим только при том же шпинделе, скорости, температуре и времени отсчёта."
+  topics: [rheology-basics]
+  sources: [mezger2020]
+
+- id: cone-plate
+  term: "Измерительная система «конус — плита»"
+  en: "cone-and-plate geometry"
+  area: rheo
+  level: adv
+  short: "Геометрия реометра, создающая почти одинаковую скорость сдвига во всём зазоре; подходит для кривых течения."
+  sources: [mezger2020]
+  see: [wall-slip]
+
+- id: wall-slip
+  term: "Пристенное скольжение"
+  en: "wall slip"
+  area: rheo
+  level: adv
+  short: "Проскальзывание образца у гладкой поверхности измерительной системы; занижает измеренную вязкость структурированных паст и кремов."
+  long: "Устраняется рифлёными поверхностями или лопастной геометрией."
+  sources: [mezger2020]
+
+- id: unit-operation
+  term: "Типовой процесс (единичная операция)"
+  en: "unit operation"
+  area: process
+  level: base
+  short: "Повторяющийся в разных производствах физический процесс: перемешивание, нагрев, фильтрование, перекачивание, диспергирование."
+  long: "Изучаются в курсе процессов и аппаратов химической технологии (ПАХТ) общими методами."
+  topics: [fluid-flow, heat-transfer]
+  sources: [coulson1999]
+
+- id: reynolds
+  term: "Число Рейнольдса (течение в трубе)"
+  en: "Reynolds number"
+  area: process
+  level: base
+  short: "Re = ρ·v·d / μ — отношение инерционных сил к вязким; определяет режим течения."
+  long: "В круглой трубе для ньютоновской жидкости течение ламинарное примерно до Re ≈ 2000–2300."
+  topics: [fluid-flow]
+  sources: [coulson1999]
+  see: [reynolds-mix, laminar]
+
+- id: laminar
+  term: "Ламинарное течение"
+  en: "laminar flow"
+  area: process
+  level: base
+  short: "Течение слоями без перемешивания между ними; характерно для вязких сред и малых скоростей."
+  topics: [fluid-flow, mixing-basics]
+  sources: [coulson1999]
+  see: [turbulent]
+
+- id: turbulent
+  term: "Турбулентное течение"
+  en: "turbulent flow"
+  area: process
+  level: base
+  short: "Течение с хаотическими вихрями, интенсивно перемешивающими жидкость; характерно для маловязких сред при высоких скоростях."
+  topics: [fluid-flow, mixing-basics]
+  sources: [coulson1999]
+  see: [laminar]
+
+- id: hagen-poiseuille
+  term: "Уравнение Хагена — Пуазейля"
+  en: "Hagen–Poiseuille equation"
+  area: process
+  level: adv
+  short: "Δp = 128·μ·L·Q / (π·d⁴) — перепад давления при ламинарном течении ньютоновской жидкости в круглой трубе."
+  long: "Перепад обратно пропорционален четвёртой степени диаметра: увеличение диаметра шланга вдвое снижает его в 16 раз."
+  topics: [fluid-flow]
+  sources: [coulson1999]
+  see: [pressure-drop]
+
+- id: pressure-drop
+  term: "Перепад давления (гидравлическое сопротивление)"
+  en: "pressure drop"
+  area: process
+  level: base
+  short: "Потеря давления жидкости при течении по трубам, шлангам, фильтрам и арматуре."
+  topics: [fluid-flow]
+  sources: [coulson1999]
+
+- id: flow-rate
+  term: "Расход"
+  en: "flow rate"
+  area: process
+  level: base
+  short: "Количество жидкости, проходящее через сечение в единицу времени: объёмный (м³/ч) или массовый (кг/ч)."
+  topics: [fluid-flow]
+
+- id: pd-pump
+  term: "Объёмный насос"
+  en: "positive displacement pump"
+  area: process
+  level: base
+  short: "Насос, перемещающий порции жидкости замкнутыми объёмами: шестерённый, кулачковый (роторный), винтовой, мембранный."
+  long: "Подходит для вязких продуктов; расход мало зависит от вязкости и противодавления."
+  topics: [fluid-flow]
+  sources: [chhabra2008]
+  see: [centrifugal-pump]
+
+- id: centrifugal-pump
+  term: "Центробежный насос"
+  en: "centrifugal pump"
+  area: process
+  level: base
+  short: "Насос, передающий энергию жидкости вращающимся рабочим колесом; эффективен для маловязких жидкостей."
+  long: "С ростом вязкости его подача и КПД резко падают; для кремов обычно не применяется."
+  topics: [fluid-flow]
+  sources: [chhabra2008]
+  see: [pd-pump]
+
+- id: cavitation
+  term: "Кавитация"
+  en: "cavitation"
+  area: process
+  level: adv
+  short: "Образование и схлопывание пузырьков пара при местном падении давления ниже давления насыщенного пара жидкости."
+  long: "Разрушает рабочие органы насосов и гомогенизаторов, вносит воздух в продукт."
+  topics: [fluid-flow]
+
+- id: thermal-conductivity
+  term: "Теплопроводность"
+  en: "thermal conductivity"
+  area: process
+  level: base
+  short: "Способность материала проводить тепло; λ, Вт/(м·К). У нержавеющей стали около 15–16 Вт/(м·К)."
+  topics: [heat-transfer]
+  sources: [coulson1999]
+  see: [fourier]
+
+- id: fourier
+  term: "Закон Фурье"
+  en: "Fourier's law"
+  area: process
+  level: adv
+  short: "Плотность теплового потока пропорциональна градиенту температуры: q = −λ·dT/dx."
+  topics: [heat-transfer]
+  sources: [coulson1999]
+
+- id: film-coefficient
+  term: "Коэффициент теплоотдачи"
+  en: "heat transfer (film) coefficient"
+  area: process
+  level: adv
+  short: "α (h), Вт/(м²·К) — интенсивность переноса тепла между стенкой и движущейся жидкостью."
+  long: "Сильно зависит от перемешивания и вязкости: у неподвижного вязкого крема он мал, и теплообмен лимитирует именно эта сторона."
+  topics: [heat-transfer]
+  sources: [coulson1999]
+  see: [heat-transfer-coeff]
+
+- id: heat-transfer-coeff
+  term: "Коэффициент теплопередачи"
+  en: "overall heat transfer coefficient"
+  area: process
+  level: base
+  short: "K (U), Вт/(м²·К) — интенсивность передачи тепла от одного теплоносителя к другому через стенку; обратная величина — сумма термических сопротивлений."
+  long: "1/K = 1/α₁ + δ/λ + 1/α₂ (+ сопротивление отложений)."
+  topics: [heat-transfer, scale-up]
+  sources: [coulson1999]
+  see: [film-coefficient]
+
+- id: lmtd
+  term: "Среднелогарифмический температурный напор"
+  en: "log mean temperature difference"
+  area: process
+  level: adv
+  short: "Средняя движущая сила теплообмена, когда разность температур теплоносителей меняется вдоль поверхности."
+  topics: [heat-transfer]
+  sources: [coulson1999]
+
+- id: specific-heat
+  term: "Удельная теплоёмкость"
+  en: "specific heat capacity"
+  area: process
+  level: base
+  short: "Количество теплоты, нужное для нагрева 1 кг вещества на 1 К, Дж/(кг·К). У воды около 4,2 кДж/(кг·К)."
+  topics: [heat-transfer, scale-up]
+  sources: [coulson1999]
+
+- id: latent-heat
+  term: "Теплота фазового перехода"
+  en: "latent heat"
+  area: process
+  level: adv
+  short: "Теплота, поглощаемая или выделяемая при плавлении, кристаллизации, испарении без изменения температуры."
+  long: "Кристаллизация жировой фазы и структурообразование при охлаждении крема выделяют тепло."
+  topics: [heat-transfer]
+  sources: [coulson1999]
+
+- id: jacket
+  term: "Рубашка аппарата"
+  en: "jacket"
+  area: process
+  level: base
+  short: "Полость вокруг корпуса реактора, по которой подаётся теплоноситель или хладагент."
+  topics: [heat-transfer, mixing-basics]
+  sources: [coulson1999]
+  see: [heat-transfer-coeff]
+
+- id: anchor
+  term: "Якорная мешалка"
+  en: "anchor impeller"
+  area: process
+  level: base
+  short: "Тихоходная мешалка, повторяющая форму днища и стенок аппарата; часто со скребками для обновления слоя у стенки."
+  topics: [mixing-basics]
+  sources: [him2003]
+  see: [scraper]
+
+- id: scraper
+  term: "Скребки"
+  en: "wall scrapers"
+  area: process
+  level: base
+  short: "Подвижные лопатки на якорной мешалке, снимающие продукт со стенки и улучшающие теплообмен."
+  topics: [mixing-basics, heat-transfer]
+  sources: [him2003]
+  see: [anchor]
+
+- id: turbine
+  term: "Турбинная (быстроходная) мешалка"
+  en: "turbine impeller"
+  area: process
+  level: base
+  short: "Мешалка с лопатками на диске или валу, создающая интенсивную циркуляцию и сдвиг в маловязких средах."
+  topics: [mixing-basics]
+  sources: [him2003]
+
+- id: power-number
+  term: "Критерий мощности"
+  en: "power number"
+  area: process
+  level: adv
+  short: "Np = P / (ρ·N³·D⁵) — безразмерная мощность мешалки; в турбулентном режиме постоянен для данной геометрии."
+  topics: [mixing-basics]
+  sources: [him2003]
+  see: [reynolds-mix]
+
+- id: similarity
+  term: "Подобие (геометрическое, кинематическое, динамическое)"
+  en: "similarity"
+  area: process
+  level: adv
+  short: "Условия, при которых процессы в аппаратах разного масштаба описываются одинаковыми безразмерными критериями."
+  long: "Полного подобия при масштабировании обычно достичь нельзя — приходится выбирать, что сохранять."
+  topics: [scale-up]
+  sources: [atiemo2004]
+  see: [dimensionless]
+
+- id: dimensionless
+  term: "Безразмерный критерий"
+  en: "dimensionless number"
+  area: process
+  level: adv
+  short: "Комбинация величин без размерности (Рейнольдс, Вебер, критерий мощности), позволяющая сравнивать процессы разного масштаба."
+  topics: [scale-up, fluid-flow]
+  sources: [coulson1999]
+
+- id: deaeration
+  term: "Деаэрация"
+  en: "deaeration"
+  area: process
+  level: base
+  short: "Удаление воздуха из продукта, обычно вакуумированием при перемешивании."
+  long: "Воздух меняет плотность, вид и стабильность продукта и ускоряет окисление."
+  topics: [emulsification]
+
+- id: hp-homogenizer
+  term: "Гомогенизатор высокого давления"
+  en: "high-pressure homogenizer"
+  area: process
+  level: base
+  short: "Аппарат, продавливающий эмульсию через узкий зазор клапана под высоким давлением; даёт субмикронные капли."
+  topics: [emulsification]
+  sources: [walstra1993]
+  see: [rotor-stator]
+
+- id: mass-transfer
+  term: "Массообмен"
+  en: "mass transfer"
+  area: process
+  level: base
+  short: "Перенос вещества между фазами или внутри фазы: растворение, экстракция, сушка."
+  sources: [coulson1999]
+  see: [dissolution]
+
+- id: dissolution
+  term: "Растворение"
+  en: "dissolution"
+  area: process
+  level: base
+  short: "Переход твёрдого вещества в раствор; скорость определяется поверхностью частиц, перемешиванием и растворимостью."
+  long: "Порошки загустителей вводят так, чтобы частицы смачивались по отдельности, — иначе образуются комки с сухой сердцевиной."
+  sources: [coulson1999]
+
+- id: filtration
+  term: "Фильтрование"
+  en: "filtration"
+  area: process
+  level: base
+  short: "Отделение частиц от жидкости пропусканием через пористую перегородку."
+  sources: [coulson1999]
+
+- id: cip
+  term: "Мойка на месте (CIP)"
+  en: "clean-in-place"
+  area: process
+  level: base
+  short: "Мойка оборудования без разборки — циркуляцией моющих и дезинфицирующих растворов по заданной программе."
+  topics: [water-raw]
+  see: [sanitization]
+
+- id: fouling
+  term: "Отложения на теплообменной поверхности"
+  en: "fouling"
+  area: process
+  level: adv
+  short: "Слой осадка, накипи или пригоревшего продукта на стенке, добавляющий термическое сопротивление."
+  topics: [heat-transfer]
+  sources: [coulson1999]
+
+- id: shelf-life
+  term: "Срок годности"
+  en: "shelf life"
+  area: stab
+  level: base
+  short: "Период, в течение которого нераскрытый продукт при соблюдении условий хранения сохраняет свои свойства."
+  topics: [stability-testing]
+  sources: [isotr18811]
+  see: [pao]
+
+- id: pao
+  term: "Срок после вскрытия (PAO)"
+  en: "period after opening"
+  area: stab
+  level: base
+  short: "Период, в течение которого продукт безопасен после вскрытия упаковки; в ЕС обозначается символом открытой баночки."
+  topics: [stability-testing]
+  sources: [eu1223]
+
+- id: freeze-thaw
+  term: "Циклы замораживания — оттаивания"
+  en: "freeze–thaw cycling"
+  area: stab
+  level: base
+  short: "Испытание чередованием низкой и высокой температуры; проверяет устойчивость к перевозке и хранению в холоде."
+  topics: [stability-testing]
+  sources: [isotr18811]
+
+- id: syneresis
+  term: "Синерезис"
+  en: "syneresis"
+  area: stab
+  level: base
+  short: "Самопроизвольное выделение жидкости из геля при хранении за счёт сжатия его сетки."
+  topics: [stability-testing]
+
+- id: particle-size
+  term: "Распределение частиц по размерам"
+  en: "particle size distribution"
+  area: stab
+  level: adv
+  short: "Доли частиц или капель разных размеров; описывается средними (d₃₂, d₅₀) и шириной распределения."
+  topics: [emulsification]
+  sources: [walstra1993]
+  see: [d32, polydispersity]
+
+- id: laser-diffraction
+  term: "Лазерная дифракция"
+  en: "laser diffraction"
+  area: stab
+  level: adv
+  short: "Метод определения размеров частиц от долей микрометра до миллиметров по угловому распределению рассеянного света."
+  see: [particle-size]
+
+- id: dls
+  term: "Динамическое рассеяние света"
+  en: "dynamic light scattering"
+  area: stab
+  level: adv
+  short: "Метод определения размера субмикронных частиц по флуктуациям рассеянного света, вызванным броуновским движением."
+  long: "Размер находят через коэффициент диффузии по уравнению Стокса — Эйнштейна."
+  topics: [disperse-systems]
+  sources: [einstein1905]
+  see: [stokes-einstein]
+
+- id: microscopy-pol
+  term: "Поляризационная микроскопия"
+  en: "polarized light microscopy"
+  area: stab
+  level: adv
+  short: "Микроскопия в скрещенных поляризаторах; выявляет анизотропные структуры — кристаллы и ламеллярные жидкокристаллические фазы."
+  topics: [lamellar-gel-network]
+  sources: [iwata2017]
+  see: [liquid-crystal]
+
+- id: dsc
+  term: "Дифференциальная сканирующая калориметрия (ДСК)"
+  en: "differential scanning calorimetry"
+  area: stab
+  level: adv
+  short: "Метод измерения тепловых эффектов при нагреве и охлаждении; показывает плавление и кристаллизацию жировой фазы и переходы гелевой сети."
+  topics: [stability-testing]
+
+- id: calibration
+  term: "Калибровка"
+  en: "calibration"
+  area: stab
+  level: base
+  short: "Установление соответствия показаний прибора значениям эталона или стандартного образца."
+  long: "pH-метр калибруют по стандартным буферам в рабочем диапазоне перед измерениями."
+  topics: [ph-buffers]
+  sources: [buck2002]
+
+- id: cfu
+  term: "КОЕ"
+  en: "colony-forming units"
+  area: micro
+  level: base
+  short: "Колониеобразующие единицы — число жизнеспособных микроорганизмов, образующих колонии на питательной среде."
+  topics: [preservation]
+  see: [tamc]
+
+- id: tamc
+  term: "Общее число мезофильных аэробных микроорганизмов"
+  en: "total aerobic microbial count"
+  area: micro
+  level: base
+  short: "Число жизнеспособных аэробных бактерий в 1 г или 1 мл продукта, КОЕ/г."
+  topics: [preservation]
+  see: [cfu]
+
+- id: specified-micro
+  term: "Специфицированные микроорганизмы"
+  en: "specified microorganisms"
+  area: micro
+  level: base
+  short: "Микроорганизмы, которые не допускаются в продукте; для косметики обычно — синегнойная палочка, золотистый стафилококк, кишечная палочка и Candida albicans."
+  topics: [preservation]
+  sources: [trts009]
+
+- id: preservative
+  term: "Консервант"
+  en: "preservative"
+  area: micro
+  level: base
+  short: "Вещество, подавляющее рост микроорганизмов в продукте при хранении и использовании."
+  long: "Действует в водной фазе; эффективность зависит от pH, распределения между фазами и связывания компонентами."
+  topics: [preservation]
+  sources: [halla2018]
+  see: [undissociated]
+
+- id: sanitization
+  term: "Санитарная обработка"
+  en: "sanitization"
+  area: micro
+  level: base
+  short: "Снижение микробной нагрузки на оборудовании и в системах воды термически или химически по утверждённому графику."
+  topics: [water-raw, preservation]
+  see: [biofilm]
+
+- id: biofilm
+  term: "Биоплёнка"
+  en: "biofilm"
+  area: micro
+  level: base
+  short: "Сообщество микроорганизмов на поверхности, заключённое в выделяемый ими матрикс; устойчиво к санитарной обработке."
+  long: "Образуется в застойных участках систем воды и оборудования и постоянно отдаёт клетки в поток."
+  topics: [water-raw, preservation]
+  see: [sanitization]
+
+- id: gram-negative
+  term: "Грамотрицательные бактерии"
+  en: "gram-negative bacteria"
+  area: micro
+  level: adv
+  short: "Бактерии с тонкой клеточной стенкой и наружной мембраной, не удерживающие красителя по Граму; многие из них обитают в воде."
+  topics: [preservation]
+
+- id: water-activity
+  term: "Активность воды"
+  en: "water activity"
+  area: micro
+  level: adv
+  short: "aw — отношение давления пара воды над продуктом к давлению пара над чистой водой; показывает доступность воды для микроорганизмов."
+  long: "Снижение активности воды (гликоли, соли, низкое содержание воды) затрудняет рост микроорганизмов."
+  topics: [preservation]
+  sources: [halla2018]
+
+- id: mic
+  term: "Минимальная ингибирующая концентрация (МИК)"
+  en: "minimum inhibitory concentration"
+  area: micro
+  level: adv
+  short: "Наименьшая концентрация вещества, подавляющая видимый рост микроорганизма в стандартных условиях."
+
+- id: mean
+  term: "Среднее арифметическое"
+  en: "mean"
+  area: stat
+  level: base
+  short: "Сумма значений, делённая на их число."
+  topics: [doe-basics]
+  sources: [nist-handbook]
+  see: [sd]
+
+- id: sd
+  term: "Стандартное отклонение"
+  en: "standard deviation"
+  area: stat
+  level: base
+  short: "Мера разброса значений вокруг среднего, в тех же единицах, что и измеряемая величина."
+  topics: [doe-basics]
+  sources: [nist-handbook]
+  see: [ci]
+
+- id: ci
+  term: "Доверительный интервал"
+  en: "confidence interval"
+  area: stat
+  level: base
+  short: "Интервал, который с заданной вероятностью содержит истинное значение оцениваемой величины."
+  long: "При малом числе измерений интервал шире, чем «плюс-минус два стандартных отклонения»: используют распределение Стьюдента."
+  topics: [doe-basics]
+  sources: [nist-handbook]
+
+- id: randomization
+  term: "Рандомизация"
+  en: "randomization"
+  area: stat
+  level: base
+  short: "Случайный порядок проведения опытов, исключающий смешение эффекта фактора с дрейфом во времени."
+  topics: [doe-basics]
+  sources: [montgomery2017]
+
+- id: repeatability
+  term: "Повторяемость и воспроизводимость"
+  en: "repeatability and reproducibility"
+  area: stat
+  level: base
+  short: "Повторяемость — разброс результатов одного оператора на одном приборе; воспроизводимость — между операторами, приборами, лабораториями."
+  topics: [rheology-basics]
+  sources: [nist-handbook]
+
+- id: outlier
+  term: "Выброс"
+  en: "outlier"
+  area: stat
+  level: base
+  short: "Результат, резко отличающийся от остальных; требует проверки причины, а не автоматического исключения."
+  sources: [nist-handbook]
+
+- id: regression
+  term: "Регрессия"
+  en: "regression"
+  area: stat
+  level: adv
+  short: "Построение зависимости отклика от факторов по экспериментальным данным, например методом наименьших квадратов."
+  topics: [doe-basics]
+  sources: [montgomery2017]
+
+- id: fractional
+  term: "Дробный факторный план"
+  en: "fractional factorial design"
+  area: stat
+  level: adv
+  short: "Часть полного факторного плана, позволяющая оценить главные эффекты при меньшем числе опытов ценой смешения части взаимодействий."
+  topics: [doe-basics]
+  sources: [montgomery2017]
+  see: [factorial]
+
+- id: response-surface
+  term: "Поверхность отклика"
+  en: "response surface methodology"
+  area: stat
+  level: adv
+  short: "Подход к поиску оптимума: квадратичная модель отклика по нескольким факторам по плану с центральными и осевыми точками."
+  sources: [montgomery2017]
+
+- id: center-point
+  term: "Центральная точка плана"
+  en: "center point"
+  area: stat
+  level: adv
+  short: "Опыт при средних уровнях всех факторов; позволяет обнаружить кривизну отклика и оценить ошибку повторами."
+  topics: [doe-basics]
+  sources: [montgomery2017]
+
+- id: control-chart
+  term: "Контрольная карта"
+  en: "control chart"
+  area: stat
+  level: adv
+  short: "График показателя партий во времени с центральной линией и контрольными границами; выявляет неслучайные изменения процесса."
+  sources: [nist-handbook]
+  see: [cpk]
+
+- id: cpk
+  term: "Индекс воспроизводимости процесса Cpk"
+  en: "process capability index"
+  area: stat
+  level: adv
+  short: "Cpk = min(ВГ − μ, μ − НГ) / (3σ): насколько разброс процесса помещается в границы спецификации с учётом смещения среднего."
+  sources: [nist-handbook]
+  see: [control-chart]
+
+- id: gmp
+  term: "GMP (надлежащая производственная практика)"
+  en: "good manufacturing practice"
+  area: reg
+  level: base
+  short: "Система требований к организации производства и контроля, обеспечивающая стабильное качество продукции; для косметики — ISO 22716."
+  sources: [iso22716]
+  see: [sop]
+
+- id: sop
+  term: "СОП (стандартная операционная процедура)"
+  en: "standard operating procedure"
+  area: reg
+  level: base
+  short: "Утверждённое письменное описание порядка выполнения операции."
+  sources: [iso22716]
+
+- id: spec
+  term: "Спецификация"
+  en: "specification"
+  area: reg
+  level: base
+  short: "Документ с перечнем показателей качества, методами их контроля и допустимыми значениями для сырья или продукта."
+  topics: [rheology-basics]
+
+- id: batch-record
+  term: "Протокол изготовления партии"
+  en: "batch manufacturing record"
+  area: reg
+  level: base
+  short: "Документ, в котором фиксируются фактические загрузки, параметры и события изготовления конкретной партии."
+  topics: [lamellar-gel-network]
+  sources: [iso22716]
+
+- id: quarantine
+  term: "Карантин"
+  en: "quarantine"
+  area: reg
+  level: base
+  short: "Статус сырья или продукции, изолированных до принятия решения о годности."
+  topics: [preservation]
+  sources: [iso22716]
+
+- id: oos
+  term: "Результат вне спецификации (OOS)"
+  en: "out of specification"
+  area: reg
+  level: adv
+  short: "Результат испытания, не соответствующий установленным требованиям; требует расследования до принятия решения."
+  topics: [rheology-basics]
+  see: [deviation]
+
+- id: retain-sample
+  term: "Архивный образец"
+  en: "retained sample"
+  area: reg
+  level: base
+  short: "Образец партии, хранящийся на случай повторных испытаний и расследований."
+  sources: [iso22716]
+
+- id: incoming-control
+  term: "Входной контроль"
+  en: "incoming inspection"
+  area: reg
+  level: base
+  short: "Проверка поступившего сырья и упаковки на соответствие спецификации до использования."
+  topics: [water-raw]
+  sources: [iso22716]
+  see: [coa]
+
+- id: coa
+  term: "Паспорт качества (CoA)"
+  en: "certificate of analysis"
+  area: reg
+  level: base
+  short: "Документ поставщика с результатами испытаний конкретной партии сырья."
+  long: "Фактические значения в паспорте (содержание основного вещества, соль, pH) используют в расчётах загрузок."
+  topics: [solutions-basics, surfactant-thickening]
+  see: [incoming-control]

@@ -11,9 +11,9 @@ export interface Check { q: string; options: { text: string; correct?: boolean; 
 export interface Topic {
   id: string; title: string; summary: string; area: 'production' | 'rnd' | 'both'; domain: string
   minutes: number; order: number; questions: string[]; labs: string[]; related: string[]
-  checks: Check[]; review: string; updated: string; body: string; swatch: string; search: string[]
+  checks: Check[]; review: string; updated: string; body: string; swatch: string; search: string[]; level: 1 | 2 | 3
 }
-export interface Term { id: string; term: string; en?: string; short: string; long?: string; topics?: string[]; sources?: string[] }
+export interface Term { id: string; term: string; en?: string; short: string; long?: string; topics?: string[]; sources?: string[]; level?: 'base' | 'adv'; area?: string; see?: string[] }
 export interface Source {
   id: string; type: string; authors: string; title: string; where: string; year: number | string
   doi?: string; url?: string; supports: string; verified: string; note?: string
@@ -28,7 +28,7 @@ function parseTopic(raw: string): Topic {
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/)
   if (!m) throw new Error('В файле темы нет шапки ---')
   const fm = YAML.parse(m[1])
-  return { questions: [], labs: [], related: [], checks: [], search: [], swatch: 'apricot', ...fm, body: m[2] }
+  return { questions: [], labs: [], related: [], checks: [], search: [], swatch: 'apricot', level: 2, ...fm, body: m[2] }
 }
 const y = (name: string) => YAML.parse(rawYaml[`/content/${name}.yaml`] ?? '[]')
 
@@ -46,6 +46,11 @@ export const labById = (id: string) => labs.find((l) => l.id === id)
 export const mediaUrl = (file: string) => mediaUrls[`/content/media/${file}`]
 export const mediaByFile = (file: string) => media.find((m) => m.file === file)
 
+/** Ступени сложности темы: от простого к сложному. */
+export const levelLabel: Record<number, string> = { 1: 'Основа', 2: 'Практика', 3: 'Углублённо' }
+export const levelHint: Record<number, string> = { 1: 'Понятия и расчёты, на которые опирается всё остальное', 2: 'Механизм и типовые рабочие решения', 3: 'Тонкие эффекты, ограничения моделей, спорные случаи' }
+/** Области словаря. */
+export const termAreas: Record<string, string> = { raw: 'Сырьё и растворы', colloid: 'Коллоидная и поверхностная химия', rheo: 'Реология', process: 'Процессы и аппараты', stab: 'Стабильность и контроль', micro: 'Микробиология и консервирование', stat: 'Эксперимент и статистика', reg: 'Нормативы и качество' }
 export const areaLabel: Record<string, string> = { production: 'Производство', rnd: 'R&D', both: 'Производство + R&D' }
 export const sourceTypeLabel: Record<string, string> = {
   textbook: 'Учебник / монография', review: 'Рецензируемый обзор', paper: 'Первичное исследование',

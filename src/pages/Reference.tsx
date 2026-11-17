@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { terms, sources, topics, labs, topicById, sourceById, sourceTypeLabel, labById } from '../content'
+import { terms, sources, topics, labs, topicById, sourceById, sourceTypeLabel, labById, termById, termAreas } from '../content'
 import { Md } from '../md'
 import { ConfirmButton } from '../ui'
 import { resetProgress, useProgress, toggleBookmark } from '../store'
@@ -15,24 +15,45 @@ function useScrollTo(id?: string) {
 
 export function Glossary() {
   const { id } = useParams()
-  useTitle('Термины'); useScrollTo(id && `t-${id}`)
+  const [q, setQ] = useState(''), [area, setArea] = useState('all'), [lvl, setLvl] = useState('all')
+  useTitle('Словарь'); useScrollTo(id && `t-${id}`)
+  const norm = (x: string) => x.toLowerCase().replace(/ё/g, 'е')
+  const list = terms.filter((t) => (area === 'all' || t.area === area) && (lvl === 'all' || (t.level ?? 'base') === lvl) && (!q || norm(`${t.term} ${t.en ?? ''} ${t.short}`).includes(norm(q.trim()))))
+  const letters = [...new Set(list.map((t) => t.term[0].toUpperCase()))]
+  const counts = Object.fromEntries(Object.keys(termAreas).map((k) => [k, terms.filter((t) => t.area === k).length]))
   return (
-    <div className="page">
-      <h1>Термины</h1>
-      <p className="lead">Определения с переходами к темам, где термин раскрыт, и к источникам. Английский эквивалент приведён для поиска литературы.</p>
+    <div className="page glossary-page">
+      <h1>Словарь</h1>
+      <p className="lead">{terms.length} терминов — от базовых понятий химии растворов до коллоидной химии и процессов и аппаратов. У каждого — определение, английский эквивалент для поиска литературы и переходы к темам и источникам.</p>
+      <div className="gfilters">
+        <label className="sr" htmlFor="gq">Найти термин</label>
+        <input id="gq" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Найти термин: вязкость, буфер, ККМ, Рейнольдс…" />
+        <div className="filters" role="group" aria-label="Область">
+          <button className={`chip ${area === 'all' ? 'on' : ''}`} aria-pressed={area === 'all'} onClick={() => setArea('all')}>Все области</button>
+          {Object.entries(termAreas).filter(([k]) => counts[k]).map(([k, l]) => <button key={k} className={`chip ${area === k ? 'on' : ''}`} aria-pressed={area === k} onClick={() => setArea(k)}>{l} <span className="num dim">{counts[k]}</span></button>)}
+        </div>
+        <div className="filters" role="group" aria-label="Уровень">
+          {[['all', 'Любой уровень'], ['base', 'Базовые'], ['adv', 'Углублённые']].map(([k, l]) => <button key={k} className={`chip ${lvl === k ? 'on' : ''}`} aria-pressed={lvl === k} onClick={() => setLvl(k)}>{l}</button>)}
+        </div>
+      </div>
+      <nav className="alpha" aria-label="Алфавитный указатель">{letters.map((L) => <a key={L} href={`#g-${L}`} onClick={(e) => { e.preventDefault(); document.getElementById(`g-${L}`)?.scrollIntoView({ block: 'start' }) }}>{L}</a>)}</nav>
+      <p className="small" role="status">Показано: {list.length}</p>
       <dl className="glossary">
-        {terms.map((t) => (
+        {list.map((t, i) => (
           <div key={t.id} id={`t-${t.id}`} className={id === t.id ? 'hl' : ''}>
-            <dt>{t.term}{t.en && <span className="en"> · {t.en}</span>}</dt>
+            {(i === 0 || list[i - 1].term[0].toUpperCase() !== t.term[0].toUpperCase()) && <span id={`g-${t.term[0].toUpperCase()}`} className="anchor" />}
+            <dt>{t.term}{t.en && <span className="en"> · {t.en}</span>} <span className={`glv ${t.level === 'adv' ? 'adv' : 'base'}`}>{t.level === 'adv' ? 'углублённый' : 'базовый'}</span>{t.area && <span className="garea">{termAreas[t.area]}</span>}</dt>
             <dd>
               <p>{t.short}</p>{t.long && <p className="small">{t.long}</p>}
               <p className="links small">
+                {t.see?.map((x) => termById(x)).filter(Boolean).map((x) => <Link key={x!.id} to={`/glossary/${x!.id}`}>См. также: {x!.term}</Link>)}
                 {t.topics?.map((x) => topicById(x)).filter(Boolean).map((x) => <Link key={x!.id} to={`/topics/${x!.id}`}>Тема: {x!.title}</Link>)}
                 {t.sources?.map((x) => sourceById(x)).filter(Boolean).map((x) => <Link key={x!.id} to={`/sources/${x!.id}`}>Источник: {x!.authors.split(',')[0]}, {x!.year}</Link>)}
               </p>
             </dd>
           </div>))}
       </dl>
+      {!list.length && <p className="muted">Ничего не найдено. Попробуйте другое слово или снимите фильтры.</p>}
     </div>)
 }
 
