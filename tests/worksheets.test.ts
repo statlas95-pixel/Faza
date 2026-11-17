@@ -13,6 +13,11 @@ function answers(id: string, expected: number[]) {
 }
 
 describe('Независимый пересчёт числовых ответов занятий', () => {
+  it('перенос новых моделей: другое k и другой перепад давления', () => {
+    const load = (id: string) => YAML.parse(fs.readFileSync(`content/labs/${id}.yaml`, 'utf8'))
+    expect(load('dissolution-sheet').transfer.questions[0].answer).toBeCloseTo(-Math.log(0.1) / 0.05, 1)
+    expect(load('deaeration-sheet').transfer.questions[0].answer).toBe(100 / 50)
+  })
   it('растворение: начальная скорость, экспоненциальное приближение и изменение k', () => {
     answers('dissolution-sheet', [0.1 * 100, -Math.log(0.1) / 0.1, 0.1 * (100 - 90), -Math.log(0.1) / 0.2])
   })

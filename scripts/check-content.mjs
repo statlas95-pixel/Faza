@@ -121,7 +121,7 @@ for (const d of diag) {
   if (d.after) {
     const parent = diag.find((x) => x.id === d.after.item)
     if (!Array.isArray(d.after.result) || !d.after.result.length || d.after.result.some((r) => !['ok', 'partial', 'wrong', 'unknown', 'skip'].includes(r))) err('diagnostic.yaml', `${d.id}: некорректное условие after`)
-    if (parent && (d.tracks ?? []).some((id) => !parent.tracks?.includes(id))) err('diagnostic.yaml', `${d.id}: родитель уточнения из другого варианта`)
+    if (parent && Array.isArray(d.tracks) && d.tracks.some((id) => !Array.isArray(parent.tracks) || !parent.tracks.includes(id))) err('diagnostic.yaml', `${d.id}: родитель уточнения из другого варианта`)
     const seen = new Set([d.id]); let p = parent
     while (p) { if (seen.has(p.id)) { err('diagnostic.yaml', `${d.id}: цикл уточнений`); break }; seen.add(p.id); p = p.after ? diag.find((x) => x.id === p.after.item) : undefined }
   }

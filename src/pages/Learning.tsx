@@ -108,7 +108,7 @@ export function DiagnosticPage() {
       <div className="goals" role="group" aria-label="Вариант диагностики">{diagTracks.map((t) => {
         const bank = diagItemsForTrack(diagItems, t.id).filter((i) => !i.after)
         return <button className="goal" key={t.id} onClick={() => { restartDiag(t.id); setChoosing(false); setVal(''); setSel(null) }}>
-          <b>{t.name}</b><span>{t.description}</span><span className="small num">{bank.length} основных вопросов · теория: {bank.filter((i) => i.mode === 'theory').length} · практика: {bank.filter((i) => i.mode === 'practice').length} · {t.time}</span>
+          <b>{t.name}</b><span>{t.description}</span><span className="small num">{bank.length} основных вопросов · теория: {bank.filter((i) => i.mode === 'theory').length} · практика: {bank.filter((i) => i.mode === 'practice').length} · ориентир {t.time}</span>
         </button>
       })}</div>
       <p className="small">Это короткий срез подготовки, а не экзамен или аттестация. Неохваченные навыки уточняются в темах и занятиях; результаты разных вариантов не предназначены для рейтинга людей.</p>

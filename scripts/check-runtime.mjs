@@ -62,8 +62,15 @@ try {
   const email = `runtime-${randomUUID()}@example.test`, password = 'runtime-test-password-123'
   assert.equal((await A.request('POST', '/api/auth/sign-up/email', { name: 'Runtime A', email, password })).status, 200)
   const attempt = { id: randomUUID(), labId: 'solutions-sheet', at: Date.now(), summary: 'Проверка рабочего образа' }
-  const saved = await A.request('PUT', '/api/me/state', { baseRev: 0, data: { visited: { 'solutions-basics': 123 }, attempts: [attempt] } })
+  const changedAt = Date.now()
+  const diagnostic = { track: 'starter', changedAt, answers: { 's-ph': { result: 'ok', at: changedAt } } }
+  const saved = await A.request('PUT', '/api/me/state', { baseRev: 0, data: { visited: { 'solutions-basics': 123 }, attempts: [attempt], diag: diagnostic } })
   assert.equal(saved.status, 200); assert.equal(saved.data.rev, 1)
+  const stale = await A.request('PUT', '/api/me/state', { baseRev: saved.data.rev, data: { diag: { answers: { 'd-rheo': { result: 'ok', at: changedAt + 1000 } }, finishedAt: changedAt + 1001 } } })
+  assert.equal(stale.status, 200); assert.equal(stale.data.data.diag.track, 'starter')
+  assert.equal(stale.data.merged, true)
+  assert.deepEqual(stale.data.data.diag.answers, diagnostic.answers)
+  assert.equal(stale.data.data.diag.finishedAt, undefined)
   assert.equal((await B.request('POST', '/api/auth/sign-up/email', { name: 'Runtime B', email: `other-${email}`, password })).status, 200)
   assert.equal((await B.request('GET', `/api/attempts/${attempt.id}`)).status, 404)
   const search = await A.request('GET', '/api/search/catalog?q=эмульсия')
@@ -74,6 +81,8 @@ try {
   const restored = await A.request('GET', '/api/me')
   assert.equal(restored.status, 200); assert.equal(restored.data.user.email, email)
   assert.equal(restored.data.data.visited['solutions-basics'], 123)
+  assert.equal(restored.data.data.diag.track, 'starter')
+  assert.deepEqual(restored.data.data.diag.answers, diagnostic.answers)
   assert.equal((await A.request('GET', `/api/attempts/${attempt.id}`)).data.summary, attempt.summary)
   assert.equal((await A.request('POST', '/api/auth/sign-out', {})).status, 200)
   assert.equal((await A.request('GET', '/api/me')).status, 401)

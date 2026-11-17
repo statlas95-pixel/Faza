@@ -59,9 +59,12 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     const u = (req as Authed).user, cur = readState(u.id), { data, baseRev } = req.body ?? {}
     if (!data || typeof data !== 'object') return void res.status(400).json({ error: 'bad_request', message: 'Нет данных' })
     // Если клиент работал с устаревшей копией — сливаем, ничего не теряя, и возвращаем результат.
-    const merged = baseRev === cur.rev ? data : mergeProgress(cur.data, data)
+    // Старый открытый клиент может потерять новые поля diag даже с актуальной baseRev.
+    const staleDiag = (data.diag?.changedAt ?? 0) < (cur.data.diag.changedAt ?? 0)
+    const needsMerge = baseRev !== cur.rev || staleDiag
+    const merged = needsMerge ? mergeProgress(cur.data, data) : data
     const saved = writeState(u.id, merged, cur.rev + 1)
-    res.json({ rev: cur.rev + 1, data: saved, merged: baseRev !== cur.rev })
+    res.json({ rev: cur.rev + 1, data: saved, merged: needsMerge })
   })
   app.post('/api/me/import', requireUser, (req, res) => {
     const u = (req as Authed).user, { importId, data } = req.body ?? {}

@@ -83,6 +83,17 @@ describe('Аккаунты и личные данные', () => {
     expect((await A.req('GET', '/api/attempts/att-anna-1')).json.summary).toBe('итог')
     expect((await B.req('GET', '/api/attempts/att-anna-1')).status).toBe(404)
   })
+  it('старый клиент с актуальной ревизией не стирает выбранный вариант диагностики', async () => {
+    const C = new Client()
+    expect((await C.req('POST', '/api/auth/sign-up/email', { name: 'Диагностика', email: 'diag@example.com', password: 'diagnostic-test-123' })).status).toBe(200)
+    const diag = { track: 'starter', changedAt: 10, answers: { 's-ph': { result: 'ok', at: 11 } } }
+    const first = await C.req('PUT', '/api/me/state', { baseRev: 0, data: { diag } })
+    const old = await C.req('PUT', '/api/me/state', { baseRev: first.json.rev, data: { diag: { answers: { 'd-rheo': { result: 'ok', at: 999 } }, finishedAt: 1000 } } })
+    expect(old.json.merged).toBe(true); expect(old.json.data.diag).toEqual(diag)
+    const reset = await C.req('PUT', '/api/me/state', { baseRev: old.json.rev, data: { diag: { track: 'graduate', changedAt: 20, answers: {} } } })
+    expect(reset.json.merged).toBe(false); expect(reset.json.data.diag.track).toBe('graduate')
+    expect((await C.req('GET', '/api/me')).json.data.diag.answers).toEqual({})
+  })
   it('импорт локального прогресса не дублируется', async () => {
     const local = { visited: { c: 1 }, bookmarks: [{ path: '/topics/x', title: 'X', kind: 'Тема', at: 1 }], labDone: { 'rheo-cabinet': { at: 2, attempts: 1 } } }
     const id = fingerprint(local)
