@@ -95,6 +95,37 @@ for (const l of labs) if (!skills.some((s) => s.labs.includes(l.id))) warns.push
 for (const g of cur.goals) for (const id of mapped) if (!g.order.includes(id)) err('curriculum.yaml', `цель ${g.id}: в порядке нет темы ${id}`)
 for (const g of cur.goals) for (const id of g.order) if (!topicIds.has(id)) err('curriculum.yaml', `цель ${g.id}: неизвестная тема ${id}`)
 for (const d of diag) { if (!skills.some((s) => s.id === d.skill)) err('diagnostic.yaml', `${d.id}: нет навыка ${d.skill}`); if (d.after && !diag.some((x) => x.id === d.after.item)) err('diagnostic.yaml', `${d.id}: after ссылается на несуществующее задание`) }
+const tracks = readY('diagnostic-tracks.yaml') ?? [], trackIds = new Set(tracks.map((t) => t.id))
+dup(tracks, 'diagnostic-tracks.yaml')
+for (const id of ['graduate', 'starter', 'experienced']) if (!trackIds.has(id)) err('diagnostic-tracks.yaml', `нет варианта ${id}`)
+for (const t of tracks) {
+  if (!['graduate', 'starter', 'experienced'].includes(t.id)) err('diagnostic-tracks.yaml', `неизвестный вариант ${t.id}`)
+  for (const k of ['name', 'description', 'time']) if (!t[k]) err('diagnostic-tracks.yaml', `${t.id}: нет поля ${k}`)
+  const bank = diag.filter((d) => Array.isArray(d.tracks) && d.tracks.includes(t.id) && !d.after)
+  if (bank.length < 8 || bank.length > 12) err('diagnostic.yaml', `${t.id}: основная часть должна содержать 8–12 вопросов`)
+  for (const mode of ['theory', 'practice']) if (bank.filter((d) => d.mode === mode).length < 2) err('diagnostic.yaml', `${t.id}: нужно не менее двух вопросов ${mode}`)
+  for (const domain of ['physical', 'colloid', 'process', 'cosmetics']) if (!bank.some((d) => d.domain === domain)) err('diagnostic.yaml', `${t.id}: нет области ${domain}`)
+}
+for (const d of diag) {
+  if (d.tracks) {
+    if (!Array.isArray(d.tracks) || !d.tracks.length || d.tracks.some((id) => !trackIds.has(id))) err('diagnostic.yaml', `${d.id}: неизвестный вариант tracks`)
+    if (!['physical', 'colloid', 'process', 'cosmetics'].includes(d.domain)) err('diagnostic.yaml', `${d.id}: неизвестная область domain`)
+    if (!['theory', 'practice'].includes(d.mode)) err('diagnostic.yaml', `${d.id}: нужен mode theory или practice`)
+    if (!topicIds.has(d.topic)) err('diagnostic.yaml', `${d.id}: нет темы разбора ${d.topic}`)
+  }
+  if (d.options) {
+    if (d.options.filter((o) => o.result === 'ok').length !== 1) err('diagnostic.yaml', `${d.id}: нужен ровно один верный вариант`)
+    if (d.options.some((o) => !['ok', 'partial', 'wrong'].includes(o.result))) err('diagnostic.yaml', `${d.id}: неизвестный результат варианта`)
+  } else if (!Number.isFinite(d.answer)) err('diagnostic.yaml', `${d.id}: нужен конечный числовой ответ`)
+  if (d.tol !== undefined && (!Number.isFinite(d.tol) || d.tol < 0)) err('diagnostic.yaml', `${d.id}: некорректный допуск tol`)
+  if (d.after) {
+    const parent = diag.find((x) => x.id === d.after.item)
+    if (!Array.isArray(d.after.result) || !d.after.result.length || d.after.result.some((r) => !['ok', 'partial', 'wrong', 'unknown', 'skip'].includes(r))) err('diagnostic.yaml', `${d.id}: некорректное условие after`)
+    if (parent && Array.isArray(d.tracks) && d.tracks.some((id) => !Array.isArray(parent.tracks) || !parent.tracks.includes(id))) err('diagnostic.yaml', `${d.id}: родитель уточнения из другого варианта`)
+    const seen = new Set([d.id]); let p = parent
+    while (p) { if (seen.has(p.id)) { err('diagnostic.yaml', `${d.id}: цикл уточнений`); break }; seen.add(p.id); p = p.after ? diag.find((x) => x.id === p.after.item) : undefined }
+  }
+}
 console.log(`Темы: ${topics.length} · занятия: ${labs.length} · термины: ${terms.length} · источники: ${sources.length} · изображения: ${media.length}`)
 warns.forEach((w) => console.log('  предупреждение — ' + w))
 if (errors.length) { errors.forEach((e) => console.error('  ОШИБКА — ' + e)); console.error(`\nНайдено ошибок: ${errors.length}`); process.exit(1) }

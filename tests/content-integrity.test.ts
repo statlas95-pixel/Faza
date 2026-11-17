@@ -23,6 +23,18 @@ function edit(dir: string, file: string, fn: (data: any) => void) {
 }
 
 describe('Защита связей учебного контента', () => {
+  it('отклоняет неверный вариант диагностики, область и тему разбора', () => {
+    const r = check((dir) => edit(dir, 'diagnostic.yaml', (qs) => {
+      const q = qs.find((i: any) => i.id === 'g-ph'); q.tracks = ['missing']; q.domain = 'other'; q.topic = 'missing-topic'
+    }))
+    expect(r.status).toBe(1); expect(r.text).toContain('неизвестный вариант tracks'); expect(r.text).toContain('неизвестная область domain'); expect(r.text).toContain('нет темы разбора missing-topic')
+  })
+  it('находит цикл уточняющих вопросов', () => {
+    const r = check((dir) => edit(dir, 'diagnostic.yaml', (qs) => {
+      qs.find((i: any) => i.id === 'e-dlvo').after = { item: 'e-ionic-calc', result: ['ok'] }
+    }))
+    expect(r.status).toBe(1); expect(r.text).toContain('цикл уточнений')
+  })
   it('отклоняет битую перекрёстную ссылку словаря', () => {
     const r = check((dir) => edit(dir, 'glossary.yaml', (xs) => { xs[0].see = ['missing-term'] }))
     expect(r.status).toBe(1); expect(r.text).toContain('нет термина see «missing-term»')

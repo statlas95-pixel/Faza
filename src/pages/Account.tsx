@@ -11,7 +11,7 @@ export function ImportBanner() {
   const p = a.pendingImport
   if (!p) return null
   const s = p.summary
-  const items = [[s.topics, 'открытых тем'], [s.answers, 'ответов на проверочные вопросы'], [s.labsStarted, 'сохранённых состояний занятий'], [s.labsDone, 'завершённых занятий'], [s.attempts, 'записей в истории попыток'], [s.bookmarks, 'закладок'], [s.sources, 'сохранённых источников']].filter(([n]) => (n as number) > 0)
+  const items = [[s.topics, 'открытых тем'], [s.answers, 'ответов на проверочные вопросы'], [s.diagnostic, 'ответов в диагностике'], [s.labsStarted, 'сохранённых состояний занятий'], [s.labsDone, 'завершённых занятий'], [s.attempts, 'записей в истории попыток'], [s.bookmarks, 'закладок'], [s.sources, 'сохранённых источников']].filter(([n]) => (n as number) > 0)
   return (
     <aside className="import" role="dialog" aria-label="Импорт локального прогресса">
       <div>

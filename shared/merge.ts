@@ -2,9 +2,9 @@
 // Правило: ничего не теряем — объединяем, а при конфликте берём более позднее или более полное.
 export interface Attempt { id: string; labId: string; at: number; summary: string; detail?: any }
 export interface SavedSource { key: string; title: string; authors: string; year: string; type: string; doi?: string; url?: string; provider: string; access: string; note?: string; topic?: string; suggested?: boolean; at: number }
-import type { Evidence, Result } from './mastery'
+import type { Evidence, Result, DiagTrack } from './mastery'
 export interface Profile { goal?: string; context?: string; at?: number }
-export interface Diag { answers: Record<string, { result: Result; note?: string; value?: string; at: number }>; startedAt?: number; finishedAt?: number }
+export interface Diag { answers: Record<string, { result: Result; note?: string; value?: string; at: number }>; track?: DiagTrack; changedAt?: number; startedAt?: number; finishedAt?: number }
 export interface Settings { level: 'novice' | 'practitioner' | 'expert'; hints: boolean; aiModel?: string }
 export interface Progress {
   visited: Record<string, number>; scroll: Record<string, number>
@@ -58,11 +58,26 @@ export function mergeProgress(aRaw: any, bRaw: any): Progress {
   out.savedSources = byKey([...a.savedSources, ...b.savedSources], (x) => x.key, (x) => x.at)
   out.last = !a.last ? b.last : !b.last ? a.last : b.last.at >= a.last.at ? b.last : a.last
   out.settings = { ...a.settings, ...b.settings }
-  out.evidence = byKey([...a.evidence, ...b.evidence], (x) => x.id, (x) => x.at)
+  const diagChangedAt = Math.max(a.diag.changedAt ?? 0, b.diag.changedAt ?? 0)
+  out.evidence = byKey([
+    ...a.evidence.filter((e) => e.kind !== 'diag' || (a.diag.changedAt ?? 0) === diagChangedAt),
+    ...b.evidence.filter((e) => e.kind !== 'diag' || (b.diag.changedAt ?? 0) === diagChangedAt),
+  ], (x) => x.id, (x) => x.at)
   out.profile = (b.profile.at ?? 0) >= (a.profile.at ?? 0) ? b.profile : a.profile
   const da = a.diag, db = b.diag
-  out.diag = { answers: { ...da.answers }, startedAt: da.startedAt ?? db.startedAt, finishedAt: Math.max(da.finishedAt ?? 0, db.finishedAt ?? 0) || undefined }
-  for (const [k, v] of Object.entries(db.answers)) if (!out.diag.answers[k] || v.at >= out.diag.answers[k].at) out.diag.answers[k] = v
+  if ((da.changedAt ?? 0) !== (db.changedAt ?? 0)) {
+    const newer = (da.changedAt ?? 0) > (db.changedAt ?? 0) ? da : db
+    out.diag = { ...newer, answers: { ...newer.answers } }
+  } else {
+    out.diag = { ...da, ...db, answers: { ...da.answers }, startedAt: da.startedAt ?? db.startedAt, finishedAt: Math.max(da.finishedAt ?? 0, db.finishedAt ?? 0) || undefined }
+    for (const [k, v] of Object.entries(db.answers)) if (!out.diag.answers[k] || v.at >= out.diag.answers[k].at) out.diag.answers[k] = v
+  }
+  // Старая копия с другого устройства не должна возвращать ответы и оценки сброшенного теста.
+  if (out.diag.changedAt) out.evidence = out.evidence.filter((e) => {
+    if (e.kind !== 'diag') return true
+    const answer = out.diag.answers[e.src]
+    return answer && answer.result !== 'skip' && answer.at === e.at && answer.result === e.result && e.at >= out.diag.changedAt!
+  })
   out.hints = maxMap(a.hints, b.hints)
   for (const k of Object.keys(out.labDone)) out.labDone[k].attempts = Math.max(out.labDone[k].attempts, out.attempts.filter((t) => t.labId === k).length)
   return out
@@ -74,14 +89,17 @@ export function summarize(pRaw: any) {
     topics: Object.keys(p.visited).length,
     answers: Object.values(p.checks).reduce((n, c) => n + Object.keys(c).length, 0),
     labsStarted: Object.keys(p.labs).length, labsDone: Object.keys(p.labDone).length,
-    attempts: p.attempts.length, bookmarks: p.bookmarks.length, sources: p.savedSources.length, evidence: p.evidence.length,
+    attempts: p.attempts.length, bookmarks: p.bookmarks.length, sources: p.savedSources.length, evidence: p.evidence.length, diagnostic: Object.keys(p.diag.answers).length,
   }
 }
 export const isEmpty = (p: any) => { const s = summarize(p); return Object.values(s).every((v) => v === 0) }
 /** Стабильный отпечаток содержимого — идентификатор импорта, исключает повторное добавление. */
 export function fingerprint(p: any) {
   const n = normalize(p)
-  const s = JSON.stringify([Object.keys(n.visited).sort(), n.checks, Object.keys(n.labs).sort(), n.labDone, n.bookmarks.map((b) => b.path).sort(), n.attempts.map((t) => t.id).sort(), n.savedSources.map((x) => x.key).sort()])
+  const parts: unknown[] = [Object.keys(n.visited).sort(), n.checks, Object.keys(n.labs).sort(), n.labDone, n.bookmarks.map((b) => b.path).sort(), n.attempts.map((t) => t.id).sort(), n.savedSources.map((x) => x.key).sort()]
+  // Отпечатки прежнего формата сохраняются; новые ответы диагностики дают новый импорт.
+  if (n.diag.track || n.diag.changedAt) parts.push([n.diag.track, n.diag.changedAt, n.diag.answers])
+  const s = JSON.stringify(parts)
   let h1 = 0x811c9dc5, h2 = 0x1b873593
   for (let i = 0; i < s.length; i++) { h1 = Math.imul(h1 ^ s.charCodeAt(i), 16777619); h2 = Math.imul(h2 + s.charCodeAt(i), 0x85ebca6b) ^ (h2 >>> 13) }
   return (h1 >>> 0).toString(16).padStart(8, '0') + (h2 >>> 0).toString(16).padStart(8, '0')
