@@ -10,15 +10,25 @@ import { useTitle } from './util'
 import aboutRaw from '/content/about.md?raw'
 
 function useScrollTo(id?: string) {
-  useEffect(() => { if (id) document.getElementById(id)?.scrollIntoView({ block: 'center' }) }, [id])
+  useEffect(() => {
+    if (!id) return
+    // Дождаться шрифтов: иначе длинный словарь меняет высоту после прокрутки.
+    let cancelled = false, frame = 0
+    void document.fonts.ready.then(() => {
+      if (!cancelled) frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'center', behavior: 'instant' }))
+    })
+    return () => { cancelled = true; cancelAnimationFrame(frame) }
+  }, [id])
 }
 
 export function Glossary() {
   const { id } = useParams()
   const [q, setQ] = useState(''), [area, setArea] = useState('all'), [lvl, setLvl] = useState('all')
-  useTitle('Словарь'); useScrollTo(id && `t-${id}`)
+  useTitle('Словарь')
+  useEffect(() => { if (id) { setQ(''); setArea('all'); setLvl('all') } }, [id])
   const norm = (x: string) => x.toLowerCase().replace(/ё/g, 'е')
   const list = terms.filter((t) => (area === 'all' || t.area === area) && (lvl === 'all' || (t.level ?? 'base') === lvl) && (!q || norm(`${t.term} ${t.en ?? ''} ${t.short}`).includes(norm(q.trim()))))
+  useScrollTo(id && list.some((t) => t.id === id) ? `t-${id}` : undefined)
   const letters = [...new Set(list.map((t) => t.term[0].toUpperCase()))]
   const counts = Object.fromEntries(Object.keys(termAreas).map((k) => [k, terms.filter((t) => t.area === k).length]))
   return (

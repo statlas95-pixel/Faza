@@ -23,6 +23,7 @@ const topics = fs.readdirSync(path.join(C, 'topics')).filter((f) => f.endsWith('
 }).filter(Boolean)
 const labs = fs.readdirSync(path.join(C, 'labs')).filter((f) => f.endsWith('.yaml')).map((f) => ({ file: `labs/${f}`, ...(readY(`labs/${f}`) ?? {}) }))
 const topicIds = new Set(topics.map((t) => t.id)), labIds = new Set(labs.map((l) => l.id))
+dup(topics, 'topics'); dup(labs, 'labs')
 const mediaFiles = new Set(fs.readdirSync(path.join(C, 'media')))
 for (const m of media) { if (!mediaFiles.has(m.file)) err('media.yaml', `нет файла media/${m.file}`); for (const k of ['author', 'source', 'license', 'attribution', 'alt']) if (!m[k]) err('media.yaml', `у «${m.file}» нет поля ${k}`) }
 for (const f of mediaFiles) if (!media.find((m) => m.file === f)) err('media.yaml', `файл media/${f} не внесён в реестр`)
@@ -36,6 +37,7 @@ function checkText(file, text) {
 }
 for (const t of topics) {
   for (const k of ['id', 'title', 'summary', 'area', 'domain', 'order', 'review']) if (t[k] === undefined) err(t.file, `нет поля ${k}`)
+  if (![1, 2, 3].includes(t.level)) err(t.file, 'level должен быть 1, 2 или 3')
   checkText(t.file, t.body)
   if (!/\[@/.test(t.body)) err(t.file, 'в теме нет ни одной ссылки на источник')
   for (const l of t.labs ?? []) if (!labIds.has(l)) err(t.file, `labs: нет занятия «${l}»`)
@@ -43,12 +45,14 @@ for (const t of topics) {
   for (const [i, c] of (t.checks ?? []).entries()) if ((c.options ?? []).filter((o) => o.correct).length !== 1) err(t.file, `проверочный вопрос ${i + 1}: должен быть ровно один верный вариант`)
 }
 for (const t of terms) { for (const x of t.topics ?? []) if (!topicIds.has(x)) err('glossary.yaml', `«${t.id}»: нет темы ${x}`); for (const x of t.sources ?? []) if (!srcIds.has(x)) err('glossary.yaml', `«${t.id}»: нет источника ${x}`) }
+for (const t of terms) for (const x of t.see ?? []) if (!termIds.has(x)) err('glossary.yaml', `«${t.id}»: нет термина see «${x}»`)
 for (const l of labs) {
   for (const k of ['id', 'engine', 'title', 'summary', 'role', 'skill', 'brief', 'dataNote']) if (!l[k]) err(l.file, `нет поля ${k}`)
   for (const x of l.topics ?? []) if (!topicIds.has(x)) err(l.file, `topics: нет темы ${x}`)
   checkText(l.file, JSON.stringify(l))
   const qs = [...(l.questions ?? []), ...(l.transferQuiz?.questions ?? []), ...(l.steps ?? []).flatMap((x) => x.questions ?? []), ...(typeof l.transfer === 'object' ? l.transfer?.questions ?? [] : [])]
-  qs.forEach((q, i) => { if (q.type === 'mc' && q.options.filter((o) => o.correct).length !== 1) err(l.file, `вопрос ${i + 1}: нужен ровно один верный вариант`); if (q.type === 'num' && typeof q.answer !== 'number') err(l.file, `вопрос ${i + 1}: нет числового ответа`) })
+  qs.forEach((q, i) => { if (q.type === 'mc' && (q.options ?? []).filter((o) => o.correct).length !== 1) err(l.file, `вопрос ${i + 1}: нужен ровно один верный вариант`); if (q.type === 'num' && !Number.isFinite(q.answer)) err(l.file, `вопрос ${i + 1}: нет конечного числового ответа`); if (q.tol !== undefined && (!Number.isFinite(q.tol) || q.tol < 0)) err(l.file, `вопрос ${i + 1}: некорректный допуск tol`) })
+  if (l.transferOf && !labIds.has(l.transferOf)) err(l.file, `transferOf: нет занятия ${l.transferOf}`)
   if (l.engine === 'investigation') {
     const ev = new Set(l.requests.map((r) => r.id))
     for (const d of l.documents) { for (const s of d.sections) for (const r of s.rows) { if (r.id) ev.add(r.id); if (r.cells.length !== s.columns.length) err(l.file, `документ «${d.id}», раздел «${s.title}»: в строке ${r.cells.length} ячеек при ${s.columns.length} столбцах`) } for (const n of d.notes ?? []) ev.add(n.id) }
@@ -68,12 +72,28 @@ for (const s of unused) warns.push(`sources.yaml: источник «${s.id}» �
 // карта знаний, навыки, диагностика
 const cur = readY('curriculum.yaml') ?? { sections: [], goals: [] }, skills = readY('skills.yaml') ?? [], diag = readY('diagnostic.yaml') ?? []
 const mapped = cur.sections.flatMap((s) => s.modules.flatMap((m) => m.topics.map((t) => t.id)))
+dup(skills, 'skills.yaml'); dup(diag, 'diagnostic.yaml')
+const refs = cur.sections.flatMap((s) => s.modules.flatMap((m) => m.topics))
+dup(refs, 'curriculum.yaml')
+for (const s of cur.sections) for (const m of s.modules) for (const id of m.also ?? []) if (!topicIds.has(id)) err('curriculum.yaml', `also: нет темы «${id}»`)
+const graph = new Map(refs.map((t) => [t.id, t.prereq ?? []]))
+for (const t of refs) for (const id of t.prereq ?? []) if (!graph.has(id)) err('curriculum.yaml', `«${t.id}»: нет предпосылки «${id}» в карте знаний`)
+const visited = new Set(), active = new Set()
+function visit(id) {
+  if (active.has(id)) { err('curriculum.yaml', `цикл предпосылок у «${id}»`); return }
+  if (visited.has(id)) return
+  active.add(id)
+  for (const p of graph.get(id) ?? []) visit(p)
+  active.delete(id); visited.add(id)
+}
+for (const id of graph.keys()) visit(id)
 for (const t of topics) if (!mapped.includes(t.id)) err('curriculum.yaml', `тема «${t.id}» не размещена ни в одном модуле карты знаний`)
 for (const id of mapped) if (!topicIds.has(id)) err('curriculum.yaml', `в карте указана несуществующая тема «${id}»`)
 for (const t of topics) if (!skills.some((s) => s.topics.includes(t.id))) err('skills.yaml', `у темы «${t.id}» нет навыка`)
 for (const s of skills) { for (const x of s.topics) if (!topicIds.has(x)) err('skills.yaml', `навык ${s.id}: нет темы ${x}`); for (const x of s.labs) if (!labIds.has(x)) err('skills.yaml', `навык ${s.id}: нет занятия ${x}`) }
 for (const l of labs) if (!skills.some((s) => s.labs.includes(l.id))) warns.push(`skills.yaml: занятие «${l.id}» не привязано к навыку — его результат не повлияет на профиль`)
 for (const g of cur.goals) for (const id of mapped) if (!g.order.includes(id)) err('curriculum.yaml', `цель ${g.id}: в порядке нет темы ${id}`)
+for (const g of cur.goals) for (const id of g.order) if (!topicIds.has(id)) err('curriculum.yaml', `цель ${g.id}: неизвестная тема ${id}`)
 for (const d of diag) { if (!skills.some((s) => s.id === d.skill)) err('diagnostic.yaml', `${d.id}: нет навыка ${d.skill}`); if (d.after && !diag.some((x) => x.id === d.after.item)) err('diagnostic.yaml', `${d.id}: after ссылается на несуществующее задание`) }
 console.log(`Темы: ${topics.length} · занятия: ${labs.length} · термины: ${terms.length} · источники: ${sources.length} · изображения: ${media.length}`)
 warns.forEach((w) => console.log('  предупреждение — ' + w))
