@@ -23,3 +23,6 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run build:single
+      - run: docker build --tag faza:runtime-check .
+      - run: npm run check:runtime
+      - run: docker run --rm faza:runtime-check npm audit --omit=dev --omit=optional --audit-level=moderate
