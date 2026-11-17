@@ -55,21 +55,23 @@ describe('Диагностика и маршрут', () => {
     expect(nextDiagItem(items, { 'd-rheo': { result: 'wrong' } }, 'rnd')!.id).not.toBe('d-rheo-calc')
     const all = Object.fromEntries(items.map((i) => [i.id, { result: 'ok' as const }])); expect(nextDiagItem(items, all, 'rnd')).toBeUndefined()
   })
-  const novice = diag({ 'd-rheo': 'unknown', 'd-mech': 'wrong', 'd-struct': 'wrong', 'd-mixing': 'unknown', 'd-scale': 'unknown', 'd-surf': 'unknown', 'd-micro': 'wrong', 'd-doe': 'unknown' })
-  const floor = diag({ 'd-struct': 'ok', 'd-mixing': 'ok', 'd-scale': 'ok', 'd-emul': 'ok', 'd-surf': 'ok', 'd-rheo': 'wrong', 'd-mech': 'partial', 'd-stab': 'wrong', 'd-micro': 'wrong', 'd-doe': 'unknown' })
-  const chemist = diag({ 'd-rheo': 'ok', 'd-rheo-calc': 'ok', 'd-mech': 'ok', 'd-stab': 'ok', 'd-micro': 'ok', 'd-doe': 'ok', 'd-surf': 'partial', 'd-struct': 'partial', 'd-mixing': 'wrong', 'd-scale': 'unknown' })
+  const novice = diag({ 'd-sol': 'unknown', 'd-ph': 'unknown', 'd-colloid': 'unknown', 'd-heat': 'unknown', 'd-rheo': 'unknown', 'd-mech': 'wrong', 'd-struct': 'wrong', 'd-mixing': 'unknown', 'd-scale': 'unknown', 'd-surf': 'unknown', 'd-micro': 'wrong', 'd-doe': 'unknown' })
+  const floor = diag({ 'd-sol': 'ok', 'd-ph': 'ok', 'd-heat': 'ok', 'd-colloid': 'wrong', 'd-struct': 'ok', 'd-mixing': 'ok', 'd-scale': 'ok', 'd-emul': 'ok', 'd-surf': 'ok', 'd-rheo': 'wrong', 'd-mech': 'partial', 'd-stab': 'wrong', 'd-micro': 'wrong', 'd-doe': 'unknown' })
+  const chemist = diag({ 'd-sol': 'ok', 'd-ph': 'ok', 'd-colloid': 'ok', 'd-heat': 'wrong', 'd-rheo': 'ok', 'd-rheo-calc': 'ok', 'd-mech': 'ok', 'd-stab': 'ok', 'd-micro': 'ok', 'd-doe': 'ok', 'd-surf': 'partial', 'd-struct': 'partial', 'd-mixing': 'wrong', 'd-scale': 'unknown' })
   it('три профиля получают разные первые шаги, и у каждого есть объяснение', () => {
     const a = route('base', novice)[0], b = route('prod', floor)[0], c = route('rnd', chemist)[0]
-    expect(a.topic).toBe('emulsion-stability'); expect(b.topic).toBe('preservation'); expect(c.topic).toBe('emulsification')
+    expect(a.topic).toBe('solutions-basics'); expect(b.topic).toBe('preservation'); expect(c.topic).toBe('emulsification')
     for (const r of [a, b, c]) { expect(r.status).toBe('now'); expect(r.reason.length).toBeGreaterThan(20); expect(r.because?.kind).toBe('diag') }
-    expect(b.reason).toContain('сорбат'); expect(c.reason).toContain('обороты для той же окружной скорости')
+    expect(b.reason).toContain('сорбат'); expect(a.reason).toContain('50 % щёлочь'); expect(c.reason).toContain('обороты для той же окружной скорости')
   })
   it('технологу производства не предлагают сначала то, что он решил верно', () => {
     const first3 = route('prod', floor).slice(0, 3).map((r) => r.topic)
     expect(first3).not.toContain('mixing-basics'); expect(first3).not.toContain('scale-up')
   })
   it('без диагностики маршрут идёт по цели и помечен как предварительный', () => {
-    const r = route('prod', [], false); expect(r[0].topic).toBe(cur.goals.find((g: any) => g.id === 'prod').order[0]); expect(r[0].reason).toContain('предварительная')
+    const order = cur.goals.find((g: any) => g.id === 'prod').order, first = refs.find((t) => t.id === order[0])!
+    const r = route('prod', [], false); expect([order[0], ...first.prereq]).toContain(r[0].topic); expect(r[0].reason.length).toBeGreaterThan(20)
+    expect(route('prod', [], false).some((x) => x.reason.includes('предварительная'))).toBe(true)
   })
   it('смена цели меняет порядок, но не уровни', () => {
     const lab = [ev({ id: 'lab:a', skill: 'mech', kind: 'lab', item: 'lab', score: 1, src: 'stability-bench' })]
@@ -87,5 +89,20 @@ describe('Совместимость данных 0.2 → 0.3', () => {
     const a = { ...normalize({}), evidence: [ev({ id: 'e1', at: 1 })], diag: { answers: { d: { result: 'wrong', at: 1 } } }, profile: { goal: 'prod', at: 1 } }
     const b = { ...normalize({}), evidence: [ev({ id: 'e1', at: 2, result: 'partial' }), ev({ id: 'e2' })], diag: { answers: { d: { result: 'ok', at: 2 } }, finishedAt: 3 }, profile: { goal: 'rnd', at: 2 } }
     const m = mergeProgress(a, b); expect(m.evidence).toHaveLength(2); expect(m.evidence.find((e) => e.id === 'e1')!.result).toBe('partial'); expect(m.diag.answers.d.result).toBe('ok'); expect(m.diag.finishedAt).toBe(3); expect(m.profile.goal).toBe('rnd')
+  })
+})
+
+describe('Ступени и предпосылки 0.4', () => {
+  it('выпускник без данных начинает с основ, а предпосылка объясняет себя', () => {
+    const r = route('grad', [], false)
+    expect(r[0].topic).toBe('raw-functions'); expect(r.findIndex((x) => x.topic === 'solutions-basics')).toBeLessThan(r.findIndex((x) => x.topic === 'ph-buffers'))
+  })
+  it('решённое задание по основам снимает принудительную предпосылку', () => {
+    const gap = diag({ 'd-micro': 'wrong' })
+    expect(route('prod', gap)[0].topic).toBe('solutions-basics') // pH-буферы и расчёты — предпосылки консервирования
+    expect(route('prod', [...gap, ...diag({ 'd-sol': 'ok', 'd-ph': 'ok' })])[0].topic).toBe('preservation')
+  })
+  it('у каждой опубликованной темы есть ступень', () => {
+    for (const f of fs.readdirSync('content/topics')) expect(fs.readFileSync(`content/topics/${f}`, 'utf8'), f).toMatch(/^level: [123]$/m)
   })
 })

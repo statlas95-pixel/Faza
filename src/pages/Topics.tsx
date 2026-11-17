@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { topics, topicById, labById, sourceById, search, areaLabel, sourceTypeLabel, labs, terms } from '../content'
+import { topics, topicById, labById, sourceById, search, areaLabel, sourceTypeLabel, labs, terms, levelLabel, levelHint } from '../content'
 import { Md, citedIds } from '../md'
 import { BookmarkButton, Quiz, Question } from '../ui'
 import { update, useProgress, getProgress } from '../store'
@@ -12,11 +12,11 @@ import { LevelBar } from './Learning'
 export function Catalog() {
   const [sp, setSp] = useSearchParams()
   const q = sp.get('q') ?? ''
-  const [area, setArea] = useState('all')
+  const [area, setArea] = useState('all'), [lvl, setLvl] = useState(0)
   const hits = useMemo(() => search(q), [q])
   const p = useProgress()
   useTitle(q ? `Поиск: ${q}` : 'Темы')
-  const list = topics.filter((t) => area === 'all' || t.area === area || t.area === 'both')
+  const list = topics.filter((t) => (area === 'all' || t.area === area || t.area === 'both') && (!lvl || t.level === lvl)).sort((a, b) => a.level - b.level || a.order - b.order)
   return (
     <div className="page">
       <h1>{q ? 'Результаты поиска' : 'Найти ответ на рабочий вопрос'}</h1>
@@ -42,6 +42,9 @@ export function Catalog() {
           <div className="filters" role="group" aria-label="Фильтр по направлению">
             {[['all', 'Все'], ['production', 'Производство'], ['rnd', 'R&D']].map(([k, l]) => (
               <button key={k} className={`chip ${area === k ? 'on' : ''}`} aria-pressed={area === k} onClick={() => setArea(k)}>{l}</button>))}
+            <span className="sep" aria-hidden />
+            {[[0, 'Все ступени'], [1, levelLabel[1]], [2, levelLabel[2]], [3, levelLabel[3]]].map(([k, l]) => (
+              <button key={k} className={`chip ${lvl === k ? 'on' : ''}`} aria-pressed={lvl === k} onClick={() => setLvl(k as number)}>{l}</button>))}
           </div>
           <div className="cards">
             {list.map((t) => (
@@ -49,7 +52,7 @@ export function Catalog() {
                 <span className={`swatch ${t.swatch}`} aria-hidden />
                 <span className="dom">{t.domain}</span><h3>{t.title}</h3><p>{t.summary}</p>
                 <ul className="qs">{t.questions.slice(0, 3).map((x) => <li key={x}>{x}</li>)}</ul>
-                <span className="meta num">{t.minutes} мин · {areaLabel[t.area]} · занятий: {t.labs.length}{p.visited[t.id] ? ' · открывалась' : ''}</span>
+                <span className="meta num"><span className={`lvtag lv${t.level}`}>{levelLabel[t.level]}</span> {t.minutes} мин · {areaLabel[t.area]} · занятий: {t.labs.length}{p.visited[t.id] ? ' · открывалась' : ''}</span>
               </Link>))}
           </div>
         </>)}
@@ -87,7 +90,7 @@ export function TopicPage() {
           <p className="eyebrow"><Link to="/map">Карта знаний</Link> · {moduleOfTopic(t.id)?.section.name ?? t.domain} · {moduleOfTopic(t.id)?.module.name}</p>
           <h1>{t.title}</h1>
           <p className="lead">{t.summary}</p>
-          <p className="meta num">{t.minutes} мин чтения · {areaLabel[t.area]} · обновлено {t.updated}</p>
+          <p className="meta num"><span className={`lvtag lv${t.level}`} title={levelHint[t.level]}>{levelLabel[t.level]}</span> {t.minutes} мин чтения · {areaLabel[t.area]} · обновлено {t.updated}</p>
           {sk && <p className="outcome-line"><b>После темы вы сможете</b> {sk.outcome}. <LevelBar s={L.states[sk.id]} /></p>}
           <div className="row"><BookmarkButton title={t.title} kind="Тема" />
             {t.labs[0] && <Link className="btn" to={`/labs/${t.labs[0]}`}>К практике: {labById(t.labs[0])?.title}</Link>}</div>
