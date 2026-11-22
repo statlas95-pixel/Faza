@@ -207,6 +207,9 @@ details summary{cursor:pointer}
 @media (max-width:980px){
   .hero,.entries,.topic-grid,.inv,.bench,.scale,.rheo,.brief-grid,.wgrid,.topic-head{grid-template-columns:minmax(0,1fr)}
   .hero-art{display:none} .toc,.inv-side,.bench-ctl,.sheet,.rheo-side{position:static;max-height:none}
+  .sheet table{min-width:0;width:100%}
+  .sheet .stamp{position:static;width:fit-content;margin:14px 0 0 auto}
+  .scale-steps .row.end{justify-content:flex-start}
   .topic-head .swatch.big{width:90px;height:68px} .stepper .lbl{display:none} .stepper{margin:0} .labtools .bm{display:none}
   .demo{grid-template-columns:120px 1fr;gap:14px} .srcmeta{grid-template-columns:1fr} .resume-bar{top:0}
   .top{position:static} .search{order:3;width:100%}

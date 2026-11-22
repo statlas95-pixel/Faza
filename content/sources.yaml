@@ -450,3 +450,14 @@
   doi: 10.3390/cosmetics12050198
   supports: "Обзор микробиологической контаминации косметической продукции: источники загрязнения на производстве и при использовании, типичные микроорганизмы, роль контроля процесса."
   verified: "Найдена поиском по Crossref (17.11.2026): авторы, журнал, год и DOI подтверждены. Аннотация и текст не открывались — утверждения ограничены общей темой обзора."
+
+- id: basf-personal-care
+  type: manufacturer
+  authors: BASF
+  title: BASF Personal Care Brochure
+  where: Каталог BASF Personal Care, таблица INCI / Trade Name / Main Group
+  year: год не указан в извлечении
+  url: https://www.basf.com/dam/jcr%3A5fd176ae-b123-33cb-8bbf-47ac09d9131c/basf/www/kr/documents/ko/product/4.%20BASF%20Personal%20Care%20Brochure.pdf
+  supports: Классификация трёх товарных марок по назначению и INCI в каталоге производителя.
+  verified: Сверены строки таблицы BASF для Cetiol® CC, Cosmedia® Gel CC и Plantacare® 2000 UP.
+    Таблица описывает марки, а показатели партии следует брать из её сертификата.
