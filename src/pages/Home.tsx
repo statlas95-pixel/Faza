@@ -1,3 +1,4 @@
+import { tr } from '../../shared/locale'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { site, labById, topicById } from '../content'
@@ -8,12 +9,12 @@ import { useTitle } from './util'
 function Entries() {
   const nav = useNavigate(), [q, setQ] = useState('')
   return (
-    <section className="entries3" aria-label="Три способа работать с платформой">
-      <Link to="/route" className="entry3 e-route"><span className="enum">1</span><h2>Мой маршрут</h2><p>Рекомендуемая тема, её обоснование и профиль навыков.</p></Link>
-      <Link to="/map" className="entry3 e-map"><span className="enum">2</span><h2>Карта знаний</h2><p>Разделы, модули и темы. Открыть можно любую.</p></Link>
+    <section className="entries3" aria-label={tr("Три способа работать с платформой")}>
+      <Link to="/route" className="entry3 e-route"><span className="enum">1</span><h2>{tr("Мой маршрут")}</h2><p>{tr("Рекомендуемая тема, её обоснование и профиль навыков.")}</p></Link>
+      <Link to="/map" className="entry3 e-map"><span className="enum">2</span><h2>{tr("Карта знаний")}</h2><p>{tr("Разделы, модули и темы. Открыть можно любую.")}</p></Link>
       <form className="entry3 e-ask" role="search" onSubmit={(e) => { e.preventDefault(); nav(q.trim() ? `/catalog?q=${encodeURIComponent(q.trim())}` : '/catalog') }}>
-        <span className="enum">3</span><h2><label htmlFor="hq">Найти ответ на рабочий вопрос</label></h2>
-        <div className="row"><input id="hq" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="партия вышла жидкой, расслоение, соль…" /><button className="btn" aria-label="Искать">→</button></div>
+        <span className="enum">3</span><h2><label htmlFor="hq">{tr("Найти ответ на рабочий вопрос")}</label></h2>
+        <div className="row"><input id="hq" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={tr("партия вышла жидкой, расслоение, соль…")} /><button className="btn" aria-label={tr("Искать")}>→</button></div>
       </form>
     </section>)
 }
@@ -31,38 +32,38 @@ export default function Home() {
       <section className="hero">
         <div className="hero-text">
           {state === 'first' && <>
-            <p className="eyebrow">Для технологов производства и разработчиков рецептур</p>
-            <h1>Понять, <em>почему</em> продукт ведёт себя так — и что с этим делать</h1>
-            <p className="lead">С чего начать — зависит от того, чего вы хотите добиться. Выберите цель: платформа соберёт маршрут и объяснит каждую рекомендацию.</p>
+            <p className="eyebrow">{tr("Для технологов производства и разработчиков рецептур")}</p>
+            <h1>{tr("Понять, ")}<em>{tr("почему")}</em>{tr(" продукт ведёт себя так — и что с этим делать")}</h1>
+            <p className="lead">{tr("С чего начать — зависит от того, чего вы хотите добиться. Выберите цель: платформа соберёт маршрут и объяснит каждую рекомендацию.")}</p>
             <GoalPicker />
-            <p className="small">Не хотите выбирать? <Link to="/map">Откройте карту знаний</Link> — все темы и занятия доступны без диагностики.</p></>}
+            <p className="small">{tr("Не хотите выбирать? ")}<Link to="/map">{tr("Откройте карту знаний")}</Link>{tr(" — все темы и занятия доступны без диагностики.")}</p></>}
           {state === 'legacy' && <>
-            <p className="eyebrow">С возвращением</p>
-            <h1>Ваш прогресс сохранён. Соберём из него маршрут?</h1>
-            <p className="lead">В новой версии платформа различает, что вы открывали и что умеете делать сами. Прежние прохождения на месте; уровни навыков по ним пока не оценены. Выберите цель — и увидите, с чего продолжить.</p>
+            <p className="eyebrow">{tr("С возвращением")}</p>
+            <h1>{tr("Ваш прогресс сохранён. Соберём из него маршрут?")}</h1>
+            <p className="lead">{tr("В новой версии платформа различает, что вы открывали и что умеете делать сами. Прежние прохождения на месте; уровни навыков по ним пока не оценены. Выберите цель — и увидите, с чего продолжить.")}</p>
             <GoalPicker />
-            {p.last && <p className="small"><Link to={p.last.path}>Или вернуться туда, где остановились: {p.last.title.replace(/ — Фаза$/, '')}</Link></p>}</>}
+            {p.last && <p className="small"><Link to={p.last.path}>{tr("Или вернуться туда, где остановились: ")}{p.last.title.replace(/ — Фаза$/, '')}</Link></p>}</>}
           {state === 'diag' && <>
-            <p className="eyebrow">Цель: {L.goal!.name}</p>
-            <h1>Начнём с вопросов под вашу подготовку</h1>
-            <p className="lead">Выберите вариант для выпускника химического вуза, начинающего или опытного специалиста. Вопросы по физической и коллоидной химии, процессам и аппаратам сочетаются с практическими ситуациями. Ответы помогут выбрать темы; это предварительная диагностика, а не экзамен.</p>
-            <div className="row"><Link className="btn primary big" to="/diagnostic">{L.diagAnswered ? 'Продолжить диагностику' : 'Пройти диагностику'}</Link><Link className="btn ghost" to="/route">Пропустить — показать маршрут по цели</Link></div></>}
+            <p className="eyebrow">{tr("Цель: ")}{L.goal!.name}</p>
+            <h1>{tr("Начнём с вопросов под вашу подготовку")}</h1>
+            <p className="lead">{tr("Выберите вариант для выпускника химического вуза, начинающего или опытного специалиста. Вопросы по физической и коллоидной химии, процессам и аппаратам сочетаются с практическими ситуациями. Ответы помогут выбрать темы; это предварительная диагностика, а не экзамен.")}</p>
+            <div className="row"><Link className="btn primary big" to="/diagnostic">{L.diagAnswered ? tr("Продолжить диагностику") : tr("Пройти диагностику")}</Link><Link className="btn ghost" to="/route">{tr("Пропустить — показать маршрут по цели")}</Link></div></>}
           {state === 'resume' && <>
-            <p className="eyebrow">Вы остановились здесь</p>
+            <p className="eyebrow">{tr("Вы остановились здесь")}</p>
             <h1>{openLab ? openLab.title : lastTopic!.title}</h1>
-            <p className="lead">{openLab ? `Занятие начато и не доведено до разбора. Ваши действия сохранены — продолжите с того же шага.` : 'Тема открыта, навык по ней ещё не подтверждён действием.'}</p>
-            <div className="row"><Link className="btn primary big" to={openLab ? `/labs/${openLab.id}` : `/topics/${lastTopic!.id}`}>Продолжить</Link><Link className="btn ghost" to="/route">Мой маршрут</Link></div></>}
+            <p className="lead">{openLab ? tr("Занятие начато и не доведено до разбора. Ваши действия сохранены — продолжите с того же шага.") : tr("Тема открыта, навык по ней ещё не подтверждён действием.")}</p>
+            <div className="row"><Link className="btn primary big" to={openLab ? `/labs/${openLab.id}` : `/topics/${lastTopic!.id}`}>{tr("Продолжить")}</Link><Link className="btn ghost" to="/route">{tr("Мой маршрут")}</Link></div></>}
           {state === 'route' && <>
-            <p className="eyebrow">Цель: {L.goal!.name}{!L.diagDone && ' · рекомендация предварительная'}</p>
-            <h1>Ваш следующий шаг</h1>
-            {L.next ? <StepCard r={L.next} main /> : <p className="lead">Все навыки маршрута подтверждены. Загляните в <Link to="/map">карту знаний</Link>.</p>}
-            {!L.diagDone && <p className="small"><Link to="/diagnostic">{L.diagAnswered ? 'Продолжить диагностику' : 'Пройти диагностику'}</Link> — рекомендация станет точнее.</p>}</>}
+            <p className="eyebrow">{tr("Цель: ")}{L.goal!.name}{!L.diagDone && tr(" · рекомендация предварительная")}</p>
+            <h1>{tr("Ваш следующий шаг")}</h1>
+            {L.next ? <StepCard r={L.next} main /> : <p className="lead">{tr("Все навыки маршрута подтверждены. Загляните в ")}<Link to="/map">{tr("карту знаний")}</Link>.</p>}
+            {!L.diagDone && <p className="small"><Link to="/diagnostic">{L.diagAnswered ? tr("Продолжить диагностику") : tr("Пройти диагностику")}</Link>{tr(" — рекомендация станет точнее.")}</p>}</>}
         </div>
         <div className="hero-art" aria-hidden><span className="swatch apricot big" /><span className="swatch teal" /><span className="swatch lilac" /><span className="swatch mimosa sm" /></div>
       </section>
       <Entries />
       <section className="strip">
-        <h2>Частые рабочие ситуации</h2>
+        <h2>{tr("Частые рабочие ситуации")}</h2>
         <ul className="tasklist two">{site.tasks.map((t: any) => <li key={t.text}><Link to={t.to}><b>{t.text}</b><span>{t.hint}</span></Link></li>)}</ul>
       </section>
     </div>)

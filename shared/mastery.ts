@@ -1,3 +1,4 @@
+import { tr } from './locale'
 // Навыки, уровни освоения и маршрут. Чистые функции: одинаково работают в браузере, на сервере и в тестах.
 // Рекомендации не зависят от ИИ — они воспроизводимы при любом состоянии внешних сервисов.
 export type Result = 'ok' | 'partial' | 'wrong' | 'unknown' | 'skip'
@@ -15,13 +16,13 @@ export interface Evidence {
   at: number
 }
 export const LEVELS = [
-  { n: 0, name: 'Нет данных', text: 'Действий, по которым можно судить о навыке, пока не было.' },
-  { n: 1, name: 'Знаком', text: 'Распознаёт явление и называет причину в проверочном вопросе.' },
-  { n: 2, name: 'Выполняет с опорой', text: 'Решает задачу с подсказками или частично; либо верно решил расчётное задание.' },
-  { n: 3, name: 'Выполняет самостоятельно', text: 'Прошёл занятие без подсказок с обоснованным результатом.' },
-  { n: 4, name: 'Переносит', text: 'Самостоятельное решение плюс верный перенос принципа на изменённые условия.' },
+  { n: 0, name: tr("Нет данных"), text: tr("Действий, по которым можно судить о навыке, пока не было.") },
+  { n: 1, name: tr("Знаком"), text: tr("Распознаёт явление и называет причину в проверочном вопросе.") },
+  { n: 2, name: tr("Выполняет с опорой"), text: tr("Решает задачу с подсказками или частично; либо верно решил расчётное задание.") },
+  { n: 3, name: tr("Выполняет самостоятельно"), text: tr("Прошёл занятие без подсказок с обоснованным результатом.") },
+  { n: 4, name: tr("Переносит"), text: tr("Самостоятельное решение плюс верный перенос принципа на изменённые условия.") },
 ] as const
-export const CONF = ['—', 'предварительно', 'подтверждено', 'уверенно'] as const
+export const CONF = ['—', tr("предварительно"), tr("подтверждено"), tr("уверенно")] as const
 
 /** Уровень, который поддерживает одно свидетельство. */
 export function supports(e: Evidence): number {
@@ -71,15 +72,15 @@ export function buildRoute(order: string[], topics: TopicRef[], states: Record<s
   let nowSet = false
   return seq.map(({ id, via }) => {
     const s = st(id), lvl = s?.level ?? 0
-    if (lvl >= 3) return { topic: id, skill: T.get(id)!.skill, status: 'done' as const, reason: `Навык подтверждён действием: ${s!.evidence.find((e) => supports(e) >= 3)?.label ?? 'занятие'}.` }
+    if (lvl >= 3) return { topic: id, skill: T.get(id)!.skill, status: 'done' as const, reason: `${tr("Навык подтверждён действием: ")}${s!.evidence.find((e) => supports(e) >= 3)?.label ?? tr("занятие")}.` }
     let reason: string, because: Evidence | undefined
-    if (s?.gap) { because = s.gap; reason = `${s.gap.kind === 'diag' ? 'В диагностике' : 'В занятии'} «${s.gap.label}» ${s.gap.result === 'unknown' ? 'вы ответили «не знаю»' : s.gap.note ? `ваш ответ — «${s.gap.note}»` : 'результат был ниже порога'}.${via ? ` Это предпосылка для темы, которая идёт дальше.` : ''}` }
-    else if (via && st(via)?.gap) { because = st(via)!.gap; reason = `Предпосылка для темы, где ${because!.kind === 'diag' ? 'диагностика' : 'занятие'} показала затруднение («${because!.label}»${because!.result === 'unknown' ? ' — ответ «не знаю»' : ''}). По самой предпосылке данных о навыке пока нет.` }
-    else if (via) reason = 'Предпосылка для следующей темы маршрута; данных о навыке пока нет.'
-    else if (lvl === 2) reason = `Задача решена с опорой (${s!.evidence.find((e) => supports(e) === 2)?.label}). До самостоятельного уровня не хватает занятия без подсказок.`
-    else if (lvl === 1) reason = `Явление вы распознаёте (${s!.evidence.find((e) => supports(e) === 1)?.label}), но действия, подтверждающего навык, ещё не было.`
-    else if (s?.legacy) reason = 'Занятие по этой теме пройдено до появления профиля навыков — уровень не оценён, нужна проверка действием.'
-    else reason = diagDone ? 'По этому навыку данных нет: задание диагностики пропущено или не задавалось.' : 'Идёт по порядку выбранной цели; диагностика не пройдена, поэтому рекомендация предварительная.'
+    if (s?.gap) { because = s.gap; reason = `${s.gap.kind === 'diag' ? tr("В диагностике") : tr("В занятии")} «${s.gap.label}» ${s.gap.result === 'unknown' ? tr("вы ответили «не знаю»") : s.gap.note ? `${tr("ваш ответ — «")}${s.gap.note}»` : tr("результат был ниже порога")}.${via ? tr(" Это предпосылка для темы, которая идёт дальше.") : ''}` }
+    else if (via && st(via)?.gap) { because = st(via)!.gap; reason = `${tr("Предпосылка для темы, где ")}${because!.kind === 'diag' ? tr("диагностика") : tr("занятие")}${tr(" показала затруднение («")}${because!.label}»${because!.result === 'unknown' ? tr(" — ответ «не знаю»") : ''}${tr("). По самой предпосылке данных о навыке пока нет.")}` }
+    else if (via) reason = tr("Предпосылка для следующей темы маршрута; данных о навыке пока нет.")
+    else if (lvl === 2) reason = `${tr("Задача решена с опорой (")}${s!.evidence.find((e) => supports(e) === 2)?.label}${tr("). До самостоятельного уровня не хватает занятия без подсказок.")}`
+    else if (lvl === 1) reason = `${tr("Явление вы распознаёте (")}${s!.evidence.find((e) => supports(e) === 1)?.label}${tr("), но действия, подтверждающего навык, ещё не было.")}`
+    else if (s?.legacy) reason = tr("Занятие по этой теме пройдено до появления профиля навыков — уровень не оценён, нужна проверка действием.")
+    else reason = diagDone ? tr("По этому навыку данных нет: задание диагностики пропущено или не задавалось.") : tr("Идёт по порядку выбранной цели; диагностика не пройдена, поэтому рекомендация предварительная.")
     const status = !nowSet ? 'now' : 'next'; nowSet = true
     return { topic: id, skill: T.get(id)!.skill, status: status as 'now' | 'next', reason, because, viaPrereqOf: via }
   }).map((x, i, a) => (x.status === 'next' && a.slice(0, i).filter((y) => y.status === 'next').length >= 2 ? { ...x, status: 'later' as const } : x))

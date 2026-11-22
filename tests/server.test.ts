@@ -81,7 +81,18 @@ describe('Аккаунты и личные данные', () => {
     // попытка Бориса с тем же id не перезаписывает запись Анны
     await B.req('PUT', '/api/me/state', { data: { ...normalize({}), attempts: [{ id: 'att-anna-1', labId: 'x', at: 1, summary: 'подмена' }] }, baseRev: 0 })
     expect((await A.req('GET', '/api/attempts/att-anna-1')).json.summary).toBe('итог')
-    expect((await B.req('GET', '/api/attempts/att-anna-1')).status).toBe(404)
+    expect((await B.req('GET', '/api/attempts/att-anna-1')).json.summary).toBe('подмена')
+  })
+  it('сохраняет большой разбор и одинаковый id попытки у двух владельцев', async () => {
+    const detail = { notes: 'x'.repeat(22000) }
+    for (const [client, summary] of [[A, 'первый'], [B, 'второй']] as const) {
+      const current = (await client.req('GET', '/api/me')).json
+      const attempt = { id: 'shared-guest-id', labId: 'solutions-sheet', at: 10, summary, detail }
+      current.data.attempts.push(attempt)
+      expect((await client.req('PUT', '/api/me/state', { baseRev: current.rev, data: current.data })).status).toBe(200)
+      expect((await client.req('GET', '/api/attempts/shared-guest-id')).json).toMatchObject({ summary, detail })
+    }
+    expect((await A.req('GET', '/api/attempts/shared-guest-id')).json.summary).toBe('первый')
   })
   it('старый клиент с актуальной ревизией не стирает выбранный вариант диагностики', async () => {
     const C = new Client()
@@ -153,6 +164,16 @@ describe('Поиск внешних источников', () => {
 describe('ИИ-наставник', () => {
   const U = new Client()
   const ask = (b: any) => U.req('POST', '/api/ai/tutor', { model: 'fake-a', mode: 'hint', kind: 'lab', id: 'batch-2417', message: 'С чего начать?', ...b })
+  it('выбирает английские материалы и язык ответа независимо от других сессий', async () => {
+    const english = new Client()
+    await english.req('POST', '/api/auth/sign-up/email', { name: 'Learner', email: 'language@example.com', password: 'english-test-123' })
+    const reply = await english.req('POST', '/api/ai/tutor', {
+      language: 'en', model: 'fake-a', mode: 'explain', kind: 'topic', id: 'deaeration', message: 'Explain the pressure scale.',
+    })
+    expect(reply.status).toBe(200)
+    expect(prompts.at(-1)?.system).toContain('Answer in English')
+    expect(prompts.at(-1)?.user).toContain('Deaeration under vacuum')
+  })
   it('статус показывает настроенные модели', async () => {
     const s = (await U.req('GET', '/api/ai/status')).json; expect(s.configured).toBe(true); expect(s.models.map((m: any) => m.id)).toEqual(['fake-a', 'fake-b'])
     expect(s.providers.find((p: any) => p.id === 'anthropic').ready).toBe(false); expect(JSON.stringify(s)).not.toMatch(/sk-|key=/i)
@@ -230,5 +251,5 @@ describe('Перенос данных версии 0.1', () => {
     const m = mergeProgress(v01, mergeProgress(v01, {})); expect(m.bookmarks).toHaveLength(1); expect(m.labDone['batch-2417'].attempts).toBe(2)
     expect(fingerprint(v01)).toBe(fingerprint(JSON.parse(JSON.stringify(v01))))
   })
-  it('миграции базы применяются повторно без ошибок', () => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'faza-mig-')); openDb(d).close(); const db = openDb(d); expect((db.prepare('SELECT COUNT(*) c FROM schema_migrations').get() as any).c).toBe(1); db.close() })
+  it('миграции базы применяются повторно без ошибок', () => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'faza-mig-')); openDb(d).close(); const db = openDb(d); expect((db.prepare('SELECT COUNT(*) c FROM schema_migrations').get() as any).c).toBe(2); db.close() })
 })

@@ -4,11 +4,12 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { toNodeHandler, fromNodeHeaders } from 'better-auth/node'
 import type { Config } from './config'
-import type { Db } from './db'
+import { transaction, type Db } from './db'
 import type { Auth } from './auth'
 import { createSearch, SearchError } from './search'
 import { buildContext, searchCatalog, type Content } from './content'
 import { AiError, type Tutor } from './ai'
+import { localizeMaterial } from '../shared/locale'
 import { mergeProgress, normalize, emptyProgress } from '../shared/merge'
 
 export interface Deps { cfg: Config; db: Db; auth: Auth; content: Content; tutor: Tutor; fetchImpl?: typeof fetch }
@@ -17,10 +18,26 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
   const app = express()
   app.disable('x-powered-by')
   app.set('trust proxy', 1)
+  app.use((_req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+    res.setHeader('Content-Security-Policy', "object-src 'none'; frame-ancestors 'none'; base-uri 'self'")
+    next()
+  })
   app.use(compression())
   // Переезд на новый адрес: запросы на прежний хост перенаправляются на основной (FAZA_BASE_URL).
   if (cfg.canonicalRedirect) { const host = new URL(cfg.baseUrl).host; app.use((req, res, next) => { const h = req.headers.host; if (h && h !== host && req.path !== '/api/health' && req.method === 'GET') return void res.redirect(301, cfg.baseUrl + req.originalUrl); next() }) }
   const search = createSearch(cfg, db, fetchImpl)
+
+  let englishContent: Content | undefined
+  function materialFor(language: unknown): Content {
+    if (language !== 'en') return content
+    if (!englishContent) {
+      const translations = JSON.parse(fs.readFileSync(path.resolve('content/locales/en.json'), 'utf8'))
+      englishContent = localizeMaterial(content, translations) as Content
+    }
+    return englishContent
+  }
 
   // Защита изменяющих запросов: только с доверенного источника (cookie SameSite + проверка Origin).
   app.use('/api', (req, res, next) => {
@@ -39,7 +56,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
   const writeState = (uid: string, data: any, rev: number) => {
     const d = normalize(data)
     putState.run(uid, JSON.stringify(d), rev, Date.now())
-    for (const a of d.attempts) if (typeof a?.id === 'string' && a.id.length <= 64) addAttempt.run(a.id, uid, String(a.labId), Number(a.at) || Date.now(), String(a.summary ?? '').slice(0, 500), JSON.stringify(a.detail ?? null).slice(0, 20000))
+    for (const a of d.attempts) if (typeof a?.id === 'string' && a.id.length <= 64) addAttempt.run(a.id, uid, String(a.labId), Number(a.at) || Date.now(), String(a.summary ?? '').slice(0, 500), JSON.stringify(a.detail ?? null))
     return d
   }
 
@@ -63,7 +80,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     const staleDiag = (data.diag?.changedAt ?? 0) < (cur.data.diag.changedAt ?? 0)
     const needsMerge = baseRev !== cur.rev || staleDiag
     const merged = needsMerge ? mergeProgress(cur.data, data) : data
-    const saved = writeState(u.id, merged, cur.rev + 1)
+    const saved = transaction(db, () => writeState(u.id, merged, cur.rev + 1))
     res.json({ rev: cur.rev + 1, data: saved, merged: needsMerge })
   })
   app.post('/api/me/import', requireUser, (req, res) => {
@@ -72,8 +89,11 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     const cur = readState(u.id)
     const seen = db.prepare('SELECT 1 FROM imports WHERE user_id = ? AND import_id = ?').get(u.id, importId)
     if (seen) return void res.json({ imported: false, rev: cur.rev, data: cur.data })
-    const saved = writeState(u.id, mergeProgress(data, cur.data), cur.rev + 1)
-    db.prepare('INSERT INTO imports (user_id, import_id, at) VALUES (?, ?, ?)').run(u.id, importId, Date.now())
+    const saved = transaction(db, () => {
+      const state = writeState(u.id, mergeProgress(data, cur.data), cur.rev + 1)
+      db.prepare('INSERT INTO imports (user_id, import_id, at) VALUES (?, ?, ?)').run(u.id, importId, Date.now())
+      return state
+    })
     res.json({ imported: true, rev: cur.rev + 1, data: saved })
   })
   app.get('/api/me/imports', requireUser, (req, res) => { res.json({ ids: db.prepare('SELECT import_id FROM imports WHERE user_id = ?').all((req as Authed).user.id).map((r: any) => r.import_id) }) })
@@ -82,19 +102,35 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
   app.get('/api/attempts/:id', requireUser, (req, res) => {
     const r = db.prepare('SELECT id, lab_id AS labId, at, summary, detail FROM attempts WHERE id = ? AND user_id = ?').get(String(req.params.id), (req as Authed).user.id) as any
     if (!r) return void res.status(404).json({ error: 'not_found', message: 'Попытка не найдена' })
-    res.json({ ...r, detail: JSON.parse(r.detail ?? 'null') })
+    let detail = null
+    try { detail = JSON.parse(r.detail ?? 'null') } catch { /* Some older records contain truncated JSON. */ }
+    res.json({ ...r, detail })
   })
   app.delete('/api/me', requireUser, (req, res) => {
     const id = (req as Authed).user.id
-    for (const t of ['user_state', 'attempts', 'imports', 'ai_usage']) db.prepare(`DELETE FROM ${t} WHERE user_id = ?`).run(id)
+    transaction(db, () => {
+      for (const t of ['user_state', 'attempts', 'imports']) db.prepare(`DELETE FROM ${t} WHERE user_id = ?`).run(id)
+    })
     res.json({ ok: true })
   })
 
   // ---------- Поиск источников ----------
   const hits = new Map<string, number[]>()
-  const limited = (key: string, max: number, windowMs: number) => { const now = Date.now(), a = (hits.get(key) ?? []).filter((t) => now - t < windowMs); a.push(now); hits.set(key, a); return a.length > max }
+  let nextSweep = 0
+  const limited = (key: string, max: number, windowMs: number) => {
+    const now = Date.now(), cutoff = now - windowMs
+    if (now >= nextSweep) {
+      for (const [address, times] of hits) if (times[times.length - 1] <= cutoff) hits.delete(address)
+      nextSweep = now + windowMs
+    }
+    const recent = (hits.get(key) ?? []).filter(at => at > cutoff)
+    if (recent.length >= max) return true
+    recent.push(now)
+    hits.set(key, recent)
+    return false
+  }
   app.get('/api/search/providers', (_req, res) => { res.json({ providers: search.providers() }) })
-  app.get('/api/search/catalog', (req, res) => { res.json({ results: searchCatalog(content, String(req.query.q ?? '')) }) })
+  app.get('/api/search/catalog', (req, res) => { res.json({ results: searchCatalog(materialFor(req.query.lang), String(req.query.q ?? '')) }) })
   app.get('/api/search/external', async (req, res) => {
     if (limited(`s:${req.ip}`, 20, 60_000)) return void res.status(429).json({ error: 'rate_limited', message: 'Слишком много запросов с этого адреса. Подождите минуту.', retryAfter: 60 })
     try { res.json(await search.search(String(req.query.q ?? ''), req.query.provider === 'openalex' ? 'openalex' : 'crossref')) }
@@ -115,16 +151,21 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     if (used >= cfg.ai.dailyLimit) return void fail(new AiError('limit', `Дневной лимит обращений к наставнику (${cfg.ai.dailyLimit}) исчерпан. Он обновится завтра.`))
     // Завершено ли занятие, сервер определяет сам — по записанной попытке, а не по словам клиента.
     const finished = b.kind === 'lab' && !!db.prepare('SELECT 1 FROM attempts WHERE user_id = ? AND lab_id = ? LIMIT 1').get(u.id, String(b.id))
-    const ctx = buildContext(content, { kind: b.kind, id: String(b.id), opened: Array.isArray(b.opened) ? b.opened.map(String) : [], bought: Array.isArray(b.bought) ? b.bought.map(String) : [], finished, theory: !(b.kind === 'lab' && !finished && (b.mode === 'hint' || b.mode === 'review')) })
+    const ctx = buildContext(materialFor(b.language), { kind: b.kind, id: String(b.id), opened: Array.isArray(b.opened) ? b.opened.map(String) : [], bought: Array.isArray(b.bought) ? b.bought.map(String) : [], finished, theory: !(b.kind === 'lab' && !finished && (b.mode === 'hint' || b.mode === 'review')) })
     if (!ctx) return void res.status(404).json({ error: 'not_found', message: 'Учебный материал не найден' })
+    const reserved = db.prepare(`INSERT INTO ai_usage (user_id, day, count) VALUES (?, ?, 1)
+      ON CONFLICT(user_id, day) DO UPDATE SET count = count + 1 WHERE count < ? RETURNING count`)
+      .get(u.id, day, cfg.ai.dailyLimit) as { count: number } | undefined
+    if (!reserved) return void fail(new AiError('limit', 'Дневной лимит исчерпан.'))
     const ac = new AbortController()
     res.on('close', () => { if (!res.writableEnded) ac.abort() })
     try {
       const external = b.external && typeof b.external.text === 'string' ? { title: String(b.external.title ?? 'Внешний материал').slice(0, 300), text: b.external.text.slice(0, 6000) } : undefined
-      const r = await tutor.ask(String(b.model), ctx.title, ctx.fragments, { mode: b.mode, level: ['novice', 'practitioner', 'expert'].includes(b.level) ? b.level : 'practitioner', hintStep: Number(b.hintStep) || 1, message: b.message.trim(), finished, kind: b.kind, stage: typeof b.stage === 'string' ? b.stage.slice(0, 80) : undefined, actions: typeof b.actions === 'string' ? b.actions.slice(0, 1200) : undefined, external }, ac.signal)
-      db.prepare('INSERT INTO ai_usage (user_id, day, count) VALUES (?, ?, 1) ON CONFLICT(user_id, day) DO UPDATE SET count = count + 1').run(u.id, day)
-      res.json({ text: r.text, model: r.model, usage: r.usage, finished, used: used + 1, limit: cfg.ai.dailyLimit, fragments: ctx.fragments.map(({ id, kind, title, path }) => ({ id, kind, title, path })) })
+      const r = await tutor.ask(String(b.model), ctx.title, ctx.fragments, { language: b.language === 'en' ? 'en' : 'ru', mode: b.mode, level: ['novice', 'practitioner', 'expert'].includes(b.level) ? b.level : 'practitioner', hintStep: Number(b.hintStep) || 1, message: b.message.trim(), finished, kind: b.kind, stage: typeof b.stage === 'string' ? b.stage.slice(0, 80) : undefined, actions: typeof b.actions === 'string' ? b.actions.slice(0, 1200) : undefined, external }, ac.signal)
+
+      res.json({ text: r.text, model: r.model, usage: r.usage, finished, used: reserved.count, limit: cfg.ai.dailyLimit, fragments: ctx.fragments.map(({ id, kind, title, path }) => ({ id, kind, title, path })) })
     } catch (e) {
+      db.prepare('UPDATE ai_usage SET count = MAX(0, count - 1) WHERE user_id = ? AND day = ?').run(u.id, day)
       if (e instanceof AiError) return void (e.code === 'cancelled' ? res.end() : fail(e))
       res.status(500).json({ error: 'internal', message: 'Внутренняя ошибка наставника' })
     }

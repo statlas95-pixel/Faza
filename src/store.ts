@@ -1,3 +1,4 @@
+import { tr } from '../shared/locale'
 import { useSyncExternalStore } from 'react'
 import { type Progress, type Attempt, type SavedSource, type Settings, normalize, emptyProgress } from '../shared/merge'
 import type { Evidence } from '../shared/mastery'
@@ -53,9 +54,9 @@ export function finishLab(id: string, summary?: string, detail?: any, score?: nu
     if (p.attempts.length > 200) p.attempts.length = 200
     const info = labSkills(id)
     if (score !== undefined) for (const skill of info.skills) {
-      p.evidence.unshift({ id: `lab:${aid}:${skill}`, skill, kind: 'lab', item: 'lab', result: score >= 0.8 ? 'ok' : score >= 0.5 ? 'partial' : 'wrong', score, hints: p.hints[id] ?? 0, src: id, label: `занятие «${info.title}»`, at })
+      p.evidence.unshift({ id: `lab:${aid}:${skill}`, skill, kind: 'lab', item: 'lab', result: score >= 0.8 ? 'ok' : score >= 0.5 ? 'partial' : 'wrong', score, hints: p.hints[id] ?? 0, src: id, label: `${tr("занятие «")}${info.title}»`, at })
       // занятие-перенос, пройденное самостоятельно, — это и есть перенос принципа
-      if (info.transferOf && score >= 0.8) p.evidence.unshift({ id: `transfer:${id}:${skill}`, skill, kind: 'transfer', item: 'transfer', result: 'ok', src: id, label: `перенос: «${info.title}»`, at })
+      if (info.transferOf && score >= 0.8 && !p.hints[id]) p.evidence.unshift({ id: `transfer:${id}:${skill}`, skill, kind: 'transfer', item: 'transfer', result: 'ok', src: id, label: `${tr("перенос: «")}${info.title}»`, at })
     }
     p.hints[id] = 0
   })

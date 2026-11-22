@@ -1,33 +1,43 @@
+import { tr, language } from '../../shared/locale'
 import { useEffect, useState, FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { api, ApiError, useAccount } from '../account'
 import { useProgress, toggleSource, patchSource } from '../store'
 import { useTitle } from '../pages/util'
 
+function OriginalLink({ url }: { url?: string }) {
+  if (!url) return null
+  try {
+    const parsed = new URL(url)
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return null
+    return <a className="btn small" href={parsed.href} rel="noreferrer" target="_blank">{tr("Открыть оригинал ↗")}</a>
+  } catch { return null }
+}
+
 const ACCESS: Record<string, [string, string]> = {
-  record: ['Библиографическая запись', 'Известны только выходные данные; содержание нужно читать у издателя'],
-  abstract: ['Есть аннотация', 'Аннотация доступна в базе; полный текст — у издателя, возможно платно'],
-  open: ['Открытая лицензия', 'В записи указана лицензия Creative Commons — полный текст, скорее всего, открыт у издателя'],
-  catalog: ['Каталог платформы', 'Документ проверен редактором платформы'],
+  record: [tr("Библиографическая запись"), tr("Известны только выходные данные; содержание нужно читать у издателя")],
+  abstract: [tr("Есть аннотация"), tr("Аннотация доступна в базе; полный текст — у издателя, возможно платно")],
+  open: [tr("Открытая лицензия"), tr("В записи указана лицензия Creative Commons — полный текст, скорее всего, открыт у издателя")],
+  catalog: [tr("Каталог платформы"), tr("Документ проверен редактором платформы")],
 }
 function Card({ r, topic }: { r: any; topic?: string }) {
   const saved = useProgress().savedSources.some((s) => s.key === r.key)
   const [open, setOpen] = useState(false)
-  const acc = ACCESS[r.access ?? 'catalog']
+  const acc = ACCESS[r.access ?? 'catalog'] ?? ACCESS.record
   return (
     <li className="srccard">
-      <div className="srchead"><span className="kindtag">{r.type}</span><span className={`access a-${r.access ?? 'catalog'}`} title={acc[1]}>{acc[0]}</span></div>
+      <div className="srchead"><span className="kindtag">{tr(r.type)}</span><span className={`access a-${r.access ?? 'catalog'}`} title={acc[1]}>{acc[0]}</span></div>
       <h4>{r.title}</h4>
-      <p className="small">{[r.authors, r.venue, r.year].filter(Boolean).join(' · ')}{r.citedBy ? ` · цитирований в Crossref: ${r.citedBy}` : ''}</p>
-      {r.matched && <p className="small why"><b>Почему в выдаче:</b> {r.matched.length ? `в названии или аннотации найдены слова запроса — ${r.matched.join(', ')}` : 'совпадение по полям записи, которых нет в карточке (например, список литературы) — проверьте релевантность по аннотации'}</p>}
-      {r.scope && <p className="small why"><b>Область применения:</b> {r.scope}</p>}
-      {r.checked && <p className="small dim">Проверка: {r.checked}</p>}
-      {r.abstract && <><button className="btn small ghost" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? 'Скрыть аннотацию' : 'Показать аннотацию'}</button>{open && <p className="abstract">{r.abstract}</p>}</>}
+      <p className="small">{[r.authors, r.venue, r.year].filter(Boolean).join(' · ')}{r.citedBy ? `${tr(" · цитирований в Crossref: ")}${r.citedBy}` : ''}</p>
+      {r.matched && <p className="small why"><b>{tr("Почему в выдаче:")}</b> {r.matched.length ? `${tr("в названии или аннотации найдены слова запроса — ")}${r.matched.join(', ')}` : tr("совпадение по полям записи, которых нет в карточке (например, список литературы) — проверьте релевантность по аннотации")}</p>}
+      {r.scope && <p className="small why"><b>{tr("Область применения:")}</b> {r.scope}</p>}
+      {r.checked && <p className="small dim">{tr("Проверка: ")}{r.checked}</p>}
+      {r.abstract && <><button className="btn small ghost" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? tr("Скрыть аннотацию") : tr("Показать аннотацию")}</button>{open && <p className="abstract">{r.abstract}</p>}</>}
       <div className="row">
-        <a className="btn small" href={r.url} target="_blank" rel="noreferrer">Открыть оригинал ↗</a>
-        {r.path && <Link className="btn small ghost" to={r.path}>Запись в реестре</Link>}
+        <OriginalLink url={r.url} />
+        {r.path && <Link className="btn small ghost" to={r.path}>{tr("Запись в реестре")}</Link>}
         {r.doi && <span className="num small">doi:{r.doi}</span>}
-        <button className={`btn small ghost ${saved ? 'bm on' : ''}`} aria-pressed={saved} onClick={() => toggleSource({ key: r.key, title: r.title, authors: r.authors ?? '', year: r.year ?? '', type: r.type, doi: r.doi, url: r.url, provider: r.provider ?? 'catalog', access: r.access ?? 'catalog', topic })}>{saved ? '★ В подборке' : '☆ В подборку'}</button>
+        <button className={`btn small ghost ${saved ? 'bm on' : ''}`} aria-pressed={saved} onClick={() => toggleSource({ key: r.key, title: r.title, authors: r.authors ?? '', year: r.year ?? '', type: r.type, doi: r.doi, url: r.url, provider: r.provider ?? 'catalog', access: r.access ?? 'catalog', topic })}>{saved ? tr("★ В подборке") : tr("☆ В подборку")}</button>
       </div>
     </li>)
 }
@@ -39,59 +49,59 @@ export function SourceFinder({ suggestions = [], topic, initial = '' }: { sugges
   async function run(query: string) {
     const s = query.trim(); if (s.length < 3) return
     setQ(s); setState('loading'); setErr(null); setExt(null)
-    api('GET', `/api/search/catalog?q=${encodeURIComponent(s)}`).then((r) => setCat(r.results)).catch(() => setCat([]))
+    api('GET', `/api/search/catalog?lang=${language}&q=${encodeURIComponent(s)}`).then((r) => setCat(r.results)).catch(() => setCat([]))
     try { setExt(await api('GET', `/api/search/external?q=${encodeURIComponent(s)}`)); setState('done') }
-    catch (e) { const x = e as ApiError; setErr({ code: x.code ?? 'error', msg: x.code === 'rate_limited' ? `${x.message}${x.data?.retryAfter ? ` Повторите через ${x.data.retryAfter} с.` : ''}` : x.message }); setState('error') }
+    catch (e) { const x = e as ApiError; setErr({ code: x.code ?? 'error', msg: x.code === 'rate_limited' ? `${x.message}${x.data?.retryAfter ? `${tr(" Повторите через ")}${x.data.retryAfter}${tr(" с.")}` : ''}` : x.message }); setState('error') }
   }
   useEffect(() => { if (initial && a.status !== 'offline' && a.status !== 'checking') void run(initial) }, [a.status]) // eslint-disable-line
-  if (a.status === 'offline') return <div className="panel"><p><b>Поиск внешних источников недоступен:</b> приложение открыто без сервера. Источники, уже проверенные редактором, перечислены в разделе <Link to="/sources">«Источники»</Link>.</p></div>
+  if (a.status === 'offline') return <div className="panel"><p><b>{tr("Поиск внешних источников недоступен:")}</b>{tr(" приложение открыто без сервера. Источники, уже проверенные редактором, перечислены в разделе ")}<Link to="/sources">{tr("«Источники»")}</Link>.</p></div>
   return (
     <div className="finder">
       <form role="search" className="finderform" onSubmit={(e: FormEvent) => { e.preventDefault(); void run(q) }}>
-        <label htmlFor="fq">Запрос к научной базе — лучше на английском, 2–6 ключевых слов</label>
+        <label htmlFor="fq">{tr("Запрос к научной базе — лучше на английском, 2–6 ключевых слов")}</label>
         <div className="row"><input id="fq" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="lamellar gel network cetearyl alcohol" maxLength={200} />
-          <button className="btn primary" disabled={state === 'loading' || q.trim().length < 3}>{state === 'loading' ? 'Ищу…' : 'Найти'}</button></div>
+          <button className="btn primary" disabled={state === 'loading' || q.trim().length < 3}>{state === 'loading' ? tr("Ищу…") : tr("Найти")}</button></div>
       </form>
-      {suggestions.length > 0 && <p className="small">Запросы по этой теме: {suggestions.map((s) => <button key={s} className="chip" onClick={() => void run(s)}>{s}</button>)}</p>}
+      {suggestions.length > 0 && <p className="small">{tr("Запросы по этой теме: ")}{suggestions.map((s) => <button key={s} className="chip" onClick={() => void run(s)}>{s}</button>)}</p>}
       <div aria-live="polite">
-        {state === 'loading' && <p className="loading" role="status">Запрашиваю Crossref… обычно это занимает 1–3 секунды</p>}
-        {state === 'error' && err && <div className="warnline" role="alert"><b>Научная база не ответила.</b> {err.msg} Уроки, занятия и каталог платформы работают без неё. <button className="btn small ghost" onClick={() => void run(q)}>Повторить</button></div>}
+        {state === 'loading' && <p className="loading" role="status">{tr("Запрашиваю Crossref… обычно это занимает 1–3 секунды")}</p>}
+        {state === 'error' && err && <div className="warnline" role="alert"><b>{tr("Научная база не ответила.")}</b> {err.msg}{tr(" Уроки, занятия и каталог платформы работают без неё. ")}<button className="btn small ghost" onClick={() => void run(q)}>{tr("Повторить")}</button></div>}
         {cat.length > 0 && state !== 'idle' && (
-          <section><h3 className="srcsec"><span className="where w-cat">Каталог платформы</span> Проверенные редактором источники и технические документы</h3>
+          <section><h3 className="srcsec"><span className="where w-cat">{tr("Каталог платформы")}</span>{tr(" Проверенные редактором источники и технические документы")}</h3>
             <ul className="srclist">{cat.map((r) => <Card key={r.key} r={r} topic={topic} />)}</ul></section>)}
         {ext && (
-          <section><h3 className="srcsec"><span className="where w-ext">Научная база Crossref</span> Найдено записей: {ext.results.length}{ext.cached ? ext.stale ? ' · показан сохранённый ранее результат: база сейчас недоступна' : ' · из кэша платформы' : ''}</h3>
-            <p className="small">Это библиографические записи издателей. Платформа их <b>не проверяла</b>: сохраните запись в подборку как кандидата и прочтите первоисточник, прежде чем опираться на него.</p>
-            {ext.results.length === 0 && <p className="empty">По этому запросу Crossref ничего не вернул. Попробуйте английские термины, меньше слов или название вещества по INCI.</p>}
+          <section><h3 className="srcsec"><span className="where w-ext">{tr("Научная база Crossref")}</span>{tr(" Найдено записей: ")}{ext.results.length}{ext.cached ? ext.stale ? tr(" · показан сохранённый ранее результат: база сейчас недоступна") : tr(" · из кэша платформы") : ''}</h3>
+            <p className="small">{tr("Это библиографические записи издателей. Платформа их ")}<b>{tr("не проверяла")}</b>{tr(": сохраните запись в подборку как кандидата и прочтите первоисточник, прежде чем опираться на него.")}</p>
+            {ext.results.length === 0 && <p className="empty">{tr("По этому запросу Crossref ничего не вернул. Попробуйте английские термины, меньше слов или название вещества по INCI.")}</p>}
             <ul className="srclist">{ext.results.map((r: any) => <Card key={r.key} r={r} topic={topic} />)}</ul></section>)}
       </div>
     </div>)
 }
 
 export function FindPage() {
-  useTitle('Поиск источников')
+  useTitle(tr("Поиск источников"))
   const [sp] = useSearchParams()
   return (
     <div className="page">
-      <h1>Поиск внешних источников</h1>
-      <p className="lead">Запрос уходит с сервера платформы в библиографическую базу Crossref и параллельно — в каталог платформы. Результаты двух видов показаны раздельно.</p>
+      <h1>{tr("Поиск внешних источников")}</h1>
+      <p className="lead">{tr("Запрос уходит с сервера платформы в библиографическую базу Crossref и параллельно — в каталог платформы. Результаты двух видов показаны раздельно.")}</p>
       <SourceFinder initial={sp.get('q') ?? ''} suggestions={['yield stress cosmetic emulsion', 'lamellar gel network cream', 'wormlike micelles shampoo viscosity']} />
-      <h2 style={{ marginTop: 40 }}>Моя подборка</h2><SavedSources />
+      <h2 style={{ marginTop: 40 }}>{tr("Моя подборка")}</h2><SavedSources />
     </div>)
 }
 
 export function SavedSources() {
   const list = useProgress().savedSources
-  if (!list.length) return <p className="muted">Подборка пуста. Кнопка «В подборку» есть на каждой карточке в поиске источников.</p>
+  if (!list.length) return <p className="muted">{tr("Подборка пуста. Кнопка «В подборку» есть на каждой карточке в поиске источников.")}</p>
   return (
     <ul className="srclist">{list.map((s) => (
       <li key={s.key} className="srccard">
-        <div className="srchead"><span className="kindtag">{s.type}</span><span className={`access a-${s.access}`}>{ACCESS[s.access]?.[0] ?? s.access}</span>{s.provider !== 'catalog' && <span className="access a-cand">Кандидат: не проверен редактором</span>}</div>
-        <h4>{s.title}</h4><p className="small">{[s.authors, s.year].filter(Boolean).join(' · ')}{s.topic && <> · сохранён из темы <Link to={`/topics/${s.topic}`}>{s.topic}</Link></>}</p>
-        <label className="field sm" htmlFor={`n-${s.key}`}>Заметка: что вы хотите из него взять или проверить</label>
+        <div className="srchead"><span className="kindtag">{s.type}</span><span className={`access a-${s.access}`}>{ACCESS[s.access]?.[0] ?? s.access}</span>{s.provider !== 'catalog' && <span className="access a-cand">{tr("Кандидат: не проверен редактором")}</span>}</div>
+        <h4>{s.title}</h4><p className="small">{[s.authors, s.year].filter(Boolean).join(' · ')}{s.topic && <>{tr(" · сохранён из темы ")}<Link to={`/topics/${s.topic}`}>{s.topic}</Link></>}</p>
+        <label className="field sm" htmlFor={`n-${s.key}`}>{tr("Заметка: что вы хотите из него взять или проверить")}</label>
         <textarea id={`n-${s.key}`} rows={2} maxLength={600} defaultValue={s.note ?? ''} onBlur={(e) => patchSource(s.key, { note: e.target.value })} />
-        <div className="row"><a className="btn small" href={s.url} target="_blank" rel="noreferrer">Открыть оригинал ↗</a>
-          {s.provider !== 'catalog' && <label className="choice sm inline"><input type="checkbox" checked={!!s.suggested} onChange={(e) => patchSource(s.key, { suggested: e.target.checked })} /><span>Предложить редактору для проверки</span></label>}
-          <button className="btn small ghost" onClick={() => toggleSource(s)}>Убрать</button></div>
+        <div className="row"><OriginalLink url={s.url} />
+          {s.provider !== 'catalog' && <label className="choice sm inline"><input type="checkbox" checked={!!s.suggested} onChange={(e) => patchSource(s.key, { suggested: e.target.checked })} /><span>{tr("Предложить редактору для проверки")}</span></label>}
+          <button className="btn small ghost" onClick={() => toggleSource(s)}>{tr("Убрать")}</button></div>
       </li>))}</ul>)
 }

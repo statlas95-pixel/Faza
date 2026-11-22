@@ -1,13 +1,17 @@
+import { tr, language } from '../shared/locale'
 import { useId, useState, ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toggleBookmark, useProgress } from './store'
 
 export const fmt = (x: number, sig = 3) =>
-  !isFinite(x) ? '—' : x.toLocaleString('ru-RU', { maximumSignificantDigits: sig, useGrouping: Math.abs(x) >= 10000 })
-export const parseNum = (s: string) => parseFloat(s.replace(/\s/g, '').replace(',', '.'))
+  !isFinite(x) ? '—' : x.toLocaleString(language === 'en' ? 'en-GB' : 'ru-RU', { maximumSignificantDigits: sig, useGrouping: Math.abs(x) >= 10000 })
+export function parseNum(input: string) {
+  const number = input.trim().replace(/(?<=\d)[ \u00a0\u202f](?=\d{3}(?:\D|$))/g, '').replace(',', '.')
+  return /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(number) ? Number(number) : NaN
+}
 
 export type Verdict = 'ok' | 'weak' | 'wrong'
-export const verdictLabel: Record<Verdict, string> = { ok: 'Обосновано', weak: 'Спорно', wrong: 'Не подтверждается' }
+export const verdictLabel: Record<Verdict, string> = { ok: tr("Обосновано"), weak: tr("Спорно"), wrong: tr("Не подтверждается") }
 export const verdictIcon: Record<Verdict, string> = { ok: '✓', weak: '◐', wrong: '✕' }
 export function VerdictTag({ v, label }: { v: Verdict; label?: string }) {
   return <span className={`verdict ${v}`}><span aria-hidden>{verdictIcon[v]}</span> {label ?? verdictLabel[v]}</span>
@@ -18,7 +22,7 @@ export function BookmarkButton({ title, kind }: { title: string; kind: string })
   const on = useProgress().bookmarks.some((b) => b.path === pathname)
   return (
     <button className={`btn ghost bm ${on ? 'on' : ''}`} aria-pressed={on} onClick={() => toggleBookmark(pathname, title, kind)}>
-      <span aria-hidden>{on ? '★' : '☆'}</span> {on ? 'В закладках' : 'В закладки'}
+      <span aria-hidden>{on ? '★' : '☆'}</span> {on ? tr("В закладках") : tr("В закладки")}
     </button>
   )
 }
@@ -50,7 +54,7 @@ export function Chart(p: ChartProps) {
   return (
     <svg className="chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}t ${id}d`}>
       <title id={`${id}t`}>{p.title}</title>
-      <desc id={`${id}d`}>{p.desc ?? `Ось X: ${p.xLabel}. Ось Y: ${p.yLabel}.`}</desc>
+      <desc id={`${id}d`}>{p.desc ?? `${tr("Ось X: ")}${p.xLabel}${tr(". Ось Y: ")}${p.yLabel}.`}</desc>
       {ticks(p.xLog, x0, x1).map((v) => (
         <g key={'x' + v}><line x1={sx(v)} x2={sx(v)} y1={T} y2={H - B} className="grid" />
           <text x={sx(v)} y={H - B + 18} textAnchor="middle" className="tick">{tl(p.xLog, v)}</text></g>))}
@@ -107,14 +111,14 @@ export function QuestionCard({ q, n, value, onAnswer }: { q: Question; n: number
       <div className="qcard">
         <p className="q"><span className="qn">{n}</span>{q.q}</p>
         <form className="numform" onSubmit={(e) => { e.preventDefault(); const v = parseNum(draft); if (isFinite(v)) onAnswer(v) }}>
-          <input inputMode="decimal" aria-label="Ваш ответ" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Ваш расчёт" />
-          <span className="unit">{q.unit}</span><button className="btn">Проверить</button>
+          <input inputMode="decimal" aria-label={tr("Ваш ответ")} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={tr("Ваш расчёт")} />
+          <span className="unit">{q.unit}</span><button className="btn">{tr("Проверить")}</button>
         </form>
         {done && (
           <div className={`fb ${ok ? 'ok' : 'wrong'}`} role="status">
-            <VerdictTag v={ok ? 'ok' : 'wrong'} label={ok ? 'Расчёт сходится' : `Ваш ответ ${fmt(value, 4)} — не сходится`} />
-            {ok ? <p>{q.explain}</p> : <><p>Проверьте единицы и степень. Можно пересчитать и ввести снова.</p>
-              <details><summary>Показать расчёт</summary><p>{q.explain}</p></details></>}
+            <VerdictTag v={ok ? 'ok' : 'wrong'} label={ok ? tr("Расчёт сходится") : `${tr("Ваш ответ ")}${fmt(value, 4)}${tr(" — не сходится")}`} />
+            {ok ? <p>{q.explain}</p> : <><p>{tr("Проверьте единицы и степень. Можно пересчитать и ввести снова.")}</p>
+              <details><summary>{tr("Показать расчёт")}</summary><p>{q.explain}</p></details></>}
           </div>)}
       </div>)
   }
@@ -127,7 +131,7 @@ export function QuestionCard({ q, n, value, onAnswer }: { q: Question; n: number
           <label key={i} className={`opt ${chosen ? (o.correct ? 'ok' : 'wrong') : ''}`}>
             <input type="radio" name={name} checked={chosen} onChange={() => onAnswer(i)} />
             <span>{o.text}</span>
-            {chosen && <span className="fb-inline" role="status"><VerdictTag v={o.correct ? 'ok' : 'wrong'} label={o.correct ? 'Верно' : 'Не так'} /> {o.why}</span>}
+            {chosen && <span className="fb-inline" role="status"><VerdictTag v={o.correct ? 'ok' : 'wrong'} label={o.correct ? tr("Верно") : tr("Не так")} /> {o.why}</span>}
           </label>)
       })}
     </fieldset>)
@@ -141,7 +145,7 @@ export function Quiz({ questions, answers, onAnswer }: { questions: Question[]; 
   return (
     <div className="quiz">
       {questions.map((q, i) => <QuestionCard key={i} q={q} n={i + 1} value={answers[i]} onAnswer={(v) => onAnswer(i, v)} />)}
-      <p className="quiz-sum num" role="status">Отвечено {answered} из {questions.length} · верно {right}. Ответ можно изменить — пояснение обновится.</p>
+      <p className="quiz-sum num" role="status">{tr("Отвечено ")}{answered}{tr(" из ")}{questions.length}{tr(" · верно ")}{right}{tr(". Ответ можно изменить — пояснение обновится.")}</p>
     </div>)
 }
 export function Panel({ title, children, tag }: { title?: string; children: ReactNode; tag?: string }) {
@@ -155,7 +159,7 @@ export function ConfirmButton({ label, ask, onConfirm }: { label: string; ask: s
   return (
     <span className="confirm" role="group" aria-label={ask}>
       <span className="small">{ask}</span>
-      <button className="btn small primary" onClick={() => { setOpen(false); onConfirm() }}>Да</button>
-      <button className="btn small ghost" onClick={() => setOpen(false)}>Нет</button>
+      <button className="btn small primary" onClick={() => { setOpen(false); onConfirm() }}>{tr("Да")}</button>
+      <button className="btn small ghost" onClick={() => setOpen(false)}>{tr("Нет")}</button>
     </span>)
 }

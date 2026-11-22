@@ -19,6 +19,11 @@ import '@fontsource/jetbrains-mono/latin-400.css'
 import '@fontsource/jetbrains-mono/latin-600.css'
 import 'katex/dist/katex.min.css'
 import './styles.css'
-import App from './App'
+import { loadLanguage } from './language'
 
-createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>)
+async function start() {
+  await loadLanguage()
+  const { default: App } = await import('./App')
+  createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>)
+}
+void start()

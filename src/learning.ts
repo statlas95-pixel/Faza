@@ -1,3 +1,4 @@
+import { tr, localizeMaterial } from '../shared/locale'
 import YAML from 'yaml'
 import { useMemo } from 'react'
 import { topics, labs, topicById, labById } from './content'
@@ -9,11 +10,11 @@ import diagRaw from '/content/diagnostic.yaml?raw'
 import tracksRaw from '/content/diagnostic-tracks.yaml?raw'
 
 export interface Skill { id: string; name: string; outcome: string; topics: string[]; labs: string[] }
-export const curriculum = YAML.parse(curRaw) as { goals: { id: string; name: string; hint: string; order: string[] }[]; contexts: { id: string; name: string }[]; sections: { id: string; name: string; text: string; color: string; modules: { id: string; name: string; topics: { id: string; prereq?: string[] }[]; also?: string[]; planned?: string[] }[] }[] }
-export const skills = YAML.parse(skillsRaw) as Skill[]
-export const diagItems = YAML.parse(diagRaw) as DiagItem[]
-export const diagTracks = YAML.parse(tracksRaw) as { id: DiagTrack; name: string; description: string; time: string }[]
-export const diagDomainLabel = { physical: 'Физическая химия', colloid: 'Коллоидная химия', process: 'Процессы и аппараты', cosmetics: 'Косметическая технология' }
+export const curriculum = localizeMaterial(YAML.parse(curRaw)) as { goals: { id: string; name: string; hint: string; order: string[] }[]; contexts: { id: string; name: string }[]; sections: { id: string; name: string; text: string; color: string; modules: { id: string; name: string; topics: { id: string; prereq?: string[] }[]; also?: string[]; planned?: string[] }[] }[] }
+export const skills = localizeMaterial(YAML.parse(skillsRaw)) as Skill[]
+export const diagItems = localizeMaterial(YAML.parse(diagRaw)) as DiagItem[]
+export const diagTracks = localizeMaterial(YAML.parse(tracksRaw)) as { id: DiagTrack; name: string; description: string; time: string }[]
+export const diagDomainLabel = { physical: tr("Физическая химия"), colloid: tr("Коллоидная химия"), process: tr("Процессы и аппараты"), cosmetics: tr("Косметическая технология") }
 export const skillById = (id?: string) => skills.find((s) => s.id === id)
 export const skillOfTopic = (topicId: string) => skills.find((s) => s.topics.includes(topicId))
 export const skillsOfLab = (labId: string) => skills.filter((s) => s.labs.includes(labId))
@@ -48,11 +49,11 @@ export function recordCheck(topicId: string) {
   const p = getProgress(), t = topicById(topicId), sk = skillOfTopic(topicId); if (!t || !sk) return
   const a = p.checks[topicId] ?? {}; if (Object.keys(a).length < t.checks.length) return
   const right = t.checks.filter((c, i) => c.options[a[i]]?.correct).length
-  addEvidence([{ id: `check:${topicId}`, skill: sk.id, kind: 'check', item: 'recognize', result: right >= Math.ceil((2 * t.checks.length) / 3) ? 'ok' : right > 0 ? 'partial' : 'wrong', src: topicId, label: `проверка понимания в теме «${t.title}» (${right} из ${t.checks.length})`, at: Date.now() }])
+  addEvidence([{ id: `check:${topicId}`, skill: sk.id, kind: 'check', item: 'recognize', result: right >= Math.ceil((2 * t.checks.length) / 3) ? 'ok' : right > 0 ? 'partial' : 'wrong', src: topicId, label: `${tr("проверка понимания в теме «")}${t.title}» (${right}${tr(" из ")}${t.checks.length})`, at: Date.now() }])
 }
 export function recordTransfer(labId: string, allCorrect: boolean) {
   const l = labById(labId); if (!l) return
-  addEvidence(skillsOfLab(labId).map((s): Evidence => ({ id: `transfer:${labId}:${s.id}`, skill: s.id, kind: 'transfer', item: 'transfer', result: allCorrect ? 'ok' : 'partial', src: labId, label: `перенос после занятия «${l.title}»`, at: Date.now() })))
+  addEvidence(skillsOfLab(labId).map((s): Evidence => ({ id: `transfer:${labId}:${s.id}`, skill: s.id, kind: 'transfer', item: 'transfer', result: allCorrect ? 'ok' : 'partial', src: labId, label: `${tr("перенос после занятия «")}${l.title}»`, at: Date.now() })))
 }
 export const labsOfTopic = (topicId: string) => labs.filter((l) => topicById(topicId)?.labs.includes(l.id))
 export { topics }

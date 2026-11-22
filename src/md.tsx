@@ -1,3 +1,4 @@
+import { tr } from '../shared/locale'
 import MarkdownIt from 'markdown-it'
 import katex from 'katex'
 import { Fragment, useMemo } from 'react'
@@ -8,17 +9,17 @@ const mdi = new MarkdownIt({ html: true, linkify: false, typographer: false })
 const mdSafe = new MarkdownIt({ html: false, linkify: false })
 /** Рендер недоверенного текста (ответ модели): без HTML, метки [F1] превращаются в ссылки на фрагменты. */
 export function renderSafe(text: string, frags: { id: string; title: string; path: string }[] = []) {
-  return mdSafe.render(text).replace(/\[([FSML]\d+)\]/g, (m, id: string) => { const f = frags.find((x) => x.id === id); return f ? `<a class="cite frag" href="#${f.path}" data-tip="${esc(f.title)}">${id}</a>` : m })
+  return mdSafe.render(text).replace(/\[([FSML]\d+)\]/g, (m, id: string) => { const f = frags.find((x) => x.id === id); return f ? `<a class="cite frag" href="#${esc(f.path)}" data-tip="${esc(f.title)}">${id}</a>` : m })
 }
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
 const calloutTitle: Record<string, string> = {
-  model: 'Учебная модель и границы вывода', decision: 'К практике', warn: 'Внимание',
+  model: tr("Учебная модель и границы вывода"), decision: tr("К практике"), warn: tr("Внимание"),
 }
 
 export function shortAuthor(authors: string) {
   const first = authors.split(/[,(]/)[0].trim().split(' ')[0]
-  return authors.includes(',') ? `${first} и др.` : first
+  return authors.includes(',') ? `${first}${tr(" и др.")}` : first
 }
 
 /** Markdown с расширениями платформы -> HTML. Синтаксис описан в docs/AUTHORING.md. */
@@ -28,7 +29,7 @@ export function renderMd(src: string): string {
   src = src.replace(/^:::(\w+)[ \t]*(.*)\r?\n([\s\S]*?)\r?\n:::[ \t]*$/gm, (_m, kind: string, title: string, body: string) => {
     const inner = renderMd(body)
     const html = kind === 'deep'
-      ? `<details class="deep"><summary><span class="deep-tag">Глубже</span>${esc(title || 'Подробности')}</summary><div class="deep-body">${inner}</div></details>`
+      ? `<details class="deep"><summary><span class="deep-tag">${esc(tr('Глубже'))}</span>${esc(title || tr("Подробности"))}</summary><div class="deep-body">${inner}</div></details>`
       : `<aside class="callout ${kind}"><div class="callout-h">${esc(title || calloutTitle[kind] || '')}</div>${inner}</aside>`
     blocks.push(html)
     return `\n\n@@BLOCK${blocks.length - 1}@@\n\n`
@@ -62,7 +63,7 @@ export function renderMd(src: string): string {
   html = html.replace(/<p><img src="media:([^"]+)" alt="([^"]*)"(?: title="([^"]*)")?[^>]*><\/p>/g, (_m, file: string, alt: string, cap?: string) => {
     const m = mediaByFile(file), url = mediaUrl(file)
     if (!url) return `<p class="broken">Нет файла content/media/${file}</p>`
-    return `<figure class="fig"><img src="${url}" alt="${esc(m?.alt ?? alt)}" loading="lazy"><figcaption>${cap ?? alt}<span class="credit">${m ? `${esc(m.author)}. <a href="#/about">Реестр изображений</a>` : 'Нет записи в реестре изображений'}</span></figcaption></figure>`
+    return `<figure class="fig"><img src="${url}" alt="${esc(m?.alt ?? alt)}" loading="lazy"><figcaption>${cap ?? alt}<span class="credit">${m ? `${esc(m.author)}. <a href="#/about">${esc(tr('Реестр изображений'))}</a>` : tr("Нет записи в реестре изображений")}</span></figcaption></figure>`
   })
   html = html.replace(/<table>/g, '<div class="table-wrap" tabindex="0"><table>').replace(/<\/table>/g, '</table></div>')
   html = html.replace(/(?:<p>)?@@BLOCK(\d+)@@(?:<\/p>)?/g, (_m, i) => blocks[+i])
@@ -78,7 +79,7 @@ export function Md({ text, className = 'prose' }: { text: string; className?: st
       {parts.map((p, i) => {
         if (i % 2 === 1) {
           const W = widgets[p]
-          return W ? <W key={i} /> : <p key={i} className="broken">Неизвестный виджет: {p}</p>
+          return W ? <W key={i} /> : <p key={i} className="broken">{tr("Неизвестный виджет: ")}{p}</p>
         }
         return <Fragment key={i}><div dangerouslySetInnerHTML={{ __html: renderMd(p) }} /></Fragment>
       })}

@@ -1,3 +1,5 @@
+import { chooseLanguage } from './language'
+import { tr, language } from '../shared/locale'
 import { useEffect, useState } from 'react'
 import { HashRouter, Routes, Route, NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { site } from './content'
@@ -18,9 +20,9 @@ function SearchBox() {
   const [q, setQ] = useState('')
   return (
     <form className="search" role="search" onSubmit={(e) => { e.preventDefault(); if (q.trim()) nav(`/catalog?q=${encodeURIComponent(q.trim())}`) }}>
-      <label className="sr" htmlFor="gs">Поиск по темам, терминам, источникам и занятиям</label>
-      <input id="gs" type="search" placeholder="Поиск: вязкость, Стокс, охлаждение…" value={q} onChange={(e) => setQ(e.target.value)} />
-      <button aria-label="Искать">→</button>
+      <label className="sr" htmlFor="gs">{tr("Поиск по темам, терминам, источникам и занятиям")}</label>
+      <input id="gs" type="search" placeholder={tr("Поиск: вязкость, Стокс, охлаждение…")} value={q} onChange={(e) => setQ(e.target.value)} />
+      <button aria-label={tr("Искать")}>→</button>
     </form>)
 }
 
@@ -39,17 +41,24 @@ function Shell() {
     const t = document.title
     if (loc.pathname !== '/') update((p) => { p.last = { path: loc.pathname, title: t, at: Date.now() } })
   }, [loc.pathname])
+  const languagePicker = <label className="language-picker">
+    <span className="sr">{language === 'en' ? 'Language' : 'Язык'}</span>
+    <select value={language} onChange={event => chooseLanguage(event.target.value === 'en' ? 'en' : 'ru')}>
+      <option value="ru" lang="ru">Русский</option><option value="en" lang="en">English</option>
+    </select>
+  </label>
   return (
     <>
-      <a className="skip" href="#main">К содержанию</a>
+      <a className="skip" href="#main" onClick={event => { event.preventDefault(); document.getElementById('main')?.focus() }}>{tr("К содержанию")}</a>
       {!inLab && (
         <header className="top">
-          <Link to="/" className="logo" aria-label={`${site.name} — на главную`}><span className="logo-drop" aria-hidden />{site.name}</Link>
-          <nav aria-label="Основные разделы">
-            <NavLink to="/route">Мой маршрут</NavLink><NavLink to="/map">Карта знаний</NavLink><NavLink to="/catalog">Найти ответ</NavLink><NavLink to="/journal">Журнал</NavLink>
-            <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? 'Без сервера' : 'Войти'}</NavLink>
-          </nav>
+          <Link to="/" className="logo" aria-label={`${site.name}${tr(" — на главную")}`}><span className="logo-drop" aria-hidden />{site.name}</Link>
+          <nav aria-label={tr("Основные разделы")}>
+            <NavLink to="/route">{tr("Мой маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/catalog">{tr("Найти ответ")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
+            <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? tr("Без сервера") : tr("Войти")}</NavLink>
+          </nav>{languagePicker}
         </header>)}
+      {inLab && <div className="lab-language">{languagePicker}</div>}
       <ImportBanner />
       <main id="main" tabIndex={-1}>
         <Routes>
@@ -68,14 +77,14 @@ function Shell() {
           <Route path="/account" element={<AccountPage />} />
           <Route path="/find" element={<FindPage />} />
           <Route path="/attempts/:id" element={<AttemptPage />} />
-          <Route path="*" element={<div className="page"><h1>Страница не найдена</h1><p><Link to="/">На главную</Link></p></div>} />
+          <Route path="*" element={<div className="page"><h1>{tr("Страница не найдена")}</h1><p><Link to="/">{tr("На главную")}</Link></p></div>} />
         </Routes>
       </main>
       {m && ctx && <Tutor kind={m[1] === 'topics' ? 'topic' : 'lab'} id={ctx.id} title={ctx.title} />}
       {!inLab && (
         <footer className="foot">
-          <p><b>{site.name}</b> · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.</p>
-          <p><Link to="/about">О платформе, методике и изображениях</Link> · <Link to="/about#authoring">Как редактировать материалы</Link></p>
+          <p><b>{site.name}</b>{tr(" · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.")}</p>
+          <p><Link to="/about">{tr("О платформе, методике и изображениях")}</Link> · <Link to="/about#authoring">{tr("Как редактировать материалы")}</Link></p>
         </footer>)}
     </>)
 }
