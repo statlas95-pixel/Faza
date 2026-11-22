@@ -168,3 +168,9 @@ export function doeInteraction(runs: DoeRun[]): Effect {
 }
 /** Двусторонний 95 %-й квантиль Стьюдента: при малом числе повторов интервал заметно шире «двух сигм». */
 export const tCrit = (df: number) => [Infinity, 12.71, 4.30, 3.18, 2.78, 2.57, 2.45, 2.36, 2.31, 2.26][df] ?? 2.2
+
+/** Inference for the observed contrast, using pure error from replicated cells. */
+export function doeConclusion(effect: Effect, df: number): 'yes' | 'no' | 'unknown' {
+  if (!effect.estimable || effect.value === undefined || effect.se === undefined || df < 1) return 'unknown'
+  return Math.abs(effect.value) > tCrit(df) * effect.se ? 'yes' : 'no'
+}

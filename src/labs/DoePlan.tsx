@@ -1,7 +1,7 @@
 import { tr } from '../../shared/locale'
 import { useState } from 'react'
 import { LabMeta } from '../content'
-import { DoeModel, DoeRun, doeMeasure, doeTrue, doeCells, doeMainEffect, doeInteraction, Effect, tCrit } from '../models/physics'
+import { DoeModel, DoeRun, doeMeasure, doeTrue, doeCells, doeMainEffect, doeInteraction, Effect, tCrit, doeConclusion } from '../models/physics'
 import { fmt, parseNum, VerdictTag, Verdict } from '../ui'
 import { LabFrame, Brief, useLabState, Transfer, DebriefLinks, markFinished } from './LabPage'
 
@@ -29,7 +29,7 @@ export default function DoePlan({ lab }: { lab: LabMeta }) {
       <td className="small">{e.estimable ? `${tr("по ")}${e.pairs} ${name.includes('×') ? tr("набору из четырёх сочетаний") : tr("парам сочетаний, различающихся только этим фактором")}` : name.includes('×') ? tr("не оценивается: нужны все четыре сочетания уровней A и B при одном уровне C") : tr("не оценивается: нет пары опытов, различающихся только этим фактором")}</td></tr>)
   const effects = (
     <div className="table-wrap" tabIndex={0}><table>
-      <caption>{tr("Эффекты, рассчитанные по вашим опытам, ")}{lab.unit}{tr(". Интервал — 95 %-й доверительный, по повторным опытам (при малом числе повторов он шире «двух сигм»)")}{cells.sd !== undefined ? `${tr(" (оценка разброса s = ")}${fmt(cells.sd, 2)} ${lab.unit}${tr(", степеней свободы ")}${cells.df})` : tr(" — повторов пока нет")}.</caption>
+      <caption>{tr("Эффекты, рассчитанные по вашим опытам, ")}{lab.unit}{tr(". Указана полуширина 95 %-го интервала по повторам. При неполном плане контраст относится к измеренным сочетаниям")}{cells.sd !== undefined ? `${tr(" (оценка разброса s = ")}${fmt(cells.sd, 2)} ${lab.unit}${tr(", степеней свободы ")}${cells.df})` : tr(" — повторов пока нет")}.</caption>
       <thead><tr><th>{tr("Эффект")}</th><th>{tr("Оценка (верхний − нижний)")}</th><th>{tr("Интервал")}</th><th>{tr("На чём основана")}</th></tr></thead>
       <tbody>{F.map((f) => effRow(`${f.id}: ${f.name}`, eff[f.id]))}{effRow(tr("A × B: взаимодействие"), eff.AB)}</tbody></table></div>)
   const runsTable = (
@@ -73,7 +73,12 @@ export default function DoePlan({ lab }: { lab: LabMeta }) {
       const miss = [...F.map((f) => f.id), 'AB'].filter((k) => !s.ans[k]).length
       if (miss || !s.level || !isFinite(parseNum(s.pred))) { setWarn(tr("Заполните все выводы, выбор уровня загустителя и прогноз вязкости.")); return }
       set((x) => { x.phase = 'debrief'; x.finished = true }); window.scrollTo(0, 0)
-      markFinished(lab.id, `${tr("варок ")}${s.runs.length}${tr("; уровень загустителя ")}${s.level === 'high' ? '0,5 %' : s.level === 'low' ? '0,3 %' : tr("не выбран")}${tr("; прогноз ")}${s.pred} ${lab.unit}`, { runs: s.runs, answers: s.ans, pred: s.pred, level: s.level }, (s.level === 'high' ? 0.3 : 0) + (Math.abs(parseNum(s.pred) - doeTrue(m, 1, 1, -1)) <= 2 * m.sigma ? 0.25 : Math.abs(parseNum(s.pred) - doeTrue(m, 1, 1, -1)) <= 4 * m.sigma ? 0.12 : 0) + (eff.AB.estimable ? 0.25 : 0) + (cells.df >= 1 ? 0.2 : 0))
+      const conclusions = Object.entries(eff).filter(([key, effect]) => s.ans[key] === doeConclusion(effect, cells.df)).length
+      const predictionError = Math.abs(parseNum(s.pred) - doeTrue(m, 1, 1, -1))
+      const predictionCredit = predictionError <= 2 * m.sigma ? 0.25 : predictionError <= 4 * m.sigma ? 0.12 : 0
+      const planCredit = (eff.AB.estimable ? 0.15 : 0) + (cells.df >= 1 ? 0.1 : 0)
+      const score = (s.level === 'high' ? 0.25 : 0) + predictionCredit + planCredit + 0.25 * conclusions / Object.keys(eff).length
+      markFinished(lab.id, `${tr("варок ")}${s.runs.length}${tr("; уровень загустителя ")}${s.level === 'high' ? '0,5 %' : s.level === 'low' ? '0,3 %' : tr("не выбран")}${tr("; прогноз ")}${s.pred} ${lab.unit}`, { runs: s.runs, answers: s.ans, pred: s.pred, level: s.level }, score)
     }
     return frame(
       <div className="conclude">
@@ -94,25 +99,32 @@ export default function DoePlan({ lab }: { lab: LabMeta }) {
       </div>)
   }
   // ---------- Разбор ----------
-  const truth: Record<string, number> = { A: 2 * m.a, B: 2 * m.b, C: 2 * m.c, AB: 2 * m.ab }
   const judge = (k: string): { v: Verdict; label: string; text: string } => {
-    const e = eff[k], a = s.ans[k], real = Math.abs(truth[k]) > 0
-    const name = k === 'AB' ? tr("взаимодействие") : tr("эффект")
+    const e = eff[k], answer = s.ans[k]
+    const supported = doeConclusion(e, cells.df)
+    const matches = answer === supported
+    let explanation: string
     if (!e.estimable) {
-      if (a === 'unknown') return { v: 'weak', label: tr("Честно, но план мог это показать"), text: `${tr("Ваш план не содержал нужных сочетаний, и вы это признали. При бюджете в ")}${lab.budget}${tr(" варок ")}${name}${tr(" можно было оценить")}${k === 'AB' ? tr(": для этого нужны все четыре сочетания уровней загустителя и актива") : ''}.` }
-      return { v: 'wrong', label: tr("Вывод без данных"), text: `${tr("Ваш план не позволял оценить ")}${name}: ${k === 'AB' ? tr("не было всех четырёх сочетаний уровней A и B при одном уровне C") : tr("не было пары опытов, различающихся только этим фактором")}. ${a === (real ? 'yes' : 'no') ? tr("Ответ совпал с заложенным в модель, но получен не из опытов.") : ''}` }
+      explanation = k === 'AB'
+        ? tr("Для этого контраста нужны все четыре сочетания A и B при одном уровне C.")
+        : tr("Для этого контраста нужна пара ячеек, отличающихся только выбранным фактором.")
+    } else if (supported === 'unknown') {
+      explanation = tr("Контраст вычислим, но для оценки разброса и интервала нужны повторы.")
+    } else {
+      const margin = tc * e.se!
+      const interval = `[${fmt(e.value! - margin, 3)}, ${fmt(e.value! + margin, 3)}] ${lab.unit}`
+      explanation = `${tr("95 %-й интервал для контраста в измеренных сочетаниях")} ${interval}. ${supported === 'yes'
+        ? tr("Интервал исключает ноль. Данные указывают на эффект в этих условиях.")
+        : tr("Интервал включает ноль. Данных недостаточно, чтобы отличить эффект от нуля. Его отсутствие не доказано.")}`
     }
-    const est = `${tr("Оценка по вашим данным: ")}${e.value! > 0 ? '+' : ''}${fmt(e.value!, 3)} ${lab.unit}${e.se !== undefined ? ` ± ${fmt(tc * e.se, 2)}` : ''}${tr("; заложено в модель: ")}${truth[k] > 0 ? '+' : ''}${truth[k]}.`
-    if (a === 'unknown') return { v: 'weak', label: tr("Данные позволяли вывод"), text: `${est} ${e.se === undefined ? tr("Без повторных опытов осторожность оправдана: шум не оценён.") : tr("Оценка и интервал были доступны — вывод можно было сделать.")}` }
-    if (e.se === undefined) return { v: a === (real ? 'yes' : 'no') ? 'weak' : 'wrong', label: a === (real ? 'yes' : 'no') ? tr("Верно, но шум не оценён") : tr("Не подтверждается"), text: `${est}${tr(" В плане нет ни одного повторного опыта, поэтому отличить ")}${name}${tr(" от случайного разброса нечем. ")}${real ? tr("Эффект велик, и вывод скорее всего устоит, но это предположение.") : tr("Для вывода «не влияет» оценка шума обязательна.")}` }
-    const sig = Math.abs(e.value!) > tc * e.se
-    const consistent = (a === 'yes') === sig
-    if (consistent && (a === 'yes') === real) return { v: 'ok', label: tr("Обосновано данными"), text: `${est} ${sig ? tr("Оценка выходит за доверительный интервал.") : tr("Оценка внутри доверительного интервала: в изученном диапазоне влияние не отличимо от шума.")}` }
-    if (consistent) return { v: 'weak', label: tr("Следует из ваших данных, но не совпало с моделью"), text: `${est}${tr(" Ваш вывод честно следует из оценки и интервала; расхождение с моделью — случайность выборки при малом числе опытов. Подтверждающий опыт это исправил бы.")}` }
-    return { v: 'wrong', label: tr("Противоречит вашим данным"), text: `${est} ${sig ? tr("Оценка выходит за доверительный интервал — эффект есть.") : tr("Оценка внутри доверительного интервала — утверждать влияние нельзя.")}` }
+    return {
+      v: matches ? 'ok' : 'wrong',
+      label: matches ? tr("Обосновано данными") : tr("Вывод не следует из плана и результатов"),
+      text: explanation,
+    }
   }
   const pred = parseNum(s.pred), tv = doeTrue(m, 1, 1, -1)
-  const ab = cells.cells.get('1,1,-1') ?? cells.cells.get('1,1,1')
+  const ab = cells.cells.get('1,1,-1')
   const direct = ab ? ab.reduce((a, b) => a + b, 0) / ab.length : undefined
   const ofat = doeTrue(m, -1, -1, -1) + 2 * (m.a - m.ab) + 2 * (m.b - m.ab)
   const predV: Verdict = Math.abs(pred - tv) <= 2 * m.sigma ? 'ok' : Math.abs(pred - tv) <= 4 * m.sigma ? 'weak' : 'wrong'
@@ -128,7 +140,9 @@ export default function DoePlan({ lab }: { lab: LabMeta }) {
           <div><dt>{tr("Оценка разброса")}</dt><dd className="num">{cells.sd !== undefined ? fmt(cells.sd, 2) : '—'}<small> {lab.unit}{tr(" (в модели ")}{m.sigma})</small></dd></div>
         </dl></header>
       <section className="panel"><h3>{tr("Ваш план")}</h3>
-        <article className={`drow ${abCombos === 4 ? 'ok' : 'wrong'}`}><p><b>{tr("Сочетания загустителя и актива.")}</b> {abCombos === 4 ? tr("Поставлены все четыре — взаимодействие можно оценить, а рецептура с активом и высоким загустителем измерена напрямую.") : `${tr("Поставлено ")}${abCombos}${tr(" из 4. ")}${direct === undefined ? tr("Рецептуру «загуститель 0,5 % + актив 2 %» вы не варили — решение о ней опирается на экстраполяцию.") : ''}${tr(" Без всех четырёх сочетаний взаимодействие не оценивается: это главный недостаток подхода «по одному фактору».")}`}</p></article>
+        <article className={`drow ${eff.AB.estimable ? 'ok' : 'wrong'}`}><p><b>{tr("Сочетания загустителя и актива.")}</b> {eff.AB.estimable
+          ? tr("Все четыре сочетания A и B измерены при одном уровне C. Можно рассчитать контраст взаимодействия.")
+          : tr("Для контраста взаимодействия нужны четыре сочетания A и B при одном и том же уровне C.")}</p></article>
         <article className={`drow ${cells.df >= 2 ? 'ok' : cells.df === 1 ? 'weak' : 'wrong'}`}><p><b>{tr("Повторы.")}</b> {cells.df === 0 ? tr("Ни одного повторного опыта: разброс между одинаковыми варками неизвестен, и любой небольшой эффект неотличим от случайности.") : `${tr("Повторных опытов: ")}${cells.df}${tr(". Оценка разброса ")}${fmt(cells.sd!, 2)} ${lab.unit}${tr(" при заложенных ")}${m.sigma}${cells.df < 2 ? tr(" — по одному повтору она очень неточна") : ''}.`}</p></article>
         {runsTable}{effects}</section>
       <section className="panel"><h3>{tr("Выводы о факторах")}</h3>
@@ -136,7 +150,7 @@ export default function DoePlan({ lab }: { lab: LabMeta }) {
           <article key={k} className={`drow ${j.v}`}><h4>{name}</h4><p className="yours">{tr("Ваш ответ: ")}<b>{(k === 'AB' ? OPT_AB : OPT)[s.ans[k] as 'yes']}</b> <VerdictTag v={j.v} label={j.label} /></p><p>{j.text}</p></article>) })}</section>
       <section className="panel"><h3>{tr("Решение и прогноз")}</h3>
         <article className={`drow ${lvlV}`}><p className="yours">{tr("Ваш выбор: ")}<b>{s.level === 'high' ? `${tr("загуститель ")}${F[0].high}` : s.level === 'low' ? `${tr("загуститель ")}${F[0].low}` : tr("ни один уровень")}</b> <VerdictTag v={lvlV} label={lvlV === 'ok' ? tr("Подтверждено опытом") : lvlV === 'weak' ? tr("Верно, но без прямого опыта") : tr("Не подтверждается")} /></p>
-          <p>{tr("По модели рецептура с 2 % актива даёт ")}{doeTrue(m, -1, 1, -1)} {lab.unit}{tr(" при ")}{F[0].low}{tr(" загустителя и ")}{tv} {lab.unit}{tr(" при ")}{F[0].high}{tr("; норма ")}{T.min}–{T.max}.{direct !== undefined ? `${tr(" В ваших опытах эта рецептура дала в среднем ")}${fmt(direct, 3)} ${lab.unit}.` : tr(" Вы её не варили.")}</p></article>
+          <p>{tr("По модели рецептура с 2 % актива даёт ")}{doeTrue(m, -1, 1, -1)} {lab.unit}{tr(" при ")}{F[0].low}{tr(" загустителя и ")}{tv} {lab.unit}{tr(" при ")}{F[0].high}{tr("; норма ")}{T.min}–{T.max}.{direct !== undefined ? `${tr(" В опытах при заданных уровнях A, B и C среднее составило ")}${fmt(direct, 3)} ${lab.unit}.` : tr(" Сочетание A+, B+, C− не измерено напрямую.")}</p></article>
         <article className={`drow ${predV}`}><p className="yours">{tr("Ваш прогноз: ")}<b className="num">{fmt(pred, 3)} {lab.unit}</b>{tr("; заложено в модель: ")}{tv} <VerdictTag v={predV} label={predV === 'ok' ? tr("В пределах разброса") : predV === 'weak' ? tr("Близко") : tr("Далеко")} /></p>
           {Math.abs(pred - ofat) <= 4 && <p>{tr("Ваш прогноз близок к ")}{ofat} {lab.unit}{tr(" — столько даёт сложение эффектов, измеренных по отдельности от базовой рецептуры. Факт ниже на ")}{ofat - tv}{tr(": актив снижает вязкость тем сильнее, чем больше загустителя. Это и есть взаимодействие, ")}{eff.AB.estimable ? tr("и ваш план его показывал.") : tr("которого ваш план не видел.")}</p>}
           <p className="small">{tr("Последний шаг в реальной работе — подтверждающая варка выбранной рецептуры.")}</p></article></section>

@@ -81,3 +81,54 @@ describe('Расчёт и перенос для новых тем карты', (
     expect(lab.transfer.questions[0].answer).toBeCloseTo(transferred, 6)
   })
 })
+
+describe('Числовые ключи переноса и входной диагностики', () => {
+  const surfaceExcess = 0.030 / (Math.log(10) * 2 * 8.314 * 298.15)
+  const jacketResistance = 1 / 300 + 0.008 / 16 + 1 / 2500
+  const hoseFlow = 1 / 3600
+  const examples: [string, number[]][] = [
+    ['batch-6102', [100 / (1 + 10 ** (4.5 - 4.2)), 100 / (1 + 10 ** (5.5 - 4.2))]],
+    ['cmc-sheet', [surfaceExcess * 1e6, 1e18 / (6.022e23 * surfaceExcess)]],
+    ['dlvo-sheet', [0.5 * 2 * 0.05 * 2 ** 2, 0.304 / Math.sqrt(0.20)]],
+    ['doe-gel', [((30 - 20) + (50 - 26)) / 2, ((50 - 26) - (30 - 20)) / 2, 20 + (30 - 20) + (26 - 20)]],
+    ['jacket-sheet', [1 / jacketResistance, 100 / 300 / jacketResistance]],
+    ['mixing-sheet', [1000 * (180 / 60) * 0.25 ** 2 / 5, 2 ** 2]],
+    ['ph-sheet', [10 ** (5 - 4.76), 100 / (1 + 10 ** (4.76 - 4.76))]],
+    ['pump-sheet', [128 * 5 * 20 * hoseFlow / (Math.PI * 0.04 ** 4) / 1e5, 4 * 1000 * hoseFlow / (Math.PI * 0.04 * 5)]],
+    ['rheo-cabinet', [1000 * 9.81 * 0.0005, (8 + 12 * 500 ** 0.45) / 500]],
+    ['salt-batch', [2400 * 0.006, 100 * (2400 * 0.0075 + 14.4) / 2400]],
+    ['scale-up-2000', [6000 * 40 / 120, 5 * 500 / 250, 8 * Math.cbrt(500 / 5)]],
+    ['solutions-sheet', [500 * 0.08 / 0.27, 10 * 0.20 / 0.50, 5 * 210.14 / 192.12]],
+    ['stability-bench', [(2 / 0.2) ** 2, 4600 * 9.81 * (2e-6) ** 2 / (18 * (0.001 / (365 * 86400)))]],
+  ]
+  it.each(examples)('перенос в %s', (id, predictions) => {
+    const lab = YAML.parse(fs.readFileSync(`content/labs/${id}.yaml`, 'utf8'))
+    const quiz = lab.transferQuiz ?? lab.transfer
+    const questions = quiz.questions.filter((q: { type: string }) => q.type === 'num')
+    expect(questions).toHaveLength(predictions.length)
+    predictions.forEach((value, i) => expect(Math.abs(questions[i].answer - value), questions[i].q).toBeLessThanOrEqual(0.01 * Math.abs(value)))
+  })
+
+  it('пристенный сдвиг при заданном расходе и радиусе канала', () => {
+    const lab = YAML.parse(fs.readFileSync('content/labs/rheo-cabinet.yaml', 'utf8'))
+    expect(lab.rateQuestion.answer).toBeCloseTo(4 * (1.5e-6 / 0.5) / (Math.PI * 0.0015 ** 3), 0)
+  })
+
+  it('каждый числовой диагностический вопрос пересчитан по его исходным данным', () => {
+    const expected: Record<string, number> = {
+      'd-rheo-calc': 1000 * 9.81 * 0.002,
+      'd-scale': 6000 * 50 / 250,
+      'd-sol': 20 * 0.1 / 0.5,
+      'g-area': 1 / 0.5,
+      'g-dilution': 20 * 0.1 / 0.5,
+      's-fraction': 100 * 0.10,
+      'e-scale': 6000 * 50 / 250,
+      'e-ionic-calc': 0.5 * (0.01 * 4 + 0.02),
+      'e-bubble-calc': 100 / 20,
+    }
+    const bank = YAML.parse(fs.readFileSync('content/diagnostic.yaml', 'utf8'))
+    const numeric = bank.filter((q: { answer?: number }) => typeof q.answer === 'number')
+    expect(numeric.map((q: { id: string }) => q.id).sort()).toEqual(Object.keys(expected).sort())
+    for (const question of numeric) expect(question.answer, question.id).toBeCloseTo(expected[question.id], 1)
+  })
+})

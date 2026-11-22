@@ -83,8 +83,9 @@
   title: "Rotor–Stator Mixing Devices (гл. 8)"
   where: "Paul E. L., Atiemo-Obeng V. A., Kresta S. M. (ред.) Handbook of Industrial Mixing: Science and Practice. Wiley. ISBN 0-471-26919-0"
   year: 2004
+  doi: 10.1002/0471451452.ch8
   supports: "Конструкции роторно-статорных аппаратов, гидродинамика, подходы к масштабированию (раздел 8.4 «Process Scale-up and Design Configurations»)."
-  verified: "Глава и её разделы подтверждены по оглавлению книги. DOI главы поиском не подтверждён и не указан."
+  verified: DOI и название главы сверены с каталогом Wiley.
 
 - id: barnes1999
   type: review
@@ -172,6 +173,7 @@
   title: "ISO 22716:2007 Cosmetics — Good Manufacturing Practices (GMP) — Guidelines on Good Manufacturing Practices"
   where: "International Organization for Standardization, 1-е изд., 2007. Международный; в ЕАЭС действует идентичный ГОСТ ISO 22716"
   year: 2007
+  url: https://www.iso.org/standard/36437.html
   supports: "Наличие в GMP отдельного раздела об отклонениях (разд. 13 «Deviations») и требования документировать производство. Не распространяется на исследования и разработку."
   verified: "Область применения и наличие раздела 13 подтверждены по оглавлению национального издания (DIN EN ISO 22716). Текст раздела при подготовке не открывался — на платформе нет пересказа его конкретных требований."
 
@@ -202,7 +204,7 @@
   where: "Техническая документация производителя; относится только к полимерам Carbopol®/Pemulen® компании Lubrizol"
   year: "ред. 2002 (TDS-237) — сверяйте с действующей"
   url: https://www.lubrizol.com/-/media/Lubrizol/Health/Literature/Bulletin-05---Neutralization-Procedures.pdf
-  supports: "Загущение карбомеров требует нейтрализации; ди- и поливалентные ионы (Ca²⁺, Mg²⁺) осаждают полимер, электролиты снижают вязкость геля."
+  supports: "Условия нейтрализации и загущения для указанных марок Carbopol и Pemulen. Чувствительность к электролитам проверяют для конкретной марки и состава."
   verified: "Документы найдены на сайте производителя и в открытых копиях; доступная редакция TDS-237 — январь 2002 г. Данные о чувствительности к электролитам — заявление производителя для его марок."
 
 - id: podolefsky2013
@@ -251,8 +253,9 @@
   title: "Design and Analysis of Experiments, 9th ed."
   where: "Wiley, Hoboken. ISBN 978-1-119-11347-8"
   year: 2017
+  url: https://catalogimages.wiley.com/images/db/pdf/9781119113478.excerpt.pdf
   supports: "Факторные планы 2^k, расчёт главных эффектов и взаимодействий, роль повторных опытов для оценки ошибки, недостатки поочерёдного изменения факторов."
-  verified: "Учебник общеизвестен; DOI у издания нет (поиск в Crossref 16.11.2026 его не нашёл). Номер издания и ISBN указаны по памяти — сверьте по своему экземпляру."
+  verified: ISBN в адресе опубликованного Wiley фрагмента соответствует девятому изданию.
 
 - id: nist-handbook
   type: standard
@@ -301,6 +304,7 @@
   title: "ISO 11930:2019 Cosmetics — Microbiology — Evaluation of the antimicrobial protection of a cosmetic product"
   where: "International Organization for Standardization; международный, действует также как EN ISO 11930:2019 (с изменением A1:2022)"
   year: 2019
+  url: https://www.iso.org/standard/75058.html
   supports: "Порядок оценки антимикробной защиты: тест эффективности консервирования и/или оценка микробиологического риска; критерии оценки — в обязательном приложении B; не применяется к продуктам с низким микробиологическим риском (приложение A)."
   verified: "Статус, область применения и структура подтверждены по описаниям национальных изданий (поиск 17.11.2026). Текст и числовые критерии приложения B не открывались и на платформе не приводятся."
 
@@ -331,6 +335,7 @@
   title: "Ionic Equilibrium: Solubility and pH Calculations"
   where: "Wiley, New York. ISBN 0-471-58526-2"
   year: 1998
+  url: https://www.wiley-vch.de/en/areas-interest/natural-sciences/ionic-equilibrium-978-0-471-58526-8
   supports: "Расчёт равновесий слабых кислот и оснований: константа диссоциации, уравнение Гендерсона — Хассельбальха и его допущения, буферная ёмкость, многоосновные кислоты."
   verified: "Существование книги, издательство, год и ISBN подтверждены рецензией в J. Am. Chem. Soc. (Crossref, DOI рецензии 10.1021/ja9856710). DOI самой книги не найден. Полный текст не открывался."
 
@@ -400,6 +405,7 @@
   title: "Theory of the Stability of Lyophobic Colloids"
   where: "Elsevier, Amsterdam"
   year: 1948
+  url: https://katalog.bibliothek.kit.edu/bib/525847
   supports: "Классическое изложение теории устойчивости лиофобных коллоидов (часть теории ДЛФО): баланс притяжения Ван-дер-Ваальса и электростатического отталкивания двойных слоёв."
   verified: "Существование книги подтверждено записью Crossref о её обсуждении в Journal of Colloid Science (1955, DOI 10.1016/0095-8522(55)90030-1) и ссылками в учебниках. DOI самой книги нет. Текст не открывался."
 
@@ -409,6 +415,7 @@
   title: "Non-Newtonian Flow and Applied Rheology: Engineering Applications, 2nd ed."
   where: "Butterworth-Heinemann (Elsevier), Oxford. ISBN 978-0-7506-8532-0"
   year: 2008
+  url: https://www.sciencedirect.com/book/monograph/9780750685320/non-newtonian-flow-and-applied-rheology
   supports: "Течение неньютоновских жидкостей в трубах: ламинарный режим, перепад давления, поправки для степенного закона, выбор насосов и перемешивание вязких сред."
   verified: "Книга подтверждена записями Crossref о её главах (например, DOI 10.1016/B978-0-7506-8532-0.00001-9, 17.11.2026). Полный текст не открывался."
 
@@ -418,6 +425,7 @@
   title: "Coulson & Richardson's Chemical Engineering, Vol. 1: Fluid Flow, Heat Transfer and Mass Transfer, 6th ed."
   where: "Butterworth-Heinemann, Oxford"
   year: 1999
+  url: https://www.educate.elsevier.com/book/details/9780080501017
   supports: "Основы процессов и аппаратов: течение жидкостей в трубах (уравнение Хагена — Пуазейля, число Рейнольдса), теплопроводность, теплоотдача, коэффициент теплопередачи через стенку как сумма термических сопротивлений, теплообмен в аппаратах с рубашкой. Также общие основы массообмена и газожидкостного равновесия; в темах о растворении и деаэрации соотношения приведены как учебные модели с явными допущениями, без постраничной сверки полного текста."
   verified: "Существование 6-го издания подтверждено рецензией в Chemical Engineering Journal (Crossref, DOI 10.1016/S1385-8947(00)00245-X, 17.11.2026). Полный текст не открывался; формулы приведены в общеизвестном виде. Русскоязычный аналог для самостоятельного чтения — учебник А. Г. Касаткина «Основные процессы и аппараты химической технологии» (DOI нет)."
 
