@@ -143,3 +143,12 @@ describe('Планирование эксперимента', () => {
     expect(P.doeMainEffect(d, 'A').se).toBeCloseTo(Math.SQRT2 * Math.sqrt(1.5), 6)
   })
 })
+
+describe('Оценка выводов из факторного эксперимента', () => {
+  it('различает пропущенные ячейки, отсутствие повторов и интервал с нулём на границе', () => {
+    expect(P.doeConclusion({ estimable: false, pairs: 0 }, 3)).toBe('unknown')
+    expect(P.doeConclusion({ estimable: true, pairs: 1, value: 8 }, 0)).toBe('unknown')
+    expect(P.doeConclusion({ estimable: true, pairs: 1, value: P.tCrit(2), se: 1 }, 2)).toBe('no')
+    expect(P.doeConclusion({ estimable: true, pairs: 1, value: -8, se: 1 }, 2)).toBe('yes')
+  })
+})

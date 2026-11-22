@@ -39,3 +39,19 @@ it('принимает числовой ответ целиком с точко�
   expect(parseNum('2 кг')).toBeNaN()
   expect(parseNum('')).toBeNaN()
 })
+
+it('сохраняет технические единицы в английском тексте', () => {
+  const units: [string, RegExp][] = [
+    ['об/мин', /rpm|rev\/min/i], ['мкСм/см', /[μµu]S\/cm/i],
+    ['мН/м', /mN\/m/], ['мПа·с', /mPa\s*[·.⋅ ]\s*s/],
+    ['Па·с', /Pa\s*[·.⋅ ]\s*s/], ['кг/м³', /kg\s*\/\s*m[³3]|kg·m⁻³/i],
+    ['моль/кг', /mol\s*\/\s*kg/i], ['моль/л', /mol\s*\/\s*L|\bM\b/i],
+    ['кВт', /kW/], ['м²', /m[²2]/],
+  ]
+  for (const [source, translation] of Object.entries(en as Record<string, string>)) {
+    const prose = (text: string) => text.replace(/\$[^$]*\$/g, '')
+    for (const [unit, expected] of units) {
+      if (prose(source).includes(unit)) expect(prose(translation), source).toMatch(expected)
+    }
+  }
+})
