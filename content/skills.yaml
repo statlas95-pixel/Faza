@@ -112,3 +112,143 @@
     - deaeration
   labs:
     - deaeration-sheet
+- id: ionic-strength
+  name: Рассчитывать ионную силу раствора
+  outcome: рассчитывать ионную силу раствора
+  topics:
+    - ionic-strength
+  labs:
+    - ionic-strength-sheet
+- id: micellar-solubility
+  name: Различать растворимость и мицеллярную солюбилизацию
+  outcome: различать растворимость и мицеллярную солюбилизацию
+  topics:
+    - micellar-solubility
+  labs:
+    - micellar-solubility-sheet
+- id: oil-oxidation
+  name: Интерпретировать показатели окисления масла
+  outcome: интерпретировать показатели окисления масла
+  topics:
+    - oil-oxidation
+  labs:
+    - oil-oxidation-sheet
+- id: ingredient-documents
+  name: Сопоставлять спецификации товарного сырья
+  outcome: сопоставлять спецификации товарного сырья
+  topics:
+    - ingredient-documents
+  labs:
+    - ingredient-documents-sheet
+- id: powder-wetting
+  name: Различать смачивание и разрушение агломератов
+  outcome: различать смачивание и разрушение агломератов
+  topics:
+    - powder-wetting
+  labs:
+    - powder-wetting-sheet
+- id: surface-adsorption
+  name: Оценивать адсорбцию по материальному балансу
+  outcome: оценивать адсорбцию по материальному балансу
+  topics:
+    - surface-adsorption
+  labs:
+    - surface-adsorption-sheet
+- id: foam-control
+  name: Различать образование и устойчивость пены
+  outcome: различать образование и устойчивость пены
+  topics:
+    - foam-control
+  labs:
+    - foam-control-sheet
+- id: particle-sizing
+  name: Читать распределения частиц по размеру
+  outcome: читать распределения частиц по размеру
+  topics:
+    - particle-sizing
+  labs:
+    - particle-sizing-sheet
+- id: emulsifier-selection
+  name: Сравнивать смеси эмульгаторов по ГЛБ
+  outcome: сравнивать смеси эмульгаторов по ГЛБ
+  topics:
+    - emulsifier-selection
+  labs:
+    - emulsifier-selection-sheet
+- id: cleanser-mildness
+  name: Сравнивать моющие системы при равной активной массе
+  outcome: сравнивать моющие системы при равной активной массе
+  topics:
+    - cleanser-mildness
+  labs:
+    - cleanser-mildness-sheet
+- id: polymer-thickeners
+  name: Выбирать проверку при смене загустителя
+  outcome: выбирать проверку при смене загустителя
+  topics:
+    - polymer-thickeners
+  labs:
+    - polymer-thickeners-sheet
+- id: fractional-design
+  name: Различать смешение эффектов и кривизну отклика
+  outcome: различать смешение эффектов и кривизну отклика
+  topics:
+    - fractional-design
+  labs:
+    - fractional-design-sheet
+- id: water-sanitation
+  name: Различать качество воды и состояние точки отбора
+  outcome: различать качество воды и состояние точки отбора
+  topics:
+    - water-sanitation
+  labs:
+    - water-sanitation-sheet
+- id: pump-selection
+  name: Определять рабочую точку насоса
+  outcome: определять рабочую точку насоса
+  topics:
+    - pump-selection
+  labs:
+    - pump-selection-sheet
+- id: porous-flow
+  name: Применять закон Дарси для пористого слоя
+  outcome: применять закон Дарси для пористого слоя
+  topics:
+    - porous-flow
+  labs:
+    - porous-flow-sheet
+- id: impeller-geometry
+  name: Сопоставлять геометрию мешалки и задачу перемешивания
+  outcome: сопоставлять геометрию мешалки и задачу перемешивания
+  topics:
+    - impeller-geometry
+  labs:
+    - impeller-geometry-sheet
+- id: fat-melting
+  name: Разделять нагрев и скрытую теплоту плавления
+  outcome: разделять нагрев и скрытую теплоту плавления
+  topics:
+    - fat-melting
+  labs:
+    - fat-melting-sheet
+- id: flow-exchangers
+  name: Составлять тепловой баланс проточного аппарата
+  outcome: составлять тепловой баланс проточного аппарата
+  topics:
+    - flow-exchangers
+  labs:
+    - flow-exchangers-sheet
+- id: filtration
+  name: Оценивать производительность фильтрования
+  outcome: оценивать производительность фильтрования
+  topics:
+    - filtration
+  labs:
+    - filtration-sheet
+- id: cip-verification
+  name: Проверять полноту свидетельств по циклу CIP
+  outcome: проверять полноту свидетельств по циклу CIP
+  topics:
+    - cip-verification
+  labs:
+    - cip-verification-sheet

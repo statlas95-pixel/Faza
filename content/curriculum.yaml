@@ -5,23 +5,23 @@ goals:
   - id: grad
     name: Применить вузовские знания на производстве и в R&D
     hint: От основ химии растворов и коллоидов — к рабочим задачам
-    order: [raw-functions, solutions-basics, water-raw, ph-buffers, disperse-systems, surface-tension, fluid-flow, heat-transfer, deaeration, emulsion-stability, rheology-basics, surfactant-thickening, lamellar-gel-network, preservation, stability-testing, mixing-basics, dissolution, emulsification, doe-basics, scale-up, colloid-stability]
+    order: [raw-functions, oil-oxidation, ingredient-documents, solutions-basics, ionic-strength, water-raw, water-sanitation, cip-verification, ph-buffers, disperse-systems, surface-adsorption, particle-sizing, surface-tension, powder-wetting, foam-control, fluid-flow, pump-selection, porous-flow, filtration, heat-transfer, fat-melting, flow-exchangers, deaeration, emulsion-stability, emulsifier-selection, rheology-basics, polymer-thickeners, surfactant-thickening, cleanser-mildness, lamellar-gel-network, preservation, stability-testing, mixing-basics, impeller-geometry, dissolution, micellar-solubility, emulsification, doe-basics, fractional-design, scale-up, colloid-stability]
   - id: prod
     name: Увереннее вести процесс на производстве
     hint: Аппараты, режимы, отклонения партий
-    order: [fluid-flow, heat-transfer, deaeration, mixing-basics, dissolution, emulsification, lamellar-gel-network, surfactant-thickening, scale-up, preservation, rheology-basics, emulsion-stability, stability-testing, doe-basics, solutions-basics, water-raw, ph-buffers, raw-functions, disperse-systems, surface-tension, colloid-stability]
+    order: [fluid-flow, pump-selection, porous-flow, filtration, heat-transfer, fat-melting, flow-exchangers, deaeration, mixing-basics, impeller-geometry, dissolution, micellar-solubility, emulsification, lamellar-gel-network, surfactant-thickening, cleanser-mildness, scale-up, preservation, rheology-basics, polymer-thickeners, emulsion-stability, emulsifier-selection, stability-testing, doe-basics, fractional-design, solutions-basics, ionic-strength, water-raw, water-sanitation, cip-verification, ph-buffers, raw-functions, oil-oxidation, ingredient-documents, disperse-systems, surface-adsorption, particle-sizing, surface-tension, powder-wetting, foam-control, colloid-stability]
   - id: rnd
     name: Разрабатывать рецептуры
     hint: Стабильность, реология, эксперимент
-    order: [disperse-systems, surface-tension, colloid-stability, emulsion-stability, rheology-basics, lamellar-gel-network, stability-testing, preservation, doe-basics, surfactant-thickening, emulsification, scale-up, mixing-basics, dissolution, raw-functions, ph-buffers, solutions-basics, water-raw, fluid-flow, heat-transfer, deaeration]
+    order: [disperse-systems, surface-adsorption, particle-sizing, surface-tension, powder-wetting, foam-control, colloid-stability, emulsion-stability, emulsifier-selection, rheology-basics, polymer-thickeners, lamellar-gel-network, stability-testing, preservation, doe-basics, fractional-design, surfactant-thickening, cleanser-mildness, emulsification, scale-up, mixing-basics, impeller-geometry, dissolution, micellar-solubility, raw-functions, oil-oxidation, ingredient-documents, ph-buffers, solutions-basics, ionic-strength, water-raw, water-sanitation, cip-verification, fluid-flow, pump-selection, porous-flow, filtration, heat-transfer, fat-melting, flow-exchangers, deaeration]
   - id: bridge
     name: Перейти из производства в R&D
     hint: От процесса — к причинам и эксперименту
-    order: [rheology-basics, emulsion-stability, doe-basics, stability-testing, preservation, lamellar-gel-network, surfactant-thickening, scale-up, emulsification, mixing-basics, dissolution, ph-buffers, raw-functions, solutions-basics, water-raw, disperse-systems, surface-tension, fluid-flow, heat-transfer, deaeration, colloid-stability]
+    order: [rheology-basics, polymer-thickeners, emulsion-stability, emulsifier-selection, doe-basics, fractional-design, stability-testing, preservation, lamellar-gel-network, surfactant-thickening, cleanser-mildness, scale-up, emulsification, mixing-basics, impeller-geometry, dissolution, micellar-solubility, ph-buffers, raw-functions, oil-oxidation, ingredient-documents, solutions-basics, ionic-strength, water-raw, water-sanitation, cip-verification, disperse-systems, surface-adsorption, particle-sizing, surface-tension, powder-wetting, foam-control, fluid-flow, pump-selection, porous-flow, filtration, heat-transfer, fat-melting, flow-exchangers, deaeration, colloid-stability]
   - id: base
     name: Освоить основы с начала
     hint: По порядку карты знаний
-    order: [raw-functions, solutions-basics, water-raw, ph-buffers, disperse-systems, surface-tension, emulsion-stability, rheology-basics, surfactant-thickening, lamellar-gel-network, stability-testing, preservation, doe-basics, fluid-flow, heat-transfer, deaeration, mixing-basics, dissolution, emulsification, scale-up, colloid-stability]
+    order: [raw-functions, oil-oxidation, ingredient-documents, solutions-basics, ionic-strength, water-raw, water-sanitation, cip-verification, ph-buffers, disperse-systems, surface-adsorption, particle-sizing, surface-tension, powder-wetting, foam-control, emulsion-stability, emulsifier-selection, rheology-basics, polymer-thickeners, surfactant-thickening, cleanser-mildness, lamellar-gel-network, stability-testing, preservation, doe-basics, fractional-design, fluid-flow, pump-selection, porous-flow, filtration, heat-transfer, fat-melting, flow-exchangers, deaeration, mixing-basics, impeller-geometry, dissolution, micellar-solubility, emulsification, scale-up, colloid-stability]
 contexts:
   - { id: grad, name: "Выпускник вуза — знаю теорию, мало практики" }
   - { id: floor, name: Работаю на варочном участке или в цехе }
@@ -35,31 +35,25 @@ sections:
     modules:
       - id: chem-raw
         name: Сырьё и водные растворы
-        topics: [{ id: raw-functions }, { id: solutions-basics }, { id: water-raw }, { id: ph-buffers, prereq: [solutions-basics] }]
-        planned: ["Электролиты и ионная сила", "Растворимость и солюбилизация", "Окисление масел и антиоксиданты", "Классы сырья: эмоленты, загустители, ПАВ — по первичной документации"]
+        topics: [{ id: raw-functions }, { id: solutions-basics }, { id: water-raw }, { id: ph-buffers, prereq: [solutions-basics] }, { id: ionic-strength, prereq: [solutions-basics] }, { id: micellar-solubility, prereq: [dissolution] }, { id: oil-oxidation, prereq: [raw-functions] }, { id: ingredient-documents, prereq: [raw-functions] }]
       - id: chem-colloid
         name: Основы коллоидной и поверхностной химии
-        topics: [{ id: disperse-systems }, { id: surface-tension, prereq: [disperse-systems] }, { id: colloid-stability, prereq: [surface-tension] }]
-        planned: ["Смачивание и диспергирование порошков", "Адсорбция на твёрдых поверхностях", "Пены и пеногашение", "Методы измерения размера частиц"]
+        topics: [{ id: disperse-systems }, { id: surface-tension, prereq: [disperse-systems] }, { id: colloid-stability, prereq: [surface-tension] }, { id: powder-wetting, prereq: [surface-tension] }, { id: surface-adsorption, prereq: [disperse-systems] }, { id: foam-control, prereq: [surface-tension] }, { id: particle-sizing, prereq: [disperse-systems] }]
       - id: chem-surf
         name: ПАВ-системы
-        topics: [{ id: surfactant-thickening, prereq: [rheology-basics, surface-tension] }]
-        planned: ["ГЛБ, параметр упаковки и выбор эмульгатора", "Мягкость моющих композиций"]
+        topics: [{ id: surfactant-thickening, prereq: [rheology-basics, surface-tension] }, { id: emulsifier-selection, prereq: [emulsion-stability] }, { id: cleanser-mildness, prereq: [surfactant-thickening] }]
       - id: chem-disp
         name: Дисперсные системы и эмульсии
         topics: [{ id: emulsion-stability, prereq: [disperse-systems] }, { id: lamellar-gel-network, prereq: [rheology-basics] }]
       - id: chem-rheo
         name: Полимеры и реология
-        topics: [{ id: rheology-basics }]
-        planned: ["Полимерные загустители: карбомеры, камеди, производные целлюлозы"]
+        topics: [{ id: rheology-basics }, { id: polymer-thickeners, prereq: [rheology-basics] }]
       - id: chem-stab
         name: Стабильность и эксперимент
-        topics: [{ id: stability-testing, prereq: [emulsion-stability, rheology-basics] }, { id: doe-basics }]
-        planned: ["Дробные планы и поверхность отклика"]
+        topics: [{ id: stability-testing, prereq: [emulsion-stability, rheology-basics] }, { id: doe-basics }, { id: fractional-design, prereq: [doe-basics] }]
       - id: chem-micro
         name: Консервирование и микробиологическая чистота
-        topics: [{ id: preservation, prereq: [ph-buffers] }]
-        planned: ["Вода как сырьё и санитарная обработка оборудования"]
+        topics: [{ id: preservation, prereq: [ph-buffers] }, { id: water-sanitation, prereq: [water-raw] }]
   - id: proc
     name: Процессы и аппараты
     text: Инженерные основы (гидравлика, теплообмен, перемешивание) и типовые процессы косметического производства — что происходит в аппарате физически, чем управляет технолог и по чему судить о результате.
@@ -67,24 +61,20 @@ sections:
     modules:
       - id: proc-flow
         name: "Основы ПАХТ: гидравлика"
-        topics: [{ id: fluid-flow, prereq: [rheology-basics] }]
-        planned: ["Перекачивание и насосы: характеристики и подбор", "Течение через фильтры и пористые слои"]
+        topics: [{ id: fluid-flow, prereq: [rheology-basics] }, { id: pump-selection, prereq: [fluid-flow] }, { id: porous-flow, prereq: [fluid-flow] }]
       - id: proc-mix
         name: Гидродинамика и перемешивание
-        topics: [{ id: mixing-basics, prereq: [fluid-flow] }, { id: dissolution, prereq: [solutions-basics] }]
-        planned: ["Геометрия аппаратов и типы мешалок"]
+        topics: [{ id: mixing-basics, prereq: [fluid-flow] }, { id: dissolution, prereq: [solutions-basics] }, { id: impeller-geometry, prereq: [mixing-basics] }]
       - id: proc-disp
         name: Диспергирование и гомогенизация
         topics: [{ id: emulsification, prereq: [emulsion-stability] }]
       - id: proc-heat
         name: "Основы ПАХТ: теплообмен"
-        topics: [{ id: heat-transfer }]
+        topics: [{ id: heat-transfer }, { id: fat-melting, prereq: [heat-transfer] }, { id: flow-exchangers, prereq: [heat-transfer] }]
         also: [scale-up]
-        planned: ["Плавление и ввод жировой фазы", "Теплообменники проточного типа"]
       - id: proc-scale
         name: Масштабирование
         topics: [{ id: scale-up, prereq: [emulsification, mixing-basics, heat-transfer] }]
       - id: proc-aux
         name: Вспомогательные операции
-        topics: [{ id: deaeration, prereq: [disperse-systems, heat-transfer] }]
-        planned: ["Фильтрование", "Мойка и санитарная обработка оборудования (CIP)"]
+        topics: [{ id: deaeration, prereq: [disperse-systems, heat-transfer] }, { id: filtration, prereq: [porous-flow] }, { id: cip-verification, prereq: [water-sanitation] }]

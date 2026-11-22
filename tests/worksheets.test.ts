@@ -51,3 +51,33 @@ describe('Независимый пересчёт числовых ответо�
     answers('mixing-sheet', [1000 * 2 * 0.4 ** 2 / 0.001, 1000 * 2 * 0.4 ** 2 / 40, 1000 * 0.5 * 1.14 ** 2 / 40, 300 * 40 * 0.5 ** 2 * 1.14 ** 3 / 1000, 60 * Math.sqrt(5500 / (300 * 80 * 1.14 ** 3))])
   })
 })
+
+describe('Расчёт и перенос для новых тем карты', () => {
+  const cases: [string, number, number][] = [
+    ['ionic-strength', (0.020 * 4 + 0.040) / 2, (0.010 * 4 + 0.020) / 2],
+    ['micellar-solubility', 0.80 - 0.20, (0.80 - 0.20) * 0.50],
+    ['oil-oxidation', 9 - 3, (9 - 3) - (5 - 3)],
+    ['ingredient-documents', 2 / 0.25, 2 / 0.50],
+    ['powder-wetting', 100 * 1.2 / 10, 100 * 0.4 / 10],
+    ['surface-adsorption', (10 - 4) * 1 / 2, 3 * 2],
+    ['foam-control', 100 * 40 / 80, 100 * 20 / 80],
+    ['particle-sizing', 100 * 40 / 200, 100 * (200 - 40) / 200],
+    ['emulsifier-selection', 0.4 * 4 + 0.6 * 14, 100 * (11 - 5) / (15 - 5)],
+    ['cleanser-mildness', 10 * 0.30, 3 / 0.50],
+    ['polymer-thickeners', 100 * 1.5 / 500, 100_000 * 1.5 / 500],
+    ['fractional-design', 2 ** 3 / 2, 20 - 18],
+    ['water-sanitation', 100 * 16 / 20, 100 * 4 / 8],
+    ['pump-selection', (30 - 5) / (0.5 + 0.75), (30 - 17.5) / (0.5 + 0.75)],
+    ['porous-flow', 1000 * 1e-12 * 20000 / (0.001 * 0.01), 1000 * 1e-12 * 20000 / (0.001 * 0.02)],
+    ['impeller-geometry', 0.60 / 1.5, 2 * 0.60 / 1.5],
+    ['fat-melting', 2 * (2 * 20 + 80), 3 * (2 * 20 + 80)],
+    ['flow-exchangers', 0.20 * 3 * 20, 12 / (4 * 5)],
+    ['filtration', 5 / (0.5 * 10 / 60), 2.5 / (0.5 * 10 / 60)],
+    ['cip-verification', 100 * 9 / 10, 8 - 7],
+  ]
+  it.each(cases)('%s', (id, initial, transferred) => {
+    const lab = YAML.parse(fs.readFileSync(`content/labs/${id}-sheet.yaml`, 'utf8'))
+    expect(lab.steps[0].questions[0].answer).toBeCloseTo(initial, 6)
+    expect(lab.transfer.questions[0].answer).toBeCloseTo(transferred, 6)
+  })
+})
