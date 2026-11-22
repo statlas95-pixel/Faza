@@ -28,19 +28,25 @@ export async function api<T = any>(method: string, url: string, body?: any, sign
   return j as T
 }
 
-let rev = 0, timer: any, pushing = false, dirty = false
-async function push() {
+let rev = 0, timer: any, inFlight: Promise<void> | undefined
+async function sendSnapshot() {
   if (acc.status !== 'user') return
-  if (pushing) { dirty = true; return }
-  pushing = true; set({ sync: 'saving' })
+  const snapshot = getProgress(), uid = acc.user?.id
+  set({ sync: 'saving' })
   try {
-    const r = await api('PUT', '/api/me/state', { data: getProgress(), baseRev: rev })
+    const r = await api('PUT', '/api/me/state', { data: snapshot, baseRev: rev })
+    if (acc.user?.id !== uid) return
     rev = r.rev
-    if (r.merged) replaceState(r.data)
+    if (r.merged) replaceState(snapshot === getProgress() ? r.data : mergeProgress(r.data, getProgress()))
     set({ sync: 'saved' })
   } catch (e) {
     if (e instanceof ApiError && e.status === 401) { setScope(GUEST_KEY); set({ status: 'guest', user: undefined, sync: 'idle' }) } else set({ sync: 'error' })
-  } finally { pushing = false; if (dirty) { dirty = false; schedule() } }
+  }
+}
+async function push() {
+  while (inFlight) await inFlight
+  inFlight = sendSnapshot()
+  try { await inFlight } finally { inFlight = undefined }
 }
 const schedule = () => { clearTimeout(timer); timer = setTimeout(push, 1200) }
 onChange(() => { if (acc.status === 'user') schedule() })
@@ -88,7 +94,7 @@ export async function signIn(email: string, password: string) {
 export async function signOut() {
   clearTimeout(timer); await push()
   const uid = acc.user?.id
-  try { await api('POST', '/api/auth/sign-out', {}) } catch { /* сессия могла уже истечь */ }
+  try { await api('POST', '/api/auth/sign-out', {}) } catch (error) { if (!(error instanceof ApiError && error.status === 401)) throw error }
   if (uid && acc.sync !== 'error') { try { localStorage.removeItem(`faza.user.${uid}`) } catch { /* ignore */ } } // на общем компьютере не оставляем чужой кэш
   setScope(GUEST_KEY); set({ status: 'guest', user: undefined, sync: 'idle', pendingImport: undefined })
 }

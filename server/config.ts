@@ -28,7 +28,7 @@ export function loadConfig(over: Partial<Config> = {}): Config {
   const baseUrl = (env.FAZA_BASE_URL ?? `http://localhost:${port}`).replace(/\/$/, '')
   return {
     port, dataDir, baseUrl, authSecret, production: env.NODE_ENV === 'production', canonicalRedirect: env.FAZA_CANONICAL_REDIRECT === '1',
-    trustedOrigins: [baseUrl, 'http://localhost:5173', 'http://127.0.0.1:5173', ...list(env.FAZA_TRUSTED_ORIGINS)],
+    trustedOrigins: [baseUrl, ...(env.NODE_ENV === 'production' ? [] : ['http://localhost:5173', 'http://127.0.0.1:5173']), ...list(env.FAZA_TRUSTED_ORIGINS)],
     smtp: env.SMTP_URL ? { url: env.SMTP_URL, from: env.SMTP_FROM ?? 'faza@localhost' } : undefined,
     search: { crossrefMailto: env.CROSSREF_MAILTO || undefined, openalexKey: env.OPENALEX_API_KEY || undefined, timeoutMs: Number(env.SEARCH_TIMEOUT_MS ?? 15000), cacheHours: Number(env.SEARCH_CACHE_HOURS ?? 168), minGapMs: Number(env.SEARCH_MIN_GAP_MS ?? 1200) },
     ai: {

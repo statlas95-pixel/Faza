@@ -81,7 +81,18 @@ describe('Аккаунты и личные данные', () => {
     // попытка Бориса с тем же id не перезаписывает запись Анны
     await B.req('PUT', '/api/me/state', { data: { ...normalize({}), attempts: [{ id: 'att-anna-1', labId: 'x', at: 1, summary: 'подмена' }] }, baseRev: 0 })
     expect((await A.req('GET', '/api/attempts/att-anna-1')).json.summary).toBe('итог')
-    expect((await B.req('GET', '/api/attempts/att-anna-1')).status).toBe(404)
+    expect((await B.req('GET', '/api/attempts/att-anna-1')).json.summary).toBe('подмена')
+  })
+  it('сохраняет большой разбор и одинаковый id попытки у двух владельцев', async () => {
+    const detail = { notes: 'x'.repeat(22000) }
+    for (const [client, summary] of [[A, 'первый'], [B, 'второй']] as const) {
+      const current = (await client.req('GET', '/api/me')).json
+      const attempt = { id: 'shared-guest-id', labId: 'solutions-sheet', at: 10, summary, detail }
+      current.data.attempts.push(attempt)
+      expect((await client.req('PUT', '/api/me/state', { baseRev: current.rev, data: current.data })).status).toBe(200)
+      expect((await client.req('GET', '/api/attempts/shared-guest-id')).json).toMatchObject({ summary, detail })
+    }
+    expect((await A.req('GET', '/api/attempts/shared-guest-id')).json.summary).toBe('первый')
   })
   it('старый клиент с актуальной ревизией не стирает выбранный вариант диагностики', async () => {
     const C = new Client()
@@ -230,5 +241,5 @@ describe('Перенос данных версии 0.1', () => {
     const m = mergeProgress(v01, mergeProgress(v01, {})); expect(m.bookmarks).toHaveLength(1); expect(m.labDone['batch-2417'].attempts).toBe(2)
     expect(fingerprint(v01)).toBe(fingerprint(JSON.parse(JSON.stringify(v01))))
   })
-  it('миграции базы применяются повторно без ошибок', () => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'faza-mig-')); openDb(d).close(); const db = openDb(d); expect((db.prepare('SELECT COUNT(*) c FROM schema_migrations').get() as any).c).toBe(1); db.close() })
+  it('миграции базы применяются повторно без ошибок', () => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'faza-mig-')); openDb(d).close(); const db = openDb(d); expect((db.prepare('SELECT COUNT(*) c FROM schema_migrations').get() as any).c).toBe(2); db.close() })
 })

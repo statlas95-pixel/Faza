@@ -11,7 +11,24 @@ const MIGRATIONS: string[] = [
    CREATE TABLE imports (user_id TEXT NOT NULL, import_id TEXT NOT NULL, at INTEGER NOT NULL, PRIMARY KEY (user_id, import_id));
    CREATE TABLE search_cache (key TEXT PRIMARY KEY, data TEXT NOT NULL, at INTEGER NOT NULL);
    CREATE TABLE ai_usage (user_id TEXT NOT NULL, day TEXT NOT NULL, count INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (user_id, day));`,
+  // One learner can import the same guest attempt into another account.
+  `ALTER TABLE attempts RENAME TO attempts_v1;
+   CREATE TABLE attempts (id TEXT NOT NULL, user_id TEXT NOT NULL, lab_id TEXT NOT NULL, at INTEGER NOT NULL, summary TEXT NOT NULL, detail TEXT, PRIMARY KEY(user_id, id));
+   INSERT INTO attempts SELECT id, user_id, lab_id, at, summary, detail FROM attempts_v1;
+   DROP TABLE attempts_v1;
+   CREATE INDEX attempts_user ON attempts(user_id, at);`,
 ]
+export function transaction<T>(db: DatabaseSync, write: () => T): T {
+  db.exec('BEGIN IMMEDIATE')
+  try {
+    const result = write()
+    db.exec('COMMIT')
+    return result
+  } catch (error) {
+    db.exec('ROLLBACK')
+    throw error
+  }
+}
 export function openDb(dataDir: string, file = 'faza.db') {
   const db = new DatabaseSync(file === ':memory:' ? file : path.join(dataDir, file))
   db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;')

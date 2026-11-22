@@ -55,7 +55,7 @@ export function finishLab(id: string, summary?: string, detail?: any, score?: nu
     if (score !== undefined) for (const skill of info.skills) {
       p.evidence.unshift({ id: `lab:${aid}:${skill}`, skill, kind: 'lab', item: 'lab', result: score >= 0.8 ? 'ok' : score >= 0.5 ? 'partial' : 'wrong', score, hints: p.hints[id] ?? 0, src: id, label: `занятие «${info.title}»`, at })
       // занятие-перенос, пройденное самостоятельно, — это и есть перенос принципа
-      if (info.transferOf && score >= 0.8) p.evidence.unshift({ id: `transfer:${id}:${skill}`, skill, kind: 'transfer', item: 'transfer', result: 'ok', src: id, label: `перенос: «${info.title}»`, at })
+      if (info.transferOf && score >= 0.8 && !p.hints[id]) p.evidence.unshift({ id: `transfer:${id}:${skill}`, skill, kind: 'transfer', item: 'transfer', result: 'ok', src: id, label: `перенос: «${info.title}»`, at })
     }
     p.hints[id] = 0
   })

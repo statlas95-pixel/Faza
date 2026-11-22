@@ -74,6 +74,7 @@ function AuthForms() {
 export default function AccountPage() {
   useTitle('Аккаунт')
   const a = useAccount(), p = useProgress(), nav = useNavigate()
+  const [logoutError, setLogoutError] = useState('')
   const [ai, setAi] = useState<any>(null)
   useEffect(() => { if (a.status !== 'offline' && a.status !== 'checking') fetch('/api/ai/status').then((r) => r.json()).then(setAi).catch(() => setAi(null)) }, [a.status])
   return (
@@ -92,7 +93,7 @@ export default function AccountPage() {
           <p className="num">{a.user.email}</p>
           <p className="small" role="status">Синхронизация: {a.sync === 'saving' ? 'сохраняю…' : a.sync === 'error' ? 'нет связи — изменения сохранены в браузере и будут отправлены при восстановлении связи' : 'все изменения сохранены на сервере'}
             {a.sync === 'error' && <> <button className="btn small ghost" onClick={syncNow}>Повторить</button></>}</p>
-          <div className="row"><Link className="btn" to="/journal">Мой журнал</Link><button className="btn ghost" onClick={async () => { await signOut(); nav('/account') }}>Выйти</button></div></section>
+          <div className="row"><Link className="btn" to="/journal">Мой журнал</Link><button className="btn ghost" onClick={async () => { try { await signOut(); nav('/account') } catch { setLogoutError('Не удалось завершить сеанс. Проверьте соединение и повторите выход.') } }}>Выйти</button></div>{logoutError && <p role="alert">{logoutError}</p>}</section>
         <section className="panel"><h3>Настройки обучения</h3>
           <fieldset><legend>Мой уровень — влияет на объяснения ИИ-наставника</legend>
             <div className="seg">{([['novice', 'Начинающий'], ['practitioner', 'Практик'], ['expert', 'Эксперт']] as const).map(([k, l]) => <label key={k} className={p.settings.level === k ? 'on' : ''}><input type="radio" name="lvl" checked={p.settings.level === k} onChange={() => setSettings({ level: k })} />{l}</label>)}</div></fieldset>
