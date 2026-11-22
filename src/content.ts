@@ -1,3 +1,4 @@
+import { tr, language, localizeMaterial } from '../shared/locale'
 import YAML from 'yaml'
 
 // Весь научный контент лежит в папке /content и подключается сюда как текст.
@@ -5,7 +6,7 @@ import YAML from 'yaml'
 const rawTopics = import.meta.glob('/content/topics/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 const rawLabs = import.meta.glob('/content/labs/*.yaml', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 const rawYaml = import.meta.glob('/content/*.yaml', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
-const mediaUrls = import.meta.glob('/content/media/*.{svg,png,jpg,jpeg,webp}', { query: '?url', import: 'default', eager: true }) as Record<string, string>
+const mediaUrls = import.meta.glob(['/content/media/*.{svg,png,jpg,jpeg,webp}', '/content/locales/en/media/*.svg'], { query: '?url', import: 'default', eager: true }) as Record<string, string>
 
 export interface Check { q: string; options: { text: string; correct?: boolean; why: string }[] }
 export interface Topic {
@@ -26,35 +27,35 @@ export interface LabMeta {
 
 function parseTopic(raw: string): Topic {
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/)
-  if (!m) throw new Error('В файле темы нет шапки ---')
-  const fm = YAML.parse(m[1])
-  return { questions: [], labs: [], related: [], checks: [], search: [], swatch: 'apricot', level: 2, ...fm, body: m[2] }
+  if (!m) throw new Error(tr("В файле темы нет шапки ---"))
+  const fm = localizeMaterial(YAML.parse(m[1]))
+  return { questions: [], labs: [], related: [], checks: [], search: [], swatch: 'apricot', level: 2, ...fm, body: tr(m[2]) }
 }
-const y = (name: string) => YAML.parse(rawYaml[`/content/${name}.yaml`] ?? '[]')
+const y = (name: string) => localizeMaterial(YAML.parse(rawYaml[`/content/${name}.yaml`] ?? '[]'))
 
 export const topics: Topic[] = Object.values(rawTopics).map(parseTopic).sort((a, b) => a.order - b.order)
-export const terms: Term[] = (y('glossary') as Term[]).sort((a, b) => a.term.localeCompare(b.term, 'ru'))
+export const terms: Term[] = (y('glossary') as Term[]).map(term => language === 'en' && term.en ? { ...term, term: term.en } : term).sort((a, b) => a.term.localeCompare(b.term, language))
 export const sources: Source[] = y('sources')
 export const media: Media[] = y('media')
 export const site: any = y('site')
-export const labs: LabMeta[] = Object.values(rawLabs).map((r) => YAML.parse(r) as LabMeta).sort((a, b) => a.order - b.order)
+export const labs: LabMeta[] = Object.values(rawLabs).map((r) => localizeMaterial(YAML.parse(r)) as LabMeta).sort((a, b) => a.order - b.order)
 
 export const topicById = (id: string) => topics.find((t) => t.id === id)
 export const termById = (id: string) => terms.find((t) => t.id === id)
 export const sourceById = (id: string) => sources.find((s) => s.id === id)
 export const labById = (id: string) => labs.find((l) => l.id === id)
-export const mediaUrl = (file: string) => mediaUrls[`/content/media/${file}`]
+export const mediaUrl = (file: string) => (language === 'en' && mediaUrls[`/content/locales/en/media/${file}`]) || mediaUrls[`/content/media/${file}`]
 export const mediaByFile = (file: string) => media.find((m) => m.file === file)
 
 /** Ступени сложности темы: от простого к сложному. */
-export const levelLabel: Record<number, string> = { 1: 'Основа', 2: 'Практика', 3: 'Углублённо' }
-export const levelHint: Record<number, string> = { 1: 'Понятия и расчёты, на которые опирается всё остальное', 2: 'Механизм и типовые рабочие решения', 3: 'Тонкие эффекты, ограничения моделей, спорные случаи' }
+export const levelLabel: Record<number, string> = { 1: tr("Основа"), 2: tr("Практика"), 3: tr("Углублённо") }
+export const levelHint: Record<number, string> = { 1: tr("Понятия и расчёты, на которые опирается всё остальное"), 2: tr("Механизм и типовые рабочие решения"), 3: tr("Тонкие эффекты, ограничения моделей, спорные случаи") }
 /** Области словаря. */
-export const termAreas: Record<string, string> = { raw: 'Сырьё и растворы', colloid: 'Коллоидная и поверхностная химия', rheo: 'Реология', process: 'Процессы и аппараты', stab: 'Стабильность и контроль', micro: 'Микробиология и консервирование', stat: 'Эксперимент и статистика', reg: 'Нормативы и качество' }
-export const areaLabel: Record<string, string> = { production: 'Производство', rnd: 'R&D', both: 'Производство + R&D' }
+export const termAreas: Record<string, string> = { raw: tr("Сырьё и растворы"), colloid: tr("Коллоидная и поверхностная химия"), rheo: tr("Реология"), process: tr("Процессы и аппараты"), stab: tr("Стабильность и контроль"), micro: tr("Микробиология и консервирование"), stat: tr("Эксперимент и статистика"), reg: tr("Нормативы и качество") }
+export const areaLabel: Record<string, string> = { production: tr("Производство"), rnd: 'R&D', both: tr("Производство + R&D") }
 export const sourceTypeLabel: Record<string, string> = {
-  textbook: 'Учебник / монография', review: 'Рецензируемый обзор', paper: 'Первичное исследование',
-  standard: 'Стандарт / руководство', regulation: 'Нормативный акт', manufacturer: 'Документация производителя', method: 'Методическая работа',
+  textbook: tr("Учебник / монография"), review: tr("Рецензируемый обзор"), paper: tr("Первичное исследование"),
+  standard: tr("Стандарт / руководство"), regulation: tr("Нормативный акт"), manufacturer: tr("Документация производителя"), method: tr("Методическая работа"),
 }
 
 // ---------- Поиск ----------
@@ -65,7 +66,7 @@ const tokens = (s: string) => norm(s).split(/[^a-zа-я0-9]+/).filter((w) => w.l
 interface Doc { kind: Hit['kind']; title: string; text: string; path: string; body: string }
 const docs: Doc[] = [
   ...topics.map((t) => ({ kind: 'Тема' as const, title: t.title, text: t.summary, path: `/topics/${t.id}`, body: t.questions.join(' ') + ' ' + t.body })),
-  ...topics.flatMap((t) => t.questions.map((q) => ({ kind: 'Рабочий вопрос' as const, title: q, text: `Разбирается в теме «${t.title}»`, path: `/topics/${t.id}`, body: '' }))),
+  ...topics.flatMap((t) => t.questions.map((q) => ({ kind: 'Рабочий вопрос' as const, title: q, text: `${tr("Разбирается в теме «")}${t.title}»`, path: `/topics/${t.id}`, body: '' }))),
   ...terms.map((t) => ({ kind: 'Термин' as const, title: t.term, text: t.short, path: `/glossary/${t.id}`, body: (t.en ?? '') + ' ' + (t.long ?? '') })),
   ...sources.map((s) => ({ kind: 'Источник' as const, title: `${s.authors} (${s.year})`, text: s.title, path: `/sources/${s.id}`, body: s.supports + ' ' + s.where })),
   ...labs.map((l) => ({ kind: 'Занятие' as const, title: l.title, text: l.summary, path: `/labs/${l.id}`, body: l.skill + ' ' + l.role })),

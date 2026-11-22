@@ -9,6 +9,7 @@ import type { Auth } from './auth'
 import { createSearch, SearchError } from './search'
 import { buildContext, searchCatalog, type Content } from './content'
 import { AiError, type Tutor } from './ai'
+import { localizeMaterial } from '../shared/locale'
 import { mergeProgress, normalize, emptyProgress } from '../shared/merge'
 
 export interface Deps { cfg: Config; db: Db; auth: Auth; content: Content; tutor: Tutor; fetchImpl?: typeof fetch }
@@ -27,6 +28,16 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
   // Переезд на новый адрес: запросы на прежний хост перенаправляются на основной (FAZA_BASE_URL).
   if (cfg.canonicalRedirect) { const host = new URL(cfg.baseUrl).host; app.use((req, res, next) => { const h = req.headers.host; if (h && h !== host && req.path !== '/api/health' && req.method === 'GET') return void res.redirect(301, cfg.baseUrl + req.originalUrl); next() }) }
   const search = createSearch(cfg, db, fetchImpl)
+
+  let englishContent: Content | undefined
+  function materialFor(language: unknown): Content {
+    if (language !== 'en') return content
+    if (!englishContent) {
+      const translations = JSON.parse(fs.readFileSync(path.resolve('content/locales/en.json'), 'utf8'))
+      englishContent = localizeMaterial(content, translations) as Content
+    }
+    return englishContent
+  }
 
   // Защита изменяющих запросов: только с доверенного источника (cookie SameSite + проверка Origin).
   app.use('/api', (req, res, next) => {
@@ -119,7 +130,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     return false
   }
   app.get('/api/search/providers', (_req, res) => { res.json({ providers: search.providers() }) })
-  app.get('/api/search/catalog', (req, res) => { res.json({ results: searchCatalog(content, String(req.query.q ?? '')) }) })
+  app.get('/api/search/catalog', (req, res) => { res.json({ results: searchCatalog(materialFor(req.query.lang), String(req.query.q ?? '')) }) })
   app.get('/api/search/external', async (req, res) => {
     if (limited(`s:${req.ip}`, 20, 60_000)) return void res.status(429).json({ error: 'rate_limited', message: 'Слишком много запросов с этого адреса. Подождите минуту.', retryAfter: 60 })
     try { res.json(await search.search(String(req.query.q ?? ''), req.query.provider === 'openalex' ? 'openalex' : 'crossref')) }
@@ -140,7 +151,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     if (used >= cfg.ai.dailyLimit) return void fail(new AiError('limit', `Дневной лимит обращений к наставнику (${cfg.ai.dailyLimit}) исчерпан. Он обновится завтра.`))
     // Завершено ли занятие, сервер определяет сам — по записанной попытке, а не по словам клиента.
     const finished = b.kind === 'lab' && !!db.prepare('SELECT 1 FROM attempts WHERE user_id = ? AND lab_id = ? LIMIT 1').get(u.id, String(b.id))
-    const ctx = buildContext(content, { kind: b.kind, id: String(b.id), opened: Array.isArray(b.opened) ? b.opened.map(String) : [], bought: Array.isArray(b.bought) ? b.bought.map(String) : [], finished, theory: !(b.kind === 'lab' && !finished && (b.mode === 'hint' || b.mode === 'review')) })
+    const ctx = buildContext(materialFor(b.language), { kind: b.kind, id: String(b.id), opened: Array.isArray(b.opened) ? b.opened.map(String) : [], bought: Array.isArray(b.bought) ? b.bought.map(String) : [], finished, theory: !(b.kind === 'lab' && !finished && (b.mode === 'hint' || b.mode === 'review')) })
     if (!ctx) return void res.status(404).json({ error: 'not_found', message: 'Учебный материал не найден' })
     const reserved = db.prepare(`INSERT INTO ai_usage (user_id, day, count) VALUES (?, ?, 1)
       ON CONFLICT(user_id, day) DO UPDATE SET count = count + 1 WHERE count < ? RETURNING count`)
@@ -150,7 +161,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     res.on('close', () => { if (!res.writableEnded) ac.abort() })
     try {
       const external = b.external && typeof b.external.text === 'string' ? { title: String(b.external.title ?? 'Внешний материал').slice(0, 300), text: b.external.text.slice(0, 6000) } : undefined
-      const r = await tutor.ask(String(b.model), ctx.title, ctx.fragments, { mode: b.mode, level: ['novice', 'practitioner', 'expert'].includes(b.level) ? b.level : 'practitioner', hintStep: Number(b.hintStep) || 1, message: b.message.trim(), finished, kind: b.kind, stage: typeof b.stage === 'string' ? b.stage.slice(0, 80) : undefined, actions: typeof b.actions === 'string' ? b.actions.slice(0, 1200) : undefined, external }, ac.signal)
+      const r = await tutor.ask(String(b.model), ctx.title, ctx.fragments, { language: b.language === 'en' ? 'en' : 'ru', mode: b.mode, level: ['novice', 'practitioner', 'expert'].includes(b.level) ? b.level : 'practitioner', hintStep: Number(b.hintStep) || 1, message: b.message.trim(), finished, kind: b.kind, stage: typeof b.stage === 'string' ? b.stage.slice(0, 80) : undefined, actions: typeof b.actions === 'string' ? b.actions.slice(0, 1200) : undefined, external }, ac.signal)
 
       res.json({ text: r.text, model: r.model, usage: r.usage, finished, used: reserved.count, limit: cfg.ai.dailyLimit, fragments: ctx.fragments.map(({ id, kind, title, path }) => ({ id, kind, title, path })) })
     } catch (e) {

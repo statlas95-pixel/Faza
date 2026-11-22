@@ -23,7 +23,7 @@ goals:
     hint: По порядку карты знаний
     order: [raw-functions, solutions-basics, water-raw, ph-buffers, disperse-systems, surface-tension, emulsion-stability, rheology-basics, surfactant-thickening, lamellar-gel-network, stability-testing, preservation, doe-basics, fluid-flow, heat-transfer, deaeration, mixing-basics, dissolution, emulsification, scale-up, colloid-stability]
 contexts:
-  - { id: grad, name: Выпускник вуза — знаю теорию, мало практики }
+  - { id: grad, name: "Выпускник вуза — знаю теорию, мало практики" }
   - { id: floor, name: Работаю на варочном участке или в цехе }
   - { id: lab, name: Работаю в лаборатории или R&D }
   - { id: study, name: Учусь или только начинаю }

@@ -81,7 +81,7 @@ export function openAiCompatibleProvider(cfg: Config, fetchImpl: typeof fetch = 
 }
 
 export type Mode = 'explain' | 'hint' | 'review' | 'ground'
-export interface TutorRequest { mode: Mode; level: 'novice' | 'practitioner' | 'expert'; hintStep?: number; message: string; finished: boolean; kind: 'topic' | 'lab'; stage?: string; actions?: string; external?: { title: string; text: string } }
+export interface TutorRequest { language?: 'ru' | 'en'; mode: Mode; level: 'novice' | 'practitioner' | 'expert'; hintStep?: number; message: string; finished: boolean; kind: 'topic' | 'lab'; stage?: string; actions?: string; external?: { title: string; text: string } }
 
 const LEVEL = { novice: 'начинающий разработчик: объясняй с опорой на наблюдаемое явление, вводи термины по одному', practitioner: 'практикующий технолог: говори на рабочем языке, без азов, с условиями применимости', expert: 'опытный специалист: коротко, с допущениями, формулами и границами метода' }
 export const SYSTEM = `Ты — наставник на учебной платформе «Фаза» для косметических химиков и технологов. Отвечай по-русски.
@@ -138,7 +138,7 @@ export function createTutor(cfg: Config, extra: Provider[] = []) {
       if (!info) throw new AiError('unknown_model', 'Эта модель не настроена на сервере.')
       if (r.message.length > cfg.ai.maxInputChars) throw new AiError('too_long', `Сообщение длиннее ${cfg.ai.maxInputChars} символов. Сократите его.`)
       const p = providers.find((x) => x.id === info.provider)!
-      return p.chat(modelId, SYSTEM, buildPrompt(title, fragments, r), signal)
+      return p.chat(modelId, r.language === 'en' ? SYSTEM.replace('Отвечай по-русски.', 'Answer in English, including section headings.') : SYSTEM, buildPrompt(title, fragments, r), signal)
     },
   }
 }

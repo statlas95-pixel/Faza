@@ -7,7 +7,10 @@ import YAML from 'yaml'
 const C = 'content'
 const errors = [], warns = []
 const err = (f, m) => errors.push(`${f}: ${m}`)
-const readY = (f) => { try { return YAML.parse(fs.readFileSync(path.join(C, f), 'utf8')) } catch (e) { err(f, `не читается YAML — ${e.message.split('\n')[0]}`); return null } }
+const readY = (f) => { try { return YAML.parse(fs.readFileSync(path.join(C, f), 'utf8'), (key, value) => {
+    if (value === null && /[а-яё]/i.test(key)) err(f, `неожиданный пустой ключ «${key}»; проверьте кавычки вокруг текста с запятой`)
+    return value
+  }) } catch (e) { err(f, `не читается YAML — ${e.message.split('\n')[0]}`); return null } }
 
 const sources = readY('sources.yaml') ?? [], terms = readY('glossary.yaml') ?? [], media = readY('media.yaml') ?? [], site = readY('site.yaml') ?? {}
 const srcIds = new Set(sources.map((s) => s.id)), termIds = new Set(terms.map((t) => t.id))

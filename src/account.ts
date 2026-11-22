@@ -1,3 +1,4 @@
+import { tr, language } from '../shared/locale'
 import { useSyncExternalStore } from 'react'
 import { GUEST_KEY, load, setScope, replaceState, onChange, getProgress } from './store'
 import { mergeProgress, isEmpty, fingerprint, summarize, type Progress } from '../shared/merge'
@@ -19,12 +20,30 @@ export const getAccount = () => acc
 
 export class ApiError extends Error { constructor(public status: number, public code: string, msg: string, public data?: any) { super(msg) } }
 export async function api<T = any>(method: string, url: string, body?: any, signal?: AbortSignal): Promise<T> {
-  if (location.protocol === 'file:') throw new ApiError(0, 'offline', 'Приложение открыто как файл — сервер недоступен')
+  if (location.protocol === 'file:') throw new ApiError(0, 'offline', tr("Приложение открыто как файл — сервер недоступен"))
   let r: Response
   try { r = await fetch(url, { method, credentials: 'same-origin', signal, headers: body ? { 'content-type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined }) }
-  catch (e: any) { if (e?.name === 'AbortError') throw e; throw new ApiError(0, 'offline', 'Нет связи с сервером платформы') }
+  catch (e: any) { if (e?.name === 'AbortError') throw e; throw new ApiError(0, 'offline', tr("Нет связи с сервером платформы")) }
   const j = await r.json().catch(() => null)
-  if (!r.ok) throw new ApiError(r.status, j?.error ?? j?.code ?? 'error', j?.message ?? `Ошибка ${r.status}`, j)
+  if (!r.ok) {
+    const code = j?.error ?? j?.code ?? 'error'
+    const english: Record<string, string> = {
+      limit: 'Your daily tutor allowance has been used. Try again tomorrow.',
+      rate_limited: 'Too many requests. Please try again shortly.',
+      too_long: 'Shorten the text and try again.',
+      timeout: 'The service took too long to respond. Please try again.',
+      not_configured: 'This service has not been configured.',
+      unknown_model: 'Please select an available model.',
+      refused: 'The provider declined the request.',
+      truncated: 'The response was incomplete. Try a shorter question.',
+      bad_query: 'Enter a more specific search query.',
+      not_found: 'This item could not be found.',
+    }
+    const message = language === 'en'
+      ? english[code] ?? (r.status === 401 ? 'Please sign in to continue.' : `Request failed (HTTP ${r.status}).`)
+      : j?.message ?? `Ошибка ${r.status}`
+    throw new ApiError(r.status, code, message, j)
+  }
   return j as T
 }
 
@@ -82,14 +101,14 @@ export async function init() {
 }
 const authErr = (e: any, fallback: string) => {
   if (!(e instanceof ApiError)) return fallback
-  const m: Record<string, string> = { USER_ALREADY_EXISTS: 'Аккаунт с таким адресом уже есть. Войдите или восстановите доступ.', USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: 'Аккаунт с таким адресом уже есть. Войдите или восстановите доступ.', INVALID_EMAIL_OR_PASSWORD: 'Неверный адрес или пароль.', PASSWORD_TOO_SHORT: 'Пароль слишком короткий — не менее 10 символов.', INVALID_EMAIL: 'Проверьте адрес почты.', INVALID_TOKEN: 'Ссылка восстановления недействительна или уже использована.', offline: e.message }
-  return m[e.code] ?? (e.status === 429 ? 'Слишком много попыток. Подождите минуту.' : fallback)
+  const m: Record<string, string> = { USER_ALREADY_EXISTS: tr("Аккаунт с таким адресом уже есть. Войдите или восстановите доступ."), USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: tr("Аккаунт с таким адресом уже есть. Войдите или восстановите доступ."), INVALID_EMAIL_OR_PASSWORD: tr("Неверный адрес или пароль."), PASSWORD_TOO_SHORT: tr("Пароль слишком короткий — не менее 10 символов."), INVALID_EMAIL: tr("Проверьте адрес почты."), INVALID_TOKEN: tr("Ссылка восстановления недействительна или уже использована."), offline: e.message }
+  return m[e.code] ?? (e.status === 429 ? tr("Слишком много попыток. Подождите минуту.") : fallback)
 }
 export async function signUp(name: string, email: string, password: string) {
-  try { await api('POST', '/api/auth/sign-up/email', { name, email, password }); await adopt(await api('GET', '/api/me')) } catch (e) { throw new Error(authErr(e, 'Не удалось создать аккаунт.')) }
+  try { await api('POST', '/api/auth/sign-up/email', { name, email, password }); await adopt(await api('GET', '/api/me')) } catch (e) { throw new Error(authErr(e, tr("Не удалось создать аккаунт."))) }
 }
 export async function signIn(email: string, password: string) {
-  try { await api('POST', '/api/auth/sign-in/email', { email, password }); await adopt(await api('GET', '/api/me')) } catch (e) { throw new Error(authErr(e, 'Не удалось войти.')) }
+  try { await api('POST', '/api/auth/sign-in/email', { email, password }); await adopt(await api('GET', '/api/me')) } catch (e) { throw new Error(authErr(e, tr("Не удалось войти."))) }
 }
 export async function signOut() {
   clearTimeout(timer); await push()
@@ -98,8 +117,8 @@ export async function signOut() {
   if (uid && acc.sync !== 'error') { try { localStorage.removeItem(`faza.user.${uid}`) } catch { /* ignore */ } } // на общем компьютере не оставляем чужой кэш
   setScope(GUEST_KEY); set({ status: 'guest', user: undefined, sync: 'idle', pendingImport: undefined })
 }
-export async function requestReset(email: string) { try { await api('POST', '/api/auth/request-password-reset', { email, redirectTo: '/' }) } catch (e) { throw new Error(authErr(e, 'Не удалось отправить запрос.')) } }
-export async function resetPassword(token: string, newPassword: string) { try { await api('POST', '/api/auth/reset-password', { token, newPassword }) } catch (e) { throw new Error(authErr(e, 'Не удалось задать пароль.')) } }
+export async function requestReset(email: string) { try { await api('POST', '/api/auth/request-password-reset', { email, redirectTo: '/' }) } catch (e) { throw new Error(authErr(e, tr("Не удалось отправить запрос."))) } }
+export async function resetPassword(token: string, newPassword: string) { try { await api('POST', '/api/auth/reset-password', { token, newPassword }) } catch (e) { throw new Error(authErr(e, tr("Не удалось задать пароль."))) } }
 export async function importGuest() {
   const p = acc.pendingImport; if (!p) return
   clearTimeout(timer); await push()

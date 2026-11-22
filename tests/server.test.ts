@@ -164,6 +164,16 @@ describe('Поиск внешних источников', () => {
 describe('ИИ-наставник', () => {
   const U = new Client()
   const ask = (b: any) => U.req('POST', '/api/ai/tutor', { model: 'fake-a', mode: 'hint', kind: 'lab', id: 'batch-2417', message: 'С чего начать?', ...b })
+  it('выбирает английские материалы и язык ответа независимо от других сессий', async () => {
+    const english = new Client()
+    await english.req('POST', '/api/auth/sign-up/email', { name: 'Learner', email: 'language@example.com', password: 'english-test-123' })
+    const reply = await english.req('POST', '/api/ai/tutor', {
+      language: 'en', model: 'fake-a', mode: 'explain', kind: 'topic', id: 'deaeration', message: 'Explain the pressure scale.',
+    })
+    expect(reply.status).toBe(200)
+    expect(prompts.at(-1)?.system).toContain('Answer in English')
+    expect(prompts.at(-1)?.user).toContain('Deaeration under vacuum')
+  })
   it('статус показывает настроенные модели', async () => {
     const s = (await U.req('GET', '/api/ai/status')).json; expect(s.configured).toBe(true); expect(s.models.map((m: any) => m.id)).toEqual(['fake-a', 'fake-b'])
     expect(s.providers.find((p: any) => p.id === 'anthropic').ready).toBe(false); expect(JSON.stringify(s)).not.toMatch(/sk-|key=/i)
