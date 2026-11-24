@@ -10,6 +10,7 @@ const list = (v?: string) => (v ?? '').split(',').map((s) => s.trim()).filter(Bo
 
 export interface Config {
   port: number; dataDir: string; baseUrl: string; authSecret: string; trustedOrigins: string[]; production: boolean; canonicalRedirect: boolean
+  analyticsAdmins: string[]
   smtp?: { url: string; from: string }
   search: { crossrefMailto?: string; openalexKey?: string; timeoutMs: number; cacheHours: number; minGapMs: number }
   ai: { anthropicKey?: string; anthropicModels: string[]; openaiKey?: string; openaiBaseUrl?: string; openaiModels: string[]; dailyLimit: number; maxTokens: number; timeoutMs: number; maxInputChars: number }
@@ -29,6 +30,7 @@ export function loadConfig(over: Partial<Config> = {}): Config {
   return {
     port, dataDir, baseUrl, authSecret, production: env.NODE_ENV === 'production', canonicalRedirect: env.FAZA_CANONICAL_REDIRECT === '1',
     trustedOrigins: [baseUrl, ...(env.NODE_ENV === 'production' ? [] : ['http://localhost:5173', 'http://127.0.0.1:5173']), ...list(env.FAZA_TRUSTED_ORIGINS)],
+    analyticsAdmins: list(env.FAZA_ANALYTICS_ADMIN_IDS),
     smtp: env.SMTP_URL ? { url: env.SMTP_URL, from: env.SMTP_FROM ?? 'faza@localhost' } : undefined,
     search: { crossrefMailto: env.CROSSREF_MAILTO || undefined, openalexKey: env.OPENALEX_API_KEY || undefined, timeoutMs: Number(env.SEARCH_TIMEOUT_MS ?? 15000), cacheHours: Number(env.SEARCH_CACHE_HOURS ?? 168), minGapMs: Number(env.SEARCH_MIN_GAP_MS ?? 1200) },
     ai: {

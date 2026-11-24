@@ -1,9 +1,12 @@
 import { chooseLanguage } from './language'
 import { tr, language } from '../shared/locale'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { HashRouter, Routes, Route, NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { site } from './content'
 import { update } from './store'
+import { recordActivity } from './statistics'
+import { publicPage } from '../shared/statistics'
+import StatisticsPage from './pages/Statistics'
 import Home from './pages/Home'
 import { Catalog, TopicPage } from './pages/Topics'
 import { Glossary, Sources, Journal, About, AttemptPage } from './pages/Reference'
@@ -33,6 +36,13 @@ function Shell() {
   useEffect(() => { void init() }, [])
   const m = loc.pathname.match(/^\/(topics|labs)\/([\w-]+)$/)
   const ctx = m ? (m[1] === 'topics' ? topicById(m[2]) : labById(m[2])) : undefined
+  const trackedPath = useRef<string | null>(null)
+  useEffect(() => {
+    if (trackedPath.current === loc.pathname) return
+    trackedPath.current = loc.pathname
+    const page = publicPage(loc.pathname)
+    if (page && (!/^\/(topics|labs)\//.test(page) || ctx)) recordActivity('view', page)
+  }, [loc.pathname, ctx])
   useEffect(() => {
     document.body.dataset.mode = inLab ? 'focus' : 'explore'
     if (!loc.hash) window.scrollTo(0, 0)
@@ -74,6 +84,7 @@ function Shell() {
           <Route path="/route" element={<RoutePage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/diagnostic" element={<DiagnosticPage />} />
+          <Route path="/statistics" element={<StatisticsPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/find" element={<FindPage />} />
           <Route path="/attempts/:id" element={<AttemptPage />} />
@@ -84,6 +95,7 @@ function Shell() {
       {!inLab && (
         <footer className="foot">
           <p><b>{site.name}</b>{tr(" · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.")}</p>
+          {acc.status === 'user' && acc.user?.canReadStatistics && <p><Link to="/statistics">{tr("Статистика сайта")}</Link></p>}
           <p><Link to="/about">{tr("О платформе, методике и изображениях")}</Link> · <Link to="/about#authoring">{tr("Как редактировать материалы")}</Link></p>
         </footer>)}
     </>)

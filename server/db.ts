@@ -17,6 +17,10 @@ const MIGRATIONS: string[] = [
    INSERT INTO attempts SELECT id, user_id, lab_id, at, summary, detail FROM attempts_v1;
    DROP TABLE attempts_v1;
    CREATE INDEX attempts_user ON attempts(user_id, at);`,
+  `CREATE TABLE traffic_visitors (day TEXT NOT NULL, visitor TEXT NOT NULL,
+     PRIMARY KEY(day, visitor)) WITHOUT ROWID;
+   CREATE TABLE traffic_pages (day TEXT NOT NULL, page TEXT NOT NULL, views INTEGER NOT NULL, completions INTEGER NOT NULL,
+     PRIMARY KEY(day, page)) WITHOUT ROWID;`,
 ]
 export function transaction<T>(db: DatabaseSync, write: () => T): T {
   db.exec('BEGIN IMMEDIATE')

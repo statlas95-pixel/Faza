@@ -1,3 +1,4 @@
+import { siteStatistics } from './statistics'
 import compression from 'compression'
 import express, { type Request, type Response, type NextFunction } from 'express'
 import path from 'node:path'
@@ -71,7 +72,7 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
   app.get('/api/health', (_req, res) => { res.json({ ok: true, version: '0.3', mail: cfg.smtp ? 'smtp' : 'outbox' }) })
 
   // ---------- Личные данные ----------
-  app.get('/api/me', requireUser, (req, res) => { const u = (req as Authed).user; res.json({ user: u, ...readState(u.id) }) })
+  app.get('/api/me', requireUser, (req, res) => { const u = (req as Authed).user; res.json({ user: { ...u, canReadStatistics: cfg.analyticsAdmins.includes(u.id) }, ...readState(u.id) }) })
   app.put('/api/me/state', requireUser, (req, res) => {
     const u = (req as Authed).user, cur = readState(u.id), { data, baseRev } = req.body ?? {}
     if (!data || typeof data !== 'object') return void res.status(400).json({ error: 'bad_request', message: 'Нет данных' })
@@ -129,6 +130,19 @@ export function createApp({ cfg, db, auth, content, tutor, fetchImpl }: Deps) {
     hits.set(key, recent)
     return false
   }
+  const statistics = siteStatistics(db, content, cfg.authSecret)
+  app.post('/api/statistics/event', (req, res) => {
+    if (!cfg.trustedOrigins.includes(req.get('origin') ?? '')) return void res.sendStatus(403)
+    if (req.get('dnt') === '1' || req.get('sec-gpc') === '1') return void res.sendStatus(204)
+    if (limited(`traffic:${req.ip}`, 600, 60_000)) return void res.sendStatus(429)
+    res.sendStatus(statistics.record(req.body) ? 204 : 400)
+  })
+  app.get('/api/statistics', requireUser, (req, res) => {
+    if (!cfg.analyticsAdmins.includes((req as Authed).user.id)) return void res.sendStatus(403)
+    const days = Number(req.query.days ?? 7)
+    if (![1, 7, 30].includes(days)) return void res.sendStatus(400)
+    res.json(statistics.report(days))
+  })
   app.get('/api/search/providers', (_req, res) => { res.json({ providers: search.providers() }) })
   app.get('/api/search/catalog', (req, res) => { res.json({ results: searchCatalog(materialFor(req.query.lang), String(req.query.q ?? '')) }) })
   app.get('/api/search/external', async (req, res) => {

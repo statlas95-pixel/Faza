@@ -278,3 +278,7 @@ details summary{cursor:pointer}
 .language-picker select { font: inherit; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: .6rem; padding: .25rem .45rem }
 .lab-language { display: flex; justify-content: flex-end; padding: .4rem 1rem }
 header.top { flex-wrap: wrap }
+
+.traffic-totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(165px,100%),1fr));gap:12px}
+.traffic-totals .panel{margin:0}
+.traffic-totals dd{font-size:1.8rem;font-weight:600;margin:.3em 0 0}

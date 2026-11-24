@@ -40,9 +40,10 @@ class Client {
     return { status: r.status, json }
   }
 }
+const analyticsAdmins: string[] = []
 const content = loadContent()
 beforeAll(async () => {
-  const cfg = loadConfig({ dataDir: dir, port: 0 })
+  const cfg = loadConfig({ dataDir: dir, port: 0, analyticsAdmins })
   cfg.search.timeoutMs = 150; cfg.search.minGapMs = 0; cfg.ai.dailyLimit = 5; cfg.ai.maxInputChars = 200
   const db = openDb(dir)
   const auth = await createAuth(cfg, db)
@@ -251,5 +252,29 @@ describe('Перенос данных версии 0.1', () => {
     const m = mergeProgress(v01, mergeProgress(v01, {})); expect(m.bookmarks).toHaveLength(1); expect(m.labDone['batch-2417'].attempts).toBe(2)
     expect(fingerprint(v01)).toBe(fingerprint(JSON.parse(JSON.stringify(v01))))
   })
-  it('миграции базы применяются повторно без ошибок', () => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'faza-mig-')); openDb(d).close(); const db = openDb(d); expect((db.prepare('SELECT COUNT(*) c FROM schema_migrations').get() as any).c).toBe(2); db.close() })
+  it('миграции базы применяются повторно без ошибок', () => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'faza-mig-')); openDb(d).close(); const db = openDb(d); expect((db.prepare('SELECT COUNT(*) c FROM schema_migrations').get() as any).c).toBe(3); db.close() })
+})
+
+
+it('restricts the statistics report and accepts only public learning events', async () => {
+  const guest = new Client(), owner = new Client()
+  expect((await guest.req('GET', '/api/statistics')).status).toBe(401)
+  await owner.req('POST', '/api/auth/sign-up/email', { name: 'Owner', email: 'owner@example.com', password: 'report-access-123' })
+  expect((await owner.req('GET', '/api/statistics')).status).toBe(403)
+  const me = (await owner.req('GET', '/api/me')).json
+  analyticsAdmins.push(me.user.id)
+  expect((await owner.req('GET', '/api/me')).json.user.canReadStatistics).toBe(true)
+  const body = { visitor: '95a2615d-f3b6-47df-99b0-a56ad91e3697', page: '/', kind: 'view' }
+  expect((await guest.req('POST', '/api/statistics/event', body)).status).toBe(204)
+  expect((await guest.req('POST', '/api/statistics/event', { ...body, page: '/account' })).status).toBe(400)
+  for (const headers of [{ dnt: '1' }, { 'sec-gpc': '1' }]) {
+    const response = await fetch(base + '/api/statistics/event', { method: 'POST', headers: { 'content-type': 'application/json', origin: base, ...headers } as HeadersInit, body: JSON.stringify(body) })
+    expect(response.status).toBe(204)
+  }
+  expect((await fetch(base + '/api/statistics/event', { method: 'POST' })).status).toBe(403)
+  expect((await owner.req('GET', '/api/statistics?days=365')).status).toBe(400)
+  const report = (await owner.req('GET', '/api/statistics?days=1')).json
+  expect(report.visitors).toBe(1)
+  expect(report.daily[0].views).toBe(1)
+  expect(JSON.stringify(report)).not.toContain(body.visitor)
 })

@@ -1,3 +1,4 @@
+import { recordActivity } from './statistics'
 import { tr } from '../shared/locale'
 import { useSyncExternalStore } from 'react'
 import { type Progress, type Attempt, type SavedSource, type Settings, normalize, emptyProgress } from '../shared/merge'
@@ -60,6 +61,7 @@ export function finishLab(id: string, summary?: string, detail?: any, score?: nu
     }
     p.hints[id] = 0
   })
+  recordActivity('complete', `/labs/${id}`)
 }
 export function bumpHints(labId: string) { update((p) => { p.hints[labId] = (p.hints[labId] ?? 0) + 1 }) }
 export function toggleSource(s: Omit<SavedSource, 'at'>) {

@@ -7,7 +7,7 @@ import { mergeProgress, isEmpty, fingerprint, summarize, type Progress } from '.
 // Если сервера нет (файл открыт с диска, статический хостинг), статус — 'offline': обучение работает, данные остаются в браузере.
 export interface Account {
   status: 'checking' | 'offline' | 'guest' | 'user'
-  user?: { id: string; email: string; name: string }
+  user?: { id: string; email: string; name: string; canReadStatistics?: boolean }
   sync: 'idle' | 'saving' | 'saved' | 'error'
   pendingImport?: { id: string; summary: ReturnType<typeof summarize> }
   mail?: 'smtp' | 'outbox'

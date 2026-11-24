@@ -1,3 +1,4 @@
+import { StatisticsPreference } from './Statistics'
 import { tr, language } from '../../shared/locale'
 import { useEffect } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
@@ -154,7 +155,7 @@ export function About() {
   useTitle(tr("О платформе"))
   const loc = useLocation()
   useEffect(() => { if (loc.hash) setTimeout(() => document.getElementById(loc.hash.slice(1))?.scrollIntoView(), 50) }, [loc.hash])
-  return <div className="page about"><h1>{tr("О платформе")}</h1><Md text={aboutRaw} /></div>
+  return <div className="page about"><h1>{tr("О платформе")}</h1><Md text={aboutRaw} /><StatisticsPreference /></div>
 }
 
 export function AttemptPage() {
