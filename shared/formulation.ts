@@ -25,6 +25,7 @@ export interface RegulatoryRule {
   standard: string
   leaveOnMax?: number
   rinseOffMax?: number
+  strictMax?: boolean
   acidFactor?: number
   warnAbove?: number
   allergenLeaveOn?: number
@@ -336,12 +337,27 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
     : null
   const hlbDelta = requiredHlb !== null && actualHlb !== null ? round(Math.abs(actualHlb - requiredHlb), 2) : null
 
-  if (oilPhasePct >= 1 && emulsifierPct <= 0) {
+  const hasPolymericOrCationicEmulsifier = rows.some(
+    (r) => r.pct > 0 && (r.ingredient.id === 'simulgel-eg' || r.ingredient.id === 'btms'),
+  )
+  const isWoSystem =
+    actualHlb !== null &&
+    actualHlb <= 6.0 &&
+    emulRows.some((r) => r.ingredient.id === 'isolan-gps' || r.ingredient.id === 'sorbitan-oleate')
+
+  if (oilPhasePct >= 1 && emulsifierPct <= 0 && !hasPolymericOrCationicEmulsifier) {
     issues.push({
       code: 'hlb:no-emulsifier',
       severity: 'error',
       title: 'В масляной фазе нет эмульгатора',
       detail: `Масляная фаза составляет ${oilPhasePct} % (требуемый ГЛБ ≈ ${requiredHlb}), но в рецептуре не задан эмульгатор — эмульсия быстро расслоится.`,
+    })
+  } else if (isWoSystem) {
+    issues.push({
+      code: 'hlb:wo-info',
+      severity: 'info',
+      title: `Обнаружена обратная эмульсия W/O (ГЛБ эмульгатора ${actualHlb})`,
+      detail: 'Для обратных эмульсий «вода в масле» ориентир O/W reqHLB не применяется; для стабильности W/O введите 0,5–1,0 % электролита (NaCl / MgSO₄) в водную фазу.',
     })
   } else if (hlbDelta !== null && hlbDelta > 2.0) {
     issues.push({
@@ -362,13 +378,15 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
   // 4. Химические и коллоидные конфликты
   const activeRows = rows.filter((r) => r.pct > 0)
   const anionicSurfs = activeRows.filter((r) => r.ingredient.ionic === 'anionic' && (r.ingredient.role === 'surfactant' || r.ingredient.role === 'emulsifier'))
-  const cationicAll = activeRows.filter((r) => r.ingredient.ionic === 'cationic')
-  if (anionicSurfs.length && cationicAll.length) {
+  // Катионные кондиционирующие полимеры (гуар, поликватерниумы) специально работают с анионными ПАВ (коацерваты);
+  // несовместимость анионных ПАВ касается именно катионных ПАВ/эмульгаторов (BTMS, BTAC, цетримоний).
+  const cationicSurfs = activeRows.filter((r) => r.ingredient.ionic === 'cationic' && (r.ingredient.role === 'surfactant' || r.ingredient.role === 'emulsifier'))
+  if (anionicSurfs.length && cationicSurfs.length) {
     issues.push({
       code: 'conflict:anionic-cationic',
       severity: 'error',
       title: 'Несовместимость анионных и катионных ПАВ',
-      detail: `${anionicSurfs.map((r) => r.ingredient.inci).join(', ')} и ${cationicAll.map((r) => r.ingredient.inci).join(', ')} образуют малорастворимый ионный комплекс — система мутнеет, выпадает осадок и теряется пенообразование.`,
+      detail: `${anionicSurfs.map((r) => r.ingredient.inci).join(', ')} и ${cationicSurfs.map((r) => r.ingredient.inci).join(', ')} образуют малорастворимый ионный комплекс — система мутнеет, выпадает осадок и теряется пенообразование.`,
     })
   }
 
@@ -381,17 +399,17 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         code: 'conflict:carbomer-electrolyte',
         severity: 'error',
         ingredientId: sensitivePolymers[0].ingredient.id,
-        title: `Разжижение карбомера электролитами (${electrolytePct} %)`,
-        detail: `${sensitivePolymers.map((r) => r.ingredient.inci).join(', ')} чувствителен к ионной силе. Присутствие электролитов (${electrolyteRows.map((r) => `${r.ingredient.inci} ${r.pct}%`).join(', ')}) сжимает двойной электрический слой и разрушает гель. Замените загуститель (например, на Xanthan Gum) или исключите электролит.`,
+        title: `Разжижение полимерного загустителя электролитами (${electrolytePct} %)`,
+        detail: `${sensitivePolymers.map((r) => r.ingredient.inci).join(', ')} чувствителен к ионной силе. Присутствие электролитов (${electrolyteRows.map((r) => `${r.ingredient.inci} ${r.pct}%`).join(', ')}) экранирует заряды вдоль полимерных цепей и разрушает гель. Замените загуститель (например, на Xanthan Gum, Sepimax Zen или Sclerotium Gum) либо уберите электролит.`,
       })
     }
-    if (cationicAll.length) {
+    if (cationicSurfs.length) {
       issues.push({
         code: 'conflict:carbomer-cationic',
         severity: 'error',
         ingredientId: sensitivePolymers[0].ingredient.id,
-        title: 'Несовместимость анионного карбомера и катионного компонента',
-        detail: 'Анионный полиакрилат образует нерастворимый комплекс с катионными ПАВ.',
+        title: 'Несовместимость анионного полимера и катионного ПАВ',
+        detail: 'Анионный полимер образует нерастворимый комплекс с катионными ПАВ.',
       })
     }
   }
@@ -412,12 +430,17 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
           detail: `При pKa = ${ing.pKa} и pH = ${pH} доля активной недиссоциированной кислоты составляет лишь ${activePct} %. Снизьте pH до ≤ ${ing.phRange[1]} или выберите pH-независимый консервант (например, Phenoxyethanol).`,
         })
       } else if (ing.electrolyteSensitive) {
+        const isCarbomer = ing.id === 'carbomer' || ing.id === 'ultrez-21'
         issues.push({
           code: `ph:${ing.id}`,
           severity: 'error',
           ingredientId: ing.id,
-          title: `${ing.name} не образует гель при pH ${pH} (нужно ${ing.phRange[0]}–${ing.phRange[1]})`,
-          detail: 'Карбоксильные группы карбомера требуют нейтрализации до pH ≥ 5,5; в кислой среде полимер остаётся свёрнутым и вязкость падает.',
+          title: `${ing.name} не образует стабильный гель при pH ${pH} (рабочее окно ${ing.phRange[0]}–${ing.phRange[1]})`,
+          detail: pH < ing.phRange[0]
+            ? isCarbomer
+              ? `Карбоксильные группы полиакрилата требуют нейтрализации (pH ≥ ${ing.phRange[0]}); в кислой среде цепи остаются свёрнутыми и вязкость падает.`
+              : `При pH ниже ${ing.phRange[0]} загущающая способность ${ing.inci} резко падает. ${ing.note}`
+            : `При pH выше ${ing.phRange[1]} избыток ионов щёлочи разрушает гелевую сетку ${ing.inci}.`,
         })
       } else {
         issues.push({
@@ -463,16 +486,24 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
       detail: 'Предел растворимости аллантоина в воде при 20 °C составляет около 0,5 %; избыток может выпасть острыми игольчатыми кристаллами при охлаждении.',
     })
   }
-  if (((totalByIngredient.get('beeswax') ?? 0) > 0 || (totalByIngredient.get('cetearyl-alcohol') ?? 0) > 0) && input.phaseTempC.B < 68) {
+  const meltChecks: { id: string; minT: number; label: string }[] = [
+    { id: 'ceramide-np', minT: 80, label: 'церамида NP (≥ 80 °C)' },
+    { id: 'candelilla-wax', minT: 73, label: 'канделильского воска (≥ 73 °C)' },
+    { id: 'behenyl-alcohol', minT: 70, label: 'бегенилового спирта (≥ 70 °C)' },
+    { id: 'beeswax', minT: 68, label: 'пчелиного воска (≥ 68 °C)' },
+    { id: 'cetearyl-alcohol', minT: 68, label: 'цетилстеарилового спирта (≥ 68 °C)' },
+  ]
+  const unmelted = meltChecks.find((m) => (totalByIngredient.get(m.id) ?? 0) > 0 && input.phaseTempC.B < m.minT)
+  if (unmelted) {
     issues.push({
       code: 'melt:phase-b',
       severity: 'warn',
-      title: `Низкая температура фазы B (${input.phaseTempC.B} °C < 68 °C) для твёрдых восков/жирных спиртов`,
-      detail: 'Пчелиный воск и цетилстеариловый спирт могут не полностью расплавиться — при эмульгировании появятся крупинки. Рекомендуется нагрев фазы B до 72–75 °C.',
+      title: `Низкая температура фазы B (${input.phaseTempC.B} °C < ${unmelted.minT} °C) для расплавления ${unmelted.label}`,
+      detail: 'Твёрдые воски, жирные спирты или церамиды могут не полностью расплавиться — при эмульгировании появятся крупинки. Поднимите температуру фазы B выше точки плавления.',
     })
   }
   const parfumPct = totalByIngredient.get('parfum') ?? 0
-  const hasSolubilizer = activeRows.some((r) => r.ingredient.role === 'solubilizer' || r.ingredient.id === 'polysorbate-60')
+  const hasSolubilizer = activeRows.some((r) => r.ingredient.role === 'solubilizer' || r.ingredient.id === 'polysorbate-60' || r.ingredient.id === 'polysorbate-80')
   if (parfumPct > 0 && oilPhasePct < 1 && emulsifierPct <= 0 && !hasSolubilizer && !activeRows.some((r) => r.ingredient.role === 'surfactant')) {
     issues.push({
       code: 'haze:parfum',
@@ -503,14 +534,16 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
       const limit = input.productType === 'leave-on' ? rule.leaveOnMax : rule.rinseOffMax
       const factor = rule.acidFactor ?? 1
       const effectivePct = round(pct * factor, 3)
-      if (limit !== undefined && effectivePct > limit + 1e-6) {
+      const exceeded = limit !== undefined && (rule.strictMax ? effectivePct >= limit - 1e-6 : effectivePct > limit + 1e-6)
+      if (exceeded) {
         const calcNote = factor !== 1 ? ` (${effectivePct} % в пересчёте на кислоту)` : ''
+        const op = rule.strictMax ? '≥' : '>'
         issues.push({
           code: `reg:${ing.id}`,
           severity: 'error',
           ingredientId: ing.id,
           standard: rule.standard,
-          title: `Превышен лимит ${ing.inci}: ${pct} %${calcNote} > ${limit} % (${input.productType})`,
+          title: `Превышен лимит ${ing.inci}: ${pct} %${calcNote} ${op} ${limit} % (${input.productType})`,
           detail: `${rule.standard}. ${rule.note}`,
         })
       } else if (rule.warnAbove !== undefined && effectivePct > rule.warnAbove + 1e-6) {
@@ -519,7 +552,7 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
           severity: 'warn',
           ingredientId: ing.id,
           standard: rule.standard,
-          title: `${ing.inci} (${pct} %) превышает порог ${rule.warnAbove} % для роли консерванта`,
+          title: `${ing.inci} (${pct} %) превышает порог ${rule.warnAbove} % для отдельных категорий продуктов`,
           detail: `${rule.standard}. ${rule.note}`,
         })
       }

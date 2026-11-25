@@ -54,9 +54,10 @@ const r2 = (n: number) => Number(n.toFixed(2))
 
 /** Прогнозирует внешний вид полупродукта на 5 узловых стадиях и готового продукта через 24 ч. */
 export function predictProcessAppearance(ev: FormulaEvaluation, input: FormulaInput): ProcessAppearanceForecast {
-  const byId = new Map(ev.rows.map((r) => [r.ingredient.id, r]))
-  const has = (id: string) => (byId.get(id)?.pct ?? 0) > 0
-  const pctOf = (id: string) => byId.get(id)?.pct ?? 0
+  const pctMap = new Map<string, number>()
+  for (const r of ev.rows) pctMap.set(r.ingredient.id, (pctMap.get(r.ingredient.id) ?? 0) + r.pct)
+  const pctOf = (id: string) => pctMap.get(id) ?? 0
+  const has = (id: string) => pctOf(id) > 0
   const hasCode = (prefix: string) => ev.issues.some((i) => i.code === prefix || i.code.startsWith(prefix))
 
   const hasSurfactants = ev.rows.some((r) => r.pct > 0 && r.ingredient.role === 'surfactant')
@@ -72,7 +73,9 @@ export function predictProcessAppearance(ev: FormulaEvaluation, input: FormulaIn
         : 'solution'
 
   const ionicConflict = hasCode('conflict:anionic-cationic') || hasCode('conflict:carbomer-cationic')
-  const carbomerCollapse = hasCode('conflict:carbomer-electrolyte') || hasCode('ph:carbomer')
+  const carbomerCollapse =
+    hasCode('conflict:carbomer-electrolyte') ||
+    ev.issues.some((i) => i.severity === 'error' && ['ph:carbomer', 'ph:ultrez-21', 'ph:aristoflex-avc', 'ph:simulgel-eg'].includes(i.code))
   const phaseSplit = hasCode('hlb:no-emulsifier') || hasCode('hlb:mismatch')
   const hlbDrift = hasCode('hlb:drift')
   const unmeltedWax = hasCode('melt:phase-b')
@@ -80,7 +83,7 @@ export function predictProcessAppearance(ev: FormulaEvaluation, input: FormulaIn
   const crystals = hasCode('solubility:allantoin')
   const yellowing =
     (has('ascorbic-acid') && (input.targetPh > 3.5 || input.phaseTempC.C > 35)) ||
-    (has('retinol') && (input.phaseTempC.C > 35 || input.targetPh < 4.8)) ||
+    (has('retinol') && (input.phaseTempC.C > 35 || input.targetPh < 5.0)) ||
     ev.issues.some((i) => i.code === 'conflict:avobenzone-octinoxate' && i.severity === 'warn') ||
     hasCode('temp:')
   const soapingRisk =
@@ -117,7 +120,7 @@ export function predictProcessAppearance(ev: FormulaEvaluation, input: FormulaIn
     stepNo: 2,
     title: 'Подготовка масляной фазы B',
     tempC: input.phaseTempC.B,
-    colorHex: hasOil ? (has('zinc-oxide') ? '#F6F4EE' : '#F4D58D') : '#ECE9F2',
+    colorHex: hasOil ? (has('zinc-oxide') || has('titanium-dioxide') ? '#F6F4EE' : '#F4D58D') : '#ECE9F2',
     opacity: !hasOil ? 'clear' : unmeltedWax ? 'milky' : has('zinc-oxide') ? 'opaque' : 'clear',
     textureLabel: !hasOil
       ? 'Масляная фаза отсутствует'
@@ -546,6 +549,7 @@ export function convertCommercialRaw(targetActivePct: number, commercialAssayPct
   if (
     !Number.isFinite(targetActivePct) || targetActivePct < 0 ||
     !Number.isFinite(commercialAssayPct) || commercialAssayPct <= 0 || commercialAssayPct > 100 ||
+    targetActivePct > commercialAssayPct ||
     !Number.isFinite(batchGrams) || batchGrams <= 0
   ) return null
   const commercialPct = (targetActivePct / commercialAssayPct) * 100

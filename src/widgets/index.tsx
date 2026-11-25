@@ -266,10 +266,16 @@ function BufferW() {
   const [pka, setPka] = useState(3.86), [C, setC] = useState(0.1), [ph0, setPh0] = useState(4.5)
   const xs = range(0, 0.06, 61)
   // начальное соотношение форм задаётся pH0; добавляем сильную кислоту x моль/л
-  const r0 = Math.pow(10, ph0 - pka), A0 = (C * r0) / (1 + r0), HA0 = C - A0
-  const phBuf = (x: number) => { const A = A0 - x, HA = HA0 + x; if (A <= 1e-6) return Math.max(-Math.log10(Math.max(x - A0, 1e-9)), 0.5); return pka + Math.log10(A / HA) }
-  const phWater = (x: number) => (x < 1e-7 ? ph0 : Math.min(ph0, -Math.log10(x)))
-  const ka = Math.pow(10, -pka), h = Math.pow(10, -ph0), beta = (2.303 * C * ka * h) / Math.pow(ka + h, 2)
+  // точное квадратное уравнение баланса зарядов (гладкий монотонный переход через точку эквивалентности)
+  const ka = Math.pow(10, -pka), h0 = Math.pow(10, -ph0)
+  const A0 = (C * ka) / (ka + h0)
+  const phBuf = (x: number) => {
+    const s = x - A0
+    const H = ((s - ka) + Math.sqrt((s - ka) * (s - ka) + 4 * ka * (C + s))) / 2
+    return Math.max(-Math.log10(Math.max(H, 1e-14)), 0.5)
+  }
+  const phWater = (x: number) => Math.max(-Math.log10(h0 + x), 0.5)
+  const beta = (2.303 * C * ka * h0) / Math.pow(ka + h0, 2)
   return (
     <Frame title={tr("Буфер против небуферированной системы")} note={tr("Учебная модель: одна слабая кислота и её соль, уравнение Гендерсона — Хассельбальха, концентрации вместо активностей. Для «без буфера» pH задаётся только добавленной сильной кислотой.")}>
       <div className="wgrid">

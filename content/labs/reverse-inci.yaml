@@ -14,10 +14,10 @@ inciList:
   - inci: Aqua
   - inci: Caprylic/Capric Triglyceride
   - inci: Glycerin
+  - inci: Niacinamide
   - inci: Cetearyl Alcohol
   - inci: Glyceryl Stearate
   - inci: PEG-100 Stearate
-  - inci: Niacinamide
   - inci: Butyrospermum Parkii Butter
   - inci: Dimethicone
   - inci: Phenoxyethanol
@@ -26,7 +26,7 @@ inciList:
   - inci: Tocopherol
   - inci: Disodium EDTA
 onePercentMarker: Phenoxyethanol
-onePercentWhy: "Феноксиэтанол законодательно ограничен пределом 1,0 % (ТР ТС 009/2011 и EU 1223/2009), поэтому он служит надёжным «маяком» границы 1 %: всё, что стоит после него (Panthenol, Xanthan Gum, Tocopherol, Disodium EDTA), введено в концентрации ≤ 1 % и может идти в произвольном порядке."
+onePercentWhy: "Феноксиэтанол законодательно ограничен пределом 1,0 % (ТР ТС 009/2011 и EU 1223/2009), поэтому он служит надёжным «маяком» границы 1 %: по ст. 19 EU 1223/2009 и ст. 5 п. 9.3 ТР ТС 009/2011 компоненты менее 1 % (< 1 %) перечисляются в произвольном порядке, а всё, что стоит после феноксиэтанола, заведомо не превышает 1 %."
 phaseTargets:
   - inci: Glycerin
     expected: A

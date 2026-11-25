@@ -132,4 +132,86 @@ describe('Лаборатория 3.0 — расширенный каталог, 
     expect(subsCarbomer.length).toBe(3)
     expect(subsCarbomer.every((s) => s.ingredient.role === 'thickener' && s.ingredient.id !== 'carbomer')).toBe(true)
   })
+
+  it('соблюдает научные и нормативные регрессии фактчекинга (D5 < 0.1%, поликватерниум в SLES, EHG-бустер, безводный термостат, фотостабильность)', () => {
+    // 1. D5 строго < 0.1% (0.1% — нарушение REACH Annex XVII п. 70)
+    const d5AtLimit = evaluateFormula({
+      productType: 'leave-on',
+      targetPh: 5.5,
+      batchGrams: 100,
+      phaseTempC: { A: 70, B: 70, C: 38 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 99.1 },
+        { ingredientId: 'cyclopentasiloxane', phase: 'C', pct: 0.1 },
+        { ingredientId: 'phenoxyethanol', phase: 'C', pct: 0.8 },
+      ],
+    }, ingredients)
+    expect(d5AtLimit.issues.some((i) => i.code === 'reg:cyclopentasiloxane' && i.severity === 'error')).toBe(true)
+
+    // 2. Поликватерниум-7 в анионном шампуне SLES — норма (без ложного conflict:anionic-cationic)
+    const shampoo = evaluateFormula({
+      productType: 'rinse-off',
+      targetPh: 5.3,
+      batchGrams: 100,
+      phaseTempC: { A: 40, B: 40, C: 35 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 86.2 },
+        { ingredientId: 'sles', phase: 'A', pct: 10.0 },
+        { ingredientId: 'capb', phase: 'A', pct: 2.0 },
+        { ingredientId: 'polyquaternium-7', phase: 'A', pct: 1.0 },
+        { ingredientId: 'phenoxyethanol', phase: 'C', pct: 0.8 },
+      ],
+    }, ingredients)
+    expect(shampoo.issues.some((i) => i.code === 'conflict:anionic-cationic')).toBe(false)
+
+    // 3. Ethylhexylglycerin сам по себе — эмолент-бустер, не заменяет консервант Прил. V
+    const ehgOnly = evaluateFormula({
+      productType: 'leave-on',
+      targetPh: 5.5,
+      batchGrams: 100,
+      phaseTempC: { A: 40, B: 40, C: 35 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 99.5 },
+        { ingredientId: 'ethylhexylglycerin', phase: 'C', pct: 0.5 },
+      ],
+    }, ingredients)
+    expect(ehgOnly.issues.some((i) => i.code === 'micro:no-preservative')).toBe(true)
+
+    // 4. Безводный бальзам (0 % воды) не проваливает термостат по «микробиологической порче»
+    const anhydrous: FormulaInput = {
+      productType: 'leave-on',
+      targetPh: 5.5,
+      batchGrams: 100,
+      phaseTempC: { A: 25, B: 75, C: 38 },
+      rows: [
+        { ingredientId: 'caprylic-triglyceride', phase: 'B', pct: 69.5 },
+        { ingredientId: 'shea-butter', phase: 'B', pct: 25.0 },
+        { ingredientId: 'beeswax', phase: 'B', pct: 5.0 },
+        { ingredientId: 'tocopherol', phase: 'C', pct: 0.5 },
+      ],
+    }
+    const anhTests = simulateAcceleratedStability(evaluateFormula(anhydrous, ingredients), anhydrous)
+    expect(anhTests.find((t) => t.id === 'oven45')?.headline).not.toContain('Микробиологическая')
+
+    // 5. Стабилизированный авобензон + октиноксат + Tinosorb S (2%) проходит фототест
+    const stabSpf: FormulaInput = {
+      productType: 'leave-on',
+      targetPh: 5.5,
+      batchGrams: 100,
+      phaseTempC: { A: 75, B: 75, C: 38 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 69.2 },
+        { ingredientId: 'c12-15-benzoate', phase: 'B', pct: 10.0 },
+        { ingredientId: 'avobenzone', phase: 'B', pct: 3.0 },
+        { ingredientId: 'octinoxate', phase: 'B', pct: 5.0 },
+        { ingredientId: 'tinosorb-s', phase: 'B', pct: 3.0 },
+        { ingredientId: 'cetearyl-alcohol', phase: 'B', pct: 2.0 },
+        { ingredientId: 'steareth-2', phase: 'B', pct: 2.0 },
+        { ingredientId: 'steareth-21', phase: 'B', pct: 5.0 },
+        { ingredientId: 'phenoxyethanol', phase: 'C', pct: 0.8 },
+      ],
+    }
+    const spfTests = simulateAcceleratedStability(evaluateFormula(stabSpf, ingredients), stabSpf)
+    expect(spfTests.find((t) => t.id === 'photostability')?.verdict).toBe('pass')
+  })
 })

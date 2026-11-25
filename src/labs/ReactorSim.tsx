@@ -245,7 +245,7 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                     checked={ctl.vacuumOn}
                     onChange={(e) => set((x) => { x.ctl.vacuumOn = e.target.checked })}
                   />
-                  <span><b>{tr('Вакуумный насос (−0,65 бар)')}</b><small>{tr('Обязателен перед гомогенизацией для защиты от завоздушивания.')}</small></span>
+                  <span><b>{tr('Вакуумный насос (−0,45 бар при > 62 °C / −0,65 бар при охлаждении)')}</b><small>{tr('Обязателен перед гомогенизацией для защиты от завоздушивания без вскипания горячей воды.')}</small></span>
                 </label>
                 <label className={`choice ${ctl.homogenizerOn ? 'on' : ''}`}>
                   <input

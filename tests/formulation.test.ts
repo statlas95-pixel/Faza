@@ -233,6 +233,7 @@ describe('Проверка конфликтов, температур и рег�
 
     // SLES 27%: чтобы получить 10% акт. на 1000 г партии -> 37.04% товарного = 370.37 г (внесёт 270.37 г воды)
     expect(convertCommercialRaw(10, 27, 1000)).toEqual({ commercialPct: 37.04, commercialGrams: 370.37, carriedWaterGrams: 270.37 })
+    expect(convertCommercialRaw(30, 27, 1000)).toBeNull()
 
     // Разведение 50% NaOH -> 10% раствор, 200 г => 40 г щёлочи + 160 г воды
     expect(diluteSolution(50, 10, 200)).toEqual({ stockGrams: 40, waterGrams: 160 })

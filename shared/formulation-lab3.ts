@@ -60,8 +60,9 @@ export function simulateAcceleratedStability(
   ev: FormulaEvaluation,
   input: FormulaInput,
 ): StabilityTestResult[] {
-  const byId = new Map(ev.rows.map((r) => [r.ingredient.id, r]))
-  const pctOf = (id: string) => byId.get(id)?.pct ?? 0
+  const pctMap = new Map<string, number>()
+  for (const r of ev.rows) pctMap.set(r.ingredient.id, (pctMap.get(r.ingredient.id) ?? 0) + r.pct)
+  const pctOf = (id: string) => pctMap.get(id) ?? 0
   const has = (id: string) => pctOf(id) > 0
   const hasCode = (prefix: string) => ev.issues.some((i) => i.code === prefix || i.code.startsWith(prefix))
 
@@ -74,7 +75,9 @@ export function simulateAcceleratedStability(
 
   const phaseSplit = hasCode('hlb:no-emulsifier') || hasCode('hlb:mismatch')
   const hlbDrift = hasCode('hlb:drift')
-  const gelCollapse = hasCode('conflict:carbomer-electrolyte') || hasCode('ph:carbomer')
+  const gelCollapse =
+    hasCode('conflict:carbomer-electrolyte') ||
+    ev.issues.some((i) => i.severity === 'error' && ['ph:carbomer', 'ph:ultrez-21', 'ph:aristoflex-avc', 'ph:simulgel-eg'].includes(i.code))
   const ionicConflict = hasCode('conflict:anionic-cationic') || hasCode('conflict:carbomer-cationic')
   const unmeltedWax = hasCode('melt:phase-b')
   const hasMinerals = pctOf('zinc-oxide') + pctOf('titanium-dioxide') >= 2
@@ -159,18 +162,19 @@ export function simulateAcceleratedStability(
     (has('retinol') && (!hasAntioxidant || input.targetPh < 5.0)) ||
     (has('kojic-acid') && (!hasChelator || !hasAntioxidant)) ||
     ((has('rosehip-oil') || has('almond-oil') || has('sunflower-oil')) && !hasAntioxidant)
-  const presFail = !hasPreservative || hasCode('ph:sodium-benzoate') || hasCode('ph:potassium-sorbate') || hasCode('ph:dehydroacetic-acid')
+  const needsPreservative = pctOf('aqua') >= 5 && !hasPreservative
+  const presFail = needsPreservative || hasCode('ph:sodium-benzoate') || hasCode('ph:potassium-sorbate') || hasCode('ph:dehydroacetic-acid')
   const ureaDrift = has('urea') && (input.targetPh > 6.2 || input.phaseTempC.C > 45)
   const niacinHydrolysis = has('niacinamide') && input.targetPh < 4.5
 
-  if (phaseSplit || gelCollapse || !hasPreservative) {
+  if (phaseSplit || gelCollapse || needsPreservative) {
     ovenVerdict = 'fail'
-    ovenVisual = !hasPreservative ? 'darkened' : 'split'
-    ovenHead = !hasPreservative ? 'Микробиологическая порча и газообразование' : 'Расслоение и резкое падение вязкости при +45 °C'
-    ovenMech = !hasPreservative
+    ovenVisual = needsPreservative ? 'darkened' : 'split'
+    ovenHead = needsPreservative ? 'Микробиологическая порча и газообразование' : 'Расслоение и резкое падение вязкости при +45 °C'
+    ovenMech = needsPreservative
       ? 'Водная система без консервантов при тёплом хранении становится питательной средой для бактерий и плесени.'
       : 'При +45 °C вязкость внешней фазы падает в 2–3 раза, ускоряя коалесценцию нестабильной эмульсии.'
-    ovenAdv = !hasPreservative
+    ovenAdv = needsPreservative
       ? 'Введите консервирующую систему (например, Phenoxyethanol 0,8 % + Ethylhexylglycerin 0,1 % + хелатор).'
       : 'Стабилизируйте эмульгатор (|ΔГЛБ| ≤ 1,0) и добавьте термостойкий структурообразователь.'
   } else if (oxidationRisk || presFail || ureaDrift || niacinHydrolysis) {
@@ -206,7 +210,9 @@ export function simulateAcceleratedStability(
   let photoMech = 'В составе нет незащищённых фотолабильных пар.'
   let photoAdv = 'Допустима стандартная непрозрачная или УФ-защищённая туба.'
 
-  const avoUnstable = hasCode('conflict:avobenzone-octinoxate') || (has('avobenzone') && pctOf('octocrylene') < 2 && pctOf('tinosorb-s') < 1.5)
+  const avoUnstable =
+    ev.issues.some((i) => i.code === 'conflict:avobenzone-octinoxate' && i.severity === 'warn') ||
+    (has('avobenzone') && pctOf('octocrylene') < 2 && pctOf('tinosorb-s') < 1.5)
   const photoActives = has('retinol') || has('ascorbic-acid') || has('kojic-acid')
 
   if (avoUnstable) {
@@ -271,8 +277,9 @@ export function simulateAcceleratedStability(
  * Детерминированный расчёт сенсорного профиля продукта по 6 осям («Сенсорная паутинка»).
  */
 export function computeSensoryProfile(ev: FormulaEvaluation, input: FormulaInput): SensoryProfile {
-  const byId = new Map(ev.rows.map((r) => [r.ingredient.id, r]))
-  const pct = (id: string) => byId.get(id)?.pct ?? 0
+  const pctMap = new Map<string, number>()
+  for (const r of ev.rows) pctMap.set(r.ingredient.id, (pctMap.get(r.ingredient.id) ?? 0) + r.pct)
+  const pct = (id: string) => pctMap.get(id) ?? 0
 
   const lightEmollients =
     pct('caprylic-triglyceride') + pct('coco-caprylate') + pct('isoamyl-laurate') +
@@ -416,7 +423,8 @@ export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput
 
   // Шаг 2: Подготовка фазы B (если есть)
   if (rowsB.length > 0) {
-    const minMelt = hasWaxes ? 75 : 70
+    const hasCeramide = rowsB.some((r) => r.ingredient.id === 'ceramide-np')
+    const minMelt = hasCeramide ? 82 : hasWaxes ? 75 : 70
     steps.push({
       stepNo: no++,
       phase: 'B',
@@ -440,13 +448,13 @@ export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput
       phase: 'EMUL',
       title: 'Эмульгирование и гомогенизация',
       tempTarget: `${Math.round((input.phaseTempC.A + input.phaseTempC.B) / 2)} °C → 45 °C`,
-      mixing: 'Ротор-статор 3000–4500 об/мин (3–5 мин под вакуумом −0,6 бар), затем якорь 30–40 об/мин при охлаждении',
+      mixing: 'Ротор-статор 3000–4500 об/мин (3–5 мин под умеренным вакуумом −0,40…−0,45 бар без вскипания воды), затем якорь 30–40 об/мин при охлаждении (вакуум до −0,65 бар при T < 60 °C)',
       actions: [
-        'Ввести масляную фазу B в водную фазу A тонкой струёй при работающем гомогенизаторе под вакуумом.',
+        'Ввести масляную фазу B в водную фазу A тонкой струёй при работающем гомогенизаторе под умеренным вакуумом.',
         'После образования первичной эмульсии перевести реактор в режим плавного охлаждения (1–2 °C/мин) при скребковом перемешивании.',
         ...(hasCarbomer ? ['При температуре 55–60 °C провести нейтрализацию карбомера до начала структурирования сетки.'] : []),
       ],
-      ccp: 'CCP-3: Поддерживать вакуум −0,5…−0,7 бар на стадии гомогенизации во избежание завоздушивания и падения плотности.',
+      ccp: 'CCP-3: При 70–75 °C держать вакуум −0,40…−0,45 бар (выше давления пара воды ~38 кПа), а глубокую деаэрацию (−0,65 бар) включать при охлаждении < 60 °C.',
     })
   }
 

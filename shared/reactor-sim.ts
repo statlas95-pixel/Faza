@@ -51,8 +51,8 @@ export function stepReactor(prev: ReactorState, ctl: ReactorControls, dtMin = 2)
   const next: ReactorState = { ...prev, events: [...prev.events] }
   next.minute += dtMin
 
-  // 1. Вакуумный насос
-  const targetVac = ctl.vacuumOn ? -0.65 : 0
+  // 1. Вакуумный насос (автоматический ограничитель: при > 62 °C держит −0,45 бар, чтобы не вскипятить воду; ниже 62 °C углубляет до −0,65 бар)
+  const targetVac = ctl.vacuumOn ? (next.tempC > 62 ? -0.45 : -0.65) : 0
   next.vacuumBar = r1(next.vacuumBar + (targetVac - next.vacuumBar) * Math.min(1, dtMin * 0.45))
 
   // 2. Теплообмен через рубашку (якорь со скребками ускоряет теплообмен в ~2.6 раза!)
@@ -91,7 +91,7 @@ export function stepReactor(prev: ReactorState, ctl: ReactorControls, dtMin = 2)
         }
       }
     }
-    if (next.vacuumBar > -0.35) {
+    if (next.vacuumBar > -0.3) {
       next.airPct = r1(Math.min(32, next.airPct + 4.8 * dtMin))
       if (prev.airPct < 6 && next.airPct >= 6) {
         next.events.push(`${next.minute} мин: ⚠ Гомогенизатор без вакуума затягивает воздух в массу (воздух ${next.airPct} %)!`)
@@ -100,7 +100,7 @@ export function stepReactor(prev: ReactorState, ctl: ReactorControls, dtMin = 2)
       // под вакуумом воздух постепенно уходит
       next.airPct = r1(Math.max(0.8, next.airPct - 1.2 * dtMin))
     }
-  } else if (next.vacuumBar <= -0.45 && ctl.anchorOn) {
+  } else if (next.vacuumBar <= -0.4 && ctl.anchorOn) {
     // деаэрация при медленном перемешивании под вакуумом
     next.airPct = r1(Math.max(0.8, next.airPct - 1.8 * dtMin))
   }
@@ -142,7 +142,7 @@ export function addPhaseC(prev: ReactorState): ReactorState {
   if (prev.phaseCAdded) return prev
   const events = [...prev.events]
   let integrity = prev.activeIntegrityPct
-  if (prev.tempC > 42) {
+  if (prev.tempC > 40.5) {
     const drop = Math.min(55, (prev.tempC - 40) * 2.2)
     integrity = r1(Math.max(25, integrity - drop))
     events.push(`${prev.minute} мин: ⚠ Фаза C введена в горячую массу (${prev.tempC} °C > 40 °C) — термическая деградация активов и испарение отдушки!`)
@@ -171,7 +171,7 @@ export function evaluateReactorRun(s: ReactorState): { score: number; criteria: 
   // 1. Ввод фазы B при 70–80 °C
   if (!s.phaseBAdded) {
     criteria.push({ id: 'phaseB', title: 'Загрузка масляной фазы B', verdict: 'wrong', detail: 'Масляная фаза B так и не была загружена в реактор.' })
-  } else if ((s.phaseBAddTempC ?? 0) >= 70 && (s.phaseBAddTempC ?? 0) <= 82) {
+  } else if ((s.phaseBAddTempC ?? 0) >= 70 && (s.phaseBAddTempC ?? 0) <= 84) {
     criteria.push({ id: 'phaseB', title: 'Загрузка масляной фазы B', verdict: 'ok', detail: `Загружена при ${s.phaseBAddTempC} °C — без температурного шока восков.` })
   } else {
     criteria.push({ id: 'phaseB', title: 'Загрузка масляной фазы B', verdict: 'wrong', detail: `Загружена при ${s.phaseBAddTempC} °C (норма 72–78 °C): образовались твёрдые крупинки.` })
@@ -181,7 +181,7 @@ export function evaluateReactorRun(s: ReactorState): { score: number; criteria: 
   if (s.dropletUm <= 4.0) {
     criteria.push({ id: 'droplet', title: 'Дисперсность эмульсии', verdict: 'ok', detail: `Средний размер капель ${s.dropletUm} мкм — тонкая стабильная эмульсия.` })
   } else if (s.dropletUm <= 10.0) {
-    criteria.push({ id: 'droplet', title: 'Дисперсность эмульсии', verdict: 'weak', detail: `Капли ${s.dropletUm} мкм — гомогенизация была слишком короткой, риск сливок.` })
+    criteria.push({ id: 'droplet', title: 'Дисперсность эмульсии', verdict: 'weak', detail: `Капли ${s.dropletUm} мкм — гомогенизация была слишком короткой, риск кримирования и расслоения.` })
   } else {
     criteria.push({ id: 'droplet', title: 'Дисперсность эмульсии', verdict: 'wrong', detail: `Капли ${s.dropletUm} мкм — грубая эмульсия, быстрое расслоение.` })
   }
@@ -190,7 +190,7 @@ export function evaluateReactorRun(s: ReactorState): { score: number; criteria: 
   if (s.airPct <= 3.0) {
     criteria.push({ id: 'air', title: 'Вакуумирование и воздух', verdict: 'ok', detail: `Остаточный воздух ${s.airPct} % — плотность и объём в тубе в норме.` })
   } else if (s.airPct <= 7.0) {
-    criteria.push({ id: 'air', title: 'Вакуумирование и воздух', verdict: 'weak', detail: `Воздух ${s.airPct} % — заметная микропена, нужно дольше держать вакуум −0,6 бар.` })
+    criteria.push({ id: 'air', title: 'Вакуумирование и воздух', verdict: 'weak', detail: `Воздух ${s.airPct} % — заметная микропена, нужно дольше держать вакуум при охлаждении.` })
   } else {
     criteria.push({ id: 'air', title: 'Вакуумирование и воздух', verdict: 'wrong', detail: `Воздух ${s.airPct} % — критическое завоздушивание (гомогенизатор работал без вакуума).` })
   }
