@@ -66,6 +66,20 @@ for (const l of labs) {
     for (const d of l.dispositions) for (const v of d.variants ?? []) for (const w of v.when) if (!(w.startsWith('main:') ? l.hypotheses.some((h) => h.id === w.slice(5)) : ev.has(w))) err(l.file, `решение ${d.id}: условие «${w}» не найдено`)
     if (l.transfer && !labIds.has(l.transfer)) err(l.file, `transfer: нет занятия ${l.transfer}`)
   }
+  if (l.engine === 'gmp') {
+    if (!l.batchMeta?.batchNo || !Array.isArray(l.steps) || l.steps.length < 4) err(l.file, 'gmp: нужны batchMeta и не менее 4 этапов steps')
+    if (!Array.isArray(l.dispositions) || l.dispositions.filter((d) => d.verdict === 'ok').length !== 1) err(l.file, 'gmp: нужен ровно один verdict: ok в dispositions')
+    if (!Array.isArray(l.capa) || l.capa.filter((c) => c.valid).length < 2) err(l.file, 'gmp: нужно не менее двух валидных мер capa')
+  }
+  if (l.engine === 'branching') {
+    const nodes = Array.isArray(l.nodes) ? l.nodes : []
+    const ids = new Set(nodes.map((n) => n.id))
+    if (!ids.has(l.start)) err(l.file, `branching: стартовый узел «${l.start}» не найден`)
+    for (const n of nodes) {
+      for (const c of n.choices ?? []) if (!ids.has(c.next)) err(l.file, `branching: узел «${n.id}» ссылается на несуществующий узел «${c.next}»`)
+    }
+    if (!nodes.some((n) => n.outcome && n.outcome.score >= 0.85)) err(l.file, 'branching: нет успешного исхода (score >= 0.85)')
+  }
 }
 for (const t of site.tasks ?? []) { const m = t.to.match(/^\/(topics|labs)\/(.+)$/); if (m && !(m[1] === 'topics' ? topicIds : labIds).has(m[2])) err('site.yaml', `tasks: нет страницы ${t.to}`) }
 for (const s of site.track?.steps ?? []) { if (s.topic && !topicIds.has(s.topic)) err('site.yaml', `track: нет темы ${s.topic}`); if (s.lab && !labIds.has(s.lab)) err('site.yaml', `track: нет занятия ${s.lab}`) }

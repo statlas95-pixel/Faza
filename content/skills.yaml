@@ -24,7 +24,7 @@
   name: Переносить процесс на другой масштаб
   outcome: пересчитать обороты, время и охлаждение и спланировать проверку до первой партии
   topics: [scale-up]
-  labs: [scale-up-2000]
+  labs: [scale-up-2000, scaleup-troubleshooting]
 - id: stabtest
   name: Выбирать испытание стабильности под риск
   outcome: сказать, какой механизм ускоряет тест и какой вывод из него нельзя делать
@@ -34,7 +34,7 @@
   name: Корректировать вязкость ПАВ-систем
   outcome: довести партию до нормы солью, подходя к максимуму кривой с безопасной стороны
   topics: [surfactant-thickening]
-  labs: [salt-batch]
+  labs: [salt-batch, aqueous-clouding-branch]
 - id: doe
   name: Планировать эксперимент
   outcome: распределить опыты так, чтобы оценить эффекты, взаимодействие и шум
@@ -252,3 +252,4 @@
     - cip-verification
   labs:
     - cip-verification-sheet
+    - gmp-batch-record

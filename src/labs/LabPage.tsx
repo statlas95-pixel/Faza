@@ -16,6 +16,8 @@ import RheoCabinet from './RheoCabinet'
 import SaltDosing from './SaltDosing'
 import DoePlan from './DoePlan'
 import Worksheet from './Worksheet'
+import GmpTrainer from './GmpTrainer'
+import BranchingSim from './BranchingSim'
 
 export function LabsIndex() {
   useTitle(tr("Занятия"))
@@ -128,7 +130,7 @@ export function LabPage() {
   const lab = labById(id)
   useTitle(lab?.title ?? tr("Занятие не найдено"))
   if (!lab) return <div className="page"><h1>{tr("Занятие не найдено")}</h1><Link to="/labs">{tr("К занятиям")}</Link></div>
-  const E = { investigation: Investigation, stability: StabilityBench, scaleup: ScaleUp, rheo: RheoCabinet, salt: SaltDosing, doe: DoePlan, worksheet: Worksheet }[lab.engine as string]
+  const E = { investigation: Investigation, stability: StabilityBench, scaleup: ScaleUp, rheo: RheoCabinet, salt: SaltDosing, doe: DoePlan, worksheet: Worksheet, gmp: GmpTrainer, branching: BranchingSim }[lab.engine as string]
   if (!E) return <div className="page"><h1>{tr("Неизвестный тип занятия: ")}{lab.engine}</h1></div>
   return <E key={lab.id} lab={lab} />
 }

@@ -8,6 +8,7 @@ import { recordActivity } from './statistics'
 import { publicPage } from '../shared/statistics'
 import StatisticsPage from './pages/Statistics'
 import SandboxPage from './pages/Sandbox'
+import PortfolioPage from './pages/Portfolio'
 import Home from './pages/Home'
 import { Catalog, TopicPage } from './pages/Topics'
 import { Glossary, Sources, Journal, About, AttemptPage } from './pages/Reference'
@@ -65,7 +66,7 @@ function Shell() {
         <header className="top">
           <Link to="/" className="logo" aria-label={`${site.name}${tr(" — на главную")}`}><span className="logo-drop" aria-hidden />{site.name}</Link>
           <nav aria-label={tr("Основные разделы")}>
-            <NavLink to="/route">{tr("Мой маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/sandbox">{tr("Песочница")}</NavLink><NavLink to="/catalog">{tr("Найти ответ")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
+            <NavLink to="/route">{tr("Мой маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/sandbox">{tr("Песочница")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink><NavLink to="/catalog">{tr("Найти ответ")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
             <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? tr("Без сервера") : tr("Войти")}</NavLink>
           </nav>{languagePicker}
         </header>)}
@@ -87,6 +88,7 @@ function Shell() {
           <Route path="/diagnostic" element={<DiagnosticPage />} />
           <Route path="/statistics" element={<StatisticsPage />} />
           <Route path="/sandbox" element={<SandboxPage />} />
+          <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/find" element={<FindPage />} />
           <Route path="/attempts/:id" element={<AttemptPage />} />
