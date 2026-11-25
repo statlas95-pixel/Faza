@@ -12,7 +12,7 @@ import { createApp } from '../server/app'
 import { mergeProgress, normalize, fingerprint, summarize } from '../shared/merge'
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'faza-test-'))
-let base = '', server: any
+let base = '', server: any, db: ReturnType<typeof openDb> | undefined
 const calls: string[] = []
 let mode: 'ok' | '429' | 'down' | 'timeout' | 'empty' = 'ok'
 const fakeFetch: typeof fetch = async (url: any, init: any) => {
@@ -45,14 +45,14 @@ const content = loadContent()
 beforeAll(async () => {
   const cfg = loadConfig({ dataDir: dir, port: 0, analyticsAdmins })
   cfg.search.timeoutMs = 150; cfg.search.minGapMs = 0; cfg.ai.dailyLimit = 5; cfg.ai.maxInputChars = 200
-  const db = openDb(dir)
+  db = openDb(dir)
   const auth = await createAuth(cfg, db)
   const app = createApp({ cfg, db, auth, content, tutor: createTutor(cfg, [fakeProvider]), fetchImpl: fakeFetch })
   await new Promise<void>((res) => { server = app.listen(0, () => res()) })
   base = `http://localhost:${(server.address() as AddressInfo).port}`
   cfg.baseUrl = base; cfg.trustedOrigins.push(base)
 })
-afterAll(() => { server?.close(); fs.rmSync(dir, { recursive: true, force: true }) })
+afterAll(() => { server?.close(); db?.close(); fs.rmSync(dir, { recursive: true, force: true }) })
 
 describe('Аккаунты и личные данные', () => {
   const A = new Client(), B = new Client()
