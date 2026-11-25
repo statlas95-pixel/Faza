@@ -18,7 +18,7 @@ questions:
   - Как по составу на упаковке понять, сколько в продукте актива?
   - Что значит «эмолент» и чем он отличается от увлажнителя?
   - Почему консервант в составе стоит в самом конце?
-labs: [inci-sheet, label-claims-audit]
+labs: [inci-sheet, label-claims-audit, reverse-inci]
 related: [solutions-basics, emulsion-stability, preservation]
 checks:
   - q: Чем увлажнитель (хумектант) отличается от эмолента?

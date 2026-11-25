@@ -524,6 +524,19 @@ header.top { flex-wrap: wrap }
 .lab3-sub-card{display:flex;flex-direction:column;justify-content:space-between;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--surface)}
 .lab3-sub-card p{margin:4px 0 0}
 
+/* ===== Спринт 3: Пульт вакуумного реактора ===== */
+.reactor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:20px;align-items:start}
+.reactor-vis-box{display:grid;place-items:center;padding:10px;border-radius:14px;background:var(--paper-2);margin:12px 0}
+.reactor-svg{width:100%;max-width:340px;height:auto}
+.reactor-svg.playing .reactor-anchor-spin{animation:sbSpin 1.8s linear infinite}
+.reactor-svg.playing .reactor-homo-spin{animation:sbSpin .24s linear infinite}
+.reactor-gauges{margin-top:12px}
+.reactor-ctl-block{margin:14px 0}
+.reactor-ctl-block .eyebrow{display:block;margin-bottom:8px}
+.reactor-log{margin-top:16px;padding-top:12px;border-top:1px dashed var(--border)}
+.reactor-log ul{margin:6px 0 0;padding-left:1.2em;display:grid;gap:4px}
+@media (max-width:980px){ .reactor-grid{grid-template-columns:minmax(0,1fr)} }
+
 @media (max-width:980px){
   .sb-visual-grid{grid-template-columns:minmax(0,1fr)}
   .sandbox-param-grid{grid-template-columns:repeat(2,minmax(0,1fr))}

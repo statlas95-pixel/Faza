@@ -92,6 +92,11 @@ for (const l of labs) {
   if (l.engine === 'label-audit') {
     if (!Array.isArray(l.items) || l.items.filter((i) => i.hasViolation).length < 2) err(l.file, 'label-audit: нужно не менее 2 нарушений в items')
   }
+  if (l.engine === 'reverse-inci') {
+    if (!Array.isArray(l.inciList) || !l.inciList.some((x) => x.inci === l.onePercentMarker)) err(l.file, 'reverse-inci: onePercentMarker должен присутствовать в inciList')
+    if (!Array.isArray(l.phaseTargets) || l.phaseTargets.length < 3) err(l.file, 'reverse-inci: нужно не менее 3 компонентов в phaseTargets')
+    for (const q of l.questions ?? []) if ((q.options ?? []).filter((o) => o.correct).length !== 1) err(l.file, `reverse-inci: у вопроса ${q.id} нужен ровно один верный вариант`)
+  }
 }
 for (const t of site.tasks ?? []) { const m = t.to.match(/^\/(topics|labs)\/(.+)$/); if (m && !(m[1] === 'topics' ? topicIds : labIds).has(m[2])) err('site.yaml', `tasks: нет страницы ${t.to}`) }
 for (const s of site.track?.steps ?? []) { if (s.topic && !topicIds.has(s.topic)) err('site.yaml', `track: нет темы ${s.topic}`); if (s.lab && !labIds.has(s.lab)) err('site.yaml', `track: нет занятия ${s.lab}`) }
