@@ -146,3 +146,133 @@ export function importProgressBackup(
   mergedProgress.savedFormulas = mergedFormulas
   return { ok: true, progress: mergedProgress, sandboxFormulas: mergedFormulas }
 }
+
+// ===== Профессиональные грейды технолога и интервальное повторение (Пакет A) =====
+
+export interface CareerGrade {
+  level: number // 1..5
+  title: string
+  badge: string
+  description: string
+  nextTitle?: string
+  nextRequirement?: string
+  progressPct: number
+}
+
+/** Рассчитывает профессиональный грейд по подтверждённым компетенциям и пройденным практическим кейсам. */
+export function computeCareerGrade(profile: CompetencyDomainSummary[], completedLabs: number): CareerGrade {
+  const mastered = profile.reduce((s, d) => s + d.mastered, 0)
+  const avgPct = profile.length ? Math.round(profile.reduce((s, d) => s + d.percent, 0) / profile.length) : 0
+  const strongDomains = profile.filter((d) => d.percent >= 50).length
+
+  if (mastered >= 20 && completedLabs >= 18 && strongDomains >= 5) {
+    return {
+      level: 5,
+      title: 'Главный технолог / R&D-директор',
+      badge: 'Грейд V',
+      description: 'Системное владение рецептурами, масштабированием, реологией, стабильностью и GMP.',
+      progressPct: 100,
+    }
+  }
+  if (mastered >= 12 && completedLabs >= 10 && strongDomains >= 3) {
+    return {
+      level: 4,
+      title: 'Ведущий технолог',
+      badge: 'Грейд IV',
+      description: 'Уверенно ведёт разработку, перенос на реактор и расследование производственного брака.',
+      nextTitle: 'Главный технолог / R&D-директор',
+      nextRequirement: `До V грейда: ≥ 20 освоенных навыков (сейчас ${mastered}), ≥ 18 кейсов (${completedLabs}) и 5 сильных доменов (${strongDomains}).`,
+      progressPct: Math.min(99, Math.round(((mastered / 20) * 0.5 + (completedLabs / 18) * 0.5) * 100)),
+    }
+  }
+  if (mastered >= 6 && completedLabs >= 5) {
+    return {
+      level: 3,
+      title: 'Разработчик рецептур (R&D)',
+      badge: 'Грейд III',
+      description: 'Самостоятельно проектирует эмульсии/ПАВ-системы, проверяет комплаенс и анализирует отклонения.',
+      nextTitle: 'Ведущий технолог',
+      nextRequirement: `До IV грейда: ≥ 12 освоенных навыков (сейчас ${mastered}), ≥ 10 кейсов (${completedLabs}) и 3 домена ≥ 50 % (${strongDomains}).`,
+      progressPct: Math.min(99, Math.round(((mastered / 12) * 0.5 + (completedLabs / 10) * 0.5) * 100)),
+    }
+  }
+  if (mastered >= 2 || completedLabs >= 2) {
+    return {
+      level: 2,
+      title: 'Младший технолог',
+      badge: 'Грейд II',
+      description: 'Уверенно работает с базовыми расчётами, pH, ГЛБ и первыми лабораторными тренажёрами.',
+      nextTitle: 'Разработчик рецептур (R&D)',
+      nextRequirement: `До III грейда: ≥ 6 освоенных навыков (сейчас ${mastered}) и ≥ 5 пройденных практических занятий (${completedLabs}).`,
+      progressPct: Math.min(99, Math.round(((mastered / 6) * 0.5 + (completedLabs / 5) * 0.5) * 100)),
+    }
+  }
+  return {
+    level: 1,
+    title: 'Стажёр-лаборант',
+    badge: 'Грейд I',
+    description: 'Начальный этап: пройдите первые 2 практических занятия или соберите и проверьте первую рецептуру.',
+    nextTitle: 'Младший технолог',
+    nextRequirement: `До II грейда: пройдите 2 практических занятия (сейчас ${completedLabs}) или освойте 2 навыка (${mastered}).`,
+    progressPct: Math.min(99, Math.max(avgPct, Math.round((completedLabs / 2) * 100))),
+  }
+}
+
+export interface RefreshItem {
+  skillId: string
+  skillName: string
+  reason: string
+  priority: number
+  topicId?: string
+  labId?: string
+}
+
+/** Интервальное повторение: подбирает до 4 навыков, которые стоит освежить (ошибки, подсказки или давняя практика). */
+export function buildRefreshQueue(
+  states: Record<string, SkillState>,
+  skillsMeta: { id: string; name: string; topics: string[]; labs: string[] }[],
+  nowMs = Date.now(),
+): RefreshItem[] {
+  const out: RefreshItem[] = []
+  const THREE_DAYS = 3 * 86400000
+
+  for (const sk of skillsMeta) {
+    const st = states[sk.id]
+    if (!st || !st.evidence.length) continue
+    const latest = st.evidence[0]
+    const ageMs = nowMs - (latest?.at ?? nowMs)
+    const hadHints = st.evidence.some((e) => (e.hints ?? 0) > 0)
+
+    if (st.gap) {
+      out.push({
+        skillId: sk.id,
+        skillName: sk.name,
+        reason: 'Было затруднение — короткий повторный кейс закрепит механизм.',
+        priority: 100,
+        topicId: sk.topics[0],
+        labId: sk.labs[0],
+      })
+    } else if (hadHints && st.level < 3) {
+      out.push({
+        skillId: sk.id,
+        skillName: sk.name,
+        reason: 'Решалось с подсказкой — попробуйте пройти самостоятельно без опоры.',
+        priority: 80,
+        topicId: sk.topics[0],
+        labId: sk.labs[0],
+      })
+    } else if (st.level < 4 && ageMs >= THREE_DAYS) {
+      const days = Math.max(3, Math.floor(ageMs / 86400000))
+      out.push({
+        skillId: sk.id,
+        skillName: sk.name,
+        reason: `Последняя практика ${days} дн. назад — интервальное повторение укрепит уверенность.`,
+        priority: 50 + Math.min(30, days),
+        topicId: sk.topics[0],
+        labId: sk.labs[0],
+      })
+    }
+  }
+
+  return out.sort((a, b) => b.priority - a.priority).slice(0, 4)
+}

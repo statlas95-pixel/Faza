@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { tr } from '../../shared/locale'
 import {
   buildCompetencyProfile,
+  computeCareerGrade,
   createProgressBackup,
   importProgressBackup,
   type CompetencyDomainSummary,
@@ -66,6 +67,7 @@ export default function PortfolioPage() {
   const totalMastered = profile.reduce((s, d) => s + d.mastered, 0)
   const totalSkills = profile.reduce((s, d) => s + d.total, 0)
   const completedLabs = Object.entries(progress.labDone).sort((a, b) => b[1].at - a[1].at)
+  const grade = useMemo(() => computeCareerGrade(profile, completedLabs.length), [profile, completedLabs.length])
 
   function handleExport() {
     const backup = createProgressBackup(getProgress(), formulas)
@@ -99,11 +101,35 @@ export default function PortfolioPage() {
 
   return (
     <div className="page portfolio">
-      <p className="eyebrow">{tr('Профиль специалиста · 6 направлений')}</p>
-      <h1>{tr('Карта компетенций и портфолио кейсов')}</h1>
+      <div className="sandbox-head-row">
+        <div>
+          <p className="eyebrow">{tr('Профиль специалиста · 6 направлений')}</p>
+          <h1>{tr('Карта компетенций и портфолио кейсов')}</h1>
+        </div>
+        <button type="button" className="btn no-print" onClick={() => window.print()}>
+          🖨 {tr('PDF-портфолио (печать)')}
+        </button>
+      </div>
       <p className="lead">
-        {tr('Агрегированный прогресс по шести ключевым доменам косметической технологии, история решённых производственных кейсов, сохранённые рецептуры и резервная копия прогресса.')}
+        {tr('Агрегированный прогресс по шести ключевым доменам косметической технологии, грейд технолога, история решённых кейсов и синхронизированные рецептуры.')}
       </p>
+
+      {/* Профессиональный грейд технолога */}
+      <section className="panel grade-card" aria-label={tr('Профессиональный грейд')}>
+        <div className="grade-head">
+          <div>
+            <span className="grade-badge">{tr(grade.badge)}</span>
+            <h2>{tr(grade.title)}</h2>
+            <p className="small">{tr(grade.description)}</p>
+          </div>
+          <div className="grade-pct num">
+            <b>{grade.progressPct} %</b>
+            <span className="small muted">{grade.nextTitle ? `${tr('до:')} ${tr(grade.nextTitle)}` : tr('Максимальный уровень')}</span>
+          </div>
+        </div>
+        <div className="bar"><span style={{ width: `${Math.max(4, grade.progressPct)}%` }} /></div>
+        {grade.nextRequirement && <p className="small muted" style={{ marginTop: 8, marginBottom: 0 }}>{tr(grade.nextRequirement)}</p>}
+      </section>
 
       <dl className="traffic-totals">
         <div className="panel"><dt>{tr('Освоено навыков (≥ 3 ур.)')}</dt><dd>{totalMastered} / {totalSkills}</dd></div>

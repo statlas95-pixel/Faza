@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 265" role="img" aria-label="Турбинная мешалка с застойной каверной и якорная мешалка со скребками">
+  <rect width="760" height="265" rx="18" fill="#FBF8F3" stroke="#E4DACB"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#2A1B3D">Перемешивание вязкого крема с пределом текучести τ₀</text>
+  <!-- Левая: турбина и каверна -->
+  <g transform="translate(28,44)">
+    <rect width="340" height="202" rx="14" fill="#FFFFFF" stroke="#E6DACB"/>
+    <path d="M90 30 L90 144 Q90 162 170 162 Q250 162 250 144 L250 30 Z" fill="#F6E6D6" stroke="#2A1B3D" stroke-width="2"/>
+    <!-- Активная каверна -->
+    <ellipse cx="170" cy="116" rx="38" ry="24" fill="#BFE8D9" stroke="#0E7C7B" stroke-width="1.8" stroke-dasharray="4 3"/>
+    <!-- Вал и турбина -->
+    <rect x="167" y="12" width="6" height="108" fill="#4B2E83"/>
+    <rect x="148" y="112" width="44" height="8" rx="2" fill="#D9482B"/>
+    <text x="170" y="64" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#B3321C">Застойная зона у стенок</text>
+    <text x="170" y="77" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B4C6E">(τ &lt; τ₀ — крем стоит!)</text>
+    <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#2A1B3D">Турбинная / пропеллерная (d ≪ D)</text>
+    <text x="170" y="196" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#B3321C">Образует лунку-каверну; плохой теплообмен</text>
+  </g>
+  <!-- Правая: якорная со скребками -->
+  <g transform="translate(392,44)">
+    <rect width="340" height="202" rx="14" fill="#FFFFFF" stroke="#E6DACB"/>
+    <path d="M90 30 L90 144 Q90 162 170 162 Q250 162 250 144 L250 30 Z" fill="#DDF3EC" stroke="#0E7C7B" stroke-width="2"/>
+    <!-- Якорь со скребками -->
+    <rect x="167" y="12" width="6" height="136" fill="#4B2E83"/>
+    <path d="M100 54 L100 142 Q100 154 170 154 Q240 154 240 142 L240 54" fill="none" stroke="#4B2E83" stroke-width="5" stroke-linecap="round"/>
+    <!-- Скребки -->
+    <rect x="91" y="70" width="9" height="14" rx="2" fill="#F7C948" stroke="#2A1B3D"/>
+    <rect x="240" y="102" width="9" height="14" rx="2" fill="#F7C948" stroke="#2A1B3D"/>
+    <!-- Потоки -->
+    <path d="M126 78 Q170 64 214 78" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-dasharray="4 3"/>
+    <path d="M214 126 Q170 140 126 126" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-dasharray="4 3"/>
+    <text x="170" y="106" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#0B6B5D">Обновление слоя у стенки</text>
+    <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#2A1B3D">Якорная мешалка со скребками</text>
+    <text x="170" y="196" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#0B6B5D">Охват всего объёма и высокий коэффициент α₁</text>
+  </g>
+</svg>

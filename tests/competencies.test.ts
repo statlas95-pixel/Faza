@@ -4,9 +4,12 @@ import YAML from 'yaml'
 import {
   COMPETENCY_DOMAINS,
   buildCompetencyProfile,
+  buildRefreshQueue,
+  computeCareerGrade,
   createProgressBackup,
   importProgressBackup,
 } from '../shared/competencies'
+import { DAILY_CASES, getDailyCase } from '../shared/daily-case'
 import { skillState } from '../shared/mastery'
 import { emptyProgress } from '../shared/merge'
 
@@ -61,5 +64,30 @@ describe('Карта компетенций по 6 направлениям и �
 
     expect(importProgressBackup('not-json', current, []).ok).toBe(false)
     expect(importProgressBackup('{"foo":1}', current, []).ok).toBe(false)
+  })
+
+  it('рассчитывает грейд технолога, очередь интервального повторения и микро-кейс дня', () => {
+    const emptyProfile = buildCompetencyProfile({})
+    expect(computeCareerGrade(emptyProfile, 0).level).toBe(1)
+    expect(computeCareerGrade(emptyProfile, 2).level).toBe(2)
+
+    const now = Date.now()
+    const states: any = {
+      mech: { level: 2, confidence: 1, gap: true, evidence: [{ at: now }] },
+      rheo: { level: 2, confidence: 1, gap: false, evidence: [{ at: now - 5 * 86400000 }] },
+    }
+    const queue = buildRefreshQueue(states, [
+      { id: 'mech', name: 'Механизмы', topics: ['emulsion-stability'], labs: ['stability-bench'] },
+      { id: 'rheo', name: 'Реология', topics: ['rheology-basics'], labs: ['rheo-cabinet'] },
+    ], now)
+    expect(queue.map((q) => q.skillId)).toEqual(['mech', 'rheo'])
+
+    expect(DAILY_CASES.length).toBeGreaterThanOrEqual(8)
+    for (const c of DAILY_CASES) {
+      expect(c.options.filter((o) => o.correct)).toHaveLength(1)
+    }
+    const c0 = getDailyCase(new Date('2026-11-25'), 0)
+    const c1 = getDailyCase(new Date('2026-11-25'), 1)
+    expect(c0.id).not.toBe(c1.id)
   })
 })

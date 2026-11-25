@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { topicById, labById, areaLabel, levelLabel, levelHint } from '../content'
 import { useLearning, curriculum, skills, skillById, skillOfTopic, diagItems, diagTracks, diagDomainLabel, setGoal, answerDiag, restartDiag, moduleOfTopic } from '../learning'
 import { LEVELS, CONF, diagItemsForTrack, diagTotal, type SkillState, type RouteStep } from '../../shared/mastery'
+import { buildRefreshQueue } from '../../shared/competencies'
 import { parseNum, ConfirmButton } from '../ui'
 import { useTitle } from './util'
 
@@ -52,12 +53,34 @@ export function RoutePage() {
     <div className="page"><h1>{tr("Мой маршрут")}</h1><p className="lead">{tr("Выберите профессиональную цель — от неё зависит порядок тем. Цель можно сменить в любой момент; прогресс и уровни навыков при этом сохраняются.")}</p>
       <GoalPicker onDone={() => setPick(false)} />{L.goal && <p><button className="btn ghost" onClick={() => setPick(false)}>{tr("Отмена")}</button></p>}</div>)
   const now = L.route.find((r) => r.status === 'now')
+  const refreshQueue = buildRefreshQueue(L.states, skills)
   return (
     <div className="page route">
       <p className="eyebrow">{tr("Цель: ")}{L.goal.name} · <button className="linkbtn" onClick={() => setPick(true)}>{tr("сменить")}</button></p>
       <h1>{tr("Мой маршрут")}</h1>
       {!L.diagDone && <div className="notice">{L.diagAnswered ? `${tr("Диагностика пройдена частично (")}${L.diagAnswered}${tr(" ответов) — рекомендации предварительные.")}` : tr("Диагностика не пройдена — маршрут идёт по порядку цели, рекомендации предварительные.")} <Link className="btn small" to="/diagnostic">{L.diagAnswered ? tr("Продолжить диагностику") : tr("Выбрать вариант диагностики")}</Link></div>}
       {now ? <StepCard r={now} main /> : <div className="notice ok">{tr("Все навыки маршрута подтверждены действием. Загляните в ")}<Link to="/map">{tr("карту знаний")}</Link>{tr(" — там видно, что запланировано дальше.")}</div>}
+      {refreshQueue.length > 0 && (
+        <section className="panel refresh-box">
+          <p className="eyebrow">↻ {tr("Интервальное повторение")}</p>
+          <h2>{tr("Стоит освежить")}</h2>
+          <p className="small">{tr("Навыки, где встречались затруднения, подсказки или практика была больше 3 дней назад.")}</p>
+          <ul className="refresh-list">
+            {refreshQueue.map((item) => (
+              <li key={item.skillId}>
+                <div>
+                  <b>{item.skillName}</b>
+                  <span className="small">{tr(item.reason)}</span>
+                </div>
+                <div className="row">
+                  {item.labId && <Link className="btn small primary" to={`/labs/${item.labId}`}>{tr("Закрепить практикой")}</Link>}
+                  {item.topicId && <Link className="btn small ghost" to={`/topics/${item.topicId}`}>{tr("Теория")}</Link>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <h2>{tr("Дальше по маршруту")}</h2>
       <ol className="steps-list" start={2}>{L.route.filter((r) => r !== now).map((r) => <li key={r.topic} className={r.status}><StepCard r={r} /></li>)}</ol>
       <h2>{tr("Профиль навыков")}</h2>

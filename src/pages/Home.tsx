@@ -1,10 +1,68 @@
 import { tr } from '../../shared/locale'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { site, labById, topicById } from '../content'
+import { site, labById, topicById, topics, labs, ingredients, terms } from '../content'
 import { useLearning } from '../learning'
+import { DailyCaseCard } from '../components/DailyCaseCard'
 import { GoalPicker, StepCard } from './Learning'
 import { useTitle } from './util'
+
+function HeroIllustration() {
+  return (
+    <div className="hero-visual" aria-hidden>
+      <div className="hero-card">
+        <div className="hero-card-top">
+          <span className="phase-pill p-A">A</span>
+          <span className="phase-pill p-B">B</span>
+          <span className="phase-pill p-C">C</span>
+          <span className="num small muted">O/W · 500 г</span>
+        </div>
+        <svg viewBox="0 0 280 184" className="hero-beaker-svg">
+          <defs>
+            <linearGradient id="hCream" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#FFE9D6" />
+              <stop offset="55%" stopColor="#F5E6F7" />
+              <stop offset="100%" stopColor="#D7F2EE" />
+            </linearGradient>
+            <linearGradient id="hAccent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#FF8A5C" />
+              <stop offset="100%" stopColor="#D9482B" />
+            </linearGradient>
+          </defs>
+          <circle cx="222" cy="48" r="34" fill="url(#hAccent)" opacity="0.16" />
+          <circle cx="56" cy="144" r="28" fill="#0E7C7B" opacity="0.14" />
+          {/* Стакан */}
+          <path d="M74 34 L74 148 Q74 162 90 162 L190 162 Q206 162 206 148 L206 34" fill="none" stroke="currentColor" strokeOpacity="0.28" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M78 74 L202 74 L202 148 Q202 158 190 158 L90 158 Q78 158 78 148 Z" fill="url(#hCream)" />
+          {/* Мениск и капли эмульсии */}
+          <ellipse cx="140" cy="74" rx="62" ry="8" fill="#FFF7EE" stroke="#E2CBB5" strokeWidth="1.2" />
+          <g fill="#FF8A5C" opacity="0.72">
+            <circle cx="106" cy="108" r="6" /><circle cx="132" cy="126" r="4.5" /><circle cx="164" cy="104" r="5.5" />
+            <circle cx="176" cy="134" r="4" /><circle cx="118" cy="140" r="3.5" /><circle cx="150" cy="118" r="3.5" />
+          </g>
+          {/* Мерные деления */}
+          <g stroke="currentColor" strokeOpacity="0.32" strokeWidth="1.4">
+            <line x1="84" y1="96" x2="96" y2="96" /><line x1="84" y1="116" x2="102" y2="116" /><line x1="84" y1="136" x2="96" y2="136" />
+          </g>
+          {/* Мешалка */}
+          <line x1="140" y1="12" x2="140" y2="132" stroke="#4B2E83" strokeWidth="3.5" strokeLinecap="round" />
+          <rect x="116" y="128" width="48" height="7" rx="3.5" fill="#6E4FA3" />
+        </svg>
+        <div className="hero-metrics num">
+          <div><span>pH</span><b>5.5</b></div>
+          <div><span>ΔГЛБ</span><b>0.2</b></div>
+          <div><span>Баланс</span><b>100 %</b></div>
+        </div>
+      </div>
+      <div className="hero-stats num">
+        <span><b>{topics.length}</b> {tr('тем')}</span>
+        <span><b>{labs.length}</b> {tr('тренажёров')}</span>
+        <span><b>{ingredients.length}</b> {tr('сырья')}</span>
+        <span><b>{terms.length}</b> {tr('терминов')}</span>
+      </div>
+    </div>
+  )
+}
 
 function Entries() {
   const nav = useNavigate(), [q, setQ] = useState('')
@@ -59,9 +117,12 @@ export default function Home() {
             {L.next ? <StepCard r={L.next} main /> : <p className="lead">{tr("Все навыки маршрута подтверждены. Загляните в ")}<Link to="/map">{tr("карту знаний")}</Link>.</p>}
             {!L.diagDone && <p className="small"><Link to="/diagnostic">{L.diagAnswered ? tr("Продолжить диагностику") : tr("Пройти диагностику")}</Link>{tr(" — рекомендация станет точнее.")}</p>}</>}
         </div>
-        <div className="hero-art" aria-hidden><span className="swatch apricot big" /><span className="swatch teal" /><span className="swatch lilac" /><span className="swatch mimosa sm" /></div>
+        <HeroIllustration />
       </section>
       <Entries />
+      <div className="strip">
+        <DailyCaseCard />
+      </div>
       <section className="strip">
         <h2>{tr("Частые рабочие ситуации")}</h2>
         <ul className="tasklist two">{site.tasks.map((t: any) => <li key={t.text}><Link to={t.to}><b>{t.text}</b><span>{t.hint}</span></Link></li>)}</ul>
