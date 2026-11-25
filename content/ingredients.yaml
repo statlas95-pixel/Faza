@@ -865,3 +865,741 @@
   typicalRange: [2, 10]
   costPerKg: 420
   note: "Мощный увлажнитель (2–5 %) и кератолитик (≥ 10 %); при нагреве и высоком pH гидролизуется с выделением аммиака — требует буферизации pH и ввода ≤ 40 °C."
+
+
+# ===== Расширение Лаборатории 3.0: современные эмульгаторы, эмоленты, полимеры, кондиционеры, активы, кислоты, УФ-фильтры =====
+
+- id: montanov-202
+  inci: "Arachidyl Alcohol, Behenyl Alcohol, Arachidyl Glucoside"
+  name: "Montanov 202 (ламеллярный эмульгатор с матовым финишем)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 8.5
+  typicalRange: [2, 5]
+  costPerKg: 3650
+  note: "PEG-free глюкозидный эмульгатор для лёгких эмульсий с матовым, нежирным финишем; формирует жидкокристаллическую сетку (ГЛБ ≈ 8,5)."
+
+- id: sodium-stearoyl-glutamate
+  inci: Sodium Stearoyl Glutamate
+  name: "Стеароилглутамат натрия (анионный ко-эмульгатор)"
+  role: emulsifier
+  recommendedPhase: A
+  ionic: anionic
+  hlb: 14.5
+  phRange: [5.0, 8.0]
+  typicalRange: [0.2, 1.5]
+  costPerKg: 3400
+  note: "Мощный аминокислотный ко-эмульгатор (ГЛБ ≈ 14,5); стабилизирует эмульсии O/W даже при 0,3–0,5 %, чувствителен к низкому pH (< 5,0)."
+
+- id: potassium-cetyl-phosphate
+  inci: Potassium Cetyl Phosphate
+  name: "Цетилфосфат калия (Amphisol K)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: anionic
+  hlb: 13.0
+  phRange: [5.5, 8.5]
+  typicalRange: [0.5, 3.0]
+  costPerKg: 3250
+  note: "Анионный эмульгатор-стандарт для водостойких SPF-эмульсий (ГЛБ ≈ 13,0); требует pH ≥ 5,5."
+
+- id: peg-100-stearate
+  inci: PEG-100 Stearate
+  name: "ПЭГ-100 стеарат (гидрофильный соэмульгатор)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 18.8
+  typicalRange: [0.5, 3.0]
+  costPerKg: 1080
+  note: "Классическая пара к Glyceryl Stearate (Arlacel 165): высокий ГЛБ (18,8) позволяет точно настроить систему под широкий спектр масел."
+
+- id: sorbitan-oleate
+  inci: Sorbitan Oleate
+  name: "Сорбитан олеат (Span 80, W/O эмульгатор)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 4.3
+  typicalRange: [1, 5]
+  costPerKg: 940
+  note: "Жидкий липофильный эмульгатор (ГЛБ ≈ 4,3) для обратных эмульсий W/O и тонкой подстройки ГЛБ в парах с Полисорбатом 80."
+
+- id: polysorbate-20
+  inci: Polysorbate 20
+  name: "Полисорбат 20 (Tween 20)"
+  role: solubilizer
+  recommendedPhase: C
+  ionic: nonionic
+  hlb: 16.7
+  typicalRange: [0.5, 5]
+  costPerKg: 1020
+  note: "Гидрофильный солюбилизатор (ГЛБ ≈ 16,7) для ввода лёгких отдушек и эфирных масел в тоники и мицеллярные растворы."
+
+- id: polysorbate-80
+  inci: Polysorbate 80
+  name: "Полисорбат 80 (Tween 80)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 15.0
+  typicalRange: [0.5, 5]
+  costPerKg: 1040
+  note: "Гидрофильный неионогенный эмульгатор и солюбилизатор (ГЛБ ≈ 15,0), применяется в гидрофильных маслах и эмульсиях O/W."
+
+- id: isolan-gps
+  inci: "Polyglyceryl-4 Diisostearate/Polyhydroxystearate/Sebacate"
+  name: "Isolan GPS (эмульгатор для обратных эмульсий W/O)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 4.5
+  typicalRange: [2, 4]
+  costPerKg: 4800
+  note: "Холодный/горячий PEG-free эмульгатор W/O (ГЛБ ≈ 4,5); требует 0,5–1 % электролита (MgSO₄/NaCl) в водной фазе для стабильности."
+
+- id: sucrose-stearate
+  inci: Sucrose Stearate
+  name: "Стеарат сахарозы (сахарный эмульгатор)"
+  role: emulsifier
+  recommendedPhase: A
+  ionic: nonionic
+  hlb: 11.0
+  typicalRange: [1, 4]
+  costPerKg: 4400
+  note: "Мягкий неионогенный эмульгатор (ГЛБ ≈ 11,0) с лёгкой шёлковой текстурой и увлажняющим действием."
+
+- id: hydrogenated-lecithin
+  inci: Hydrogenated Lecithin
+  name: "Гидрогенизированный лецитин"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: amphoteric
+  hlb: 8.0
+  typicalRange: [0.5, 3]
+  costPerKg: 6800
+  note: "Биомиметический фосфолипидный соэмульгатор (ГЛБ ≈ 8,0), восстанавливает липидный барьер и улучшает сенсорику."
+
+- id: pg4-caprate
+  inci: Polyglyceryl-4 Caprate
+  name: "Полиглицерил-4 капрат (PEG-free солюбилизатор)"
+  role: solubilizer
+  recommendedPhase: C
+  ionic: nonionic
+  hlb: 14.5
+  typicalRange: [0.5, 4]
+  costPerKg: 3100
+  note: "Растительный PEG-free солюбилизатор для прозрачных водных лосьонов и мицеллярной воды."
+
+- id: dicaprylyl-carbonate
+  inci: Dicaprylyl Carbonate
+  name: "Дикаприлилкарбонат (Cetiol CC)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 8.5
+  typicalRange: [2, 12]
+  costPerKg: 1750
+  note: "Сухой быстрорастекающийся эмолент с бархатным финишем, отличная замена летучим силиконам; учебный reqHLB ≈ 8,5."
+
+- id: dicaprylyl-ether
+  inci: Dicaprylyl Ether
+  name: "Дикаприлиловый эфир (Cetiol OE)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 9.0
+  typicalRange: [1, 10]
+  costPerKg: 1680
+  note: "Очень лёгкий эмолент, устойчивый к гидролизу в широком диапазоне pH (3–11); учебный reqHLB ≈ 9,0."
+
+- id: isopropyl-myristate
+  inci: Isopropyl Myristate
+  name: "Изопропилмиристат (IPM)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 11.5
+  typicalRange: [1, 10]
+  costPerKg: 820
+  note: "Классический лёгкий эфир, снижает жирность плотных кремов; в высоких дозах может повышать комедогенность; учебный reqHLB ≈ 11,5."
+
+- id: octyldodecanol
+  inci: Octyldodecanol
+  name: "Октилдодеканол"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 11.0
+  typicalRange: [1, 10]
+  costPerKg: 1350
+  note: "Устойчивый разветвлённый жирный спирт-эмолент, не подвержен гидролизу и окислению; хороший диспергатор пигментов."
+
+- id: ethylhexyl-stearate
+  inci: Ethylhexyl Stearate
+  name: "Этилгексилстеарат"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.0
+  typicalRange: [2, 12]
+  costPerKg: 790
+  note: "Экономичный эмолент средней растекаемости с мягким защитным финишем; учебный reqHLB ≈ 10,0."
+
+- id: cyclopentasiloxane
+  inci: Cyclopentasiloxane
+  name: "Циклопентасилоксан (D5, летучий силикон)"
+  role: emollient
+  recommendedPhase: C
+  ionic: nonionic
+  reqHlb: 7.5
+  maxTempC: 45
+  typicalRange: [0.05, 5]
+  costPerKg: 1950
+  note: "Летучий силикон, даёт мгновенное сухое скольжение; вводится при охлаждении (≤ 45 °C) во избежание испарения."
+  regulatory:
+    - standard: "EU 1223/2009 / REACH (Прил. XVII, п. 70, ред. 2024/1328)"
+      leaveOnMax: 0.1
+      rinseOffMax: 0.1
+      note: "В ЕС ограничение ≤ 0,1 % уже действует для смываемых средств (с 2020) и вводится для несмываемых (переходный период до июня 2027 г.)."
+
+- id: phenyl-trimethicone
+  inci: Phenyl Trimethicone
+  name: "Фенилтриметикон (блеск и анти-мыльность)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 6.0
+  typicalRange: [0.5, 4]
+  costPerKg: 3400
+  note: "Силикон с высоким показателем преломления: придаёт блеск волосам и убирает липкость и мыльность кремов."
+
+- id: sunflower-oil
+  inci: Helianthus Annuus Seed Oil
+  name: "Масло подсолнечное высокоолеиновое"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 7.0
+  typicalRange: [2, 15]
+  costPerKg: 360
+  note: "Базовое растительное триглицеридное масло; желателен антиоксидант (токоферол 0,1–0,3 %) против окисления."
+
+- id: rosehip-oil
+  inci: Rosa Canina Fruit Oil
+  name: "Масло шиповника (высокие ПНЖК)"
+  role: emollient
+  recommendedPhase: C
+  ionic: nonionic
+  reqHlb: 7.0
+  maxTempC: 45
+  typicalRange: [0.5, 5]
+  costPerKg: 4900
+  note: "Богато полиненасыщенными жирными кислотами (омега-3/6); быстро прогоркает при нагреве и без антиоксиданта, вводится при ≤ 45 °C."
+
+- id: argan-oil
+  inci: Argania Spinosa Kernel Oil
+  name: "Масло арганы"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 7.0
+  typicalRange: [0.5, 6]
+  costPerKg: 5400
+  note: "Питательное растительное масло с высоким содержанием олеиновой кислоты и природного токоферола."
+
+- id: castor-oil
+  inci: Ricinus Communis Seed Oil
+  name: "Касторовое масло"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 14.0
+  typicalRange: [1, 10]
+  costPerKg: 680
+  note: "Полярное высоковязкое масло с рицинолевой кислотой (высокий reqHLB ≈ 14,0); придаёт глянец и плотность."
+
+- id: cetyl-alcohol
+  inci: Cetyl Alcohol
+  name: "Цетиловый спирт"
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 15.5
+  typicalRange: [1, 5]
+  costPerKg: 740
+  note: "Жирный спирт C16 (tпл ≈ 49 °C); загущает эмульсии мягче, чем цетилстеариловый спирт, придаёт бархатистость."
+
+- id: behenyl-alcohol
+  inci: Behenyl Alcohol
+  name: "Бегениловый спирт"
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 14.0
+  typicalRange: [1, 4]
+  costPerKg: 1450
+  note: "Длинноцепочечный жирный спирт C22 (tпл ≈ 70 °C); даёт матовый, нежирный, плотный каркас эмульсии."
+
+- id: candelilla-wax
+  inci: Euphorbia Cerifera Cera
+  name: "Канделильский воск (растительный)"
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 14.5
+  typicalRange: [0.5, 4]
+  costPerKg: 2600
+  note: "Твёрдый веганский воск (tпл ≈ 68–73 °C); требует прогрева фазы B ≥ 75 °C для полного расплавления."
+
+- id: petrolatum
+  inci: Petrolatum
+  name: "Вазелин косметический (петролатум)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 7.5
+  typicalRange: [1, 10]
+  costPerKg: 380
+  note: "Максимально эффективный окклюзив (снижает ТЭПВ > 95 %); в высоких дозах ощущается плотным и жирным."
+
+- id: simulgel-eg
+  inci: "Sodium Acrylate/Sodium Acryloyldimethyl Taurate Copolymer, Isohexadecane, Polysorbate 80"
+  name: "Simulgel EG (жидкий полимерный эмульгатор-загуститель)"
+  role: thickener
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [4.0, 11.0]
+  electrolyteSensitive: true
+  typicalRange: [0.5, 3.0]
+  costPerKg: 4900
+  note: "Готовая жидкая дисперсия полимера: загущает без нейтрализации, позволяет делать холодные крем-гели до 15 % масел; чувствителен к солям."
+
+- id: ultrez-21
+  inci: "Acrylates/C10-30 Alkyl Acrylate Crosspolymer"
+  name: "Carbopol Ultrez 21 (самосмачиваемый полиакрилат)"
+  role: thickener
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [5.2, 10.0]
+  electrolyteSensitive: true
+  typicalRange: [0.1, 0.8]
+  costPerKg: 4500
+  note: "Полимерный загуститель с коротким течением и повышенной стойкостью к следам электролитов (но всё равно падает при высоких солях и pH < 5,2)."
+
+- id: sclerotium-gum
+  inci: Sclerotium Gum
+  name: "Склероций камедь (Amigum)"
+  role: thickener
+  recommendedPhase: A
+  ionic: nonionic
+  phRange: [2.0, 11.0]
+  typicalRange: [0.2, 1.5]
+  costPerKg: 6200
+  note: "Неионогенный натуральный биополимер с гораздо меньшей липкостью, чем ксантан; устойчив к кислотам и солям."
+
+- id: silica-matting
+  inci: Silica
+  name: "Диоксид кремния сферический (матирующая силика)"
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.5, 4]
+  costPerKg: 2900
+  note: "Снижает жирный блеск и липкость эмульсий, создаёт эффект мягкого фокуса и бархатистого скольжения."
+
+- id: veegum
+  inci: Magnesium Aluminum Silicate
+  name: "Алюмосиликат магния (Veegum)"
+  role: thickener
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [4.5, 11.0]
+  typicalRange: [0.3, 2.0]
+  costPerKg: 2400
+  note: "Минеральная глина-тиксотроп; стабилизирует суспензии пигментов и минеральных УФ-фильтров против оседания."
+
+- id: guar-hptc
+  inci: Guar Hydroxypropyltrimonium Chloride
+  name: "Гуар гидроксипропилтримония хлорид (катионный гуар)"
+  role: thickener
+  recommendedPhase: A
+  ionic: cationic
+  phRange: [4.0, 7.0]
+  typicalRange: [0.1, 0.5]
+  costPerKg: 2800
+  note: "Катионный кондиционирующий полимер для шампуней; гидратируется в воде при pH ~5,5 до ввода анионных ПАВ (образует мягкие коацерваты)."
+
+- id: polyquaternium-7
+  inci: Polyquaternium-7
+  name: "Поликватерниум-7 (кондиционер, 10 % акт.)"
+  role: active
+  recommendedPhase: A
+  ionic: cationic
+  typicalRange: [0.2, 2.0]
+  costPerKg: 890
+  note: "Катионный полимер, облегчающий расчёсывание волос и смягчающий пену; совместим с анионными ПАВ в низких концентрациях."
+
+- id: polyquaternium-10
+  inci: Polyquaternium-10
+  name: "Поликватерниум-10 (катионная целлюлоза)"
+  role: thickener
+  recommendedPhase: A
+  ionic: cationic
+  typicalRange: [0.1, 0.5]
+  costPerKg: 3400
+  note: "Снимает статическое электричество и кондиционирует повреждённые волосы в шампунях и бальзамах."
+
+- id: sodium-cocoyl-glutamate
+  inci: Sodium Cocoyl Glutamate
+  name: "Кокоилглутамат натрия (мягкий аминокислотный ПАВ, акт.)"
+  role: surfactant
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [5.0, 7.5]
+  typicalRange: [2, 10]
+  costPerKg: 2450
+  note: "Сверхмягкий бессульфатный анионный ПАВ для чувствительной кожи; практически не загущается солью."
+
+- id: lauryl-glucoside
+  inci: Lauryl Glucoside
+  name: "Лаурилглюкозид (100 % акт.)"
+  role: surfactant
+  recommendedPhase: A
+  ionic: nonionic
+  typicalRange: [1, 8]
+  costPerKg: 980
+  note: "Мягкий неионогенный ПАВ, лучше коко-глюкозида поддерживает вязкость в бессульфатных шампунях."
+
+- id: disodium-sulfosuccinate
+  inci: Disodium Laureth Sulfosuccinate
+  name: "Динатрия лауретсульфосукцинат (мягкий ПАВ, акт.)"
+  role: surfactant
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [5.0, 7.0]
+  typicalRange: [2, 10]
+  costPerKg: 1120
+  note: "Крупная молекула слабо проникает в роговой слой — один из самых мягких анионных ПАВ; при pH > 7,5 может гидролизоваться."
+
+- id: behentrimonium-chloride
+  inci: Behentrimonium Chloride
+  name: "Бегентримония хлорид (BTAC, в пересчёте на 100 % акт.)"
+  role: surfactant
+  recommendedPhase: B
+  ionic: cationic
+  typicalRange: [0.5, 3.0]
+  costPerKg: 2650
+  note: "Сильный катионный кондиционер для масок и бальзамов; несовместим с анионными ПАВ и карбомерами."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. III, п. 287; Прил. V, п. 44) · ТР ТС 009/2011"
+      leaveOnMax: 3.0
+      rinseOffMax: 5.0
+      note: "До 5,0 % в смываемых средствах для волос и до 3,0 % в несмываемых средствах для волос/лица (по сумме с цетиловым/стеариловым аналогами действуют отдельные лимиты)."
+
+- id: bakuchiol
+  inci: Bakuchiol
+  name: "Бакучиол (растительный ретинолоподобный актив)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  phRange: [4.5, 6.5]
+  typicalRange: [0.2, 1.0]
+  costPerKg: 145000
+  note: "Жирорастворимый фенольный актив, значительно фотостабильнее ретинола; вводится в охлаждённую фазу ≤ 45 °C."
+
+- id: azelaic-acid
+  inci: Azelaic Acid
+  name: "Азелаиновая кислота"
+  role: active
+  recommendedPhase: C
+  ionic: anionic
+  phRange: [4.2, 5.2]
+  typicalRange: [2, 10]
+  costPerKg: 5800
+  note: "Плохо растворима в воде и маслах: требует микронизации и тиксотропной суспензии либо сорастворителей (пропандиол/этоксидигликоль)."
+
+- id: mandelic-acid
+  inci: Mandelic Acid
+  name: "Миндальная кислота (AHA)"
+  role: active
+  recommendedPhase: C
+  ionic: anionic
+  maxTempC: 50
+  phRange: [3.2, 4.5]
+  typicalRange: [1, 10]
+  costPerKg: 4200
+  note: "Мягкая крупномолекулярная AHA-кислота, снижает pH системы и требует электролитоустойчивого загустителя."
+
+- id: gluconolactone
+  inci: Gluconolactone
+  name: "Глюконолактон (PHA-кислота)"
+  role: active
+  recommendedPhase: A
+  ionic: nonionic
+  phRange: [3.5, 5.5]
+  typicalRange: [1, 8]
+  costPerKg: 1950
+  note: "Полигидроксикислота: мягкое обновление, увлажнение и хелатирование; постепенно гидролизуется до глюконовой кислоты, слегка снижая pH при хранении."
+
+- id: tranexamic-acid
+  inci: Tranexamic Acid
+  name: "Транексамовая кислота"
+  role: active
+  recommendedPhase: C
+  ionic: amphoteric
+  maxTempC: 50
+  phRange: [5.0, 7.0]
+  typicalRange: [1, 3]
+  costPerKg: 9800
+  note: "Водорастворимый актив против гиперпигментации; хорошо сочетается с ниацинамидом при pH 5,5–6,5."
+
+- id: alpha-arbutin
+  inci: Alpha-Arbutin
+  name: "Альфа-арбутин"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  phRange: [4.5, 6.5]
+  typicalRange: [0.5, 2.0]
+  costPerKg: 38000
+  note: "Осветляющий актив; при pH < 4,0 или > 7,0 и нагреве гидролизуется с высвобождением гидрохинона."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. III, ред. 2024/996)"
+      leaveOnMax: 2.0
+      rinseOffMax: 2.0
+      warnAbove: 0.5
+      note: "В ЕС установлен предел до 2,0 % в кремах для лица и до 0,5 % в лосьонах для тела."
+
+- id: kojic-acid
+  inci: Kojic Acid
+  name: "Койевая кислота"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  phRange: [4.0, 5.5]
+  typicalRange: [0.2, 1.0]
+  costPerKg: 8900
+  note: "Ингибитор тирозиназы; легко окисляется и буреет на свету и в присутствии следов железа — обязателен хелатор и антиоксидант."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. III, ред. 2024/996)"
+      leaveOnMax: 1.0
+      rinseOffMax: 1.0
+      note: "Максимально допустимая концентрация — 1,0 % в средствах для лица и рук."
+
+- id: ectoin
+  inci: Ectoin
+  name: "Эктоин (осмопротектор)"
+  role: active
+  recommendedPhase: C
+  ionic: amphoteric
+  maxTempC: 60
+  phRange: [3.0, 9.0]
+  typicalRange: [0.3, 2.0]
+  costPerKg: 82000
+  note: "Исключительно стабильный цвиттер-ионный актив: защищает клеточные мембраны и барьер кожи в широком диапазоне pH и температур."
+
+- id: ceramide-np
+  inci: Ceramide NP
+  name: "Церамид NP (барьерный липид)"
+  role: active
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.05, 0.5]
+  costPerKg: 195000
+  note: "Высокоплавкий кристаллический липид (tпл > 90 °C в чистом виде): требует полного растворения в полярных эмолентах/жирных спиртах при 80–85 °C."
+
+- id: bisabolol
+  inci: Bisabolol
+  name: "Альфа-бисаболол"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  typicalRange: [0.1, 1.0]
+  costPerKg: 21000
+  note: "Жирорастворимый успокаивающий актив для чувствительной кожи; вводится на стадии охлаждения."
+
+- id: caffeine
+  inci: Caffeine
+  name: "Кофеин безводный"
+  role: active
+  recommendedPhase: A
+  ionic: nonionic
+  typicalRange: [0.2, 2.0]
+  costPerKg: 3600
+  note: "Растворимость в холодной воде ~2 %; при вводе > 2 % без бензоата/ниацинамида может выпадать в игольчатые кристаллы при охлаждении."
+
+- id: zinc-pca
+  inci: Zinc PCA
+  name: "Цинк PCA (себорегулятор)"
+  role: active
+  recommendedPhase: C
+  ionic: cationic
+  maxTempC: 45
+  phRange: [4.5, 6.5]
+  isElectrolyte: true
+  typicalRange: [0.2, 1.0]
+  costPerKg: 11500
+  note: "Соль двухвалентного цинка (Zn²⁺): сильный электролит — мгновенно разрушает незащищённый карбомер."
+
+- id: titanium-dioxide
+  inci: Titanium Dioxide
+  name: "Диоксид титана (минеральный УФ-B фильтр)"
+  role: uv_filter
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 9.0
+  typicalRange: [2, 15]
+  costPerKg: 2600
+  note: "Физический УФ-фильтр и белый пигмент; требует диспергатора и тиксотропного стабилизатора против седиментации."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. VI, п. 27) · ТР ТС 009/2011 (Прил. 5)"
+      leaveOnMax: 25.0
+      rinseOffMax: 25.0
+      note: "До 25,0 % в готовом продукте; нано-форма запрещена в ингаляционных спреях."
+
+- id: tinosorb-m
+  inci: "Methylene Bis-Benzotriazolyl Tetramethylbutylphenol"
+  name: "Tinosorb M (широкоспектральный УФ-A/B фильтр в водной фазе)"
+  role: uv_filter
+  recommendedPhase: A
+  ionic: nonionic
+  maxTempC: 60
+  typicalRange: [2, 10]
+  costPerKg: 15500
+  note: "Микронизированный фотостабильный фильтр (обычно поставляется как 50 % водная дисперсия); работает в водной фазе."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. VI, п. 23) · ТР ТС 009/2011 (Прил. 5)"
+      leaveOnMax: 10.0
+      rinseOffMax: 10.0
+      note: "До 10,0 % в пересчёте на активное вещество."
+
+- id: uvinul-t150
+  inci: Ethylhexyl Triazone
+  name: "Uvinul T 150 (высокоэффективный УФ-B фильтр)"
+  role: uv_filter
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.0
+  maxTempC: 80
+  typicalRange: [1, 5]
+  costPerKg: 14200
+  note: "Один из самых фотостабильных и эффективных УФ-B фильтров; требует полярных эмолентов (C12-15 алкилбензоат) для растворения."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. VI, п. 15) · ТР ТС 009/2011 (Прил. 5)"
+      leaveOnMax: 5.0
+      rinseOffMax: 5.0
+      note: "Максимально допустимая концентрация — 5,0 % в готовой продукции."
+
+- id: homosalate
+  inci: Homosalate
+  name: "Гомосалат (жидкий УФ-B фильтр и растворитель)"
+  role: uv_filter
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 8.5
+  maxTempC: 80
+  typicalRange: [2, 7.34]
+  costPerKg: 3100
+  note: "Жидкий УФ-B фильтр, часто используется для растворения твёрдых УФ-фильтров (авобензона, Tinosorb S)."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. VI, п. 3, ред. 2022/2195)"
+      leaveOnMax: 7.34
+      rinseOffMax: 7.34
+      note: "В ЕС с 2025 г. ограничение 7,34 % только для средств для лица (кроме аэрозолей); в ТР ТС 009/2011 исторически до 10 %."
+
+- id: piroctone-olamine
+  inci: Piroctone Olamine
+  name: "Пироктон оламин (антимикотик / консервант)"
+  role: preservative
+  recommendedPhase: C
+  ionic: anionic
+  maxTempC: 50
+  phRange: [4.5, 8.0]
+  typicalRange: [0.1, 1.0]
+  costPerKg: 7600
+  note: "Противоперхотный актив и фунгицидный консервант; требует хелатора, иначе в присутствии Fe³⁺ окрашивает продукт в розовато-бурый цвет."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. V, п. 35) · ТР ТС 009/2011 (Прил. 4)"
+      leaveOnMax: 0.5
+      rinseOffMax: 1.0
+      note: "До 1,0 % в смываемых средствах и до 0,5 % в несмываемых."
+
+- id: caprylyl-glycol
+  inci: Caprylyl Glycol
+  name: "Каприлилгликоль (увлажнитель-бустер консервантов)"
+  role: humectant
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 60
+  typicalRange: [0.3, 1.0]
+  costPerKg: 2650
+  note: "Многофункциональный диол-бустер: усиливает антимикробную защиту, но при > 0,5 % может слегка снижать вязкость некоторых эмульсий."
+
+- id: pentylene-glycol
+  inci: Pentylene Glycol
+  name: "Пентиленгликоль"
+  role: humectant
+  recommendedPhase: A
+  ionic: nonionic
+  typicalRange: [1, 5]
+  costPerKg: 3100
+  note: "Нелипкий увлажнитель и растворитель активов; при 3–5 % существенно снижает активность воды (aw) и усиливает консервацию."
+
+- id: betaine
+  inci: Betaine
+  name: "Бетаин (триметилглицин)"
+  role: humectant
+  recommendedPhase: A
+  ionic: amphoteric
+  typicalRange: [1, 5]
+  costPerKg: 1150
+  note: "Осмопротекторный увлажнитель из сахарной свёклы; уменьшает липкость глицерина и смягчает действие ПАВ."
+
+- id: sodium-pca
+  inci: Sodium PCA
+  name: "Натрий PCA (компонент NMF, 100 % акт.)"
+  role: humectant
+  recommendedPhase: C
+  ionic: anionic
+  isElectrolyte: true
+  maxTempC: 50
+  typicalRange: [0.5, 3.0]
+  costPerKg: 2100
+  note: "Высокоэффективный физиологический увлажнитель; является солью-электролитом (снижает вязкость обычного карбомера)."
+
+- id: bht
+  inci: BHT
+  name: "Бутилгидрокситолуол (BHT, антиоксидант)"
+  role: antioxidant
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.02, 0.1]
+  costPerKg: 1450
+  note: "Синтетический жирорастворимый антиоксидант для защиты масел, отдушек и ретинола."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. III, ред. 2022/2195)"
+      leaveOnMax: 0.8
+      rinseOffMax: 0.8
+      warnAbove: 0.1
+      note: "В ЕС установлен лимит 0,8 % в несмываемых и смываемых средствах (и 0,1 % в зубных пастах, 0,001 % в ополаскивателях)."
+
+- id: triethanolamine
+  inci: Triethanolamine
+  name: "Триэтаноламин (ТЭА, регулятор pH)"
+  role: ph_adjuster
+  recommendedPhase: C
+  ionic: nonionic
+  typicalRange: [0.05, 1.0]
+  costPerKg: 480
+  note: "Мягкий нейтрализатор карбомеров; запрещено сочетать с нитрозирующими агентами (бронопол и др.) из-за риска нитрозаминов."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. III, п. 62) · ТР ТС 009/2011 (Прил. 2)"
+      leaveOnMax: 2.5
+      rinseOffMax: 2.5
+      note: "В несмываемых средствах максимум 2,5 %; чистота ≥ 99 %, вторичных аминов ≤ 0,5 %, не применять с нитрозирующими системами."

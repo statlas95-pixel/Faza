@@ -16,7 +16,14 @@ import {
   diffFormulas,
   predictProcessAppearance,
 } from '../../shared/formulation-sim'
+import {
+  computeSensoryProfile,
+  findIngredientSubstitutes,
+  generateBatchProtocol,
+  simulateAcceleratedStability,
+} from '../../shared/formulation-lab3'
 import { api, ApiError, useAccount } from '../account'
+import { BatchProtocolPanel, SensoryProfilePanel, StabilityLabPanel } from '../components/Lab3Panels'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
 import { renderSafe } from '../md'
@@ -123,10 +130,14 @@ export default function SandboxPage() {
   const [aiBusy, setAiBusy] = useState(false)
   const [aiAnswer, setAiAnswer] = useState('')
   const [aiErr, setAiErr] = useState('')
+  const [subRowIdx, setSubRowIdx] = useState<number | null>(null)
 
   const activePreset = sandboxPresets.find((p) => p.id === presetId) ?? null
   const evaluation = useMemo(() => evaluateFormula(formula, ingredients), [formula])
   const forecast = useMemo(() => predictProcessAppearance(evaluation, formula), [evaluation, formula])
+  const stabilityTests = useMemo(() => simulateAcceleratedStability(evaluation, formula), [evaluation, formula])
+  const sensory = useMemo(() => computeSensoryProfile(evaluation, formula), [evaluation, formula])
+  const protocol = useMemo(() => generateBatchProtocol(evaluation, formula), [evaluation, formula])
   const goals = useMemo(
     () => (activePreset ? checkPresetGoals(evaluation, formula, activePreset.goals) : []),
     [activePreset, evaluation, formula],
@@ -671,14 +682,27 @@ export default function SandboxPage() {
                     <td className="num">{evRow?.grams ?? 0}</td>
                     <td className="num">{evRow?.cost ?? 0}</td>
                     <td>
-                      <button
-                        type="button"
-                        className="btn"
-                        aria-label={`${tr('Удалить')} ${ing.name}`}
-                        onClick={() => removeRow(idx)}
-                      >
-                        ×
-                      </button>
+                      <div className="row lab3-row-acts">
+                        {ing.id !== 'aqua' && (
+                          <button
+                            type="button"
+                            className={`btn small ${subRowIdx === idx ? 'primary' : 'ghost'}`}
+                            title={tr('Подобрать функциональный аналог сырья')}
+                            aria-label={`${tr('Аналоги для')} ${ing.name}`}
+                            onClick={() => setSubRowIdx((cur) => (cur === idx ? null : idx))}
+                          >
+                            ⇄
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          className="btn small"
+                          aria-label={`${tr('Удалить')} ${ing.name}`}
+                          onClick={() => { setSubRowIdx(null); removeRow(idx) }}
+                        >
+                          ×
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 )
@@ -705,7 +729,53 @@ export default function SandboxPage() {
             </tfoot>
           </table>
         </div>
+        {subRowIdx !== null && formula.rows[subRowIdx] && (() => {
+          const curRow = formula.rows[subRowIdx]
+          const curIng = ingredientById(curRow.ingredientId)
+          const subs = findIngredientSubstitutes(curRow.ingredientId, ingredients)
+          if (!curIng) return null
+          return (
+            <div className="lab3-sub-box">
+              <div className="sandbox-head-row">
+                <b>{tr('Функциональные аналоги для:')} {curIng.name}</b>
+                <button type="button" className="btn small ghost" onClick={() => setSubRowIdx(null)}>
+                  {tr('Закрыть')}
+                </button>
+              </div>
+              {subs.length === 0 ? (
+                <p className="small muted">{tr('Для этого компонента в каталоге нет прямых аналогов той же функции.')}</p>
+              ) : (
+                <div className="lab3-sub-grid">
+                  {subs.map((s) => (
+                    <div key={s.ingredient.id} className="lab3-sub-card">
+                      <div>
+                        <b>{s.ingredient.name}</b> <code className="small">{s.ingredient.inci}</code>
+                        <div className="small num">{s.deltaNote}</div>
+                        <p className="small muted">{s.reason}</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn small primary"
+                        onClick={() => {
+                          updateRow(subRowIdx, { ingredientId: s.ingredient.id, phase: s.ingredient.recommendedPhase })
+                          setSubRowIdx(null)
+                        }}
+                      >
+                        {tr('Заменить')}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })()}
       </section>
+
+      {/* Лаборатория 3.0: Ускоренное старение, Сенсорная паутинка и Протокол варки (SOP) */}
+      <StabilityLabPanel tests={stabilityTests} />
+      <SensoryProfilePanel profile={sensory} />
+      <BatchProtocolPanel steps={protocol} />
 
       {/* Диагностика, регуляторика и кнопка ИИ-наставника */}
       <section className="panel">

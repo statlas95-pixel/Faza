@@ -502,7 +502,27 @@ header.top { flex-wrap: wrap }
 .sb-pill.bad{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong)}
 .sb-sticky-actions{gap:8px}
 @media (max-width:980px){ .sb-sticky-bar{top:0} }
-@media print{ .sb-sticky-bar,.sb-onboard,.cmdk-trigger{display:none!important} }
+@media print{ .sb-sticky-bar,.sb-onboard,.cmdk-trigger,.lab3-row-acts,.lab3-sub-box{display:none!important} }
+
+/* ===== Лаборатория 3.0: термостат, сенсорика, SOP, аналоги ===== */
+.lab3-tubes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:14px;margin-top:14px}
+.lab3-tube-card{border:1.5px solid var(--border);border-radius:14px;padding:14px;background:var(--paper-2);display:grid;gap:8px;align-content:start}
+.lab3-tube-card.v-pass{border-color:var(--ok)}
+.lab3-tube-card.v-warn{border-color:var(--weak)}
+.lab3-tube-card.v-fail{border-color:var(--wrong)}
+.lab3-tube-top{display:grid;grid-template-columns:46px 1fr;gap:12px;align-items:center}
+.lab3-tube-top h4{margin:4px 0 2px}
+.lab3-tube-svg{width:46px;height:102px}
+.lab3-sop-list{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:12px}
+.lab3-sop-step{border:1px solid var(--border);border-radius:14px;padding:14px;background:var(--paper-2)}
+.lab3-sop-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.lab3-sop-step ul{margin:0;padding-left:1.25em;display:grid;gap:4px}
+.lab3-ccp{margin:8px 0 0;padding:7px 10px;border-radius:8px;background:var(--weak-bg);color:var(--weak)}
+.lab3-row-acts{flex-wrap:nowrap;gap:6px}
+.lab3-sub-box{margin-top:14px;padding:14px;border-radius:14px;border:1.5px solid var(--teal);background:var(--paper-2)}
+.lab3-sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:10px;margin-top:10px}
+.lab3-sub-card{display:flex;flex-direction:column;justify-content:space-between;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--surface)}
+.lab3-sub-card p{margin:4px 0 0}
 
 @media (max-width:980px){
   .sb-visual-grid{grid-template-columns:minmax(0,1fr)}
