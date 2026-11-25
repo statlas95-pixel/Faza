@@ -48,24 +48,24 @@ function CompetencyRadar({ domains }: { domains: CompetencyDomainSummary[] }) {
   return (
     <svg viewBox="0 0 300 280" className="comp-radar" role="img" aria-label={tr('Профиль компетенций по 6 направлениям')}>
       {[0.25, 0.5, 0.75, 1].map((r) => (
-        <polygon key={r} points={polygon(r)} fill="none" stroke="rgba(42,27,61,0.16)" strokeWidth="1" />
+        <polygon key={r} points={polygon(r)} fill="none" stroke="currentColor" opacity="0.2" strokeWidth="1" />
       ))}
       {domains.map((d, i) => {
         const [x2, y2] = point(i, 1)
         const [lx, ly] = point(i, 1.24)
         return (
           <g key={d.def.id}>
-            <line x1={cx} y1={cy} x2={x2} y2={y2} stroke="rgba(42,27,61,0.14)" strokeWidth="1" />
+            <line x1={cx} y1={cy} x2={x2} y2={y2} stroke="currentColor" opacity="0.18" strokeWidth="1" />
             <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" className="comp-radar-lbl">
               {tr(d.def.shortTitle)}
             </text>
           </g>
         )
       })}
-      <polygon points={valuePoly} fill="rgba(14,124,123,0.28)" stroke="#0E7C7B" strokeWidth="2.2" />
+      <polygon points={valuePoly} fill="rgba(14,124,123,0.28)" stroke="var(--teal)" strokeWidth="2.2" />
       {domains.map((d, i) => {
         const [vx, vy] = point(i, Math.max(0.08, d.percent / 100))
-        return <circle key={d.def.id} cx={vx} cy={vy} r="4" fill="#0E7C7B" />
+        return <circle key={d.def.id} cx={vx} cy={vy} r="4" fill="var(--teal)" />
       })}
     </svg>
   )

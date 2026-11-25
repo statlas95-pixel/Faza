@@ -90,8 +90,8 @@ export default function ShiftTrend({ lab }: { lab: LabMeta }) {
               <line x1="42" y1="175" x2="528" y2="175" stroke="currentColor" opacity="0.25" />
               <line x1="42" y1="25" x2="42" y2="175" stroke="currentColor" opacity="0.25" />
               <polyline points={lineOf((p) => yTemp(p.tempC))} fill="none" stroke="#E86A42" strokeWidth="2.5" />
-              <polyline points={lineOf((p) => yCur(p.currentA))} fill="none" stroke="#6E4FA3" strokeWidth="2.5" />
-              <polyline points={lineOf((p) => yVac(p.vacuumBar))} fill="none" stroke="#0E7C7B" strokeWidth="2.5" />
+              <polyline points={lineOf((p) => yCur(p.currentA))} fill="none" stroke="var(--plum)" strokeWidth="2.5" />
+              <polyline points={lineOf((p) => yVac(p.vacuumBar))} fill="none" stroke="var(--teal)" strokeWidth="2.5" />
               {s.selectedMin !== undefined && (
                 <line
                   x1={xFor(s.selectedMin)}
@@ -114,8 +114,8 @@ export default function ShiftTrend({ lab }: { lab: LabMeta }) {
                   >
                     <rect x={x - 16} y="20" width="32" height="175" fill="transparent" />
                     <circle cx={x} cy={yTemp(p.tempC)} r={sel ? 5.5 : 3.5} fill="#E86A42" />
-                    <circle cx={x} cy={yCur(p.currentA)} r={sel ? 5.5 : 3.5} fill="#6E4FA3" />
-                    <circle cx={x} cy={yVac(p.vacuumBar)} r={sel ? 5.5 : 3.5} fill="#0E7C7B" />
+                    <circle cx={x} cy={yCur(p.currentA)} r={sel ? 5.5 : 3.5} fill="var(--plum)" />
+                    <circle cx={x} cy={yVac(p.vacuumBar)} r={sel ? 5.5 : 3.5} fill="var(--teal)" />
                     <text x={x} y="196" textAnchor="middle" fontSize="10" fill="currentColor" fontWeight={sel ? 700 : 400}>
                       {p.min}м
                     </text>

@@ -378,9 +378,9 @@ export function PreservativePhCurve({ evaluation, targetPh }: { evaluation: Form
         <span className="small num">pKa {pKa} · {tr('при pH')} {targetPh}: <b>{curFrac} %</b></span>
       </div>
       <svg viewBox="0 0 272 110" className="sb-curve-svg" role="img" aria-label={tr('Кривая Гендерсона–Хассельбаха')}>
-        <line x1="24" y1="92" x2="256" y2="92" stroke="rgba(42,27,61,0.25)" />
-        <line x1="24" y1="16" x2="24" y2="92" stroke="rgba(42,27,61,0.25)" />
-        <polyline points={pts.join(' ')} fill="none" stroke="#0E7C7B" strokeWidth="2.4" />
+        <line x1="24" y1="92" x2="256" y2="92" stroke="currentColor" opacity="0.3" />
+        <line x1="24" y1="16" x2="24" y2="92" stroke="currentColor" opacity="0.3" />
+        <polyline points={pts.join(' ')} fill="none" stroke="var(--teal)" strokeWidth="2.4" />
         <line x1={curX} y1="16" x2={curX} y2="92" stroke="#E86A42" strokeWidth="1.2" strokeDasharray="3 3" />
         <circle cx={curX} cy={curY} r="4.5" fill="#E86A42" />
         <text x="24" y="105" fontSize="9" fill="currentColor">pH 2</text>
