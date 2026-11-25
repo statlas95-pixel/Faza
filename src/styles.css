@@ -350,7 +350,7 @@ header.top { flex-wrap: wrap }
 }
 [data-theme="dark"] body{background:var(--bg);color:var(--fg)}
 [data-theme="dark"] body[data-mode="debrief"]{--bg:#151D1B;--surface:#1D2724;--border:#2E433D}
-[data-theme="dark"] a{color:#C9B3FF}
+[data-theme="dark"] a.btn:not(.primary):not(.ghost){color:var(--btn-fg)}
 [data-theme="dark"] .btn.primary{background:#E25B3B;border-color:#E25B3B;color:#fff}
 [data-theme="dark"] .btn.ghost{background:transparent;color:var(--fg);border-color:var(--border)}
 [data-theme="dark"] input,[data-theme="dark"] select,[data-theme="dark"] textarea{background:#181424;color:var(--ink);border-color:var(--line)}
