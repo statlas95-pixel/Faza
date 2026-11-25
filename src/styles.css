@@ -331,3 +331,90 @@ header.top { flex-wrap: wrap }
 .mlab:hover{border-color:var(--plum);background:#F3EFF8}
 .mlab.done{border-color:var(--teal);background:#E2F4F0;color:#0B5553!important}
 @media (max-width:980px){ .comp-grid{grid-template-columns:minmax(0,1fr)} }
+
+/* ===== Тёмная тема («Ночная смена») и компактная шапка ===== */
+.top-tools{display:inline-flex;align-items:center;gap:8px}
+.theme-toggle{font:inherit;background:transparent;border:1px solid var(--line);border-radius:.6rem;padding:.22rem .5rem;cursor:pointer;line-height:1.2}
+[data-theme="dark"]{
+  --bg:#16131E;--paper:#1E1A2A;--paper-2:#262135;--card:#211C2E;--surface:#211C2E;
+  --ink:#F2EEFA;--ink-2:#C6BCD8;--ink-3:#9A8FB3;--fg:#F2EEFA;--fg2:#C6BCD8;
+  --line:#39304E;--border:#39304E;--ok-bg:#143533;--weak-bg:#382E15;--wrong-bg:#3D1C24;
+  --shadow:0 8px 28px rgba(0,0,0,.35);
+}
+[data-theme="dark"] body{background:var(--bg);color:var(--ink)}
+[data-theme="dark"] input,[data-theme="dark"] select,[data-theme="dark"] textarea{background:#181424;color:var(--ink);border-color:var(--line)}
+[data-theme="dark"] .module,[data-theme="dark"] .comp-card,[data-theme="dark"] .outcome div{background:var(--card);color:var(--ink)}
+[data-theme="dark"] .mlab{background:var(--paper-2);color:#D5C4F8!important}
+[data-theme="dark"] .mlab.done{background:#143533;color:#8CE3DC!important}
+[data-theme="dark"] .sb-cat-item{background:var(--paper-2)}
+
+/* ===== Цвета фаз A / B / C, визуализация варки и анимации ===== */
+.phase-pill{display:inline-block;font:700 .72rem var(--mono);padding:2px 7px;border-radius:6px;vertical-align:middle}
+.phase-pill.p-A,.phase-btn.p-A.on{background:#0E7C7B;color:#fff;border-color:#0E7C7B}
+.phase-pill.p-B,.phase-btn.p-B.on{background:#C98A00;color:#fff;border-color:#C98A00}
+.phase-pill.p-C,.phase-btn.p-C.on{background:#6E4FA3;color:#fff;border-color:#6E4FA3}
+.phase-switch{display:inline-flex;gap:3px}
+.phase-btn{font:700 .75rem var(--mono);padding:3px 7px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--fg);cursor:pointer}
+.sb-stage-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(155px,100%),1fr));gap:8px;margin:12px 0}
+.sb-stage-tab{display:flex;align-items:center;gap:8px;text-align:left;padding:8px 10px;border-radius:10px;border:1.5px solid var(--border);background:var(--paper-2);color:var(--fg);font:500 .84rem var(--sans);cursor:pointer}
+.sb-stage-tab.on{border-color:var(--teal);background:var(--ok-bg)}
+.sb-stage-tab.has-defect{border-color:var(--wrong)}
+.sb-step-num{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 .75rem var(--mono);background:var(--card);border:1px solid var(--border)}
+.sb-visual-grid{display:grid;grid-template-columns:minmax(220px,300px) 1fr 140px;gap:16px;align-items:center}
+.sb-artwork-box{background:var(--paper-2);border-radius:14px;padding:8px;display:grid;place-items:center}
+.sb-stage-svg{width:100%;max-width:290px;height:auto}
+.sb-svg-cap{font-size:11px;font-weight:600;fill:var(--ink)}
+.sb-stage-info h3{margin:.2em 0 .4em}
+.sb-mini-meta{display:flex;gap:18px;flex-wrap:wrap;margin:8px 0}
+.sb-mini-meta dt{font-size:.75rem;color:var(--fg2)}
+.sb-mini-meta dd{margin:0;font-weight:600}
+.sb-micro{margin:0;text-align:center}
+.sb-micro-svg{width:118px;height:118px}
+@keyframes sbSteam{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-6px);opacity:.85}}
+@keyframes sbSpin{from{transform:scaleX(1)}50%{transform:scaleX(.25)}to{transform:scaleX(1)}}
+@keyframes sbDrop{0%{transform:translateY(-8px);opacity:0}35%{opacity:1}100%{transform:translateY(26px);opacity:0}}
+@keyframes sbPour{0%,100%{stroke-dashoffset:0}50%{stroke-dashoffset:16}}
+.sb-steam{animation:sbSteam 2.2s ease-in-out infinite}
+.sb-rotor{animation:sbSpin .32s linear infinite}
+.sb-drop{animation:sbDrop 1.3s ease-in infinite}
+.sb-drop-2{animation-delay:.65s}
+.sb-pour{stroke-dasharray:12 4;animation:sbPour 1s linear infinite}
+
+.sb-gauges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:18px}
+.sb-gauge-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:.9rem}
+.sb-gauge-track{position:relative;height:14px;border-radius:999px;background:linear-gradient(90deg,#E8B647 0%,#8CE3DC 50%,#6E4FA3 100%);margin:10px 0 6px}
+.sb-gauge-zone{position:absolute;top:-3px;bottom:-3px;border-radius:6px;background:rgba(14,124,123,.28);border:2px solid #0E7C7B}
+.sb-gauge-pin{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.sb-gauge-pin.req{background:#2A1B3D;border-radius:2px;transform:translate(-50%,-50%) rotate(45deg)}
+.sb-gauge-pin.act{background:#E86A42}
+.sb-gauge-scale{display:flex;justify-content:space-between;font-size:.75rem;color:var(--fg2)}
+.sb-curve-svg{width:100%;max-width:300px;height:auto}
+
+.sb-catalog{border:1px solid var(--border);border-radius:14px;padding:12px;margin:12px 0;background:var(--paper-2)}
+.sb-catalog-filters{display:grid;gap:8px;margin-bottom:10px}
+.sb-catalog-filters input{width:100%;font:inherit;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border)}
+.sb-catalog-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:8px;max-height:290px;overflow:auto}
+.sb-cat-item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.sb-pct-ctl{display:grid;gap:4px;min-width:96px}
+.sb-pct-slider{width:100%;accent-color:var(--teal)}
+.sb-diff-list{margin:8px 0 0;padding-left:1.1em}
+.diff-add{color:var(--ok)}
+.diff-rem{color:var(--wrong)}
+.sb-ai-box{margin-top:14px}
+
+/* ===== Выдвижной Калькулятор технолога ===== */
+.calc-fab{position:fixed;left:max(16px,env(safe-area-inset-left));bottom:18px;z-index:39;font:600 .9rem var(--sans);padding:.62em 1.05em;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;box-shadow:0 6px 22px rgba(42,27,61,.22)}
+.calc-drawer{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:68px;z-index:41;width:min(360px,calc(100vw - 24px));max-height:76vh;overflow:auto;background:var(--card);color:var(--ink);border-radius:18px;border:1.5px solid var(--ink);box-shadow:0 16px 48px rgba(42,27,61,.35);padding:14px}
+.calc-drawer header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.calc-tabs{margin-bottom:10px}
+.calc-body{display:grid;gap:8px}
+.calc-body label{display:grid;gap:4px;font-size:.86rem}
+.calc-body input{font:inherit;padding:6px 10px;border-radius:8px;border:1.5px solid var(--border)}
+
+@media (max-width:980px){
+  .sb-visual-grid{grid-template-columns:minmax(0,1fr)}
+  .calc-fab span{display:none}
+}
+@media print{
+  .calc-fab,.calc-drawer,.sb-top-actions,.sb-antipatterns,.sandbox-presets,.sb-catalog,.sb-pct-slider,.phase-switch{display:none!important}
+}

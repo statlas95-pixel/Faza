@@ -18,6 +18,8 @@ export type IngredientRole =
   | 'electrolyte'
   | 'antioxidant'
   | 'fragrance'
+  | 'chelator'
+  | 'solubilizer'
 
 export interface RegulatoryRule {
   standard: string
@@ -134,7 +136,7 @@ const VALID_PHASES = new Set<Phase>(['A', 'B', 'C'])
 const VALID_IONIC = new Set<IonicType>(['nonionic', 'anionic', 'cationic', 'amphoteric'])
 const VALID_ROLES = new Set<IngredientRole>([
   'solvent', 'humectant', 'emollient', 'emulsifier', 'thickener', 'surfactant',
-  'active', 'preservative', 'uv_filter', 'ph_adjuster', 'electrolyte', 'antioxidant', 'fragrance',
+  'active', 'preservative', 'uv_filter', 'ph_adjuster', 'electrolyte', 'antioxidant', 'fragrance', 'chelator', 'solubilizer',
 ])
 
 const round = (n: number, digits = 2) => Number(n.toFixed(digits))
@@ -438,13 +440,46 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
     }
   }
 
-  // 6. Фотостабильность пары Авобензон + Октиноксат
+  // 6. Фотостабильность пары Авобензон + Октиноксат, кристаллизация аллантоина, плавление восков, солюбилизация отдушки
   if ((totalByIngredient.get('avobenzone') ?? 0) > 0 && (totalByIngredient.get('octinoxate') ?? 0) > 0) {
+    const hasStabilizer = (totalByIngredient.get('octocrylene') ?? 0) >= 2 || (totalByIngredient.get('tinosorb-s') ?? 0) >= 1.5
     issues.push({
       code: 'conflict:avobenzone-octinoxate',
+      severity: hasStabilizer ? 'info' : 'warn',
+      title: hasStabilizer
+        ? 'Авобензон + Октиноксат стабилизированы фотостабилизатором'
+        : 'Фотонестабильная пара УФ-фильтров: Авобензон + Этилгексилметоксициннамат',
+      detail: hasStabilizer
+        ? 'В формуле присутствует фотостабилизатор (Octocrylene / Tinosorb S), снижающий фотодеградацию авобензона, но требуется подтверждение SPF/UVA-PF тестом.'
+        : 'Комбинация Butyl Methoxydibenzoylmethane и Ethylhexyl Methoxycinnamate ускоряет взаимную фотодеградацию под УФ без фотостабилизатора (например, Octocrylene или Tinosorb S).',
+    })
+  }
+  if ((totalByIngredient.get('allantoin') ?? 0) > 0.5) {
+    issues.push({
+      code: 'solubility:allantoin',
       severity: 'warn',
-      title: 'Фотонестабильная пара УФ-фильтров: Авобензон + Этилгексилметоксициннамат',
-      detail: 'Комбинация Butyl Methoxydibenzoylmethane и Ethylhexyl Methoxycinnamate ускоряет взаимную фотодеградацию под УФ без специального фотостабилизатора.',
+      ingredientId: 'allantoin',
+      title: `Риск перекристаллизации аллантоина (${totalByIngredient.get('allantoin')} % > 0,5 %)`,
+      detail: 'Предел растворимости аллантоина в воде при 20 °C составляет около 0,5 %; избыток может выпасть острыми игольчатыми кристаллами при охлаждении.',
+    })
+  }
+  if (((totalByIngredient.get('beeswax') ?? 0) > 0 || (totalByIngredient.get('cetearyl-alcohol') ?? 0) > 0) && input.phaseTempC.B < 68) {
+    issues.push({
+      code: 'melt:phase-b',
+      severity: 'warn',
+      title: `Низкая температура фазы B (${input.phaseTempC.B} °C < 68 °C) для твёрдых восков/жирных спиртов`,
+      detail: 'Пчелиный воск и цетилстеариловый спирт могут не полностью расплавиться — при эмульгировании появятся крупинки. Рекомендуется нагрев фазы B до 72–75 °C.',
+    })
+  }
+  const parfumPct = totalByIngredient.get('parfum') ?? 0
+  const hasSolubilizer = activeRows.some((r) => r.ingredient.role === 'solubilizer' || r.ingredient.id === 'polysorbate-60')
+  if (parfumPct > 0 && oilPhasePct < 1 && emulsifierPct <= 0 && !hasSolubilizer && !activeRows.some((r) => r.ingredient.role === 'surfactant')) {
+    issues.push({
+      code: 'haze:parfum',
+      severity: 'warn',
+      ingredientId: 'parfum',
+      title: 'Отдушка в водной системе без солюбилизатора — риск помутнения',
+      detail: `Добавлено ${parfumPct} % отдушки в водную базу без солюбилизатора. Введите PEG-40 Hydrogenated Castor Oil (ориентир 3:1–5:1 к отдушке) через предварительный премикс.`,
     })
   }
 

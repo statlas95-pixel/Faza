@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { tr } from '../../shared/locale'
+import { Link } from 'react-router-dom'
+import { language, tr } from '../../shared/locale'
 import {
   autoBalanceWater,
   checkPresetGoals,
@@ -10,7 +11,16 @@ import {
   type Phase,
   type ProductType,
 } from '../../shared/formulation'
+import {
+  ANTIPATTERNS,
+  diffFormulas,
+  predictProcessAppearance,
+} from '../../shared/formulation-sim'
+import { api, ApiError, useAccount } from '../account'
+import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
+import { renderSafe } from '../md'
+import { useProgress } from '../store'
 import { useTitle } from './util'
 
 const SAVED_KEY = 'faza.sandbox.saved.v1'
@@ -69,6 +79,8 @@ const roleLabels: Record<IngredientRole, string> = {
   electrolyte: tr('Электролит'),
   antioxidant: tr('Антиоксидант'),
   fragrance: tr('Отдушка'),
+  chelator: tr('Хелатор'),
+  solubilizer: tr('Солюбилизатор'),
 }
 
 const phaseName: Record<Phase, string> = {
@@ -79,6 +91,9 @@ const phaseName: Record<Phase, string> = {
 
 export default function SandboxPage() {
   useTitle(tr('Песочница рецептур'))
+  const acc = useAccount()
+  const progress = useProgress()
+
   const [presetId, setPresetId] = useState<string>(sandboxPresets[0]?.id ?? '')
   const [formula, setFormula] = useState<FormulaInput>(() => {
     const p = sandboxPresets[0]
@@ -86,34 +101,68 @@ export default function SandboxPage() {
       ? { productType: p.productType, targetPh: p.targetPh, batchGrams: p.batchGrams, phaseTempC: { ...p.phaseTempC }, rows: p.rows.map((r) => ({ ...r })) }
       : blankFormula()
   })
-  const [selectedAdd, setSelectedAdd] = useState<string>(ingredients[0]?.id ?? 'aqua')
+  const [snapshot, setSnapshot] = useState<FormulaInput | null>(null)
+  const [catalogOpen, setCatalogOpen] = useState(false)
+  const [catQuery, setCatQuery] = useState('')
+  const [catPhase, setCatPhase] = useState<'all' | Phase>('all')
+  const [catRole, setCatRole] = useState<'all' | IngredientRole>('all')
   const [saveName, setSaveName] = useState('')
   const [saved, setSaved] = useState<SavedFormula[]>(loadSavedFormulas)
   const [copied, setCopied] = useState(false)
 
+  // ИИ-наставник для разбора текущей рецептуры
+  const [aiBusy, setAiBusy] = useState(false)
+  const [aiAnswer, setAiAnswer] = useState('')
+  const [aiErr, setAiErr] = useState('')
+
   const activePreset = sandboxPresets.find((p) => p.id === presetId) ?? null
   const evaluation = useMemo(() => evaluateFormula(formula, ingredients), [formula])
+  const forecast = useMemo(() => predictProcessAppearance(evaluation, formula), [evaluation, formula])
   const goals = useMemo(
     () => (activePreset ? checkPresetGoals(evaluation, formula, activePreset.goals) : []),
     [activePreset, evaluation, formula],
   )
+  const diff = useMemo(
+    () => (snapshot ? diffFormulas(snapshot, formula, ingredients) : null),
+    [snapshot, formula],
+  )
   const allGoalsPassed = goals.length > 0 && goals.every((g) => g.passed)
 
+  const filteredCatalog = useMemo(() => {
+    const q = catQuery.trim().toLowerCase()
+    return ingredients.filter((ing) => {
+      if (catPhase !== 'all' && ing.recommendedPhase !== catPhase) return false
+      if (catRole !== 'all' && ing.role !== catRole) return false
+      if (!q) return true
+      return (
+        ing.name.toLowerCase().includes(q) ||
+        ing.inci.toLowerCase().includes(q) ||
+        ing.note.toLowerCase().includes(q)
+      )
+    })
+  }, [catQuery, catPhase, catRole])
+
+  function loadFormulaState(next: FormulaInput, nextPreset = '') {
+    setPresetId(nextPreset)
+    setFormula(JSON.parse(JSON.stringify(next)))
+    setAiAnswer('')
+    setAiErr('')
+  }
+
   function selectPreset(id: string) {
-    setPresetId(id)
     if (!id) {
-      setFormula(blankFormula())
+      loadFormulaState(blankFormula(), '')
       return
     }
     const p = sandboxPresets.find((x) => x.id === id)
     if (!p) return
-    setFormula({
+    loadFormulaState({
       productType: p.productType,
       targetPh: p.targetPh,
       batchGrams: p.batchGrams,
       phaseTempC: { ...p.phaseTempC },
       rows: p.rows.map((r) => ({ ...r })),
-    })
+    }, id)
   }
 
   function updateRow(idx: number, patch: Partial<FormulaRow>) {
@@ -127,8 +176,8 @@ export default function SandboxPage() {
     setFormula((prev) => ({ ...prev, rows: prev.rows.filter((_, i) => i !== idx) }))
   }
 
-  function addIngredient() {
-    const ing = ingredientById(selectedAdd)
+  function addIngredientById(id: string) {
+    const ing = ingredientById(id)
     if (!ing) return
     const defaultPct = Number(((ing.typicalRange[0] + Math.min(ing.typicalRange[1], ing.typicalRange[0] + 2)) / 2).toFixed(2))
     setFormula((prev) => ({
@@ -187,6 +236,47 @@ export default function SandboxPage() {
     URL.revokeObjectURL(url)
   }
 
+  async function askTutorAboutFormula() {
+    setAiBusy(true)
+    setAiErr('')
+    setAiAnswer('')
+    try {
+      const status = await api<any>('GET', '/api/ai/status')
+      const model = progress.settings.aiModel || status?.models?.[0]?.id
+      if (!status?.configured || !model) {
+        setAiErr(tr('ИИ-наставник не настроен на сервере.'))
+        return
+      }
+      const topicId = evaluation.issues.some((i) => i.code.startsWith('ph:') || i.code.startsWith('reg:'))
+        ? 'preservation'
+        : evaluation.issues.some((i) => i.code.includes('carbomer'))
+          ? 'polymer-thickeners'
+          : 'emulsifier-selection'
+      const summary = [
+        `Рецептура (${formula.productType}, pH ${formula.targetPh}, фазы A=${formula.phaseTempC.A}°C / B=${formula.phaseTempC.B}°C / C=${formula.phaseTempC.C}°C):`,
+        ...evaluation.rows.map((r) => `[${r.phase}] ${r.ingredient.inci} ${r.pct}%`),
+        evaluation.issues.length
+          ? `Найдены замечания валидатора: ${evaluation.issues.map((i) => i.title).join('; ')}`
+          : 'Критических ошибок валидатор не нашёл.',
+        'Кратко объясни физико-химические причины замечаний и предложи 1–2 практических шага улучшения.',
+      ].join('\n').slice(0, 1400)
+      const res = await api<any>('POST', '/api/ai/tutor', {
+        language,
+        model,
+        mode: 'review',
+        kind: 'topic',
+        id: topicId,
+        level: progress.settings.level,
+        message: summary,
+      })
+      setAiAnswer(res.text ?? '')
+    } catch (e: any) {
+      setAiErr(e instanceof ApiError ? e.message : tr('Не удалось получить разбор наставника.'))
+    } finally {
+      setAiBusy(false)
+    }
+  }
+
   const fullInci = [...evaluation.inci.aboveOne, ...evaluation.inci.oneOrLess].join(', ')
 
   function copyInci() {
@@ -199,12 +289,29 @@ export default function SandboxPage() {
 
   return (
     <div className="page sandbox">
-      <p className="eyebrow">{tr('Интерактивный конструктор · детерминированный расчёт')}</p>
-      <h1>{tr('Песочница рецептур и фаз')}</h1>
+      <div className="sandbox-head-row">
+        <div>
+          <p className="eyebrow">{tr('Интерактивный конструктор · 68 компонентов · детерминированный расчёт')}</p>
+          <h1>{tr('Песочница рецептур и фаз')}</h1>
+        </div>
+        <div className="row sb-top-actions">
+          <button
+            type="button"
+            className={`btn ${snapshot ? 'primary' : ''}`}
+            onClick={() => setSnapshot(snapshot ? null : JSON.parse(JSON.stringify(formula)))}
+          >
+            {snapshot ? tr('Скрыть «До / После»') : tr('Зафиксировать «До»')}
+          </button>
+          <button type="button" className="btn" onClick={() => window.print()}>
+            🖨 {tr('Карта варки (печать)')}
+          </button>
+        </div>
+      </div>
       <p className="lead">
-        {tr('Собирайте косметические рецептуры по фазам A, B и C с автоматическим пересчётом загрузок, балансом 100 %, расчётом ГЛБ, проверкой химической совместимости и лимитов ТР ТС 009/2011 и EU 1223/2009.')}
+        {tr('Собирайте косметические рецептуры по фазам A, B и C с прогнозом внешнего вида на 5 стадиях, микроскопией, балансом 100 %, расчётом ГЛБ, проверкой конфликтов и лимитов ТР ТС 009/2011 и EU 1223/2009.')}
       </p>
 
+      {/* Выбор кейса */}
       <section className="panel sandbox-presets">
         <div className="sandbox-preset-bar">
           <label>
@@ -241,6 +348,36 @@ export default function SandboxPage() {
         )}
       </section>
 
+      {/* Анимированный прогноз внешнего вида на 5 стадиях + микроскопия */}
+      <ProcessSimulatorPanel forecast={forecast} evaluation={evaluation} />
+
+      {/* Сравнение «До / После» */}
+      {diff && (
+        <section className="panel sb-diff-panel">
+          <h2>{tr('Сравнение рецептуры «До / После»')}</h2>
+          <div className="row sb-diff-chips num">
+            <span className="tag">{tr('Δ Ошибки:')} {diff.errorsDelta > 0 ? `+${diff.errorsDelta}` : diff.errorsDelta}</span>
+            <span className="tag">{tr('Δ Предупреждения:')} {diff.warningsDelta > 0 ? `+${diff.warningsDelta}` : diff.warningsDelta}</span>
+            <span className="tag">{tr('Δ Стоимость:')} {diff.costDelta > 0 ? `+${diff.costDelta}` : diff.costDelta} {tr('₽/кг')}</span>
+            <span className="tag">{tr('ГЛБ:')} {diff.hlbDeltaChange}</span>
+          </div>
+          {diff.added.length === 0 && diff.removed.length === 0 && diff.changed.length === 0 ? (
+            <p className="small muted">{tr('Пока отличий от зафиксированного снимка «До» нет — внесите правки в рецептуру.')}</p>
+          ) : (
+            <ul className="small sb-diff-list">
+              {diff.added.map((a) => <li key={`+${a}`} className="diff-add">+ {a}</li>)}
+              {diff.removed.map((r) => <li key={`-${r}`} className="diff-rem">− {r}</li>)}
+              {diff.changed.map((c) => (
+                <li key={c.id}>
+                  ~ <b>{c.name}</b>: {c.beforePct} % ({c.beforePhase}) → <b>{c.afterPct} % ({c.afterPhase})</b>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+
+      {/* Параметры процесса */}
       <section className="panel sandbox-params">
         <h2>{tr('Параметры процесса и партии')}</h2>
         <div className="sandbox-param-grid">
@@ -255,14 +392,14 @@ export default function SandboxPage() {
             </select>
           </label>
           <label>
-            {tr('Целевой pH')}
+            {tr('Целевой pH')}: <b>{formula.targetPh}</b>
             <input
-              type="number"
+              type="range"
               step="0.1"
-              min="2"
-              max="11"
+              min="2.5"
+              max="9.0"
               value={formula.targetPh}
-              onChange={(e) => setFormula((prev) => ({ ...prev, targetPh: Number(e.target.value) || 5.5 }))}
+              onChange={(e) => setFormula((prev) => ({ ...prev, targetPh: Number(e.target.value) }))}
             />
           </label>
           <label>
@@ -278,17 +415,17 @@ export default function SandboxPage() {
           </label>
           {(['A', 'B', 'C'] as Phase[]).map((ph) => (
             <label key={ph}>
-              {tr(`Температура фазы ${ph}, °C`)}
+              <span className={`phase-pill p-${ph}`}>{tr(`Фаза ${ph}`)}</span> {formula.phaseTempC[ph]} °C
               <input
-                type="number"
+                type="range"
                 step="1"
-                min="15"
-                max="95"
+                min="20"
+                max="85"
                 value={formula.phaseTempC[ph]}
                 onChange={(e) =>
                   setFormula((prev) => ({
                     ...prev,
-                    phaseTempC: { ...prev.phaseTempC, [ph]: Number(e.target.value) || 20 },
+                    phaseTempC: { ...prev.phaseTempC, [ph]: Number(e.target.value) },
                   }))
                 }
               />
@@ -310,6 +447,7 @@ export default function SandboxPage() {
         </div>
       </section>
 
+      {/* Ключевые метрики + Шкала ГЛБ + Кривая pH */}
       <dl className="traffic-totals sandbox-kpis">
         <div className={`panel ${evaluation.balanced ? 'kpi-ok' : 'kpi-bad'}`}>
           <dt>{tr('Сумма рецептуры')}</dt>
@@ -333,26 +471,76 @@ export default function SandboxPage() {
         </div>
       </dl>
 
+      {(evaluation.requiredHlb !== null || evaluation.rows.some((r) => r.pct > 0 && r.ingredient.pKa !== undefined)) && (
+        <section className="panel sb-gauges-grid">
+          <HlbGauge requiredHlb={evaluation.requiredHlb} actualHlb={evaluation.actualHlb} />
+          <PreservativePhCurve evaluation={evaluation} targetPh={formula.targetPh} />
+        </section>
+      )}
+
+      {/* Состав по фазам + умный каталог сырья */}
       <section className="panel">
         <div className="sandbox-head-row">
           <h2>{tr('Состав по фазам (A / B / C)')}</h2>
-          <button type="button" className="btn primary" onClick={balanceWater}>
-            {tr('Довести воду до 100 % (q.s.)')}
-          </button>
+          <div className="row">
+            <button type="button" className="btn" onClick={() => setCatalogOpen((v) => !v)}>
+              {catalogOpen ? tr('Скрыть каталог сырья') : `${tr('+ Каталог сырья')} (${ingredients.length})`}
+            </button>
+            <button type="button" className="btn primary" onClick={balanceWater}>
+              {tr('Довести воду до 100 % (q.s.)')}
+            </button>
+          </div>
         </div>
 
-        <div className="sandbox-add-row">
-          <select aria-label={tr('Выбрать ингредиент')} value={selectedAdd} onChange={(e) => setSelectedAdd(e.target.value)}>
-            {ingredients.map((ing) => (
-              <option key={ing.id} value={ing.id}>
-                [{ing.recommendedPhase}] {ing.name} ({ing.inci}) — {roleLabels[ing.role]}
-              </option>
-            ))}
-          </select>
-          <button type="button" className="btn" onClick={addIngredient}>
-            {tr('+ Добавить компонент')}
-          </button>
-        </div>
+        {catalogOpen && (
+          <div className="sb-catalog">
+            <div className="sb-catalog-filters">
+              <input
+                type="search"
+                placeholder={tr('Поиск по INCI, названию или свойству (напр. Olivem, Squalane, Retinol, EDTA)…')}
+                value={catQuery}
+                onChange={(e) => setCatQuery(e.target.value)}
+              />
+              <div className="row">
+                {(['all', 'A', 'B', 'C'] as const).map((ph) => (
+                  <button
+                    key={ph}
+                    type="button"
+                    className={`chip ${catPhase === ph ? 'on' : ''}`}
+                    onClick={() => setCatPhase(ph)}
+                  >
+                    {ph === 'all' ? tr('Все фазы') : `${tr('Фаза')} ${ph}`}
+                  </button>
+                ))}
+                <select value={catRole} onChange={(e) => setCatRole(e.target.value as any)}>
+                  <option value="all">{tr('Все функции')}</option>
+                  {(Object.keys(roleLabels) as IngredientRole[]).map((r) => (
+                    <option key={r} value={r}>{roleLabels[r]}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="sb-catalog-list">
+              {filteredCatalog.map((ing) => (
+                <div key={ing.id} className="sb-cat-item">
+                  <div>
+                    <span className={`phase-pill p-${ing.recommendedPhase}`}>{ing.recommendedPhase}</span>{' '}
+                    <b>{ing.name}</b> <code className="small">{ing.inci}</code>
+                    <div className="small">
+                      {roleLabels[ing.role]} · {ing.typicalRange[0]}–{ing.typicalRange[1]} %
+                      {ing.hlb !== undefined ? ` · HLB ${ing.hlb}` : ''}
+                      {ing.reqHlb !== undefined ? ` · reqHLB ${ing.reqHlb}` : ''}
+                      {ing.regulatory?.length ? ` · ⚖ ${tr('регламент')}` : ''}
+                    </div>
+                  </div>
+                  <button type="button" className="btn" onClick={() => addIngredientById(ing.id)}>
+                    +
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="table-wrap">
           <table className="sandbox-table">
@@ -371,18 +559,22 @@ export default function SandboxPage() {
                 const ing = ingredientById(row.ingredientId)
                 if (!ing) return null
                 const evRow = evaluation.rows[idx]
+                const sliderMax = ing.id === 'aqua' ? 100 : Math.max(20, ing.typicalRange[1] * 2)
                 return (
                   <tr key={`${row.ingredientId}-${idx}`}>
                     <td>
-                      <select
-                        aria-label={tr('Фаза ввода')}
-                        value={row.phase}
-                        onChange={(e) => updateRow(idx, { phase: e.target.value as Phase })}
-                      >
-                        <option value="A">A ({formula.phaseTempC.A}°C)</option>
-                        <option value="B">B ({formula.phaseTempC.B}°C)</option>
-                        <option value="C">C ({formula.phaseTempC.C}°C)</option>
-                      </select>
+                      <div className="phase-switch" role="group" aria-label={tr('Фаза ввода')}>
+                        {(['A', 'B', 'C'] as Phase[]).map((ph) => (
+                          <button
+                            key={ph}
+                            type="button"
+                            className={`phase-btn p-${ph} ${row.phase === ph ? 'on' : ''}`}
+                            onClick={() => updateRow(idx, { phase: ph })}
+                          >
+                            {ph}
+                          </button>
+                        ))}
+                      </div>
                     </td>
                     <td>
                       <b>{ing.name}</b>
@@ -394,16 +586,28 @@ export default function SandboxPage() {
                       </div>
                     </td>
                     <td>
-                      <input
-                        className="sandbox-pct"
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        max="100"
-                        aria-label={`${ing.name}, %`}
-                        value={row.pct}
-                        onChange={(e) => updateRow(idx, { pct: Math.max(0, Number(e.target.value) || 0) })}
-                      />
+                      <div className="sb-pct-ctl">
+                        <input
+                          className="sandbox-pct"
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          max="100"
+                          aria-label={`${ing.name}, %`}
+                          value={row.pct}
+                          onChange={(e) => updateRow(idx, { pct: Math.max(0, Number(e.target.value) || 0) })}
+                        />
+                        <input
+                          className="sb-pct-slider"
+                          type="range"
+                          step="0.1"
+                          min="0"
+                          max={sliderMax}
+                          aria-label={`${ing.name} slider`}
+                          value={Math.min(sliderMax, row.pct)}
+                          onChange={(e) => updateRow(idx, { pct: Number(e.target.value) })}
+                        />
+                      </div>
                     </td>
                     <td className="num">{evRow?.grams ?? 0}</td>
                     <td className="num">{evRow?.cost ?? 0}</td>
@@ -424,7 +628,9 @@ export default function SandboxPage() {
             <tfoot>
               {(['A', 'B', 'C'] as Phase[]).map((ph) => (
                 <tr key={ph} className="sandbox-subtotal">
-                  <td colSpan={2}>{phaseName[ph]} ({formula.phaseTempC[ph]} °C)</td>
+                  <td colSpan={2}>
+                    <span className={`phase-pill p-${ph}`}>{ph}</span> {phaseName[ph]} ({formula.phaseTempC[ph]} °C)
+                  </td>
                   <td className="num">{evaluation.phaseTotals[ph].pct} %</td>
                   <td className="num">{evaluation.phaseTotals[ph].grams} {tr('г')}</td>
                   <td colSpan={2} />
@@ -442,8 +648,19 @@ export default function SandboxPage() {
         </div>
       </section>
 
+      {/* Диагностика, регуляторика и кнопка ИИ-наставника */}
       <section className="panel">
-        <h2>{tr('Автоматическая проверка рецептуры и регуляторики')}</h2>
+        <div className="sandbox-head-row">
+          <h2>{tr('Автоматическая проверка рецептуры и регуляторики')}</h2>
+          {acc.status === 'user' ? (
+            <button type="button" className="btn" disabled={aiBusy} onClick={askTutorAboutFormula}>
+              {aiBusy ? tr('Наставник анализирует…') : tr('💬 Разобрать с ИИ-наставником')}
+            </button>
+          ) : (
+            <Link className="btn" to="/account">{tr('Войти для разбора с наставником')}</Link>
+          )}
+        </div>
+
         {evaluation.issues.length === 0 ? (
           <p className="okline" role="status">
             {tr('Ошибок и предупреждений не найдено: баланс 100 %, температурные режимы, химическая совместимость и лимиты соблюдены.')}
@@ -461,11 +678,21 @@ export default function SandboxPage() {
             ))}
           </div>
         )}
+
+        {aiErr && <p className="warnline">{aiErr}</p>}
+        {aiAnswer && (
+          <div className="tutor-answer sb-ai-box">
+            <h3>{tr('Комментарий ИИ-наставника (расчёты проверены кодом)')}</h3>
+            <div className="prose" dangerouslySetInnerHTML={{ __html: renderSafe(aiAnswer) }} />
+          </div>
+        )}
+
         <p className="small">
           {tr('О данных: цены сырья синтетические (учебные ориентиры); значения требуемого ГЛБ справочные для эмульсий O/W; для промышленного выпуска сверяйте действующую редакцию ТР ТС 009/2011 и Регламента (ЕС) № 1223/2009.')}
         </p>
       </section>
 
+      {/* INCI */}
       <section className="panel">
         <div className="sandbox-head-row">
           <h2>{tr('Автоматическая декларация INCI (ст. 19 EU 1223/2009 · ТР ТС 009/2011)')}</h2>
@@ -483,6 +710,33 @@ export default function SandboxPage() {
         </p>
       </section>
 
+      {/* Галерея антипаттернов */}
+      <section className="panel sb-antipatterns">
+        <h2>{tr('Галерея антипаттернов и дефектов рецептур')}</h2>
+        <p className="small">{tr('Откройте любой классический дефект прямо в Песочнице, посмотрите прогноз внешнего вида и микроскопию, а затем исправьте формулу.')}</p>
+        <div className="cards">
+          {ANTIPATTERNS.map((ap) => (
+            <article key={ap.id} className="card">
+              <h3>{tr(ap.title)}</h3>
+              <p className="small"><b>{tr('Симптом:')}</b> {tr(ap.symptom)}</p>
+              <p className="small"><b>{tr('Причина:')}</b> {tr(ap.mechanism)}</p>
+              <p className="small"><b>{tr('Как исправить:')}</b> {tr(ap.fixHint)}</p>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  loadFormulaState(ap.formula, '')
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+              >
+                {tr('Открыть дефект в Песочнице →')}
+              </button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Сохранение и экспорт */}
       <section className="panel">
         <h2>{tr('Сохранение и экспорт рецептуры')}</h2>
         <div className="sandbox-save-row">
@@ -510,10 +764,7 @@ export default function SandboxPage() {
                   <button
                     type="button"
                     className="btn"
-                    onClick={() => {
-                      setPresetId(item.presetId ?? '')
-                      setFormula(JSON.parse(JSON.stringify(item.formula)))
-                    }}
+                    onClick={() => loadFormulaState(item.formula, item.presetId ?? '')}
                   >
                     {tr('Открыть')}
                   </button>

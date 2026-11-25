@@ -9,6 +9,7 @@ import { publicPage } from '../shared/statistics'
 import StatisticsPage from './pages/Statistics'
 import SandboxPage from './pages/Sandbox'
 import PortfolioPage from './pages/Portfolio'
+import { TechCalculator } from './components/TechCalculator'
 import Home from './pages/Home'
 import { Catalog, TopicPage } from './pages/Topics'
 import { Glossary, Sources, Journal, About, AttemptPage } from './pages/Reference'
@@ -35,6 +36,13 @@ function Shell() {
   const loc = useLocation()
   const inLab = /^\/labs\/.+/.test(loc.pathname)
   const acc = useAccount()
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try { return localStorage.getItem('faza.theme') === 'dark' ? 'dark' : 'light' } catch { return 'light' }
+  })
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try { localStorage.setItem('faza.theme', theme) } catch { /* ignore */ }
+  }, [theme])
   useEffect(() => { void init() }, [])
   const m = loc.pathname.match(/^\/(topics|labs)\/([\w-]+)$/)
   const ctx = m ? (m[1] === 'topics' ? topicById(m[2]) : labById(m[2])) : undefined
@@ -59,6 +67,17 @@ function Shell() {
       <option value="ru" lang="ru">Русский</option><option value="en" lang="en">English</option>
     </select>
   </label>
+  const themeButton = (
+    <button
+      type="button"
+      className="theme-toggle"
+      aria-label={theme === 'dark' ? tr('Включить светлую тему') : tr('Включить тёмную тему («Ночная смена»)')}
+      title={theme === 'dark' ? tr('Светлая тема') : tr('Тёмная тема («Ночная смена»)')}
+      onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+    >
+      {theme === 'dark' ? '☀️' : '🌙'}
+    </button>
+  )
   return (
     <>
       <a className="skip" href="#main" onClick={event => { event.preventDefault(); document.getElementById('main')?.focus() }}>{tr("К содержанию")}</a>
@@ -66,11 +85,11 @@ function Shell() {
         <header className="top">
           <Link to="/" className="logo" aria-label={`${site.name}${tr(" — на главную")}`}><span className="logo-drop" aria-hidden />{site.name}</Link>
           <nav aria-label={tr("Основные разделы")}>
-            <NavLink to="/route">{tr("Мой маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/sandbox">{tr("Песочница")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink><NavLink to="/catalog">{tr("Найти ответ")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
+            <NavLink to="/route">{tr("Маршрут")}</NavLink><NavLink to="/map">{tr("Карта")}</NavLink><NavLink to="/sandbox">{tr("Песочница")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink><NavLink to="/catalog">{tr("Поиск")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
             <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? tr("Без сервера") : tr("Войти")}</NavLink>
-          </nav>{languagePicker}
+          </nav><div className="top-tools">{themeButton}{languagePicker}</div>
         </header>)}
-      {inLab && <div className="lab-language">{languagePicker}</div>}
+      {inLab && <div className="lab-language">{themeButton}{languagePicker}</div>}
       <ImportBanner />
       <main id="main" tabIndex={-1}>
         <Routes>
@@ -96,6 +115,7 @@ function Shell() {
         </Routes>
       </main>
       {m && ctx && <Tutor kind={m[1] === 'topics' ? 'topic' : 'lab'} id={ctx.id} title={ctx.title} />}
+      <TechCalculator />
       {!inLab && (
         <footer className="foot">
           <p><b>{site.name}</b>{tr(" · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.")}</p>

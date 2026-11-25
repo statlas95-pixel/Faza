@@ -148,7 +148,7 @@ const ingredients = readY('ingredients.yaml') ?? []
 const sandboxPresets = readY('sandbox-presets.yaml') ?? []
 const ingIds = new Set(ingredients.map((i) => i.id))
 dup(ingredients, 'ingredients.yaml'); dup(sandboxPresets, 'sandbox-presets.yaml')
-const validRoles = new Set(['solvent', 'humectant', 'emollient', 'emulsifier', 'thickener', 'surfactant', 'active', 'preservative', 'uv_filter', 'ph_adjuster', 'electrolyte', 'antioxidant', 'fragrance'])
+const validRoles = new Set(['solvent', 'humectant', 'emollient', 'emulsifier', 'thickener', 'surfactant', 'active', 'preservative', 'uv_filter', 'ph_adjuster', 'electrolyte', 'antioxidant', 'fragrance', 'chelator', 'solubilizer'])
 const validIonic = new Set(['nonionic', 'anionic', 'cationic', 'amphoteric'])
 for (const ing of ingredients) {
   for (const k of ['id', 'inci', 'name', 'note']) if (typeof ing[k] !== 'string' || !ing[k].trim()) err('ingredients.yaml', `у «${ing.id}» нет поля ${k}`)

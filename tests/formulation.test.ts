@@ -14,6 +14,15 @@ import {
   type SandboxPreset,
 } from '../shared/formulation'
 
+import {
+  ANTIPATTERNS,
+  convertCommercialRaw,
+  diffFormulas,
+  diluteSolution,
+  predictProcessAppearance,
+  solveHlbMix,
+} from '../shared/formulation-sim'
+
 const ingredients: Ingredient[] = YAML.parse(fs.readFileSync(path.join('content', 'ingredients.yaml'), 'utf8'))
 const presets: SandboxPreset[] = YAML.parse(fs.readFileSync(path.join('content', 'sandbox-presets.yaml'), 'utf8'))
 
@@ -173,5 +182,57 @@ describe('Проверка конфликтов, температур и рег�
       const initialGoals = checkPresetGoals(initial, p, p.goals)
       expect(initialGoals.some((g) => !g.passed)).toBe(true)
     }
+  })
+
+  it('прогнозирует внешний вид на 5 стадиях процесса, микроскопию и дефекты (расслоение, коллапс, потемнение)', () => {
+    const brokenEmul: FormulaInput = {
+      productType: 'leave-on',
+      targetPh: 5.5,
+      batchGrams: 500,
+      phaseTempC: { A: 75, B: 60, C: 38 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 84.2 },
+        { ingredientId: 'caprylic-triglyceride', phase: 'B', pct: 10.0 },
+        { ingredientId: 'beeswax', phase: 'B', pct: 5.0 },
+        { ingredientId: 'phenoxyethanol', phase: 'C', pct: 0.8 },
+      ],
+    }
+    const ev = evaluateFormula(brokenEmul, ingredients)
+    const forecast = predictProcessAppearance(ev, brokenEmul)
+    expect(forecast.stages).toHaveLength(5)
+    expect(forecast.stages[1].defects).toContain('unmelted-wax')
+    expect(forecast.stages[4].defects).toContain('phase-split')
+    expect(forecast.stages[4].microscopeType).toBe('coarse-emulsion')
+
+    for (const anti of ANTIPATTERNS) {
+      const aEv = evaluateFormula(anti.formula, ingredients)
+      const aForecast = predictProcessAppearance(aEv, anti.formula)
+      expect(aForecast.stages[4].defects.length).toBeGreaterThan(0)
+    }
+  })
+
+  it('считает diff «До/После» и проверяет математику калькулятора технолога', () => {
+    const before = presets[0]
+    const after: FormulaInput = {
+      ...before,
+      rows: autoBalanceWater([
+        ...before.rows.filter((r) => r.ingredientId !== 'panthenol'),
+        { ingredientId: 'panthenol', phase: 'C', pct: 2.0 },
+        { ingredientId: 'polysorbate-60', phase: 'B', pct: 1.5 },
+      ]),
+    }
+    const d = diffFormulas(before, after, ingredients)
+    expect(d.errorsDelta).toBeLessThan(0)
+    expect(d.added.some((x) => x.includes('Полисорбат 60'))).toBe(true)
+
+    // Правило креста: Span 60 (4.7) + Tween 60 (14.9) -> target 9.8, total 4% => ровно 50/50 = 2% и 2%
+    expect(solveHlbMix(4.7, 14.9, 9.8, 4)).toEqual({ share1Pct: 50, share2Pct: 50, pct1: 2, pct2: 2 })
+    expect(solveHlbMix(4.7, 14.9, 16, 4)).toBeNull()
+
+    // SLES 27%: чтобы получить 10% акт. на 1000 г партии -> 37.04% товарного = 370.37 г (внесёт 270.37 г воды)
+    expect(convertCommercialRaw(10, 27, 1000)).toEqual({ commercialPct: 37.04, commercialGrams: 370.37, carriedWaterGrams: 270.37 })
+
+    // Разведение 50% NaOH -> 10% раствор, 200 г => 40 г щёлочи + 160 г воды
+    expect(diluteSolution(50, 10, 200)).toEqual({ stockGrams: 40, waterGrams: 160 })
   })
 })
