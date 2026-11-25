@@ -9,6 +9,7 @@ import {
   generateBatchProtocol,
   simulateAcceleratedStability,
 } from '../shared/formulation-lab3'
+import { computeSurfactantProfile, computeUnitEconomics } from '../shared/formulation-lab4'
 
 const ingredients: Ingredient[] = YAML.parse(fs.readFileSync(path.join('content', 'ingredients.yaml'), 'utf8'))
 
@@ -213,5 +214,32 @@ describe('Лаборатория 3.0 — расширенный каталог, 
     }
     const spfTests = simulateAcceleratedStability(evaluateFormula(stabSpf, ingredients), stabSpf)
     expect(spfTests.find((t) => t.id === 'photostability')?.verdict).toBe('pass')
+
+    // 6. Лаборатория 4.0: COGS на 1 флакон, % ASM и дедупликация смесевых INCI
+    const econ = computeUnitEconomics(shampoo, 500, { unitGrams: 50, lossPct: 5, packagingRub: 30, labelRub: 10, laborRub: 20 })
+    expect(econ.packagingTotal).toBe(60)
+    expect(econ.unitsPerBatch).toBe(9) // 500 * 0.95 / 50 = 9.5 -> 9 шт.
+    expect(econ.totalCogs).toBeGreaterThan(60)
+
+    const asm = computeSurfactantProfile(shampoo)
+    expect(asm?.totalAsmPct).toBe(12)
+    expect(asm?.anionicPct).toBe(10)
+    expect(asm?.amphotericPct).toBe(2)
+
+    const blendInci = evaluateFormula({
+      productType: 'leave-on',
+      targetPh: 5.5,
+      batchGrams: 100,
+      phaseTempC: { A: 75, B: 75, C: 38 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 90.2 },
+        { ingredientId: 'montanov-68', phase: 'B', pct: 4.0 },
+        { ingredientId: 'cetearyl-alcohol', phase: 'B', pct: 2.0 },
+        { ingredientId: 'caprylic-triglyceride', phase: 'B', pct: 3.0 },
+        { ingredientId: 'phenoxyethanol', phase: 'C', pct: 0.8 },
+      ],
+    }, ingredients)
+    const allInci = [...blendInci.inci.aboveOne, ...blendInci.inci.oneOrLess]
+    expect(allInci.filter((x) => x === 'Cetearyl Alcohol')).toHaveLength(1)
   })
 })

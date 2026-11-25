@@ -1,0 +1,18 @@
+{
+  "name": "Фаза — технология и разработка косметики",
+  "short_name": "Фаза",
+  "description": "Образовательная платформа и лаборатория рецептур для технологов и R&D-химиков косметики",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#231736",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

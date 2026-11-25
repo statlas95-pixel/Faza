@@ -197,7 +197,7 @@ export default function ReverseInci({ lab }: { lab: LabMeta }) {
       <section className="panel">
         <h3>{tr('Собрать эту базу своими руками')}</h3>
         <p className="small">{tr('Перейдите в Лабораторию рецептур — все компоненты из этой этикетки уже есть в каталоге сырья (130 позиций), вы можете собрать аналог и поставить его на термостат.')}</p>
-        <Link className="btn primary" to="/sandbox">{tr('Открыть Лабораторию рецептур →')}</Link>
+        <Link className="btn primary" to="/sandbox?template=reverse-inci">{tr('Перенести скелет этой формулы в Лабораторию →')}</Link>
       </section>
 
       <Transfer lab={lab} answers={s.transfer} onAnswer={(i, v) => set((x) => { x.transfer[i] = v })} />

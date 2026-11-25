@@ -28,14 +28,14 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
     title: 'Эмульсии и дисперсные системы',
     shortTitle: 'Эмульсии',
     description: 'Механизмы нестабильности, подбор ГЛБ, ламеллярные сетки, диспергирование порошков и испытания стабильности.',
-    skills: ['mech', 'struct', 'emul', 'stabtest', 'disperse', 'emulsifier-selection', 'colloidstab', 'oil-oxidation', 'particle-sizing', 'powder-wetting'],
+    skills: ['mech', 'struct', 'emul', 'stabtest', 'disperse', 'emulsifier-selection', 'colloidstab', 'oil-oxidation', 'particle-sizing', 'powder-wetting', 'sunscreens-spf'],
   },
   {
     id: 'surfactants',
     title: 'ПАВ-системы и очищение',
     shortTitle: 'ПАВ-системы',
-    description: 'ККМ, адсорбция, солевая кривая, мягкость моющих систем, солюбилизация отдушек и управление пеной.',
-    skills: ['surf', 'surface', 'surface-adsorption', 'micellar-solubility', 'cleanser-mildness', 'foam-control', 'ionic-strength'],
+    description: 'ККМ, адсорбция, солевая кривая, мягкость моющих систем, солюбилизация отдушек, уход за волосами и управление пеной.',
+    skills: ['surf', 'surface', 'surface-adsorption', 'micellar-solubility', 'cleanser-mildness', 'foam-control', 'ionic-strength', 'hair-care-systems'],
   },
   {
     id: 'rheology',
@@ -46,10 +46,10 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
   },
   {
     id: 'preservation',
-    title: 'Консервация, pH и сырьё',
+    title: 'Консервация, активы, pH и сырьё',
     shortTitle: 'Консервация',
-    description: 'Активная форма консервантов при заданном pH, буферы, вода как сырьё, чтение INCI и спецификаций сырья.',
-    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve'],
+    description: 'Активная форма консервантов при заданном pH, стабильность активов, буферы, вода как сырьё, чтение INCI и спецификаций сырья.',
+    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve', 'unstable-actives'],
   },
   {
     id: 'scaleup',
@@ -60,10 +60,10 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
   },
   {
     id: 'gmp',
-    title: 'GMP (ISO 22716) и санитарный контроль',
+    title: 'GMP (ISO 22716), санитария и упаковка',
     shortTitle: 'GMP',
-    description: 'Маршрутные карты Batch Record, критические контрольные точки (CCP), отклонения, CAPA, верификация CIP и санитария воды.',
-    skills: ['cip-verification', 'water-sanitation'],
+    description: 'Маршрутные карты Batch Record, критические контрольные точки (CCP), отклонения, CAPA, верификация CIP, санитария воды и совместимость с упаковкой.',
+    skills: ['cip-verification', 'water-sanitation', 'packaging-compatibility'],
   },
 ]
 

@@ -255,3 +255,24 @@
   labs:
     - cip-verification-sheet
     - gmp-batch-record
+
+- id: sunscreens-spf
+  name: Проектировать фотостабильные SPF-системы
+  outcome: подбирать пары УФ-фильтров, растворители и проверять лимиты Прил. VI EU 1223/2009 и Прил. 5 ТР ТС 009/2011
+  topics: [sunscreens-spf]
+  labs: []
+- id: hair-care-systems
+  name: Разрабатывать кондиционирующие системы для волос
+  outcome: различать катионные ламеллярные бальзамы и коацерватные шампуни с поликватерниумами и гуаром
+  topics: [hair-care-systems]
+  labs: []
+- id: unstable-actives
+  name: Стабилизировать капризные активы (вит. C, ретинол, кислоты)
+  outcome: задавать рабочее окно pH, хелатно-антиоксидантную защиту и учитывать лимиты EU 2024/996
+  topics: [unstable-actives]
+  labs: []
+- id: packaging-compatibility
+  name: Подбирать упаковку и проверять совместимость с рецептурой
+  outcome: выбирать материал тары (HDPE/PP/PET/airless) и планировать тесты совместимости по ISO/TR 18811
+  topics: [packaging-compatibility]
+  labs: []

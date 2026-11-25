@@ -226,17 +226,27 @@ export function validateSandboxPresets(presets: unknown, ingredientIds: Set<stri
   return errs
 }
 
-/** Сборка декларации INCI по ст. 19 Регламента (ЕС) 1223/2009 и ТР ТС 009/2011. */
+/** Сборка декларации INCI по ст. 19 Регламента (ЕС) 1223/2009 и ТР ТС 009/2011 (с разворотом и дедупликацией смесей). */
 export function buildInciList(rows: EvaluatedRow[]): { aboveOne: string[]; oneOrLess: string[] } {
   const byInci = new Map<string, number>()
   for (const r of rows) {
     if (r.pct <= 0) continue
-    byInci.set(r.ingredient.inci, (byInci.get(r.ingredient.inci) ?? 0) + r.pct)
+    const parts = r.ingredient.inci.split(',').map((s) => s.trim()).filter(Boolean)
+    if (parts.length === 1) {
+      byInci.set(parts[0], (byInci.get(parts[0]) ?? 0) + r.pct)
+    } else {
+      // Учебное приближение долей составного сырья (убывающий вес компонентов в смеси)
+      const weights = parts.length === 2 ? [0.65, 0.35] : parts.map((_, i) => 1 / (i + 1))
+      const wSum = weights.reduce((a, b) => a + b, 0)
+      parts.forEach((p, i) => {
+        byInci.set(p, (byInci.get(p) ?? 0) + r.pct * (weights[i] / wSum))
+      })
+    }
   }
   const entries = [...byInci.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
   return {
-    aboveOne: entries.filter(([, pct]) => pct > 1).map(([inci]) => inci),
-    oneOrLess: entries.filter(([, pct]) => pct <= 1).map(([inci]) => inci),
+    aboveOne: entries.filter(([, pct]) => pct >= 1 - 1e-6).map(([inci]) => inci),
+    oneOrLess: entries.filter(([, pct]) => pct < 1 - 1e-6).map(([inci]) => inci),
   }
 }
 

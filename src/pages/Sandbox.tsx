@@ -24,6 +24,7 @@ import {
 } from '../../shared/formulation-lab3'
 import { api, ApiError, useAccount } from '../account'
 import { BatchProtocolPanel, SensoryProfilePanel, StabilityLabPanel } from '../components/Lab3Panels'
+import { Lab4Panels } from '../components/Lab4Panels'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
 import { renderSafe } from '../md'
@@ -105,10 +106,11 @@ export default function SandboxPage() {
     try { localStorage.setItem(ONBOARD_KEY, 'done') } catch { /* ignore */ }
   }
 
-  // Обработка ?add=<ingredientId> (из Ctrl+K) и ?load=<savedId> (из Портфолио)
+  // Обработка ?add=<ingredientId> (из Ctrl+K), ?load=<savedId> (из Портфолио) и ?template=reverse-inci
   useEffect(() => {
     const addId = searchParams.get('add')
     const loadId = searchParams.get('load')
+    const tpl = searchParams.get('template')
     if (addId) {
       const ing = ingredientById(addId)
       if (ing) {
@@ -122,6 +124,30 @@ export default function SandboxPage() {
     } else if (loadId) {
       const found = saved.find((x) => x.id === loadId)
       if (found) loadFormulaState(found.formula, found.presetId ?? '')
+      setSearchParams({}, { replace: true })
+    } else if (tpl === 'reverse-inci') {
+      loadFormulaState({
+        productType: 'leave-on',
+        targetPh: 5.6,
+        batchGrams: 500,
+        phaseTempC: { A: 75, B: 75, C: 38 },
+        rows: [
+          { ingredientId: 'aqua', phase: 'A', pct: 74.6 },
+          { ingredientId: 'glycerin', phase: 'A', pct: 4.5 },
+          { ingredientId: 'xanthan-gum', phase: 'A', pct: 0.3 },
+          { ingredientId: 'disodium-edta', phase: 'A', pct: 0.1 },
+          { ingredientId: 'caprylic-triglyceride', phase: 'B', pct: 7.0 },
+          { ingredientId: 'cetearyl-alcohol', phase: 'B', pct: 2.5 },
+          { ingredientId: 'glyceryl-stearate', phase: 'B', pct: 2.0 },
+          { ingredientId: 'peg-100-stearate', phase: 'B', pct: 1.5 },
+          { ingredientId: 'shea-butter', phase: 'B', pct: 1.5 },
+          { ingredientId: 'dimethicone', phase: 'B', pct: 1.0 },
+          { ingredientId: 'niacinamide', phase: 'C', pct: 3.5 },
+          { ingredientId: 'phenoxyethanol', phase: 'C', pct: 0.8 },
+          { ingredientId: 'panthenol', phase: 'C', pct: 0.5 },
+          { ingredientId: 'tocopherol', phase: 'C', pct: 0.2 },
+        ],
+      }, '')
       setSearchParams({}, { replace: true })
     }
   }, [searchParams, saved, setSearchParams])
@@ -772,9 +798,10 @@ export default function SandboxPage() {
         })()}
       </section>
 
-      {/* Лаборатория 3.0: Ускоренное старение, Сенсорная паутинка и Протокол варки (SOP) */}
+      {/* Лаборатория 3.0 и 4.0: Ускоренное старение, Сенсорная паутинка, Экономика COGS / ASM и Протокол варки (SOP) */}
       <StabilityLabPanel tests={stabilityTests} />
       <SensoryProfilePanel profile={sensory} />
+      <Lab4Panels ev={evaluation} batchGrams={formula.batchGrams} />
       <BatchProtocolPanel steps={protocol} />
 
       {/* Диагностика, регуляторика и кнопка ИИ-наставника */}

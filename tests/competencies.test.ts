@@ -34,9 +34,9 @@ describe('Карта компетенций по 6 направлениям и �
     }
     const profile = buildCompetencyProfile(states)
     const gmp = profile.find((d) => d.def.id === 'gmp')!
-    expect(gmp.total).toBe(2)
+    expect(gmp.total).toBe(3)
     expect(gmp.mastered).toBe(1)
-    expect(gmp.percent).toBe(50) // 4 из 8 возможных баллов
+    expect(gmp.percent).toBe(33) // 4 из 12 возможных баллов
     expect(gmp.nextSkillId).toBe('water-sanitation')
   })
 
