@@ -1,5 +1,5 @@
 // Only public learning pages enter the report. Searches and personal routes never do.
-export const publicPages = ['/', '/route', '/map', '/catalog', '/diagnostic', '/labs', '/sources', '/find', '/glossary', '/about']
+export const publicPages = ['/', '/route', '/map', '/catalog', '/diagnostic', '/labs', '/sandbox', '/sources', '/find', '/glossary', '/about']
 
 export function publicPage(path: string) {
   if (publicPages.includes(path)) return path

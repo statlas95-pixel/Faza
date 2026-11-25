@@ -282,3 +282,29 @@ header.top { flex-wrap: wrap }
 .traffic-totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(165px,100%),1fr));gap:12px}
 .traffic-totals .panel{margin:0}
 .traffic-totals dd{font-size:1.8rem;font-weight:600;margin:.3em 0 0}
+
+/* ===== Песочница рецептур ===== */
+.sandbox-preset-bar,.sandbox-head-row,.sandbox-add-row,.sandbox-save-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;justify-content:space-between}
+.sandbox-preset-bar label{flex:1;min-width:min(280px,100%);display:grid;gap:6px}
+.sandbox-preset-bar select,.sandbox-add-row select,.sandbox-param-grid select,.sandbox-param-grid input,.sandbox-save-row input{font:inherit;padding:8px 10px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--ink);max-width:100%}
+.sandbox-add-row select,.sandbox-save-row input{flex:1;min-width:min(240px,100%)}
+.sandbox-add-row{margin:12px 0}
+.sandbox-param-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:12px;margin-bottom:12px}
+.sandbox-param-grid label{display:grid;gap:4px;font-size:.88rem}
+.sandbox-batch-chips{align-items:center;gap:6px;flex-wrap:wrap}
+.sandbox-kpis{margin:16px 0}
+.sandbox-kpis .kpi-ok{border-color:var(--ok);background:var(--ok-bg)}
+.sandbox-kpis .kpi-bad{border-color:var(--wrong);background:var(--wrong-bg)}
+.sandbox-summary{margin:10px 0 8px}
+.sandbox-goals{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}
+.sandbox-goals li{padding:6px 10px;border-radius:8px;font-size:.92rem;background:var(--paper-2)}
+.sandbox-goals li.ok{background:var(--ok-bg);color:var(--ok);font-weight:500}
+.sandbox-table{width:100%;border-collapse:collapse}
+.sandbox-table td,.sandbox-table th{padding:8px;vertical-align:middle}
+.sandbox-table select{font:inherit;padding:4px 6px;border-radius:8px;border:1px solid var(--border);background:#fff}
+.sandbox-pct{width:84px;font:inherit;padding:4px 6px;border-radius:8px;border:1px solid var(--border);text-align:right}
+.sandbox-subtotal td{background:var(--paper-2);font-size:.88rem}
+.sandbox-total td{border-top:2px solid var(--ink)}
+.sandbox-inci{margin:.5em 0;line-height:1.55;overflow-wrap:anywhere}
+.sandbox-saved-list{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.sandbox-saved-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper-2)}

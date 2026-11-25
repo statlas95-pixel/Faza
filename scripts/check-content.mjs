@@ -129,7 +129,36 @@ for (const d of diag) {
     while (p) { if (seen.has(p.id)) { err('diagnostic.yaml', `${d.id}: цикл уточнений`); break }; seen.add(p.id); p = p.after ? diag.find((x) => x.id === p.after.item) : undefined }
   }
 }
-console.log(`Темы: ${topics.length} · занятия: ${labs.length} · термины: ${terms.length} · источники: ${sources.length} · изображения: ${media.length}`)
+// каталог ингредиентов и пресеты песочницы рецептур
+const ingredients = readY('ingredients.yaml') ?? []
+const sandboxPresets = readY('sandbox-presets.yaml') ?? []
+const ingIds = new Set(ingredients.map((i) => i.id))
+dup(ingredients, 'ingredients.yaml'); dup(sandboxPresets, 'sandbox-presets.yaml')
+const validRoles = new Set(['solvent', 'humectant', 'emollient', 'emulsifier', 'thickener', 'surfactant', 'active', 'preservative', 'uv_filter', 'ph_adjuster', 'electrolyte', 'antioxidant', 'fragrance'])
+const validIonic = new Set(['nonionic', 'anionic', 'cationic', 'amphoteric'])
+for (const ing of ingredients) {
+  for (const k of ['id', 'inci', 'name', 'note']) if (typeof ing[k] !== 'string' || !ing[k].trim()) err('ingredients.yaml', `у «${ing.id}» нет поля ${k}`)
+  if (!validRoles.has(ing.role)) err('ingredients.yaml', `«${ing.id}»: неизвестная роль ${ing.role}`)
+  if (!['A', 'B', 'C'].includes(ing.recommendedPhase)) err('ingredients.yaml', `«${ing.id}»: фаза должна быть A, B или C`)
+  if (!validIonic.has(ing.ionic)) err('ingredients.yaml', `«${ing.id}»: неизвестная ионность ${ing.ionic}`)
+  if (!Array.isArray(ing.typicalRange) || ing.typicalRange.length !== 2 || !Number.isFinite(ing.typicalRange[0]) || !Number.isFinite(ing.typicalRange[1]) || ing.typicalRange[0] < 0 || ing.typicalRange[1] < ing.typicalRange[0]) err('ingredients.yaml', `«${ing.id}»: некорректный typicalRange`)
+  if (!Number.isFinite(ing.costPerKg) || ing.costPerKg < 0) err('ingredients.yaml', `«${ing.id}»: некорректная цена costPerKg`)
+  if (ing.hlb !== undefined && (!Number.isFinite(ing.hlb) || ing.hlb < 0 || ing.hlb > 20)) err('ingredients.yaml', `«${ing.id}»: некорректный hlb`)
+  if (ing.reqHlb !== undefined && (!Number.isFinite(ing.reqHlb) || ing.reqHlb < 0 || ing.reqHlb > 20)) err('ingredients.yaml', `«${ing.id}»: некорректный reqHlb`)
+  for (const r of ing.regulatory ?? []) {
+    if (!r.standard || !r.note) err('ingredients.yaml', `«${ing.id}»: в regulatory нужны standard и note`)
+  }
+}
+for (const p of sandboxPresets) {
+  for (const k of ['id', 'title', 'summary']) if (!p[k]) err('sandbox-presets.yaml', `у «${p.id}» нет поля ${k}`)
+  if (!['leave-on', 'rinse-off'].includes(p.productType)) err('sandbox-presets.yaml', `«${p.id}»: некорректный productType`)
+  for (const r of p.rows ?? []) {
+    if (!ingIds.has(r.ingredientId)) err('sandbox-presets.yaml', `«${p.id}»: неизвестный ингредиент ${r.ingredientId}`)
+    if (!['A', 'B', 'C'].includes(r.phase)) err('sandbox-presets.yaml', `«${p.id}»: некорректная фаза ${r.phase}`)
+  }
+}
+
+console.log(`Темы: ${topics.length} · занятия: ${labs.length} · термины: ${terms.length} · источники: ${sources.length} · ингредиенты: ${ingredients.length} · изображения: ${media.length}`)
 warns.forEach((w) => console.log('  предупреждение — ' + w))
 if (errors.length) { errors.forEach((e) => console.error('  ОШИБКА — ' + e)); console.error(`\nНайдено ошибок: ${errors.length}`); process.exit(1) }
 console.log('Ошибок не найдено.')

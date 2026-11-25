@@ -1,0 +1,183 @@
+# Учебные пресеты и задания для песочницы рецептур «Фазы».
+
+- id: cream-ow-hlb
+  title: "Кейс 1: Базовый крем O/W — свести 100 % и подобрать ГЛБ"
+  summary: "В рецептуре дневного крема не сходится баланс фаз, а эмульгатор подобран с низким ГЛБ. Доведите сумму до 100 %, подберите пару эмульгаторов под требуемый ГЛБ и перенесите термолабильный актив в фазу C."
+  productType: leave-on
+  targetPh: 5.5
+  batchGrams: 500
+  phaseTempC:
+    A: 75
+    B: 75
+    C: 38
+  rows:
+    - ingredientId: aqua
+      phase: A
+      pct: 73.0
+    - ingredientId: glycerin
+      phase: A
+      pct: 4.0
+    - ingredientId: panthenol
+      phase: A
+      pct: 2.0
+    - ingredientId: caprylic-triglyceride
+      phase: B
+      pct: 8.0
+    - ingredientId: shea-butter
+      phase: B
+      pct: 4.0
+    - ingredientId: cetearyl-alcohol
+      phase: B
+      pct: 3.0
+    - ingredientId: sorbitan-stearate
+      phase: B
+      pct: 3.0
+    - ingredientId: phenoxyethanol
+      phase: C
+      pct: 0.8
+    - ingredientId: tocopherol
+      phase: C
+      pct: 0.2
+  goals:
+    noErrors: true
+    requireBalance: true
+    requireHlbMatch: true
+    requirePreservative: true
+    phMin: 5.0
+    phMax: 6.0
+
+- id: carbomer-conflict
+  title: "Кейс 2: Гель с карбомером и витамином C — устранить конфликты"
+  summary: "Сыворотка на карбомере разжижается, актив перегрет, а бензоат натрия не работает при целевом pH. Устраните несовместимость полимера с электролитами и приведите консервирование в рабочий режим."
+  productType: leave-on
+  targetPh: 6.2
+  batchGrams: 1000
+  phaseTempC:
+    A: 70
+    B: 70
+    C: 45
+  rows:
+    - ingredientId: aqua
+      phase: A
+      pct: 90.0
+    - ingredientId: glycerin
+      phase: A
+      pct: 5.0
+    - ingredientId: carbomer
+      phase: A
+      pct: 0.5
+    - ingredientId: sap
+      phase: C
+      pct: 2.0
+    - ingredientId: sodium-benzoate
+      phase: C
+      pct: 0.8
+    - ingredientId: sodium-hydroxide
+      phase: C
+      pct: 0.2
+    - ingredientId: parfum
+      phase: C
+      pct: 0.3
+  goals:
+    noErrors: true
+    requireBalance: true
+    requirePreservative: true
+    phMin: 5.5
+    phMax: 7.0
+
+- id: cleanser-ionic
+  title: "Кейс 3: Очищающий гель rinse-off — конфликт ПАВ и консервант"
+  summary: "В формулу смываемого геля попали одновременно анионный и катионный ПАВ, а pH слишком высок для кислотного консерванта. Исправьте систему ПАВ и проверьте лимиты для rinse-off."
+  productType: rinse-off
+  targetPh: 6.5
+  batchGrams: 5000
+  phaseTempC:
+    A: 40
+    B: 40
+    C: 35
+  rows:
+    - ingredientId: aqua
+      phase: A
+      pct: 77.5
+    - ingredientId: sles
+      phase: A
+      pct: 10.0
+    - ingredientId: capb
+      phase: A
+      pct: 4.0
+    - ingredientId: cetrimonium-chloride
+      phase: A
+      pct: 1.0
+    - ingredientId: glycerin
+      phase: A
+      pct: 3.0
+    - ingredientId: sodium-chloride
+      phase: C
+      pct: 1.2
+    - ingredientId: sodium-benzoate
+      phase: C
+      pct: 0.5
+    - ingredientId: potassium-sorbate
+      phase: C
+      pct: 0.3
+    - ingredientId: parfum
+      phase: C
+      pct: 0.3
+  goals:
+    noErrors: true
+    requireBalance: true
+    requirePreservative: true
+    phMin: 4.5
+    phMax: 5.2
+
+- id: spf-compliance
+  title: "Кейс 4: Дневной крем с УФ-фильтрами — проверка регуляторики"
+  summary: "Проверьте допустимые концентрации УФ-фильтров и феноксиэтанола по ТР ТС 009/2011 и EU 1223/2009, устраните превышения и проверьте баланс эмульсии."
+  productType: leave-on
+  targetPh: 5.8
+  batchGrams: 500
+  phaseTempC:
+    A: 75
+    B: 75
+    C: 38
+  rows:
+    - ingredientId: aqua
+      phase: A
+      pct: 66.0
+    - ingredientId: glycerin
+      phase: A
+      pct: 3.0
+    - ingredientId: xanthan-gum
+      phase: A
+      pct: 0.3
+    - ingredientId: caprylic-triglyceride
+      phase: B
+      pct: 6.0
+    - ingredientId: avobenzone
+      phase: B
+      pct: 6.0
+    - ingredientId: octinoxate
+      phase: B
+      pct: 8.0
+    - ingredientId: cetearyl-alcohol
+      phase: B
+      pct: 2.5
+    - ingredientId: glyceryl-stearate
+      phase: B
+      pct: 2.5
+    - ingredientId: ceteareth-20
+      phase: B
+      pct: 2.5
+    - ingredientId: phenoxyethanol
+      phase: C
+      pct: 1.4
+    - ingredientId: tocopherol
+      phase: C
+      pct: 0.3
+  goals:
+    noErrors: true
+    requireBalance: true
+    requireHlbMatch: true
+    requirePreservative: true
+    phMin: 5.0
+    phMax: 6.5

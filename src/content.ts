@@ -1,4 +1,5 @@
 import { tr, language, localizeMaterial } from '../shared/locale'
+import type { Ingredient, SandboxPreset } from '../shared/formulation'
 import YAML from 'yaml'
 
 // Весь научный контент лежит в папке /content и подключается сюда как текст.
@@ -38,12 +39,15 @@ export const terms: Term[] = (y('glossary') as Term[]).map(term => language === 
 export const sources: Source[] = y('sources')
 export const media: Media[] = y('media')
 export const site: any = y('site')
+export const ingredients: Ingredient[] = y('ingredients')
+export const sandboxPresets: SandboxPreset[] = y('sandbox-presets')
 export const labs: LabMeta[] = Object.values(rawLabs).map((r) => localizeMaterial(YAML.parse(r)) as LabMeta).sort((a, b) => a.order - b.order)
 
 export const topicById = (id: string) => topics.find((t) => t.id === id)
 export const termById = (id: string) => terms.find((t) => t.id === id)
 export const sourceById = (id: string) => sources.find((s) => s.id === id)
 export const labById = (id: string) => labs.find((l) => l.id === id)
+export const ingredientById = (id: string) => ingredients.find((i) => i.id === id)
 export const mediaUrl = (file: string) => (language === 'en' && mediaUrls[`/content/locales/en/media/${file}`]) || mediaUrls[`/content/media/${file}`]
 export const mediaByFile = (file: string) => media.find((m) => m.file === file)
 

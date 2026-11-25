@@ -1,0 +1,398 @@
+# Каталог сырья для песочницы рецептур «Фазы».
+# Цены (costPerKg, руб/кг) и типовые диапазоны ввода — условные учебные ориентиры.
+# Значения требуемого ГЛБ (reqHlb) приведены как справочные ориентиры для эмульсий м/в (O/W).
+# Регуляторные лимиты отражают базовые ограничения EU 1223/2009 и ТР ТС 009/2011;
+# для промышленного выпуска всегда сверяйте действующую редакцию регламента и область применения.
+
+- id: aqua
+  inci: Aqua
+  name: Вода очищенная
+  role: solvent
+  recommendedPhase: A
+  ionic: nonionic
+  typicalRange: [50, 95]
+  costPerKg: 2
+  note: Основной растворитель водной фазы; для баланса рецептуры обычно доводится до 100 % (q.s. ad 100 %).
+
+- id: glycerin
+  inci: Glycerin
+  name: Глицерин
+  role: humectant
+  recommendedPhase: A
+  ionic: nonionic
+  typicalRange: [1, 10]
+  costPerKg: 260
+  note: Классический увлажнитель; термостабилен, вводится в водную фазу A.
+
+- id: propanediol
+  inci: Propanediol
+  name: Пропандиол (1,3-пропандиол)
+  role: humectant
+  recommendedPhase: A
+  ionic: nonionic
+  typicalRange: [1, 10]
+  costPerKg: 1100
+  note: Увлажнитель и сорастворитель, снижает липкость глицерина и усиливает действие консервантов.
+
+- id: carbomer
+  inci: Carbomer
+  name: Карбомер (полиакриловый загуститель)
+  role: thickener
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [5.5, 10.0]
+  electrolyteSensitive: true
+  typicalRange: [0.1, 1.0]
+  costPerKg: 3800
+  note: Загущает водную фазу после нейтрализации (pH ≥ 5,5); резко теряет вязкость в присутствии электролитов и при низком pH.
+
+- id: xanthan-gum
+  inci: Xanthan Gum
+  name: Ксантановая камедь
+  role: thickener
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [3.0, 11.0]
+  typicalRange: [0.1, 1.0]
+  costPerKg: 1900
+  note: Биополимерный загуститель, устойчивый к широкому диапазону pH и электролитам; несовместим с катионными ПАВ в высоких концентрациях.
+
+- id: caprylic-triglyceride
+  inci: Caprylic/Capric Triglyceride
+  name: Каприлик/каприк триглицериды
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 5.0
+  typicalRange: [2, 15]
+  costPerKg: 950
+  note: Лёгкий стабильный эмолент с высокой устойчивостью к окислению; учебный требуемый ГЛБ (O/W) ≈ 5,0.
+
+- id: shea-butter
+  inci: Butyrospermum Parkii Butter
+  name: Масло ши (карите)
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 8.0
+  typicalRange: [1, 8]
+  costPerKg: 1450
+  note: Твёрдый эмолент, плавится в масляной фазе B; учебный требуемый ГЛБ (O/W) ≈ 8,0.
+
+- id: mineral-oil
+  inci: Paraffinum Liquidum
+  name: Минеральное масло
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.5
+  typicalRange: [2, 15]
+  costPerKg: 420
+  note: Инертный окклюзивный эмолент; учебный требуемый ГЛБ (O/W) ≈ 10,5.
+
+- id: cetearyl-alcohol
+  inci: Cetearyl Alcohol
+  name: Цетилстеариловый спирт
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 15.5
+  typicalRange: [1, 6]
+  costPerKg: 680
+  note: Жирный спирт — структурообразователь ламеллярной гелевой сетки в фазе B; учебный требуемый ГЛБ (O/W) ≈ 15,5.
+
+- id: glyceryl-stearate
+  inci: Glyceryl Stearate
+  name: Глицерилстеарат (неионогенный)
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 3.8
+  typicalRange: [1, 5]
+  costPerKg: 760
+  note: Липофильный соэмульгатор (ГЛБ ≈ 3,8); обычно комбинируется с гидрофильным эмульгатором.
+
+- id: sorbitan-stearate
+  inci: Sorbitan Stearate
+  name: Сорбитан стеарат (Span 60)
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 4.7
+  typicalRange: [0.5, 4]
+  costPerKg: 980
+  note: Неионогенный эмульгатор с низким ГЛБ (≈ 4,7), часто используется в паре с Полисорбатом 60.
+
+- id: polysorbate-60
+  inci: Polysorbate 60
+  name: Полисорбат 60 (Tween 60)
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 14.9
+  typicalRange: [0.5, 5]
+  costPerKg: 1120
+  note: Гидрофильный неионогенный эмульгатор (ГЛБ ≈ 14,9) для эмульсий типа «масло в воде».
+
+- id: ceteareth-20
+  inci: Ceteareth-20
+  name: Цетеарет-20
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 15.2
+  typicalRange: [0.5, 4]
+  costPerKg: 1050
+  note: Гидрофильный этоксилированный эмульгатор (ГЛБ ≈ 15,2), хорошо сочетается с цетилстеариловым спиртом.
+
+- id: sles
+  inci: Sodium Laureth Sulfate
+  name: Лауретсульфат натрия (SLES, в пересчёте на 100 % акт.)
+  role: surfactant
+  recommendedPhase: A
+  ionic: anionic
+  typicalRange: [3, 14]
+  costPerKg: 540
+  note: Основной анионный ПАВ для смываемых систем; несовместим с катионными ПАВ (образует нерастворимый комплекс).
+
+- id: capb
+  inci: Cocamidopropyl Betaine
+  name: Кокамидопропилбетаин (CAPB, в пересчёте на 100 % акт.)
+  role: surfactant
+  recommendedPhase: A
+  ionic: amphoteric
+  typicalRange: [1, 6]
+  costPerKg: 620
+  note: Амфотерный со-ПАВ, смягчает анионные системы и участвует в загущении солью.
+
+- id: cetrimonium-chloride
+  inci: Cetrimonium Chloride
+  name: Цетримония хлорид (в пересчёте на 100 % акт.)
+  role: surfactant
+  recommendedPhase: A
+  ionic: cationic
+  typicalRange: [0.2, 2.5]
+  costPerKg: 1850
+  note: Катионный ПАВ и кондиционер; несовместим с анионными ПАВ и полиакрилатами.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. III, п. 286; Прил. V, п. 44) · ТР ТС 009/2011
+      leaveOnMax: 0.5
+      rinseOffMax: 2.5
+      note: В смываемых средствах для волос до 2,5 % (или до 1,0 % в несмываемых средствах для волос; в прочих несмываемых и как консервант — более строгие лимиты, в учебном шаблоне взято 0,5 % для leave-on).
+
+- id: niacinamide
+  inci: Niacinamide
+  name: Ниацинамид (витамин B3)
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  phRange: [4.5, 7.5]
+  typicalRange: [1, 5]
+  costPerKg: 4200
+  note: Водорастворимый актив; при pH ниже 4,5 и нагреве может гидролизоваться до никотиновой кислоты.
+
+- id: panthenol
+  inci: Panthenol
+  name: Д-пантенол (провитамин B5)
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  typicalRange: [0.5, 5]
+  costPerKg: 4600
+  note: Термолабильный увлажняющий и успокаивающий актив; рекомендуется вводить в фазу охлаждения C (≤ 40 °C).
+
+- id: sap
+  inci: Sodium Ascorbyl Phosphate
+  name: Аскорбилфосфат натрия (стабильная форма вит. C)
+  role: active
+  recommendedPhase: C
+  ionic: anionic
+  maxTempC: 40
+  phRange: [6.0, 7.5]
+  isElectrolyte: true
+  typicalRange: [0.5, 3]
+  costPerKg: 14500
+  note: Солевая форма витамина C — ведёт себя как электролит и разжижает незащищённые карбомеры; вводится в фазу C (≤ 40 °C).
+
+- id: tocopherol
+  inci: Tocopherol
+  name: Токоферол (витамин E)
+  role: antioxidant
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  typicalRange: [0.1, 1]
+  costPerKg: 7800
+  note: Жирорастворимый антиоксидант для защиты масел от окисления; лучше вводить при охлаждении (≤ 45 °C).
+
+- id: phenoxyethanol
+  inci: Phenoxyethanol
+  name: Феноксиэтанол
+  role: preservative
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  phRange: [3.0, 10.0]
+  typicalRange: [0.5, 1.0]
+  costPerKg: 1350
+  note: Широко используемый консервант с широким диапазоном pH; обычно комбинируется с бустером или фунгицидом.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. V, п. 29) · ТР ТС 009/2011 (Прил. 4, п. 29)
+      leaveOnMax: 1.0
+      rinseOffMax: 1.0
+      note: Суммарный предел 1,0 % из всех источников в готовом продукте.
+
+- id: sodium-benzoate
+  inci: Sodium Benzoate
+  name: Бензоат натрия
+  role: preservative
+  recommendedPhase: C
+  ionic: anionic
+  maxTempC: 45
+  phRange: [3.0, 5.2]
+  pKa: 4.2
+  isElectrolyte: true
+  typicalRange: [0.2, 0.5]
+  costPerKg: 490
+  note: Органический кислотный консервант (pKa ≈ 4,2); эффективен преимущественно при pH ≤ 5,2, выступает как электролит.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. V, п. 1) · ТР ТС 009/2011 (Прил. 4, п. 1)
+      leaveOnMax: 0.5
+      rinseOffMax: 2.5
+      acidFactor: 0.847
+      note: "Лимит считается в пересчёте на бензойную кислоту (коэффициент 0,847): до 0,5 % в leave-on и до 2,5 % в rinse-off (кроме средств гигиены полости рта — 1,7 %)."
+
+- id: potassium-sorbate
+  inci: Potassium Sorbate
+  name: Сорбат калия
+  role: preservative
+  recommendedPhase: C
+  ionic: anionic
+  maxTempC: 45
+  phRange: [3.0, 5.5]
+  pKa: 4.76
+  isElectrolyte: true
+  typicalRange: [0.1, 0.4]
+  costPerKg: 920
+  note: Фунгицидный консервант (pKa ≈ 4,76); активен в кислой среде (pH ≤ 5,5), является электролитом.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. V, п. 4) · ТР ТС 009/2011 (Прил. 4, п. 4)
+      leaveOnMax: 0.6
+      rinseOffMax: 0.6
+      acidFactor: 0.746
+      note: Лимит 0,6 % в пересчёте на сорбиновую кислоту (коэффициент 0,746).
+
+- id: benzyl-alcohol
+  inci: Benzyl Alcohol
+  name: Бензиловый спирт
+  role: preservative
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  phRange: [3.0, 8.0]
+  typicalRange: [0.3, 1.0]
+  costPerKg: 890
+  note: Консервант и растворитель; относится к декларируемым аллергенам отдушек при превышении порога маркировки.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. V, п. 34; Прил. III) · ТР ТС 009/2011 (Прил. 4, п. 45)
+      leaveOnMax: 1.0
+      rinseOffMax: 1.0
+      allergenLeaveOn: 0.001
+      allergenRinseOff: 0.01
+      note: Максимум 1,0 % как консервант; обязательное вынесение в INCI как аллергена при > 0,001 % (leave-on) или > 0,01 % (rinse-off).
+
+- id: salicylic-acid
+  inci: Salicylic Acid
+  name: Салициловая кислота
+  role: active
+  recommendedPhase: C
+  ionic: anionic
+  maxTempC: 60
+  phRange: [3.0, 4.5]
+  typicalRange: [0.2, 2.0]
+  costPerKg: 1650
+  note: Бета-гидроксикислота (BHA) и консервант; запрещена в средствах для детей до 3 лет (кроме шампуней) и в ингаляционных формах.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. III, п. 98; Прил. V, п. 3) · ТР ТС 009/2011 (Прил. 2, Прил. 4)
+      leaveOnMax: 2.0
+      rinseOffMax: 3.0
+      warnAbove: 0.5
+      note: Как консервант — не более 0,5 %; как актив (кератолитик) — до 2,0 % в leave-on (лицо/руки) и до 3,0 % в смываемых средствах для волос; запрещена для детей < 3 лет.
+
+- id: avobenzone
+  inci: Butyl Methoxydibenzoylmethane
+  name: Авобензон (УФ-A фильтр)
+  role: uv_filter
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 8.0
+  maxTempC: 75
+  typicalRange: [1, 5]
+  costPerKg: 5900
+  note: Жирорастворимый УФ-A фильтр; требует фотостабилизации и дестабилизируется в паре с этилгексилметоксициннаматом.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. VI, п. 8) · ТР ТС 009/2011 (Прил. 5)
+      leaveOnMax: 5.0
+      rinseOffMax: 5.0
+      note: Максимально допустимая концентрация — 5,0 % в готовом продукте.
+
+- id: octinoxate
+  inci: Ethylhexyl Methoxycinnamate
+  name: Этилгексилметоксициннамат (УФ-B фильтр)
+  role: uv_filter
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 8.0
+  maxTempC: 75
+  typicalRange: [2, 7.5]
+  costPerKg: 3400
+  note: Жирорастворимый УФ-B фильтр; фотонестабилен в комбинации с авобензоном без стабилизатора.
+  regulatory:
+    - standard: EU 1223/2009 (Прил. VI, п. 12) · ТР ТС 009/2011 (Прил. 5)
+      leaveOnMax: 10.0
+      rinseOffMax: 10.0
+      note: Максимально допустимая концентрация — 10,0 % в готовом продукте.
+
+- id: sodium-chloride
+  inci: Sodium Chloride
+  name: Хлорид натрия (соль)
+  role: electrolyte
+  recommendedPhase: C
+  ionic: nonionic
+  isElectrolyte: true
+  typicalRange: [0.2, 2.0]
+  costPerKg: 45
+  note: Загуститель анионно-амфотерных ПАВ-систем; разрушает гелевую сетку чувствительных карбомеров.
+
+- id: citric-acid
+  inci: Citric Acid
+  name: Лимонная кислота
+  role: ph_adjuster
+  recommendedPhase: C
+  ionic: anionic
+  typicalRange: [0.05, 0.5]
+  costPerKg: 320
+  note: Регулятор pH в кислую сторону и слабый комплексообразователь.
+
+- id: sodium-hydroxide
+  inci: Sodium Hydroxide
+  name: Гидроксид натрия (в пересчёте на 100 %)
+  role: ph_adjuster
+  recommendedPhase: C
+  ionic: anionic
+  typicalRange: [0.02, 0.3]
+  costPerKg: 290
+  note: Нейтрализатор карбомеров и регулятор pH в щелочную сторону (на производстве вводится в виде 10–20 % водного раствора).
+
+- id: parfum
+  inci: Parfum
+  name: Отдушка косметическая
+  role: fragrance
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  typicalRange: [0.1, 0.5]
+  costPerKg: 8500
+  note: Вводится в фазу охлаждения C (≤ 40 °C) во избежание испарения летучих нот и изменения запаха.
