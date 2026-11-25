@@ -220,7 +220,11 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                       type="radio"
                       name="jmode"
                       checked={ctl.jacket === m}
-                      onChange={() => set((x) => { x.ctl.jacket = m })}
+                      onChange={() => set((x) => {
+                        x.ctl.jacket = m
+                        const lbl = m === 'heat' ? 'Нагрев (+80 °C)' : m === 'cool' ? 'Охлаждение (+12 °C)' : 'Выкл'
+                        x.reactor.events.push(`${x.reactor.minute} мин: Рубашка переключена → ${lbl}.`)
+                      })}
                     />
                     {m === 'heat' ? tr('🔥 Нагрев (+80 °C)') : m === 'cool' ? tr('❄ Охлаждение (+12 °C)') : tr('Выкл')}
                   </label>
@@ -235,7 +239,10 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                   <input
                     type="checkbox"
                     checked={ctl.anchorOn}
-                    onChange={(e) => set((x) => { x.ctl.anchorOn = e.target.checked })}
+                    onChange={(e) => set((x) => {
+                      x.ctl.anchorOn = e.target.checked
+                      x.reactor.events.push(`${x.reactor.minute} мин: Якорная мешалка ${e.target.checked ? 'включена (35 об/мин)' : 'остановлена'}.`)
+                    })}
                   />
                   <span><b>{tr('Якорная мешалка со скребками (35 об/мин)')}</b><small>{tr('Ускоряет нагрев и охлаждение, не даёт крему застывать на стенках.')}</small></span>
                 </label>
@@ -243,7 +250,10 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                   <input
                     type="checkbox"
                     checked={ctl.vacuumOn}
-                    onChange={(e) => set((x) => { x.ctl.vacuumOn = e.target.checked })}
+                    onChange={(e) => set((x) => {
+                      x.ctl.vacuumOn = e.target.checked
+                      x.reactor.events.push(`${x.reactor.minute} мин: Вакуумный насос ${e.target.checked ? 'включён' : 'выключен'}.`)
+                    })}
                   />
                   <span><b>{tr('Вакуумный насос (−0,45 бар при > 62 °C / −0,65 бар при охлаждении)')}</b><small>{tr('Обязателен перед гомогенизацией для защиты от завоздушивания без вскипания горячей воды.')}</small></span>
                 </label>
@@ -251,7 +261,10 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                   <input
                     type="checkbox"
                     checked={ctl.homogenizerOn}
-                    onChange={(e) => set((x) => { x.ctl.homogenizerOn = e.target.checked })}
+                    onChange={(e) => set((x) => {
+                      x.ctl.homogenizerOn = e.target.checked
+                      x.reactor.events.push(`${x.reactor.minute} мин: Гомогенизатор ротор-статор ${e.target.checked ? 'включён (3500 об/мин)' : 'остановлен'}.`)
+                    })}
                   />
                   <span><b>{tr('Гомогенизатор ротор-статор (3500 об/мин)')}</b><small>{tr('Дробит капли масла после ввода фазы B при 65–75 °C; нельзя включать на холодной сетке!')}</small></span>
                 </label>

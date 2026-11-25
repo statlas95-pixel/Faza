@@ -16,6 +16,7 @@ questions:
   - Что измерить для оценки работы дозатора после замены загустителя?
 labs:
   - polymer-thickeners-sheet
+  - ph-titration-sim
 related:
   - rheology-basics
 checks:

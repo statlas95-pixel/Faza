@@ -44,7 +44,7 @@
   name: Оценивать консервирование и микробиологические риски
   outcome: рассчитать долю активной формы консерванта при заданном pH и найти источник контаминации по данным партии
   topics: [preservation]
-  labs: [batch-6102]
+  labs: [batch-6102, challenge-test-iso11930]
 - id: mixing
   name: Оценивать режим перемешивания и мощность
   outcome: рассчитать число Рейнольдса для мешалки, определить режим и предсказать, как изменится мощность
@@ -59,7 +59,7 @@
   name: Работать с pH и буферами
   outcome: рассчитать соотношение кислоты и соли для заданного pH, оценить буферную ёмкость и правильно измерить pH
   topics: [ph-buffers]
-  labs: [ph-sheet]
+  labs: [ph-sheet, ph-titration-sim]
 - id: water
   name: Оценивать воду как сырьё
   outcome: связать показатели воды (проводимость, жёсткость, микробиологию) с поведением продукта и найти воду среди причин отклонения
@@ -191,6 +191,7 @@
     - polymer-thickeners
   labs:
     - polymer-thickeners-sheet
+    - ph-titration-sim
 - id: fractional-design
   name: Различать смешение эффектов и кривизну отклика
   outcome: различать смешение эффектов и кривизну отклика
@@ -270,9 +271,9 @@
   name: Стабилизировать капризные активы (вит. C, ретинол, кислоты)
   outcome: задавать рабочее окно pH, хелатно-антиоксидантную защиту и учитывать лимиты EU 2024/996
   topics: [unstable-actives]
-  labs: []
+  labs: [marketing-brief-branch]
 - id: packaging-compatibility
   name: Подбирать упаковку и проверять совместимость с рецептурой
   outcome: выбирать материал тары (HDPE/PP/PET/airless) и планировать тесты совместимости по ISO/TR 18811
   topics: [packaging-compatibility]
-  labs: []
+  labs: [challenge-test-iso11930]

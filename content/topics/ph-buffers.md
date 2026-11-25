@@ -18,7 +18,7 @@ questions:
   - Сколько лимонной кислоты нужно, чтобы сдвинуть pH?
   - Почему pH горячей пробы отличается от pH той же пробы при 25 °C?
   - Можно ли мерить pH в креме?
-labs: [ph-sheet]
+labs: [ph-sheet, ph-titration-sim]
 related: [preservation, solutions-basics]
 checks:
   - q: Слабая кислота с pKa 4,0 и её натриевая соль смешаны в мольном отношении соль/кислота = 10. Каков pH?

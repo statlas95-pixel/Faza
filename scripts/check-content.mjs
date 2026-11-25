@@ -97,6 +97,12 @@ for (const l of labs) {
     if (!Array.isArray(l.phaseTargets) || l.phaseTargets.length < 3) err(l.file, 'reverse-inci: нужно не менее 3 компонентов в phaseTargets')
     for (const q of l.questions ?? []) if ((q.options ?? []).filter((o) => o.correct).length !== 1) err(l.file, `reverse-inci: у вопроса ${q.id} нужен ровно один верный вариант`)
   }
+  if (l.engine === 'challenge-test') {
+    if (!Array.isArray(l.strains) || l.strains.length !== 5) err(l.file, 'challenge-test: по ISO 11930 должно быть ровно 5 тест-штаммов')
+    if (!Array.isArray(l.strains) || !l.strains.some((s) => s.id === l.failedStrainId)) err(l.file, `challenge-test: failedStrainId «${l.failedStrainId}» не найден в strains`)
+    if (!['A', 'B', 'fail'].includes(l.expectedCriterion)) err(l.file, 'challenge-test: expectedCriterion должен быть A, B или fail')
+    if (!Array.isArray(l.remedies) || l.remedies.filter((r) => r.correct).length !== 1) err(l.file, 'challenge-test: в remedies нужен ровно один вариант с correct: true')
+  }
 }
 for (const t of site.tasks ?? []) { const m = t.to.match(/^\/(topics|labs)\/(.+)$/); if (m && !(m[1] === 'topics' ? topicIds : labIds).has(m[2])) err('site.yaml', `tasks: нет страницы ${t.to}`) }
 for (const s of site.track?.steps ?? []) { if (s.topic && !topicIds.has(s.topic)) err('site.yaml', `track: нет темы ${s.topic}`); if (s.lab && !labIds.has(s.lab)) err('site.yaml', `track: нет занятия ${s.lab}`) }
