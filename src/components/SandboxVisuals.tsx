@@ -233,6 +233,25 @@ function MicroscopeLens({ type, caption }: { type: MicroscopeType; caption: stri
   )
 }
 
+const OPACITY_LABELS: Record<string, string> = {
+  clear: 'прозрачная',
+  opalescent: 'опалесцирующая',
+  milky: 'молочная',
+  opaque: 'непрозрачная',
+}
+
+const DEFECT_LABELS: Record<string, string> = {
+  'phase-split': 'расслоение фаз',
+  flocculation: 'хлопья / осадок',
+  'gel-collapse': 'разжижение геля',
+  'unmelted-wax': 'нерасплавленный воск',
+  haze: 'помутнение',
+  yellowing: 'пожелтение / окисление',
+  crystals: 'кристаллизация',
+  bubbles: 'завоздушивание',
+  soaping: 'эффект мыльности',
+}
+
 /** Панель прогноза внешнего вида по 5 узловым стадиям с кнопкой «Провести варку ▶». */
 export function ProcessSimulatorPanel({
   forecast,
@@ -308,11 +327,11 @@ export function ProcessSimulatorPanel({
           <p>{tr(stage.summary)}</p>
           <dl className="sb-mini-meta">
             <div><dt>{tr('Прогноз вязкости')}</dt><dd>{stage.viscosityBand}</dd></div>
-            <div><dt>{tr('Прозрачность')}</dt><dd>{tr(stage.opacity)}</dd></div>
+            <div><dt>{tr('Прозрачность')}</dt><dd>{tr(OPACITY_LABELS[stage.opacity] ?? stage.opacity)}</dd></div>
           </dl>
           {stage.defects.length > 0 && (
             <p className="small">
-              <span className="gapmark">{tr('Дефекты на стадии:')} {stage.defects.join(', ')}</span>
+              <span className="gapmark">{tr('Дефекты на стадии:')} {stage.defects.map((d) => tr(DEFECT_LABELS[d] ?? d)).join(', ')}</span>
             </p>
           )}
         </div>

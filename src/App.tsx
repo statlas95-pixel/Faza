@@ -85,7 +85,7 @@ function Shell() {
         <header className="top">
           <Link to="/" className="logo" aria-label={`${site.name}${tr(" — на главную")}`}><span className="logo-drop" aria-hidden />{site.name}</Link>
           <nav aria-label={tr("Основные разделы")}>
-            <NavLink to="/route">{tr("Маршрут")}</NavLink><NavLink to="/map">{tr("Карта")}</NavLink><NavLink to="/sandbox">{tr("Песочница")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink><NavLink to="/catalog">{tr("Поиск")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
+            <NavLink to="/route">{tr("Маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/sandbox">{tr("Лаборатория")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink><NavLink to="/catalog">{tr("Поиск")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
             <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? tr("Без сервера") : tr("Войти")}</NavLink>
           </nav><div className="top-tools">{themeButton}{languagePicker}</div>
         </header>)}

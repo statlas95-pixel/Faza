@@ -90,7 +90,7 @@ const phaseName: Record<Phase, string> = {
 }
 
 export default function SandboxPage() {
-  useTitle(tr('Песочница рецептур'))
+  useTitle(tr('Лаборатория рецептур'))
   const acc = useAccount()
   const progress = useProgress()
 
@@ -291,8 +291,8 @@ export default function SandboxPage() {
     <div className="page sandbox">
       <div className="sandbox-head-row">
         <div>
-          <p className="eyebrow">{tr('Интерактивный конструктор · 68 компонентов · детерминированный расчёт')}</p>
-          <h1>{tr('Песочница рецептур и фаз')}</h1>
+          <p className="eyebrow">{tr('Интерактивный конструктор')} · {ingredients.length} {tr('компонентов · детерминированный расчёт')}</p>
+          <h1>{tr('Лаборатория рецептур и фаз')}</h1>
         </div>
         <div className="row sb-top-actions">
           <button
@@ -317,7 +317,7 @@ export default function SandboxPage() {
           <label>
             <b>{tr('Режим или учебный кейс')}</b>
             <select value={presetId} onChange={(e) => selectPreset(e.target.value)}>
-              <option value="">{tr('Свободная песочница (базовый шаблон)')}</option>
+              <option value="">{tr('Свободная лаборатория (базовый шаблон)')}</option>
               {sandboxPresets.map((p) => (
                 <option key={p.id} value={p.id}>{p.title}</option>
               ))}
@@ -382,7 +382,7 @@ export default function SandboxPage() {
         <h2>{tr('Параметры процесса и партии')}</h2>
         <div className="sandbox-param-grid">
           <label>
-            {tr('Тип продукта (регуляторика)')}
+            <span className="sb-param-head"><span>{tr('Тип продукта (регуляторика)')}</span></span>
             <select
               value={formula.productType}
               onChange={(e) => setFormula((prev) => ({ ...prev, productType: e.target.value as ProductType }))}
@@ -392,7 +392,7 @@ export default function SandboxPage() {
             </select>
           </label>
           <label>
-            {tr('Целевой pH')}: <b>{formula.targetPh}</b>
+            <span className="sb-param-head"><span>{tr('Целевой pH')}</span><b className="num">{formula.targetPh}</b></span>
             <input
               type="range"
               step="0.1"
@@ -403,7 +403,7 @@ export default function SandboxPage() {
             />
           </label>
           <label>
-            {tr('Загрузка партии, г')}
+            <span className="sb-param-head"><span>{tr('Загрузка партии, г')}</span></span>
             <input
               type="number"
               step="50"
@@ -415,7 +415,10 @@ export default function SandboxPage() {
           </label>
           {(['A', 'B', 'C'] as Phase[]).map((ph) => (
             <label key={ph}>
-              <span className={`phase-pill p-${ph}`}>{tr(`Фаза ${ph}`)}</span> {formula.phaseTempC[ph]} °C
+              <span className="sb-param-head">
+                <span className={`phase-pill p-${ph}`}>{tr(`Фаза ${ph}`)}</span>
+                <b className="num">{formula.phaseTempC[ph]} °C</b>
+              </span>
               <input
                 type="range"
                 step="1"
@@ -713,7 +716,7 @@ export default function SandboxPage() {
       {/* Галерея антипаттернов */}
       <section className="panel sb-antipatterns">
         <h2>{tr('Галерея антипаттернов и дефектов рецептур')}</h2>
-        <p className="small">{tr('Откройте любой классический дефект прямо в Песочнице, посмотрите прогноз внешнего вида и микроскопию, а затем исправьте формулу.')}</p>
+        <p className="small">{tr('Откройте любой классический дефект прямо в Лаборатории, посмотрите прогноз внешнего вида и микроскопию, а затем исправьте формулу.')}</p>
         <div className="cards">
           {ANTIPATTERNS.map((ap) => (
             <article key={ap.id} className="card">
@@ -723,13 +726,13 @@ export default function SandboxPage() {
               <p className="small"><b>{tr('Как исправить:')}</b> {tr(ap.fixHint)}</p>
               <button
                 type="button"
-                className="btn"
+                className="btn wide"
                 onClick={() => {
                   loadFormulaState(ap.formula, '')
                   window.scrollTo({ top: 0, behavior: 'smooth' })
                 }}
               >
-                {tr('Открыть дефект в Песочнице →')}
+                {tr('Открыть дефект в Лаборатории →')}
               </button>
             </article>
           ))}

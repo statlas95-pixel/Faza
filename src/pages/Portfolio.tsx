@@ -207,11 +207,11 @@ export default function PortfolioPage() {
 
       <section className="panel">
         <div className="sandbox-head-row">
-          <h2>{tr('Сохранённые рецептуры из Песочницы')}</h2>
-          <Link className="btn" to="/sandbox">{tr('Открыть Песочницу')}</Link>
+          <h2>{tr('Сохранённые рецептуры из Лаборатории')}</h2>
+          <Link className="btn" to="/sandbox">{tr('Открыть Лабораторию')}</Link>
         </div>
         {formulas.length === 0 ? (
-          <p className="muted">{tr('Сохранённых рецептур пока нет — соберите и сохраните первую рецептуру в Песочнице.')}</p>
+          <p className="muted">{tr('Сохранённых рецептур пока нет — соберите и сохраните первую рецептуру в Лаборатории.')}</p>
         ) : (
           <ul className="sandbox-saved-list">
             {formulas.map((f) => (
