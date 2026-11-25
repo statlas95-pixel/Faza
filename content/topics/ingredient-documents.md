@@ -16,6 +16,7 @@ questions:
   - Две марки имеют одинаковый INCI. Что обосновывает замену?
 labs:
   - ingredient-documents-sheet
+  - coa-incoming-control
 related:
   - raw-functions
 checks:

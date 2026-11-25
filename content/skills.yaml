@@ -69,7 +69,7 @@
   name: Читать рецептуру и состав по функциям
   outcome: назвать функцию каждого компонента и оценить границы концентраций по списку INCI
   topics: [raw-functions]
-  labs: [inci-sheet]
+  labs: [inci-sheet, label-claims-audit]
 - id: disperse
   name: Описывать дисперсные системы количественно
   outcome: классифицировать систему по фазам, оценить удельную поверхность и сравнить броуновское движение с оседанием для заданного размера частиц
@@ -112,6 +112,7 @@
     - deaeration
   labs:
     - deaeration-sheet
+    - shift-log-trend
 - id: ionic-strength
   name: Рассчитывать ионную силу раствора
   outcome: рассчитывать ионную силу раствора
@@ -140,6 +141,7 @@
     - ingredient-documents
   labs:
     - ingredient-documents-sheet
+    - coa-incoming-control
 - id: powder-wetting
   name: Различать смачивание и разрушение агломератов
   outcome: различать смачивание и разрушение агломератов

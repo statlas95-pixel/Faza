@@ -80,6 +80,18 @@ for (const l of labs) {
     }
     if (!nodes.some((n) => n.outcome && n.outcome.score >= 0.85)) err(l.file, 'branching: нет успешного исхода (score >= 0.85)')
   }
+  if (l.engine === 'shift-trend') {
+    if (!Array.isArray(l.points) || l.points.length < 4 || !Number.isFinite(l.anomalyMin)) err(l.file, 'shift-trend: нужны points (>=4) и anomalyMin')
+    if (!Array.isArray(l.causes) || l.causes.filter((c) => c.verdict === 'ok').length !== 1) err(l.file, 'shift-trend: нужен ровно один verdict: ok в causes')
+    if (!Array.isArray(l.actions) || l.actions.filter((a) => a.verdict === 'ok').length !== 1) err(l.file, 'shift-trend: нужен ровно один verdict: ok в actions')
+  }
+  if (l.engine === 'coa') {
+    if (!Array.isArray(l.lots) || l.lots.length < 2) err(l.file, 'coa: нужно не менее 2 партий lots')
+    for (const lot of l.lots ?? []) if (!['approve', 'quarantine', 'reject'].includes(lot.expected)) err(l.file, `coa: у ${lot.id} неверный expected`)
+  }
+  if (l.engine === 'label-audit') {
+    if (!Array.isArray(l.items) || l.items.filter((i) => i.hasViolation).length < 2) err(l.file, 'label-audit: нужно не менее 2 нарушений в items')
+  }
 }
 for (const t of site.tasks ?? []) { const m = t.to.match(/^\/(topics|labs)\/(.+)$/); if (m && !(m[1] === 'topics' ? topicIds : labIds).has(m[2])) err('site.yaml', `tasks: нет страницы ${t.to}`) }
 for (const s of site.track?.steps ?? []) { if (s.topic && !topicIds.has(s.topic)) err('site.yaml', `track: нет темы ${s.topic}`); if (s.lab && !labIds.has(s.lab)) err('site.yaml', `track: нет занятия ${s.lab}`) }

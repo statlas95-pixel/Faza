@@ -410,6 +410,13 @@ header.top { flex-wrap: wrap }
 .calc-body{display:grid;gap:8px}
 .calc-body label{display:grid;gap:4px;font-size:.86rem}
 .calc-body input{font:inherit;padding:6px 10px;border-radius:8px;border:1.5px solid var(--border)}
+.trend-legend{display:flex;gap:16px;flex-wrap:wrap;margin:8px 0}
+.tl-temp{color:#E86A42;font-weight:600}
+.tl-cur{color:#6E4FA3;font-weight:600}
+.tl-vac{color:#0E7C7B;font-weight:600}
+.trend-svg{width:100%;max-width:640px;height:auto}
+.trend-hit{cursor:pointer}
+.coa-choices{margin-top:12px}
 
 @media (max-width:980px){
   .sb-visual-grid{grid-template-columns:minmax(0,1fr)}
