@@ -10,6 +10,7 @@ import StatisticsPage from './pages/Statistics'
 import SandboxPage from './pages/Sandbox'
 import PortfolioPage from './pages/Portfolio'
 import { TechCalculator } from './components/TechCalculator'
+import { CommandPalette } from './components/CommandPalette'
 import Home from './pages/Home'
 import { Catalog, TopicPage } from './pages/Topics'
 import { Glossary, Sources, Journal, About, AttemptPage } from './pages/Reference'
@@ -39,6 +40,17 @@ function Shell() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     try { return localStorage.getItem('faza.theme') === 'dark' ? 'dark' : 'light' } catch { return 'light' }
   })
+  const [cmdOpen, setCmdOpen] = useState(false)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setCmdOpen((v) => !v)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
   useEffect(() => {
     document.documentElement.dataset.theme = theme
     try { localStorage.setItem('faza.theme', theme) } catch { /* ignore */ }
@@ -78,6 +90,17 @@ function Shell() {
       {theme === 'dark' ? '☀️' : '🌙'}
     </button>
   )
+  const cmdButton = (
+    <button
+      type="button"
+      className="theme-toggle cmdk-trigger"
+      aria-label={tr('Быстрый поиск (Ctrl+K)')}
+      title={tr('Быстрый поиск по темам, занятиям, сырью и терминам (Ctrl+K)')}
+      onClick={() => setCmdOpen(true)}
+    >
+      ⌘K
+    </button>
+  )
   return (
     <>
       <a className="skip" href="#main" onClick={event => { event.preventDefault(); document.getElementById('main')?.focus() }}>{tr("К содержанию")}</a>
@@ -87,9 +110,9 @@ function Shell() {
           <nav aria-label={tr("Основные разделы")}>
             <NavLink to="/route">{tr("Маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/sandbox">{tr("Лаборатория")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink><NavLink to="/catalog">{tr("Поиск")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
             <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? tr("Без сервера") : tr("Войти")}</NavLink>
-          </nav><div className="top-tools">{themeButton}{languagePicker}</div>
+          </nav><div className="top-tools">{cmdButton}{themeButton}{languagePicker}</div>
         </header>)}
-      {inLab && <div className="lab-language">{themeButton}{languagePicker}</div>}
+      {inLab && <div className="lab-language">{cmdButton}{themeButton}{languagePicker}</div>}
       <ImportBanner />
       <main id="main" tabIndex={-1}>
         <Routes>
@@ -116,6 +139,7 @@ function Shell() {
       </main>
       {m && ctx && <Tutor kind={m[1] === 'topics' ? 'topic' : 'lab'} id={ctx.id} title={ctx.title} />}
       <TechCalculator />
+      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
       {!inLab && (
         <footer className="foot">
           <p><b>{site.name}</b>{tr(" · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.")}</p>

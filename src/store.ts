@@ -1,15 +1,32 @@
 import { recordActivity } from './statistics'
 import { tr } from '../shared/locale'
 import { useSyncExternalStore } from 'react'
-import { type Progress, type Attempt, type SavedSource, type Settings, normalize, emptyProgress } from '../shared/merge'
+import { type Progress, type Attempt, type SavedSource, type SavedFormulaRecord, type Settings, normalize, emptyProgress } from '../shared/merge'
 import type { Evidence } from '../shared/mastery'
-export type { Progress, Attempt, SavedSource, Settings }
+export type { Progress, Attempt, SavedSource, SavedFormulaRecord, Settings }
+
+const LEGACY_FORMULAS_KEY = 'faza.sandbox.saved.v1'
+function loadLegacyFormulas(): SavedFormulaRecord[] {
+  try {
+    const raw = localStorage.getItem(LEGACY_FORMULAS_KEY)
+    const parsed = raw ? JSON.parse(raw) : []
+    return Array.isArray(parsed) ? parsed.filter((f: any) => f && typeof f.id === 'string' && f.formula) : []
+  } catch { return [] }
+}
+function mergeLegacyFormulas(p: Progress): Progress {
+  const legacy = loadLegacyFormulas()
+  if (!legacy.length) return p
+  const known = new Set(p.savedFormulas.map((f) => f.id))
+  const extra = legacy.filter((f) => !known.has(f.id))
+  if (!extra.length) return p
+  return { ...p, savedFormulas: [...p.savedFormulas, ...extra].sort((a, b) => (b.at ?? 0) - (a.at ?? 0)).slice(0, 50) }
+}
 
 // Прогресс всегда лежит в localStorage браузера — приложение работает и без сервера.
 // Для вошедшего пользователя это кэш: src/account.ts синхронизирует его с сервером.
 export const GUEST_KEY = 'faza.progress.v1'
 let scope = GUEST_KEY
-let state: Progress = load(scope)
+let state: Progress = mergeLegacyFormulas(load(scope))
 const listeners = new Set<() => void>()
 const changeHooks = new Set<(p: Progress) => void>()
 
@@ -69,3 +86,13 @@ export function toggleSource(s: Omit<SavedSource, 'at'>) {
 }
 export function patchSource(key: string, patch: Partial<SavedSource>) { update((p) => { const x = p.savedSources.find((s) => s.key === key); if (x) Object.assign(x, patch) }) }
 export function setSettings(patch: Partial<Settings>) { update((p) => { Object.assign(p.settings, patch) }) }
+export function saveFormula(entry: SavedFormulaRecord) {
+  update((p) => {
+    p.savedFormulas = [entry, ...p.savedFormulas.filter((x) => x.id !== entry.id)].slice(0, 50)
+  })
+}
+export function deleteSavedFormula(id: string) {
+  update((p) => {
+    p.savedFormulas = p.savedFormulas.filter((x) => x.id !== id)
+  })
+}

@@ -9,27 +9,9 @@ import {
 } from '../../shared/competencies'
 import { labById, labs } from '../content'
 import { skills, useLearning } from '../learning'
+import { syncNow, useAccount } from '../account'
 import { getProgress, replaceState, useProgress } from '../store'
-import type { SavedFormula } from './Sandbox'
 import { useTitle } from './util'
-
-const SAVED_KEY = 'faza.sandbox.saved.v1'
-
-function loadFormulas(): SavedFormula[] {
-  try {
-    const raw = localStorage.getItem(SAVED_KEY)
-    const parsed = raw ? JSON.parse(raw) : []
-    return Array.isArray(parsed) ? parsed : []
-  } catch {
-    return []
-  }
-}
-
-function saveFormulas(items: SavedFormula[]) {
-  try {
-    localStorage.setItem(SAVED_KEY, JSON.stringify(items.slice(0, 30)))
-  } catch { /* ignore */ }
-}
 
 /** Шестиугольная диаграмма профиля компетенций (чистый SVG без внешних зависимостей). */
 function CompetencyRadar({ domains }: { domains: CompetencyDomainSummary[] }) {
@@ -75,7 +57,8 @@ export default function PortfolioPage() {
   useTitle(tr('Карта компетенций и портфолио'))
   const learning = useLearning()
   const progress = useProgress()
-  const [formulas, setFormulas] = useState<SavedFormula[]>(loadFormulas)
+  const acc = useAccount()
+  const formulas = progress.savedFormulas
   const [statusMsg, setStatusMsg] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -105,8 +88,7 @@ export default function PortfolioPage() {
         setStatusMsg({ kind: 'err', text: tr(res.error) })
       } else {
         replaceState(res.progress)
-        saveFormulas(res.sandboxFormulas)
-        setFormulas(res.sandboxFormulas)
+        if (acc.status === 'user') void syncNow()
         setStatusMsg({ kind: 'ok', text: tr('Резервная копия успешно объединена с текущим прогрессом без потерь.') })
       }
       if (fileRef.current) fileRef.current.value = ''
@@ -219,7 +201,10 @@ export default function PortfolioPage() {
                 <span>
                   <b>{f.name}</b> · {f.formula.productType} · pH {f.formula.targetPh} · {f.formula.batchGrams} {tr('г')} ({f.formula.rows.length} {tr('комп.')})
                 </span>
-                <span className="small num">{new Date(f.at).toLocaleDateString()}</span>
+                <span className="row">
+                  <span className="small num">{new Date(f.at).toLocaleDateString()}</span>
+                  <Link className="btn small" to={`/sandbox?load=${encodeURIComponent(f.id)}`}>{tr('Открыть')}</Link>
+                </span>
               </li>
             ))}
           </ul>

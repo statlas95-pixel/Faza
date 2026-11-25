@@ -99,11 +99,13 @@ export interface ProgressBackup {
 }
 
 export function createProgressBackup(progress: Progress, sandboxFormulas: any[] = []): ProgressBackup {
+  const norm = normalize(progress)
+  const list = sandboxFormulas.length ? sandboxFormulas : norm.savedFormulas
   return {
     schema: 'faza.backup.v1',
     exportedAt: new Date().toISOString(),
-    progress: normalize(progress),
-    sandboxFormulas: Array.isArray(sandboxFormulas) ? sandboxFormulas : [],
+    progress: { ...norm, savedFormulas: list },
+    sandboxFormulas: Array.isArray(list) ? list : [],
   }
 }
 
@@ -134,12 +136,13 @@ export function importProgressBackup(
   const mergedProgress = mergeProgress(currentProgress, incomingProgress)
   const incomingFormulas = Array.isArray(parsed.sandboxFormulas) ? parsed.sandboxFormulas : []
   const byId = new Map<string, any>()
-  for (const f of [...currentFormulas, ...incomingFormulas]) {
+  for (const f of [...mergedProgress.savedFormulas, ...currentFormulas, ...incomingFormulas]) {
     if (f && typeof f.id === 'string' && f.formula) {
       const prev = byId.get(f.id)
       if (!prev || (f.at ?? 0) >= (prev.at ?? 0)) byId.set(f.id, f)
     }
   }
-  const mergedFormulas = [...byId.values()].sort((a, b) => (b.at ?? 0) - (a.at ?? 0)).slice(0, 30)
+  const mergedFormulas = [...byId.values()].sort((a, b) => (b.at ?? 0) - (a.at ?? 0)).slice(0, 50)
+  mergedProgress.savedFormulas = mergedFormulas
   return { ok: true, progress: mergedProgress, sandboxFormulas: mergedFormulas }
 }

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { tr } from '../../shared/locale'
-import { convertCommercialRaw, diluteSolution, solveHlbMix } from '../../shared/formulation-sim'
+import { calcTipSpeedScale, convertCommercialRaw, diluteSolution, solveHlbMix } from '../../shared/formulation-sim'
 
-type Tab = 'raw' | 'hlb' | 'dilute'
+type Tab = 'raw' | 'hlb' | 'dilute' | 'mixer'
 
 /** Выдвижной «Калькулятор технолога» — доступен с любой страницы платформы. */
 export function TechCalculator() {
@@ -25,9 +25,15 @@ export function TechCalculator() {
   const [c2, setC2] = useState('10')
   const [targetG, setTargetG] = useState('200')
 
+  // Окружная скорость мешалки и масштабирование
+  const [d1, setD1] = useState('50')
+  const [rpm1, setRpm1] = useState('3000')
+  const [d2, setD2] = useState('180')
+
   const rawRes = convertCommercialRaw(Number(activePct), Number(assayPct), Number(batchG))
   const hlbRes = solveHlbMix(Number(hlb1), Number(hlb2), Number(targetHlb), Number(totalEmul))
   const dilRes = diluteSolution(Number(c1), Number(c2), Number(targetG))
+  const mixRes = calcTipSpeedScale(Number(d1), Number(rpm1), Number(d2))
 
   return (
     <>
@@ -61,6 +67,10 @@ export function TechCalculator() {
             <label className={tab === 'dilute' ? 'on' : ''}>
               <input type="radio" name="calc-tab" checked={tab === 'dilute'} onChange={() => setTab('dilute')} />
               {tr('Разведение')}
+            </label>
+            <label className={tab === 'mixer' ? 'on' : ''}>
+              <input type="radio" name="calc-tab" checked={tab === 'mixer'} onChange={() => setTab('mixer')} />
+              {tr('Мешалка')}
             </label>
           </div>
 
@@ -107,6 +117,22 @@ export function TechCalculator() {
                   <div>{tr('Воды очищенной:')} <b>{dilRes.waterGrams} {tr('г')}</b></div>
                 </div>
               ) : <p className="small">{tr('Нужно C₁ ≥ C₂ > 0 и масса > 0.')}</p>}
+            </div>
+          )}
+
+          {tab === 'mixer' && (
+            <div className="calc-body">
+              <p className="small">{tr('Окружная скорость ротора v = π·D·n/60 и перенос оборотов со стакана на реактор при постоянной v_tip.')}</p>
+              <label>{tr('Диаметр насадки в лаборатории D₁, мм')}<input type="number" step="5" value={d1} onChange={(e) => setD1(e.target.value)} /></label>
+              <label>{tr('Обороты в лаборатории n₁, об/мин')}<input type="number" step="100" value={rpm1} onChange={(e) => setRpm1(e.target.value)} /></label>
+              <label>{tr('Диаметр ротора/мешалки реактора D₂, мм')}<input type="number" step="10" value={d2} onChange={(e) => setD2(e.target.value)} /></label>
+              {mixRes ? (
+                <div className="okline num">
+                  <div>{tr('Окружная скорость v_tip:')} <b>{mixRes.tipSpeedMs} {tr('м/с')}</b></div>
+                  <div>{tr('Обороты на реакторе n₂:')} <b>{mixRes.targetRpm2} {tr('об/мин')}</b></div>
+                  <div className="small">{tr(mixRes.regime)}</div>
+                </div>
+              ) : <p className="small">{tr('Введите положительные диаметры и обороты.')}</p>}
             </div>
           )}
         </aside>

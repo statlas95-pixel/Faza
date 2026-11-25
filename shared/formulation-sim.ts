@@ -572,3 +572,29 @@ export function diluteSolution(c1Pct: number, c2Pct: number, targetGrams: number
     waterGrams: r2(waterGrams),
   }
 }
+
+/**
+ * Расчёт окружной скорости мешалки/ротора v_tip = π · D · n / 60 (м/с)
+ * и пересчёт оборотов на реактор с диаметром D2 по критерию постоянной v_tip.
+ */
+export function calcTipSpeedScale(d1Mm: number, rpm1: number, d2Mm: number) {
+  if (
+    !Number.isFinite(d1Mm) || d1Mm <= 0 ||
+    !Number.isFinite(rpm1) || rpm1 <= 0 ||
+    !Number.isFinite(d2Mm) || d2Mm <= 0
+  ) return null
+  const tipSpeedMs = (Math.PI * (d1Mm / 1000) * rpm1) / 60
+  const targetRpm2 = (rpm1 * d1Mm) / d2Mm
+  const regime = tipSpeedMs < 1.5
+    ? 'мягкое перемешивание (якорь / рамная мешалка)'
+    : tipSpeedMs < 6
+      ? 'средний сдвиг (пропеллер / турбина)'
+      : tipSpeedMs < 15
+        ? 'диспергирование / предварительное эмульгирование'
+        : 'высокий сдвиг (ротор-статор / гомогенизация)'
+  return {
+    tipSpeedMs: r2(tipSpeedMs),
+    targetRpm2: Math.round(targetRpm2),
+    regime,
+  }
+}

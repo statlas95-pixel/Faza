@@ -2,6 +2,7 @@
 // Правило: ничего не теряем — объединяем, а при конфликте берём более позднее или более полное.
 export interface Attempt { id: string; labId: string; at: number; summary: string; detail?: any }
 export interface SavedSource { key: string; title: string; authors: string; year: string; type: string; doi?: string; url?: string; provider: string; access: string; note?: string; topic?: string; suggested?: boolean; at: number }
+export interface SavedFormulaRecord { id: string; name: string; at: number; presetId?: string; formula: any }
 import type { Evidence, Result, DiagTrack } from './mastery'
 export interface Profile { goal?: string; context?: string; at?: number }
 export interface Diag { answers: Record<string, { result: Result; note?: string; value?: string; at: number }>; track?: DiagTrack; changedAt?: number; startedAt?: number; finishedAt?: number }
@@ -12,19 +13,19 @@ export interface Progress {
   labs: Record<string, any>
   labDone: Record<string, { at: number; attempts: number; summary?: string }>
   bookmarks: { path: string; title: string; kind: string; at: number }[]
-  attempts: Attempt[]; savedSources: SavedSource[]; settings: Settings
+  attempts: Attempt[]; savedSources: SavedSource[]; savedFormulas: SavedFormulaRecord[]; settings: Settings
   last?: { path: string; title: string; at: number }
   profile: Profile; diag: Diag; evidence: Evidence[]; hints: Record<string, number>
 }
 export const emptyProgress = (): Progress => ({
-  visited: {}, scroll: {}, checks: {}, labs: {}, labDone: {}, bookmarks: [], attempts: [], savedSources: [],
+  visited: {}, scroll: {}, checks: {}, labs: {}, labDone: {}, bookmarks: [], attempts: [], savedSources: [], savedFormulas: [],
   settings: { level: 'practitioner', hints: true }, profile: {}, diag: { answers: {} }, evidence: [], hints: {},
 })
 /** Приводит объект любой прошлой версии к текущей форме (миграция данных 0.1 -> 0.2). */
 export function normalize(p: any): Progress {
   const e = emptyProgress()
   if (!p || typeof p !== 'object') return e
-  return { ...e, ...p, settings: { ...e.settings, ...(p.settings ?? {}) }, attempts: Array.isArray(p.attempts) ? p.attempts : [], savedSources: Array.isArray(p.savedSources) ? p.savedSources : [], bookmarks: Array.isArray(p.bookmarks) ? p.bookmarks : [], profile: p.profile ?? {}, diag: { answers: {}, ...(p.diag ?? {}) }, evidence: Array.isArray(p.evidence) ? p.evidence : [], hints: p.hints ?? {} }
+  return { ...e, ...p, settings: { ...e.settings, ...(p.settings ?? {}) }, attempts: Array.isArray(p.attempts) ? p.attempts : [], savedSources: Array.isArray(p.savedSources) ? p.savedSources : [], savedFormulas: Array.isArray(p.savedFormulas) ? p.savedFormulas.filter((f: any) => f && typeof f.id === 'string' && f.formula) : [], bookmarks: Array.isArray(p.bookmarks) ? p.bookmarks : [], profile: p.profile ?? {}, diag: { answers: {}, ...(p.diag ?? {}) }, evidence: Array.isArray(p.evidence) ? p.evidence : [], hints: p.hints ?? {} }
 }
 const maxMap = (a: Record<string, number>, b: Record<string, number>) => {
   const o: Record<string, number> = { ...a }
@@ -56,6 +57,7 @@ export function mergeProgress(aRaw: any, bRaw: any): Progress {
   out.bookmarks = byKey([...a.bookmarks, ...b.bookmarks], (x) => x.path, (x) => x.at)
   out.attempts = byKey([...a.attempts, ...b.attempts], (x) => x.id, (x) => x.at)
   out.savedSources = byKey([...a.savedSources, ...b.savedSources], (x) => x.key, (x) => x.at)
+  out.savedFormulas = byKey([...a.savedFormulas, ...b.savedFormulas], (x) => x.id, (x) => x.at).slice(0, 50)
   out.last = !a.last ? b.last : !b.last ? a.last : b.last.at >= a.last.at ? b.last : a.last
   out.settings = { ...a.settings, ...b.settings }
   const diagChangedAt = Math.max(a.diag.changedAt ?? 0, b.diag.changedAt ?? 0)
@@ -89,7 +91,7 @@ export function summarize(pRaw: any) {
     topics: Object.keys(p.visited).length,
     answers: Object.values(p.checks).reduce((n, c) => n + Object.keys(c).length, 0),
     labsStarted: Object.keys(p.labs).length, labsDone: Object.keys(p.labDone).length,
-    attempts: p.attempts.length, bookmarks: p.bookmarks.length, sources: p.savedSources.length, evidence: p.evidence.length, diagnostic: Object.keys(p.diag.answers).length,
+    attempts: p.attempts.length, bookmarks: p.bookmarks.length, sources: p.savedSources.length, formulas: p.savedFormulas.length, evidence: p.evidence.length, diagnostic: Object.keys(p.diag.answers).length,
   }
 }
 export const isEmpty = (p: any) => { const s = summarize(p); return Object.values(s).every((v) => v === 0) }
@@ -99,6 +101,7 @@ export function fingerprint(p: any) {
   const parts: unknown[] = [Object.keys(n.visited).sort(), n.checks, Object.keys(n.labs).sort(), n.labDone, n.bookmarks.map((b) => b.path).sort(), n.attempts.map((t) => t.id).sort(), n.savedSources.map((x) => x.key).sort()]
   // Отпечатки прежнего формата сохраняются; новые ответы диагностики дают новый импорт.
   if (n.diag.track || n.diag.changedAt) parts.push([n.diag.track, n.diag.changedAt, n.diag.answers])
+  if (n.savedFormulas.length) parts.push(n.savedFormulas.map((f) => f.id).sort())
   const s = JSON.stringify(parts)
   let h1 = 0x811c9dc5, h2 = 0x1b873593
   for (let i = 0; i < s.length; i++) { h1 = Math.imul(h1 ^ s.charCodeAt(i), 16777619); h2 = Math.imul(h2 + s.charCodeAt(i), 0x85ebca6b) ^ (h2 >>> 13) }

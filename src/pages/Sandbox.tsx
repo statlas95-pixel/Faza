@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { language, tr } from '../../shared/locale'
 import {
   autoBalanceWater,
@@ -20,34 +20,12 @@ import { api, ApiError, useAccount } from '../account'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
 import { renderSafe } from '../md'
-import { useProgress } from '../store'
+import { deleteSavedFormula, saveFormula, useProgress, type SavedFormulaRecord } from '../store'
 import { useTitle } from './util'
 
-const SAVED_KEY = 'faza.sandbox.saved.v1'
+const ONBOARD_KEY = 'faza.lab.onboard.v1'
 
-export interface SavedFormula {
-  id: string
-  name: string
-  at: number
-  presetId?: string
-  formula: FormulaInput
-}
-
-function loadSavedFormulas(): SavedFormula[] {
-  try {
-    const raw = localStorage.getItem(SAVED_KEY)
-    const arr = raw ? JSON.parse(raw) : []
-    return Array.isArray(arr) ? arr : []
-  } catch {
-    return []
-  }
-}
-
-function writeSavedFormulas(items: SavedFormula[]) {
-  try {
-    localStorage.setItem(SAVED_KEY, JSON.stringify(items.slice(0, 30)))
-  } catch { /* ignore */ }
-}
+export type SavedFormula = SavedFormulaRecord
 
 const blankFormula = (): FormulaInput => ({
   productType: 'leave-on',
@@ -107,8 +85,39 @@ export default function SandboxPage() {
   const [catPhase, setCatPhase] = useState<'all' | Phase>('all')
   const [catRole, setCatRole] = useState<'all' | IngredientRole>('all')
   const [saveName, setSaveName] = useState('')
-  const [saved, setSaved] = useState<SavedFormula[]>(loadSavedFormulas)
+  const saved = progress.savedFormulas
   const [copied, setCopied] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const simRef = useRef<HTMLDivElement>(null)
+  const [showOnboard, setShowOnboard] = useState(() => {
+    try { return localStorage.getItem(ONBOARD_KEY) !== 'done' } catch { return true }
+  })
+
+  function dismissOnboard() {
+    setShowOnboard(false)
+    try { localStorage.setItem(ONBOARD_KEY, 'done') } catch { /* ignore */ }
+  }
+
+  // Обработка ?add=<ingredientId> (из Ctrl+K) и ?load=<savedId> (из Портфолио)
+  useEffect(() => {
+    const addId = searchParams.get('add')
+    const loadId = searchParams.get('load')
+    if (addId) {
+      const ing = ingredientById(addId)
+      if (ing) {
+        const defaultPct = Number(((ing.typicalRange[0] + Math.min(ing.typicalRange[1], ing.typicalRange[0] + 2)) / 2).toFixed(2))
+        setFormula((prev) => ({
+          ...prev,
+          rows: [...prev.rows, { ingredientId: ing.id, phase: ing.recommendedPhase, pct: defaultPct }],
+        }))
+      }
+      setSearchParams({}, { replace: true })
+    } else if (loadId) {
+      const found = saved.find((x) => x.id === loadId)
+      if (found) loadFormulaState(found.formula, found.presetId ?? '')
+      setSearchParams({}, { replace: true })
+    }
+  }, [searchParams, saved, setSearchParams])
 
   // ИИ-наставник для разбора текущей рецептуры
   const [aiBusy, setAiBusy] = useState(false)
@@ -199,16 +208,12 @@ export default function SandboxPage() {
       presetId: presetId || undefined,
       formula: JSON.parse(JSON.stringify(formula)),
     }
-    const next = [entry, ...saved].slice(0, 30)
-    setSaved(next)
-    writeSavedFormulas(next)
+    saveFormula(entry)
     setSaveName('')
   }
 
   function deleteSaved(id: string) {
-    const next = saved.filter((x) => x.id !== id)
-    setSaved(next)
-    writeSavedFormulas(next)
+    deleteSavedFormula(id)
   }
 
   function exportJson() {
@@ -311,6 +316,55 @@ export default function SandboxPage() {
         {tr('Собирайте косметические рецептуры по фазам A, B и C с прогнозом внешнего вида на 5 стадиях, микроскопией, балансом 100 %, расчётом ГЛБ, проверкой конфликтов и лимитов ТР ТС 009/2011 и EU 1223/2009.')}
       </p>
 
+      {/* Короткий онбординг «Первая варка» */}
+      {showOnboard && (
+        <section className="panel sb-onboard" aria-label={tr('Быстрый старт в Лаборатории')}>
+          <div className="sandbox-head-row">
+            <div>
+              <b>{tr('Быстрый старт: первая варка за 30 секунд')}</b>
+              <ol className="sb-onboard-steps small">
+                <li>{tr('Выберите кейс ниже (или начните с «Базового крема O/W» — в нём специально заложены 3 ошибки).')}</li>
+                <li>{tr('Поправьте эмульгатор/фазу и нажмите «Автобаланс воды», чтобы сумма стала ровно 100 %.')}</li>
+                <li>{tr('Нажмите «▶ Провести варку» и проследите, как исчезают дефекты на всех 5 стадиях и под микроскопом.')}</li>
+              </ol>
+            </div>
+            <button type="button" className="btn small ghost" onClick={dismissOnboard}>
+              {tr('Понятно, скрыть')}
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* Прилипающая панель живой сводки */}
+      <div className="sb-sticky-bar" role="region" aria-label={tr('Живая сводка рецептуры')}>
+        <div className="sb-sticky-metrics num">
+          <span className={`sb-pill ${evaluation.balanced ? 'ok' : 'bad'}`}>
+            {tr('Сумма:')} <b>{evaluation.totalPct} %</b>
+          </span>
+          <span className="sb-pill">
+            {tr('ГЛБ:')} <b>{evaluation.requiredHlb ?? '—'} / {evaluation.actualHlb ?? '—'}</b>
+          </span>
+          <span className={`sb-pill ${evaluation.errorsCount === 0 ? 'ok' : 'bad'}`}>
+            {tr('Ошибки:')} <b>{evaluation.errorsCount}</b>
+          </span>
+          <span className="sb-pill">
+            <b>{evaluation.costPerKg} {tr('₽/кг')}</b>
+          </span>
+        </div>
+        <div className="row sb-sticky-actions">
+          <button type="button" className="btn small" onClick={balanceWater}>
+            {tr('Баланс воды → 100 %')}
+          </button>
+          <button
+            type="button"
+            className="btn small primary"
+            onClick={() => simRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          >
+            ▶ {tr('К варке')}
+          </button>
+        </div>
+      </div>
+
       {/* Выбор кейса */}
       <section className="panel sandbox-presets">
         <div className="sandbox-preset-bar">
@@ -349,7 +403,9 @@ export default function SandboxPage() {
       </section>
 
       {/* Анимированный прогноз внешнего вида на 5 стадиях + микроскопия */}
-      <ProcessSimulatorPanel forecast={forecast} evaluation={evaluation} />
+      <div ref={simRef}>
+        <ProcessSimulatorPanel forecast={forecast} evaluation={evaluation} />
+      </div>
 
       {/* Сравнение «До / После» */}
       {diff && (

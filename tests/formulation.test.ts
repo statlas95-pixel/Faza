@@ -16,12 +16,14 @@ import {
 
 import {
   ANTIPATTERNS,
+  calcTipSpeedScale,
   convertCommercialRaw,
   diffFormulas,
   diluteSolution,
   predictProcessAppearance,
   solveHlbMix,
 } from '../shared/formulation-sim'
+import { emptyProgress, mergeProgress } from '../shared/merge'
 
 const ingredients: Ingredient[] = YAML.parse(fs.readFileSync(path.join('content', 'ingredients.yaml'), 'utf8'))
 const presets: SandboxPreset[] = YAML.parse(fs.readFileSync(path.join('content', 'sandbox-presets.yaml'), 'utf8'))
@@ -234,5 +236,16 @@ describe('Проверка конфликтов, температур и рег�
 
     // Разведение 50% NaOH -> 10% раствор, 200 г => 40 г щёлочи + 160 г воды
     expect(diluteSolution(50, 10, 200)).toEqual({ stockGrams: 40, waterGrams: 160 })
+
+    // Окружная скорость: D1=50 мм, n1=3000 об/мин => v_tip = π * 0.05 * 50 = 7.85 м/с; D2=150 мм => n2 = 1000 об/мин
+    const mix = calcTipSpeedScale(50, 3000, 150)
+    expect(mix?.tipSpeedMs).toBe(7.85)
+    expect(mix?.targetRpm2).toBe(1000)
+
+    // Синхронизация сохранённых рецептур Лаборатории в Progress через mergeProgress
+    const p1 = { ...emptyProgress(), savedFormulas: [{ id: 'f1', name: 'Крем v1', at: 100, formula: before }] }
+    const p2 = { ...emptyProgress(), savedFormulas: [{ id: 'f1', name: 'Крем v2', at: 200, formula: after }, { id: 'f2', name: 'Гель', at: 150, formula: before }] }
+    const merged = mergeProgress(p1, p2)
+    expect(merged.savedFormulas.map((x) => `${x.id}:${x.name}`)).toEqual(['f1:Крем v2', 'f2:Гель'])
   })
 })
