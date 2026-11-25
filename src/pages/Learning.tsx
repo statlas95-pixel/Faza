@@ -87,7 +87,16 @@ export function MapPage() {
             <div key={m.id} className="module"><h3>{m.name}</h3>
               <ul>{[...m.topics.map((t) => ({ ...t, shared: false })), ...(m.also ?? []).map((id) => ({ id, prereq: [] as string[], shared: true }))].sort((a, b) => (topicById(a.id)?.level ?? 2) - (topicById(b.id)?.level ?? 2)).map((ref) => { const t = topicById(ref.id); if (!t) return null; const sk = skillOfTopic(t.id), s = sk ? L.states[sk.id] : undefined, r = L.route.find((x) => x.topic === t.id); return (
                 <li key={ref.id} className={`mtopic ${r?.status ?? ''}`}><Link to={`/topics/${t.id}`}><b>{t.title}</b></Link>
-                  <span className="mmeta"><span className={`lvtag lv${t.level}`} title={levelHint[t.level]}>{levelLabel[t.level]}</span>{ref.shared && <span className="tag">{tr("общая с модулем «")}{moduleOfTopic(t.id)?.module.name}»</span>}{r?.status === 'now' && <span className="tag now">{tr("рекомендуем сейчас")}</span>}{L.p.visited[t.id] ? <span className="tag">{tr("открывалась")}</span> : null}<LevelBar s={s} compact /> {t.labs.length ? `${tr("практика: ")}${t.labs.length}` : ''}</span>
+                  <span className="mmeta"><span className={`lvtag lv${t.level}`} title={levelHint[t.level]}>{levelLabel[t.level]}</span>{ref.shared && <span className="tag">{tr("общая с модулем «")}{moduleOfTopic(t.id)?.module.name}»</span>}{r?.status === 'now' && <span className="tag now">{tr("рекомендуем сейчас")}</span>}{L.p.visited[t.id] ? <span className="tag">{tr("открывалась")}</span> : null}<LevelBar s={s} compact /></span>
+                  {!!t.labs.length && (
+                    <span className="mlabs">
+                      {t.labs.map(labById).filter(Boolean).map((lab) => lab && (
+                        <Link key={lab.id} to={`/labs/${lab.id}`} className={`mlab ${L.p.labDone[lab.id] ? 'done' : ''}`}>
+                          {L.p.labDone[lab.id] ? '✓ ' : '▸ '}{lab.title}
+                        </Link>
+                      ))}
+                    </span>
+                  )}
                   {!!ref.prereq?.length && <span className="small prereq">{tr("после: ")}{ref.prereq.map((x) => topicById(x)?.title).join('; ')}</span>}</li>) })}
                 {(m.planned ?? []).map((x) => <li key={x} className="mtopic planned"><b>{x}</b><span className="mmeta"><span className="tag">{tr("в плане, ещё не опубликована")}</span></span></li>)}</ul></div>))}</div>
         </section>))}

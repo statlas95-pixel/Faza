@@ -326,4 +326,8 @@ header.top { flex-wrap: wrap }
 .comp-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff;display:grid;gap:6px;min-width:0}
 .comp-card-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .comp-card-head h3{margin:0;font-size:1rem}
+.mlabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.mlab{font-size:.76rem;line-height:1.25;padding:3px 8px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--plum)!important;text-decoration:none}
+.mlab:hover{border-color:var(--plum);background:#F3EFF8}
+.mlab.done{border-color:var(--teal);background:#E2F4F0;color:#0B5553!important}
 @media (max-width:980px){ .comp-grid{grid-template-columns:minmax(0,1fr)} }

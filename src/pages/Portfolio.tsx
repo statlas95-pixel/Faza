@@ -84,9 +84,6 @@ export default function PortfolioPage() {
   const totalSkills = profile.reduce((s, d) => s + d.total, 0)
   const completedLabs = Object.entries(progress.labDone).sort((a, b) => b[1].at - a[1].at)
 
-  const featuredIds = ['gmp-batch-record', 'scaleup-troubleshooting', 'aqueous-clouding-branch']
-  const featuredLabs = featuredIds.map((id) => labById(id)).filter(Boolean)
-
   function handleExport() {
     const backup = createProgressBackup(getProgress(), formulas)
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
@@ -165,23 +162,6 @@ export default function PortfolioPage() {
               )
             })}
           </div>
-        </div>
-      </section>
-
-      <section className="panel">
-        <h2>{tr('Новые тренажёры и симуляторы (GMP и масштабирование)')}</h2>
-        <div className="cards">
-          {featuredLabs.map((lab) => lab && (
-            <Link key={lab.id} to={`/labs/${lab.id}`} className="card lab">
-              <span className="dom">{lab.role}</span>
-              <h3>{lab.title}</h3>
-              <p>{lab.summary}</p>
-              <span className="meta num">
-                {lab.minutes} {tr('мин')}
-                {progress.labDone[lab.id] ? ` · ${tr('пройдено')}` : ''}
-              </span>
-            </Link>
-          ))}
         </div>
       </section>
 

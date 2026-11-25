@@ -16,6 +16,7 @@ questions:
   - Какое решение следует из неполного протокола?
 labs:
   - cip-verification-sheet
+  - gmp-batch-record
 related:
   - water-sanitation
 checks:
