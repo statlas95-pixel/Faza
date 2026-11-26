@@ -33,6 +33,62 @@ function SearchBox() {
     </form>)
 }
 
+function LanguageMenu() {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const onDoc = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('mousedown', onDoc)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDoc)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  return (
+    <div className={`language-picker ${open ? 'open' : ''}`} ref={ref}>
+      <button
+        type="button"
+        className="lang-btn"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={language === 'en' ? 'Language' : 'Язык'}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span>{language === 'en' ? 'English' : 'Русский'}</span>
+        <svg className="lang-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2.75 4.5L6 7.75L9.25 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {open && (
+        <div className="lang-menu" role="menu" aria-label={language === 'en' ? 'Select language' : 'Выбор языка'}>
+          {([['ru', 'Русский'], ['en', 'English']] as const).map(([code, label]) => (
+            <button
+              key={code}
+              type="button"
+              role="menuitemradio"
+              aria-checked={language === code}
+              lang={code}
+              className={`lang-opt ${language === code ? 'on' : ''}`}
+              onClick={() => { setOpen(false); if (code !== language) chooseLanguage(code) }}
+            >
+              <span>{label}</span>
+              {language === code && <span className="lang-check" aria-hidden="true">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function Shell() {
   const loc = useLocation()
   const inLab = /^\/labs\/.+/.test(loc.pathname)
@@ -75,15 +131,7 @@ function Shell() {
     const t = document.title
     if (loc.pathname !== '/') update((p) => { p.last = { path: loc.pathname, title: t, at: Date.now() } })
   }, [loc.pathname])
-  const languagePicker = <label className="language-picker">
-    <span className="sr">{language === 'en' ? 'Language' : 'Язык'}</span>
-    <select value={language} onChange={event => chooseLanguage(event.target.value === 'en' ? 'en' : 'ru')}>
-      <option value="ru" lang="ru">Русский</option><option value="en" lang="en">English</option>
-    </select>
-    <svg className="lang-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-      <path d="M2.75 4.5L6 7.75L9.25 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  </label>
+  const languagePicker = <LanguageMenu />
   const themeButton = (
     <button
       type="button"
