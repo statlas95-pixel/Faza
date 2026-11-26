@@ -36,7 +36,7 @@ export default function StabilityBench({ lab }: { lab: LabMeta }) {
             <td className="num">{fmt(proc(r.cfg.process).d)}</td><td className="num">{fmt(r.cfg.c, 2)}</td><td className="num">{r.cfg.phi}</td>
             <td className="num">{fmt(r.res.eta0, 2)}</td>
             <td className="num">{fmt(r.res.eta1000_mPas, 3)} <VerdictTag v={r.res.sprayOk ? 'ok' : 'wrong'} label={r.res.sprayOk ? tr("распыляется") : tr("не распыляется")} /></td>
-            <td className="num">{days(r.res.days)} <VerdictTag v={r.res.stableOk ? 'ok' : 'wrong'} label={r.res.stableOk ? tr("≥ 24 мес") : '< 24 мес'} /></td>
+            <td className="num">{days(r.res.days)} <VerdictTag v={r.res.stableOk ? 'ok' : 'wrong'} label={r.res.stableOk ? tr("≥ 24 мес") : tr("< 24 мес")} /></td>
             <td className="num">{fmt(r.res.centrifuge_mm, 2)} <span className="dim">{tr("(линейный пересчёт: ")}{fmt(r.res.centrifuge_naive_mm, 2)})</span></td>
             <td>{r.pred ? <>{(lab.predictions as any[]).find((p) => p.id === r.pred).text} <VerdictTag v={predOf(r.res.days) === r.pred ? 'ok' : 'weak'} label={predOf(r.res.days) === r.pred ? tr("совпал") : tr("не совпал")} /></> : <span className="dim">—</span>}</td>
           </tr>))}</tbody>

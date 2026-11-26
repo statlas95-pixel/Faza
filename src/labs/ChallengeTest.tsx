@@ -79,10 +79,10 @@ export default function ChallengeTest({ lab }: { lab: LabMeta }) {
             <svg viewBox="0 0 560 212" className="trend-svg" role="img" aria-label={tr('График Challenge Test ISO 11930')}>
               {/* Нулевая линия (отсутствие роста) */}
               <line x1="56" y1={yAt(0)} x2="528" y2={yAt(0)} stroke="#D9482B" strokeDasharray="5 3" strokeWidth="1.4" />
-              <text x="528" y={yAt(0) - 5} textAnchor="end" fontSize="9.5" fill="#D9482B">Δlog = 0 (граница роста)</text>
+              <text x="528" y={yAt(0) - 5} textAnchor="end" fontSize="9.5" fill="#D9482B">{tr('Δlog = 0 (граница роста)')}</text>
               {/* Линия +3 log (бактерии) */}
               <line x1="56" y1={yAt(3)} x2="528" y2={yAt(3)} stroke="#0E7C7B" strokeDasharray="4 4" strokeWidth="1" opacity="0.6" />
-              <text x="528" y={yAt(3) - 4} textAnchor="end" fontSize="9" fill="#0E7C7B">+3 log (порог бактерий)</text>
+              <text x="528" y={yAt(3) - 4} textAnchor="end" fontSize="9" fill="#0E7C7B">{tr('+3 log (порог бактерий)')}</text>
               <line x1="56" y1="176" x2="528" y2="176" stroke="currentColor" opacity="0.25" />
               <line x1="56" y1="24" x2="56" y2="176" stroke="currentColor" opacity="0.25" />
               {['День 0', 'День 7', 'День 14', 'День 28'].map((lbl, idx) => (

@@ -98,14 +98,14 @@ function ReactorSchematic({ r, ctl, running }: { r: ReactorState; ctl: ReactorCo
       </g>
       {/* Линия вакуума сверху */}
       <path d="M210 46 L210 22 L276 22" fill="none" stroke={ctl.vacuumOn ? '#0E7C7B' : '#8A7D9A'} strokeWidth="2.5" />
-      <text x="278" y="25" fontSize="10" fill="currentColor" fontWeight="600">{r.vacuumBar} бар</text>
+      <text x="278" y="25" fontSize="10" fill="currentColor" fontWeight="600">{r.vacuumBar} {tr('бар')}</text>
       {/* Термодатчик */}
       <text x="16" y="128" fontSize="12" fill={jacketColor} fontWeight="700">{r.tempC} °C</text>
       <text x="16" y="144" fontSize="9.5" fill="currentColor" opacity="0.7">
         {ctl.jacket === 'heat' ? tr('Нагрев') : ctl.jacket === 'cool' ? tr('Охлажд.') : tr('Рубашка выкл')}
       </text>
       <text x="160" y="210" textAnchor="middle" fontSize="11" fill="currentColor" fontWeight="600">
-        {tr('Время:')} {r.minute} {tr('мин')} · {tr('Капли:')} {r.phaseBAdded ? `${r.dropletUm} мкм` : '—'}
+        {tr('Время:')} {r.minute} {tr('мин')} · {tr('Капли:')} {r.phaseBAdded ? `${r.dropletUm} ${tr('мкм')}` : '—'}
       </text>
     </svg>
   )
@@ -202,7 +202,7 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
               <div><dt>{tr('Температура')}</dt><dd className="num">{r.tempC} °C</dd></div>
               <div><dt>{tr('Вакуум')}</dt><dd className="num">{r.vacuumBar} {tr('бар')}</dd></div>
               <div><dt>{tr('Воздух (норма ≤ 3 %)')}</dt><dd className="num">{r.airPct} %</dd></div>
-              <div><dt>{tr('Капли (норма ≤ 4 мкм)')}</dt><dd className="num">{r.phaseBAdded ? `${r.dropletUm} мкм` : '—'}</dd></div>
+              <div><dt>{tr('Капли (норма ≤ 4 мкм)')}</dt><dd className="num">{r.phaseBAdded ? `${r.dropletUm} ${tr('мкм')}` : '—'}</dd></div>
               <div><dt>{tr('Активы фазы C')}</dt><dd className="num">{r.activeIntegrityPct} %</dd></div>
               <div><dt>{tr('Сетка структуры')}</dt><dd className="num">{r.structurePct} %</dd></div>
             </dl>

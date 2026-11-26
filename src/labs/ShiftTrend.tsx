@@ -117,7 +117,7 @@ export default function ShiftTrend({ lab }: { lab: LabMeta }) {
                     <circle cx={x} cy={yCur(p.currentA)} r={sel ? 5.5 : 3.5} fill="var(--plum)" />
                     <circle cx={x} cy={yVac(p.vacuumBar)} r={sel ? 5.5 : 3.5} fill="var(--teal)" />
                     <text x={x} y="196" textAnchor="middle" fontSize="10" fill="currentColor" fontWeight={sel ? 700 : 400}>
-                      {p.min}м
+                      {p.min}{tr('м')}
                     </text>
                   </g>
                 )
@@ -141,7 +141,7 @@ export default function ShiftTrend({ lab }: { lab: LabMeta }) {
             <dl className="outcome">
               <div><dt>{tr('Выбранная минута')}</dt><dd>{activePt.min} {tr('мин')}</dd></div>
               <div><dt>{tr('Температура')}</dt><dd>{activePt.tempC} °C</dd></div>
-              <div><dt>{tr('Ток привода')}</dt><dd>{activePt.currentA} А</dd></div>
+              <div><dt>{tr('Ток привода')}</dt><dd>{activePt.currentA} {tr('А')}</dd></div>
               <div><dt>{tr('Вакуум')}</dt><dd>{activePt.vacuumBar} {tr('бар')}</dd></div>
             </dl>
           )}

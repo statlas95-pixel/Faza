@@ -326,7 +326,7 @@ export function ProcessSimulatorPanel({
           <h3>{tr(stage.textureLabel)}</h3>
           <p>{tr(stage.summary)}</p>
           <dl className="sb-mini-meta">
-            <div><dt>{tr('Прогноз вязкости')}</dt><dd>{stage.viscosityBand}</dd></div>
+            <div><dt>{tr('Прогноз вязкости')}</dt><dd>{tr(stage.viscosityBand)}</dd></div>
             <div><dt>{tr('Прозрачность')}</dt><dd>{tr(OPACITY_LABELS[stage.opacity] ?? stage.opacity)}</dd></div>
           </dl>
           {stage.defects.length > 0 && (

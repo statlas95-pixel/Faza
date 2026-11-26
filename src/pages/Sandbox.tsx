@@ -294,14 +294,24 @@ export default function SandboxPage() {
         : evaluation.issues.some((i) => i.code.includes('carbomer'))
           ? 'polymer-thickeners'
           : 'emulsifier-selection'
-      const summary = [
-        `Рецептура (${formula.productType}, pH ${formula.targetPh}, фазы A=${formula.phaseTempC.A}°C / B=${formula.phaseTempC.B}°C / C=${formula.phaseTempC.C}°C):`,
-        ...evaluation.rows.map((r) => `[${r.phase}] ${r.ingredient.inci} ${r.pct}%`),
-        evaluation.issues.length
-          ? `Найдены замечания валидатора: ${evaluation.issues.map((i) => i.title).join('; ')}`
-          : 'Критических ошибок валидатор не нашёл.',
-        'Кратко объясни физико-химические причины замечаний и предложи 1–2 практических шага улучшения.',
-      ].join('\n').slice(0, 1400)
+      const summary = (language === 'en'
+        ? [
+            `Formula (${formula.productType}, pH ${formula.targetPh}, phases A=${formula.phaseTempC.A}°C / B=${formula.phaseTempC.B}°C / C=${formula.phaseTempC.C}°C):`,
+            ...evaluation.rows.map((r) => `[${r.phase}] ${r.ingredient.inci} ${r.pct}%`),
+            evaluation.issues.length
+              ? `Validator findings: ${evaluation.issues.map((i) => i.title).join('; ')}`
+              : 'No critical validator errors found.',
+            'Briefly explain the physicochemical reasons behind the findings and suggest 1–2 practical improvement steps.',
+          ]
+        : [
+            `Рецептура (${formula.productType}, pH ${formula.targetPh}, фазы A=${formula.phaseTempC.A}°C / B=${formula.phaseTempC.B}°C / C=${formula.phaseTempC.C}°C):`,
+            ...evaluation.rows.map((r) => `[${r.phase}] ${r.ingredient.inci} ${r.pct}%`),
+            evaluation.issues.length
+              ? `Найдены замечания валидатора: ${evaluation.issues.map((i) => i.title).join('; ')}`
+              : 'Критических ошибок валидатор не нашёл.',
+            'Кратко объясни физико-химические причины замечаний и предложи 1–2 практических шага улучшения.',
+          ]
+      ).join('\n').slice(0, 1400)
       const res = await api<any>('POST', '/api/ai/tutor', {
         language,
         model,
@@ -509,7 +519,7 @@ export default function SandboxPage() {
           {(['A', 'B', 'C'] as Phase[]).map((ph) => (
             <label key={ph}>
               <span className="sb-param-head">
-                <span className={`phase-pill p-${ph}`}>{tr(`Фаза ${ph}`)}</span>
+                <span className={`phase-pill p-${ph}`}>{tr('Фаза')} {ph}</span>
                 <b className="num">{formula.phaseTempC[ph]} °C</b>
               </span>
               <input
@@ -749,7 +759,7 @@ export default function SandboxPage() {
                 <td colSpan={2}><b>{tr('Итого на партию')}</b></td>
                 <td className="num"><b>{evaluation.totalPct} %</b></td>
                 <td className="num"><b>{formula.batchGrams} {tr('г')}</b></td>
-                <td className="num"><b>{evaluation.batchCost} ₽</b></td>
+                <td className="num"><b>{evaluation.batchCost} {tr('₽')}</b></td>
                 <td />
               </tr>
             </tfoot>

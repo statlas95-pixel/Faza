@@ -7655,5 +7655,13 @@
   "1. **Правильный загуститель под кислые и солевые активы:** карбомер не выдерживает ни pH 3,5 (`Ascorbic Acid`, AHA), ни солевые формы (`Sodium Ascorbyl Phosphate`, `Zinc PCA`). Используйте `Polyacrylate Crosspolymer-6` (Sepimax Zen), `Sclerotium Gum` или `Xanthan Gum`.": "1. **Right thickener for acidic and ionic actives:** carbomer tolerates neither pH 3.5 (`Ascorbic Acid`, AHAs) nor salt-forming actives (`Sodium Ascorbyl Phosphate`, `Zinc PCA`). Use `Polyacrylate Crosspolymer-6` (Sepimax Zen), `Sclerotium Gum`, or `Xanthan Gum`.",
   "2. **Антиоксидантная + хелатная пара:** даже 1 ppm ионов Fe³⁺ из сырья или воды ускоряет окисление масел, витамина C и койевой кислоты на порядки. Пара `Disodium EDTA` (или `Sodium Phytate`) 0,1 % + `Tocopherol` 0,2–0,5 % — базовый стандарт.": "2. **Antioxidant + chelator pair:** even 1 ppm of Fe³⁺ ions from raw materials or water accelerates the oxidation of oils, vitamin C, and kojic acid by orders of magnitude. Pairing `Disodium EDTA` (or `Sodium Phytate`) 0.1% + `Tocopherol` 0.2–0.5% is the baseline standard.",
   "3. **Уход от воды для экстремально лабильных активов:** чистый ретинол и L-аскорбиновая кислота на порядок стабильнее в безводных (силиконово-эмолентных или пропандиоловых) базах и безвоздушной таре [@barel2009; @isotr18811].": "3. **Waterless bases for extremely labile actives:** pure retinol and L-ascorbic acid are an order of magnitude more stable in anhydrous (silicone–emollient or propanediol) bases and airless packaging [@barel2009; @isotr18811].",
-  "₽": "RUB"
+  "₽": "RUB",
+  "Δlog = 0 (граница роста)": "Δlog = 0 (growth boundary)",
+  "+3 log (порог бактерий)": "+3 log (bacteria threshold)",
+  "< 24 мес": "< 24 mo",
+  "А": "A",
+  "Фаза A": "Phase A",
+  "Фаза B": "Phase B",
+  "Фаза C": "Phase C",
+  "Учебная модель Гершеля — Балкли. При σ_y > 0 вязкость при малых скоростях сдвига растёт неограниченно — это модельное представление предела текучести.": "Training Herschel–Bulkley model. When σ_y > 0, apparent viscosity diverges at low shear rates — a model representation of yield stress."
 }

@@ -1,6 +1,8 @@
 // Детерминированный расчётный и валидационный движок «Песочницы рецептур».
 // Чистые функции без ИИ и без побочных эффектов — используются и в интерфейсе, и в тестах.
 
+import { language } from './locale'
+
 export type Phase = 'A' | 'B' | 'C'
 export type ProductType = 'leave-on' | 'rinse-off'
 export type IonicType = 'nonionic' | 'anionic' | 'cationic' | 'amphoteric'
@@ -291,13 +293,19 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
   const missingPct = round(100 - totalPct, 2)
   const balanced = Math.abs(totalPct - 100) <= 0.01
 
+  const en = language === 'en'
+
   // 1. Баланс 100 %
   if (!balanced) {
     issues.push({
       code: 'balance',
       severity: 'error',
-      title: missingPct > 0 ? `Сумма рецептуры ${totalPct} % (не хватает ${missingPct} %)` : `Сумма рецептуры ${totalPct} % (перебор ${Math.abs(missingPct)} %)`,
-      detail: 'Массовая доля всех компонентов рецептуры должна строго составлять 100,00 %. Скорректируйте доли или нажмите «Довести воду до 100 %».',
+      title: en
+        ? (missingPct > 0 ? `Formula total is ${totalPct}% (short by ${missingPct}%)` : `Formula total is ${totalPct}% (over by ${Math.abs(missingPct)}%)`)
+        : (missingPct > 0 ? `Сумма рецептуры ${totalPct} % (не хватает ${missingPct} %)` : `Сумма рецептуры ${totalPct} % (перебор ${Math.abs(missingPct)} %)`),
+      detail: en
+        ? 'The mass fractions of all formula components must total strictly 100.00%. Adjust percentages or click "Balance water to 100%".'
+        : 'Массовая доля всех компонентов рецептуры должна строго составлять 100,00 %. Скорректируйте доли или нажмите «Довести воду до 100 %».',
     })
   }
 
@@ -310,8 +318,12 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         code: `temp:${ing.id}`,
         severity: 'error',
         ingredientId: ing.id,
-        title: `Перегрев ${ing.name} (${r.phaseTempC} °C > ${ing.maxTempC} °C)`,
-        detail: `${ing.inci} находится в фазе ${r.phase} при ${r.phaseTempC} °C. Для предотвращения деградации или испарения перенесите компонент в фазу охлаждения C или снизьте температуру фазы до ≤ ${ing.maxTempC} °C.`,
+        title: en
+          ? `Overheating ${ing.name} (${r.phaseTempC} °C > ${ing.maxTempC} °C)`
+          : `Перегрев ${ing.name} (${r.phaseTempC} °C > ${ing.maxTempC} °C)`,
+        detail: en
+          ? `${ing.inci} is in Phase ${r.phase} at ${r.phaseTempC} °C. To prevent thermal degradation or evaporation, move it to cool-down Phase C or lower the phase temperature to ≤ ${ing.maxTempC} °C.`
+          : `${ing.inci} находится в фазе ${r.phase} при ${r.phaseTempC} °C. Для предотвращения деградации или испарения перенесите компонент в фазу охлаждения C или снизьте температуру фазы до ≤ ${ing.maxTempC} °C.`,
       })
     }
     if (ing.recommendedPhase === 'B' && r.phase === 'A') {
@@ -319,8 +331,12 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         code: `phase:${ing.id}`,
         severity: 'warn',
         ingredientId: ing.id,
-        title: `Жирорастворимый ${ing.name} указан в водной фазе A`,
-        detail: `${ing.inci} обычно вводится в масляную фазу B.`,
+        title: en
+          ? `Oil-soluble ${ing.name} placed in aqueous Phase A`
+          : `Жирорастворимый ${ing.name} указан в водной фазе A`,
+        detail: en
+          ? `${ing.inci} is typically added to oil Phase B.`
+          : `${ing.inci} обычно вводится в масляную фазу B.`,
       })
     }
     if (ing.recommendedPhase === 'A' && r.phase === 'B') {
@@ -328,8 +344,12 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         code: `phase:${ing.id}`,
         severity: 'warn',
         ingredientId: ing.id,
-        title: `Водорастворимый ${ing.name} указан в масляной фазе B`,
-        detail: `${ing.inci} обычно вводится в водную фазу A.`,
+        title: en
+          ? `Water-soluble ${ing.name} placed in oil Phase B`
+          : `Водорастворимый ${ing.name} указан в масляной фазе B`,
+        detail: en
+          ? `${ing.inci} is typically added to aqueous Phase A.`
+          : `${ing.inci} обычно вводится в водную фазу A.`,
       })
     }
   }
@@ -359,44 +379,58 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
     issues.push({
       code: 'hlb:no-emulsifier',
       severity: 'error',
-      title: 'В масляной фазе нет эмульгатора',
-      detail: `Масляная фаза составляет ${oilPhasePct} % (требуемый ГЛБ ≈ ${requiredHlb}), но в рецептуре не задан эмульгатор — эмульсия быстро расслоится.`,
+      title: en ? 'No emulsifier for the oil phase' : 'В масляной фазе нет эмульгатора',
+      detail: en
+        ? `The oil phase is ${oilPhasePct}% (required HLB ≈ ${requiredHlb}), but no emulsifier is present — the emulsion will separate rapidly.`
+        : `Масляная фаза составляет ${oilPhasePct} % (требуемый ГЛБ ≈ ${requiredHlb}), но в рецептуре не задан эмульгатор — эмульсия быстро расслоится.`,
     })
   } else if (isWoSystem) {
     issues.push({
       code: 'hlb:wo-info',
       severity: 'info',
-      title: `Обнаружена обратная эмульсия W/O (ГЛБ эмульгатора ${actualHlb})`,
-      detail: 'Для обратных эмульсий «вода в масле» ориентир O/W reqHLB не применяется; для стабильности W/O введите 0,5–1,0 % электролита (NaCl / MgSO₄) в водную фазу.',
+      title: en
+        ? `Water-in-oil (W/O) emulsion detected (emulsifier HLB ${actualHlb})`
+        : `Обнаружена обратная эмульсия W/O (ГЛБ эмульгатора ${actualHlb})`,
+      detail: en
+        ? 'O/W required HLB targets do not apply to inverse W/O emulsions; add 0.5–1.0% electrolyte (NaCl / MgSO₄) to the aqueous phase for W/O stability.'
+        : 'Для обратных эмульсий «вода в масле» ориентир O/W reqHLB не применяется; для стабильности W/O введите 0,5–1,0 % электролита (NaCl / MgSO₄) в водную фазу.',
     })
   } else if (hlbDelta !== null && hlbDelta > 2.0) {
     issues.push({
       code: 'hlb:mismatch',
       severity: 'error',
-      title: `Сильное расхождение ГЛБ: факт ${actualHlb} при требуемом ${requiredHlb} (Δ = ${hlbDelta})`,
-      detail: 'Сбалансируйте пару липофильного и гидрофильного эмульгаторов так, чтобы расчётный ГЛБ смеси находился в пределах ±1,0 от требуемого ГЛБ масляной фазы (ориентир для O/W).',
+      title: en
+        ? `Severe HLB mismatch: actual ${actualHlb} vs required ${requiredHlb} (Δ = ${hlbDelta})`
+        : `Сильное расхождение ГЛБ: факт ${actualHlb} при требуемом ${requiredHlb} (Δ = ${hlbDelta})`,
+      detail: en
+        ? 'Balance a lipophilic/hydrophilic emulsifier pair so the blended HLB sits within ±1.0 of the oil phase required HLB (O/W guideline).'
+        : 'Сбалансируйте пару липофильного и гидрофильного эмульгаторов так, чтобы расчётный ГЛБ смеси находился в пределах ±1,0 от требуемого ГЛБ масляной фазы (ориентир для O/W).',
     })
   } else if (hlbDelta !== null && hlbDelta > 1.0) {
     issues.push({
       code: 'hlb:drift',
       severity: 'warn',
-      title: `ГЛБ смещён: факт ${actualHlb} при требуемом ${requiredHlb} (Δ = ${hlbDelta})`,
-      detail: 'Отклонение превышает ±1,0 единицы ГЛБ — проверьте устойчивость эмульсии или скорректируйте соотношение эмульгаторов.',
+      title: en
+        ? `HLB offset: actual ${actualHlb} vs required ${requiredHlb} (Δ = ${hlbDelta})`
+        : `ГЛБ смещён: факт ${actualHlb} при требуемом ${requiredHlb} (Δ = ${hlbDelta})`,
+      detail: en
+        ? 'Deviation exceeds ±1.0 HLB units — check emulsion stability or adjust the emulsifier ratio.'
+        : 'Отклонение превышает ±1,0 единицы ГЛБ — проверьте устойчивость эмульсии или скорректируйте соотношение эмульгаторов.',
     })
   }
 
   // 4. Химические и коллоидные конфликты
   const activeRows = rows.filter((r) => r.pct > 0)
   const anionicSurfs = activeRows.filter((r) => r.ingredient.ionic === 'anionic' && (r.ingredient.role === 'surfactant' || r.ingredient.role === 'emulsifier'))
-  // Катионные кондиционирующие полимеры (гуар, поликватерниумы) специально работают с анионными ПАВ (коацерваты);
-  // несовместимость анионных ПАВ касается именно катионных ПАВ/эмульгаторов (BTMS, BTAC, цетримоний).
   const cationicSurfs = activeRows.filter((r) => r.ingredient.ionic === 'cationic' && (r.ingredient.role === 'surfactant' || r.ingredient.role === 'emulsifier'))
   if (anionicSurfs.length && cationicSurfs.length) {
     issues.push({
       code: 'conflict:anionic-cationic',
       severity: 'error',
-      title: 'Несовместимость анионных и катионных ПАВ',
-      detail: `${anionicSurfs.map((r) => r.ingredient.inci).join(', ')} и ${cationicSurfs.map((r) => r.ingredient.inci).join(', ')} образуют малорастворимый ионный комплекс — система мутнеет, выпадает осадок и теряется пенообразование.`,
+      title: en ? 'Anionic + cationic surfactant incompatibility' : 'Несовместимость анионных и катионных ПАВ',
+      detail: en
+        ? `${anionicSurfs.map((r) => r.ingredient.inci).join(', ')} and ${cationicSurfs.map((r) => r.ingredient.inci).join(', ')} form a poorly soluble ionic complex — causing haze, flocculation/precipitate, and foam collapse.`
+        : `${anionicSurfs.map((r) => r.ingredient.inci).join(', ')} и ${cationicSurfs.map((r) => r.ingredient.inci).join(', ')} образуют малорастворимый ионный комплекс — система мутнеет, выпадает осадок и теряется пенообразование.`,
     })
   }
 
@@ -409,8 +443,12 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         code: 'conflict:carbomer-electrolyte',
         severity: 'error',
         ingredientId: sensitivePolymers[0].ingredient.id,
-        title: `Разжижение полимерного загустителя электролитами (${electrolytePct} %)`,
-        detail: `${sensitivePolymers.map((r) => r.ingredient.inci).join(', ')} чувствителен к ионной силе. Присутствие электролитов (${electrolyteRows.map((r) => `${r.ingredient.inci} ${r.pct}%`).join(', ')}) экранирует заряды вдоль полимерных цепей и разрушает гель. Замените загуститель (например, на Xanthan Gum, Sepimax Zen или Sclerotium Gum) либо уберите электролит.`,
+        title: en
+          ? `Electrolyte collapse of polymer thickener (${electrolytePct}%)`
+          : `Разжижение полимерного загустителя электролитами (${electrolytePct} %)`,
+        detail: en
+          ? `${sensitivePolymers.map((r) => r.ingredient.inci).join(', ')} is sensitive to ionic strength. Electrolytes (${electrolyteRows.map((r) => `${r.ingredient.inci} ${r.pct}%`).join(', ')}) screen charges along the polymer chains and collapse viscosity. Switch to Xanthan Gum, Sepimax Zen, or Sclerotium Gum, or remove the electrolyte.`
+          : `${sensitivePolymers.map((r) => r.ingredient.inci).join(', ')} чувствителен к ионной силе. Присутствие электролитов (${electrolyteRows.map((r) => `${r.ingredient.inci} ${r.pct}%`).join(', ')}) экранирует заряды вдоль полимерных цепей и разрушает гель. Замените загуститель (например, на Xanthan Gum, Sepimax Zen или Sclerotium Gum) либо уберите электролит.`,
       })
     }
     if (cationicSurfs.length) {
@@ -418,8 +456,10 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         code: 'conflict:carbomer-cationic',
         severity: 'error',
         ingredientId: sensitivePolymers[0].ingredient.id,
-        title: 'Несовместимость анионного полимера и катионного ПАВ',
-        detail: 'Анионный полимер образует нерастворимый комплекс с катионными ПАВ.',
+        title: en ? 'Anionic polymer + cationic surfactant incompatibility' : 'Несовместимость анионного полимера и катионного ПАВ',
+        detail: en
+          ? 'The anionic polymer forms an insoluble complex with cationic surfactants.'
+          : 'Анионный полимер образует нерастворимый комплекс с катионными ПАВ.',
       })
     }
   }
@@ -436,8 +476,12 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
           code: `ph:${ing.id}`,
           severity: 'error',
           ingredientId: ing.id,
-          title: `${ing.name} неэффективен при pH ${pH} (рабочий диапазон ${ing.phRange[0]}–${ing.phRange[1]})`,
-          detail: `При pKa = ${ing.pKa} и pH = ${pH} доля активной недиссоциированной кислоты составляет лишь ${activePct} %. Снизьте pH до ≤ ${ing.phRange[1]} или выберите pH-независимый консервант (например, Phenoxyethanol).`,
+          title: en
+            ? `${ing.name} is ineffective at pH ${pH} (working range ${ing.phRange[0]}–${ing.phRange[1]})`
+            : `${ing.name} неэффективен при pH ${pH} (рабочий диапазон ${ing.phRange[0]}–${ing.phRange[1]})`,
+          detail: en
+            ? `At pKa = ${ing.pKa} and pH = ${pH}, the active undissociated acid fraction is only ${activePct}%. Lower pH to ≤ ${ing.phRange[1]} or choose a pH-independent preservative (e.g., Phenoxyethanol).`
+            : `При pKa = ${ing.pKa} и pH = ${pH} доля активной недиссоциированной кислоты составляет лишь ${activePct} %. Снизьте pH до ≤ ${ing.phRange[1]} или выберите pH-независимый консервант (например, Phenoxyethanol).`,
         })
       } else if (ing.electrolyteSensitive) {
         const isCarbomer = ing.id === 'carbomer' || ing.id === 'ultrez-21'
@@ -445,19 +489,29 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
           code: `ph:${ing.id}`,
           severity: 'error',
           ingredientId: ing.id,
-          title: `${ing.name} не образует стабильный гель при pH ${pH} (рабочее окно ${ing.phRange[0]}–${ing.phRange[1]})`,
+          title: en
+            ? `${ing.name} cannot form a stable gel at pH ${pH} (working window ${ing.phRange[0]}–${ing.phRange[1]})`
+            : `${ing.name} не образует стабильный гель при pH ${pH} (рабочее окно ${ing.phRange[0]}–${ing.phRange[1]})`,
           detail: pH < ing.phRange[0]
             ? isCarbomer
-              ? `Карбоксильные группы полиакрилата требуют нейтрализации (pH ≥ ${ing.phRange[0]}); в кислой среде цепи остаются свёрнутыми и вязкость падает.`
-              : `При pH ниже ${ing.phRange[0]} загущающая способность ${ing.inci} резко падает. ${ing.note}`
-            : `При pH выше ${ing.phRange[1]} избыток ионов щёлочи разрушает гелевую сетку ${ing.inci}.`,
+              ? (en
+                  ? `Polyacrylate carboxyl groups require neutralization (pH ≥ ${ing.phRange[0]}); in acidic media chains stay coiled and viscosity collapses.`
+                  : `Карбоксильные группы полиакрилата требуют нейтрализации (pH ≥ ${ing.phRange[0]}); в кислой среде цепи остаются свёрнутыми и вязкость падает.`)
+              : (en
+                  ? `Below pH ${ing.phRange[0]}, the thickening efficiency of ${ing.inci} drops sharply. ${ing.note}`
+                  : `При pH ниже ${ing.phRange[0]} загущающая способность ${ing.inci} резко падает. ${ing.note}`)
+            : (en
+                ? `Above pH ${ing.phRange[1]}, excess alkali ions collapse the ${ing.inci} gel network.`
+                : `При pH выше ${ing.phRange[1]} избыток ионов щёлочи разрушает гелевую сетку ${ing.inci}.`),
         })
       } else {
         issues.push({
           code: `ph:${ing.id}`,
           severity: 'warn',
           ingredientId: ing.id,
-          title: `pH ${pH} вне рекомендуемого диапазона для ${ing.name} (${ing.phRange[0]}–${ing.phRange[1]})`,
+          title: en
+            ? `pH ${pH} is outside the recommended range for ${ing.name} (${ing.phRange[0]}–${ing.phRange[1]})`
+            : `pH ${pH} вне рекомендуемого диапазона для ${ing.name} (${ing.phRange[0]}–${ing.phRange[1]})`,
           detail: ing.note,
         })
       }
@@ -467,8 +521,12 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         code: `pka-info:${ing.id}`,
         severity: 'info',
         ingredientId: ing.id,
-        title: `Активная форма ${ing.name} при pH ${pH}: ${activePct} %`,
-        detail: `По уравнению Гендерсона–Хассельбаха (pKa = ${ing.pKa}) консервант находится в рабочем окне pH.`,
+        title: en
+          ? `Active form of ${ing.name} at pH ${pH}: ${activePct}%`
+          : `Активная форма ${ing.name} при pH ${pH}: ${activePct} %`,
+        detail: en
+          ? `By the Henderson–Hasselbalch equation (pKa = ${ing.pKa}), the preservative is within its active pH window.`
+          : `По уравнению Гендерсона–Хассельбаха (pKa = ${ing.pKa}) консервант находится в рабочем окне pH.`,
       })
     }
   }
@@ -480,11 +538,15 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
       code: 'conflict:avobenzone-octinoxate',
       severity: hasStabilizer ? 'info' : 'warn',
       title: hasStabilizer
-        ? 'Авобензон + Октиноксат стабилизированы фотостабилизатором'
-        : 'Фотонестабильная пара УФ-фильтров: Авобензон + Этилгексилметоксициннамат',
+        ? (en ? 'Avobenzone + Octinoxate stabilized by photostabilizer' : 'Авобензон + Октиноксат стабилизированы фотостабилизатором')
+        : (en ? 'Photounstable UV filter pair: Avobenzone + Octinoxate' : 'Фотонестабильная пара УФ-фильтров: Авобензон + Этилгексилметоксициннамат'),
       detail: hasStabilizer
-        ? 'В формуле присутствует фотостабилизатор (Octocrylene / Tinosorb S), снижающий фотодеградацию авобензона, но требуется подтверждение SPF/UVA-PF тестом.'
-        : 'Комбинация Butyl Methoxydibenzoylmethane и Ethylhexyl Methoxycinnamate ускоряет взаимную фотодеградацию под УФ без фотостабилизатора (например, Octocrylene или Tinosorb S).',
+        ? (en
+            ? 'A photostabilizer (Octocrylene / Tinosorb S) is present to mitigate avobenzone photodegradation, though SPF/UVA-PF testing is still required.'
+            : 'В формуле присутствует фотостабилизатор (Octocrylene / Tinosorb S), снижающий фотодеградацию авобензона, но требуется подтверждение SPF/UVA-PF тестом.')
+        : (en
+            ? 'Combining Butyl Methoxydibenzoylmethane and Ethylhexyl Methoxycinnamate accelerates mutual UV photodegradation without a photostabilizer (e.g., Octocrylene or Tinosorb S).'
+            : 'Комбинация Butyl Methoxydibenzoylmethane и Ethylhexyl Methoxycinnamate ускоряет взаимную фотодеградацию под УФ без фотостабилизатора (например, Octocrylene или Tinosorb S).'),
     })
   }
   if ((totalByIngredient.get('allantoin') ?? 0) > 0.5) {
@@ -492,24 +554,32 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
       code: 'solubility:allantoin',
       severity: 'warn',
       ingredientId: 'allantoin',
-      title: `Риск перекристаллизации аллантоина (${totalByIngredient.get('allantoin')} % > 0,5 %)`,
-      detail: 'Предел растворимости аллантоина в воде при 20 °C составляет около 0,5 %; избыток может выпасть острыми игольчатыми кристаллами при охлаждении.',
+      title: en
+        ? `Allantoin recrystallization risk (${totalByIngredient.get('allantoin')}% > 0.5%)`
+        : `Риск перекристаллизации аллантоина (${totalByIngredient.get('allantoin')} % > 0,5 %)`,
+      detail: en
+        ? 'Allantoin water solubility at 20 °C is ~0.5%; excess amounts can precipitate as sharp needle-like crystals upon cooling.'
+        : 'Предел растворимости аллантоина в воде при 20 °C составляет около 0,5 %; избыток может выпасть острыми игольчатыми кристаллами при охлаждении.',
     })
   }
-  const meltChecks: { id: string; minT: number; label: string }[] = [
-    { id: 'ceramide-np', minT: 80, label: 'церамида NP (≥ 80 °C)' },
-    { id: 'candelilla-wax', minT: 73, label: 'канделильского воска (≥ 73 °C)' },
-    { id: 'behenyl-alcohol', minT: 70, label: 'бегенилового спирта (≥ 70 °C)' },
-    { id: 'beeswax', minT: 68, label: 'пчелиного воска (≥ 68 °C)' },
-    { id: 'cetearyl-alcohol', minT: 68, label: 'цетилстеарилового спирта (≥ 68 °C)' },
+  const meltChecks: { id: string; minT: number; label: string; labelEn: string }[] = [
+    { id: 'ceramide-np', minT: 80, label: 'церамида NP (≥ 80 °C)', labelEn: 'Ceramide NP (≥ 80 °C)' },
+    { id: 'candelilla-wax', minT: 73, label: 'канделильского воска (≥ 73 °C)', labelEn: 'Candelilla Wax (≥ 73 °C)' },
+    { id: 'behenyl-alcohol', minT: 70, label: 'бегенилового спирта (≥ 70 °C)', labelEn: 'Behenyl Alcohol (≥ 70 °C)' },
+    { id: 'beeswax', minT: 68, label: 'пчелиного воска (≥ 68 °C)', labelEn: 'Beeswax (≥ 68 °C)' },
+    { id: 'cetearyl-alcohol', minT: 68, label: 'цетилстеарилового спирта (≥ 68 °C)', labelEn: 'Cetearyl Alcohol (≥ 68 °C)' },
   ]
   const unmelted = meltChecks.find((m) => (totalByIngredient.get(m.id) ?? 0) > 0 && input.phaseTempC.B < m.minT)
   if (unmelted) {
     issues.push({
       code: 'melt:phase-b',
       severity: 'warn',
-      title: `Низкая температура фазы B (${input.phaseTempC.B} °C < ${unmelted.minT} °C) для расплавления ${unmelted.label}`,
-      detail: 'Твёрдые воски, жирные спирты или церамиды могут не полностью расплавиться — при эмульгировании появятся крупинки. Поднимите температуру фазы B выше точки плавления.',
+      title: en
+        ? `Phase B temperature too low (${input.phaseTempC.B} °C < ${unmelted.minT} °C) to melt ${unmelted.labelEn}`
+        : `Низкая температура фазы B (${input.phaseTempC.B} °C < ${unmelted.minT} °C) для расплавления ${unmelted.label}`,
+      detail: en
+        ? 'Solid waxes, fatty alcohols, or ceramides may not melt completely — creating graininess during emulsification. Raise Phase B above the melting point.'
+        : 'Твёрдые воски, жирные спирты или церамиды могут не полностью расплавиться — при эмульгировании появятся крупинки. Поднимите температуру фазы B выше точки плавления.',
     })
   }
   const parfumPct = totalByIngredient.get('parfum') ?? 0
@@ -519,8 +589,12 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
       code: 'haze:parfum',
       severity: 'warn',
       ingredientId: 'parfum',
-      title: 'Отдушка в водной системе без солюбилизатора — риск помутнения',
-      detail: `Добавлено ${parfumPct} % отдушки в водную базу без солюбилизатора. Введите PEG-40 Hydrogenated Castor Oil (ориентир 3:1–5:1 к отдушке) через предварительный премикс.`,
+      title: en
+        ? 'Fragrance in aqueous system without solubilizer — haze risk'
+        : 'Отдушка в водной системе без солюбилизатора — риск помутнения',
+      detail: en
+        ? `${parfumPct}% fragrance added to an aqueous base without a solubilizer. Pre-mix with PEG-40 Hydrogenated Castor Oil (typically 3:1–5:1 to fragrance).`
+        : `Добавлено ${parfumPct} % отдушки в водную базу без солюбилизатора. Введите PEG-40 Hydrogenated Castor Oil (ориентир 3:1–5:1 к отдушке) через предварительный премикс.`,
     })
   }
 
@@ -531,8 +605,10 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
     issues.push({
       code: 'micro:no-preservative',
       severity: 'error',
-      title: 'Водная система без консерванта',
-      detail: `В рецептуре ${waterPct} % воды, но нет консерванта — высок риск микробного роста. Добавьте консервирующую систему в фазу C.`,
+      title: en ? 'Aqueous system without preservative' : 'Водная система без консерванта',
+      detail: en
+        ? `Formula contains ${waterPct}% water with no preservative — high microbial growth risk. Add a preservation system to Phase C.`
+        : `В рецептуре ${waterPct} % воды, но нет консерванта — высок риск микробного роста. Добавьте консервирующую систему в фазу C.`,
     })
   }
 
@@ -546,14 +622,16 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
       const effectivePct = round(pct * factor, 3)
       const exceeded = limit !== undefined && (rule.strictMax ? effectivePct >= limit - 1e-6 : effectivePct > limit + 1e-6)
       if (exceeded) {
-        const calcNote = factor !== 1 ? ` (${effectivePct} % в пересчёте на кислоту)` : ''
+        const calcNote = factor !== 1 ? (en ? ` (${effectivePct}% as acid equivalent)` : ` (${effectivePct} % в пересчёте на кислоту)`) : ''
         const op = rule.strictMax ? '≥' : '>'
         issues.push({
           code: `reg:${ing.id}`,
           severity: 'error',
           ingredientId: ing.id,
           standard: rule.standard,
-          title: `Превышен лимит ${ing.inci}: ${pct} %${calcNote} ${op} ${limit} % (${input.productType})`,
+          title: en
+            ? `Regulatory limit exceeded for ${ing.inci}: ${pct}%${calcNote} ${op} ${limit}% (${input.productType})`
+            : `Превышен лимит ${ing.inci}: ${pct} %${calcNote} ${op} ${limit} % (${input.productType})`,
           detail: `${rule.standard}. ${rule.note}`,
         })
       } else if (rule.warnAbove !== undefined && effectivePct > rule.warnAbove + 1e-6) {
@@ -562,7 +640,9 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
           severity: 'warn',
           ingredientId: ing.id,
           standard: rule.standard,
-          title: `${ing.inci} (${pct} %) превышает порог ${rule.warnAbove} % для отдельных категорий продуктов`,
+          title: en
+            ? `${ing.inci} (${pct}%) exceeds the ${rule.warnAbove}% threshold for specific product categories`
+            : `${ing.inci} (${pct} %) превышает порог ${rule.warnAbove} % для отдельных категорий продуктов`,
           detail: `${rule.standard}. ${rule.note}`,
         })
       }
@@ -573,7 +653,9 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
           severity: 'info',
           ingredientId: ing.id,
           standard: rule.standard,
-          title: `Обязательная маркировка аллергена ${ing.inci} (> ${allergenThreshold} %)`,
+          title: en
+            ? `Mandatory allergen labeling for ${ing.inci} (> ${allergenThreshold}%)`
+            : `Обязательная маркировка аллергена ${ing.inci} (> ${allergenThreshold} %)`,
           detail: `${rule.standard}. ${rule.note}`,
         })
       }
@@ -626,7 +708,9 @@ export function checkPresetGoals(ev: FormulaEvaluation, input: FormulaInput, goa
   if (goals.phMin !== undefined && goals.phMax !== undefined) {
     checks.push({
       id: 'ph',
-      label: `Целевой pH в заданном диапазоне ${goals.phMin}–${goals.phMax}`,
+      label: language === 'en'
+        ? `Target pH within specified range ${goals.phMin}–${goals.phMax}`
+        : `Целевой pH в заданном диапазоне ${goals.phMin}–${goals.phMax}`,
       passed: input.targetPh >= goals.phMin && input.targetPh <= goals.phMax,
     })
   }

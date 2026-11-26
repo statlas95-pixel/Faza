@@ -1,4 +1,4 @@
-import { tr } from '../../shared/locale'
+import { language, tr } from '../../shared/locale'
 import {
   dosePhBatch,
   evaluatePhBatch,
@@ -55,7 +55,7 @@ export default function PhTitrationSim({ lab }: { lab: LabMeta }) {
       window.scrollTo(0, 0)
       markFinished(
         lab.id,
-        `pH ${b.ph} · ${b.viscosityMpas} мПа·с · ${Math.round(ev.score * 100)} %`,
+        `pH ${b.ph} · ${b.viscosityMpas} ${tr('мПа·с')} · ${Math.round(ev.score * 100)} %`,
         { ph: b.ph, viscosityMpas: b.viscosityMpas, naoh10Kg: b.naoh10Kg, citric10Kg: b.citric10Kg },
         ev.score,
       )
@@ -152,7 +152,7 @@ export default function PhTitrationSim({ lab }: { lab: LabMeta }) {
             <span className="eyebrow">{tr('Протокол дозировок')}</span>
             <ul className="small">
               {[...b.history].reverse().slice(0, 8).map((h) => (
-                <li key={h.step}><b>#{h.step}:</b> {h.action} → pH <b>{h.ph}</b> ({h.viscosityMpas.toLocaleString('ru-RU')} мПа·с)</li>
+                <li key={h.step}><b>#{h.step}:</b> {h.action} → pH <b>{h.ph}</b> ({h.viscosityMpas.toLocaleString(language === 'en' ? 'en-US' : 'ru-RU')} {tr('мПа·с')})</li>
               ))}
             </ul>
           </div>
@@ -169,9 +169,9 @@ export default function PhTitrationSim({ lab }: { lab: LabMeta }) {
         <h1>{tr('Итог подгонки pH')} — {Math.round(ev.score * 100)} %</h1>
         <dl className="outcome">
           <div><dt>{tr('Итоговый pH')}</dt><dd className="num">{b.ph}</dd></div>
-          <div><dt>{tr('Вязкость геля')}</dt><dd className="num">{b.viscosityMpas.toLocaleString('ru-RU')} мПа·с</dd></div>
-          <div><dt>{tr('Расход 10 % NaOH')}</dt><dd className="num">{b.naoh10Kg} кг</dd></div>
-          <div><dt>{tr('Обратная кислота')}</dt><dd className="num">{b.citric10Kg} кг</dd></div>
+          <div><dt>{tr('Вязкость геля')}</dt><dd className="num">{b.viscosityMpas.toLocaleString(language === 'en' ? 'en-US' : 'ru-RU')} {tr('мПа·с')}</dd></div>
+          <div><dt>{tr('Расход 10 % NaOH')}</dt><dd className="num">{b.naoh10Kg} {tr('кг')}</dd></div>
+          <div><dt>{tr('Обратная кислота')}</dt><dd className="num">{b.citric10Kg} {tr('кг')}</dd></div>
         </dl>
       </div>
       <div className={`drow ${ev.phOk ? 'ok' : 'wrong'}`}>

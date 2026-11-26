@@ -451,6 +451,7 @@ header.top { flex-wrap: wrap }
 [data-theme="dark"] .language-picker .lang-chevron{color:var(--ink-2)}
 .theme-toggle:hover{background:rgba(255,255,255,.95);border-color:rgba(24,32,38,.2)}
 [data-theme="dark"]{
+  color-scheme:dark;
   --bg:#0B1118;--paper:#0F1722;--paper-2:#152030;--card:rgba(18,29,43,.84);--surface:rgba(20,32,48,.88);
   --glass-bg:linear-gradient(155deg,rgba(24,39,58,.86) 0%,rgba(15,24,36,.78) 100%);
   --top-bg:rgba(15,24,36,.76);--btn-bg:#EDF3F8;--btn-fg:#0B1118;
@@ -498,6 +499,9 @@ header.top { flex-wrap: wrap }
 [data-theme="dark"] .btn.ghost{background:rgba(255,255,255,.06);color:var(--fg);border-color:var(--border);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
 [data-theme="dark"] .btn.ghost:hover:not(:disabled){background:rgba(142,214,248,.12);border-color:rgba(142,214,248,.34)}
 [data-theme="dark"] .chip{background:rgba(20,32,48,.82);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+[data-theme="dark"] .chip.on{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-bg);box-shadow:none}
+select option{background-color:#FFFFFF;color:#182026}
+[data-theme="dark"] select option{background-color:#0F1722;color:#EDF3F8}
 [data-theme="dark"] .step.main{
   border-color:rgba(255,150,138,.36);
   background:linear-gradient(155deg,rgba(26,38,56,.9) 0%,rgba(28,24,38,.82) 100%);
