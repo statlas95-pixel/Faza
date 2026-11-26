@@ -80,16 +80,28 @@ function Shell() {
     <select value={language} onChange={event => chooseLanguage(event.target.value === 'en' ? 'en' : 'ru')}>
       <option value="ru" lang="ru">Русский</option><option value="en" lang="en">English</option>
     </select>
+    <svg className="lang-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M2.75 4.5L6 7.75L9.25 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   </label>
   const themeButton = (
     <button
       type="button"
-      className="theme-toggle"
+      className="theme-toggle theme-icon-btn"
       aria-label={theme === 'dark' ? tr('Включить светлую тему') : tr('Включить тёмную тему («Ночная смена»)')}
       title={theme === 'dark' ? tr('Светлая тема') : tr('Тёмная тема («Ночная смена»)')}
       onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
     >
-      {theme === 'dark' ? '☀️' : '🌙'}
+      {theme === 'dark' ? (
+        <svg className="ico-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" fill="currentColor" fillOpacity="0.22" stroke="currentColor" strokeWidth="1.8" />
+          <path d="M12 2.5v2.2M12 19.3v2.2M4.93 4.93l1.56 1.56M17.51 17.51l1.56 1.56M2.5 12h2.2M19.3 12h2.2M4.93 19.07l1.56-1.56M17.51 6.49l1.56-1.56" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg className="ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20.4 14.3A8.3 8.3 0 0 1 9.7 3.6a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor" fillOpacity="0.16" stroke="currentColor" strokeWidth="1.85" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
     </button>
   )
   const cmdButton = (

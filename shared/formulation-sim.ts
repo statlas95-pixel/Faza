@@ -7,6 +7,7 @@ import {
   type FormulaInput,
   type Ingredient,
 } from './formulation'
+import { language } from './locale'
 
 export type StageId = 'phaseA' | 'phaseB' | 'emulsify' | 'coolingC' | 'final24h'
 export type VisualOpacity = 'clear' | 'opalescent' | 'milky' | 'opaque'
@@ -302,7 +303,9 @@ export function predictProcessAppearance(ev: FormulaEvaluation, input: FormulaIn
     viscosityBand: finalVisc,
     summary: finalDefects.length === 0
       ? 'После 24 часов созревания продукт однороден, стабилен по внешнему виду и готов к испытаниям стабильности (40 °C / циклы).'
-      : `Обнаружены визуальные риски (${finalDefects.length}): проверьте панель диагностики ниже и скорректируйте состав или режим.`,
+      : language === 'en'
+        ? `Visual risks detected (${finalDefects.length}): review the diagnostics panel below and adjust composition or process.`
+        : `Обнаружены визуальные риски (${finalDefects.length}): проверьте панель диагностики ниже и скорректируйте состав или режим.`,
     defects: finalDefects,
     microscopeType: ionicConflict
       ? 'flocculated'
@@ -363,7 +366,7 @@ export function diffFormulas(before: FormulaInput, after: FormulaInput, catalog:
     const a = mapA.get(id)
     const b = mapB.get(id)
     const name = byId.get(id)?.name ?? id
-    if (!a && b) added.push(`${name} (${b.pct} %, фаза ${b.phase})`)
+    if (!a && b) added.push(`${name} (${b.pct} %, ${language === 'en' ? 'Phase' : 'фаза'} ${b.phase})`)
     else if (a && !b) removed.push(`${name} (${a.pct} %)`)
     else if (a && b && (Math.abs(a.pct - b.pct) > 0.001 || a.phase !== b.phase)) {
       changed.push({ id, name, beforePct: a.pct, afterPct: b.pct, beforePhase: a.phase, afterPhase: b.phase })

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { tr } from '../../shared/locale'
+import { language, tr } from '../../shared/locale'
 import {
   addPhaseB,
   addPhaseC,
@@ -222,8 +222,13 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                       checked={ctl.jacket === m}
                       onChange={() => set((x) => {
                         x.ctl.jacket = m
-                        const lbl = m === 'heat' ? 'Нагрев (+80 °C)' : m === 'cool' ? 'Охлаждение (+12 °C)' : 'Выкл'
-                        x.reactor.events.push(`${x.reactor.minute} мин: Рубашка переключена → ${lbl}.`)
+                        if (language === 'en') {
+                          const lbl = m === 'heat' ? 'Heating (+80 °C)' : m === 'cool' ? 'Cooling (+12 °C)' : 'Off'
+                          x.reactor.events.push(`${x.reactor.minute} min: Jacket switched → ${lbl}.`)
+                        } else {
+                          const lbl = m === 'heat' ? 'Нагрев (+80 °C)' : m === 'cool' ? 'Охлаждение (+12 °C)' : 'Выкл'
+                          x.reactor.events.push(`${x.reactor.minute} мин: Рубашка переключена → ${lbl}.`)
+                        }
                       })}
                     />
                     {m === 'heat' ? tr('🔥 Нагрев (+80 °C)') : m === 'cool' ? tr('❄ Охлаждение (+12 °C)') : tr('Выкл')}
@@ -241,7 +246,9 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                     checked={ctl.anchorOn}
                     onChange={(e) => set((x) => {
                       x.ctl.anchorOn = e.target.checked
-                      x.reactor.events.push(`${x.reactor.minute} мин: Якорная мешалка ${e.target.checked ? 'включена (35 об/мин)' : 'остановлена'}.`)
+                      x.reactor.events.push(language === 'en'
+                        ? `${x.reactor.minute} min: Anchor mixer ${e.target.checked ? 'started (35 rpm)' : 'stopped'}.`
+                        : `${x.reactor.minute} мин: Якорная мешалка ${e.target.checked ? 'включена (35 об/мин)' : 'остановлена'}.`)
                     })}
                   />
                   <span><b>{tr('Якорная мешалка со скребками (35 об/мин)')}</b><small>{tr('Ускоряет нагрев и охлаждение, не даёт крему застывать на стенках.')}</small></span>
@@ -252,7 +259,9 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                     checked={ctl.vacuumOn}
                     onChange={(e) => set((x) => {
                       x.ctl.vacuumOn = e.target.checked
-                      x.reactor.events.push(`${x.reactor.minute} мин: Вакуумный насос ${e.target.checked ? 'включён' : 'выключен'}.`)
+                      x.reactor.events.push(language === 'en'
+                        ? `${x.reactor.minute} min: Vacuum pump ${e.target.checked ? 'turned on' : 'turned off'}.`
+                        : `${x.reactor.minute} мин: Вакуумный насос ${e.target.checked ? 'включён' : 'выключен'}.`)
                     })}
                   />
                   <span><b>{tr('Вакуумный насос (−0,45 бар при > 62 °C / −0,65 бар при охлаждении)')}</b><small>{tr('Обязателен перед гомогенизацией для защиты от завоздушивания без вскипания горячей воды.')}</small></span>
@@ -263,7 +272,9 @@ export default function ReactorSim({ lab }: { lab: LabMeta }) {
                     checked={ctl.homogenizerOn}
                     onChange={(e) => set((x) => {
                       x.ctl.homogenizerOn = e.target.checked
-                      x.reactor.events.push(`${x.reactor.minute} мин: Гомогенизатор ротор-статор ${e.target.checked ? 'включён (3500 об/мин)' : 'остановлен'}.`)
+                      x.reactor.events.push(language === 'en'
+                        ? `${x.reactor.minute} min: Rotor-stator homogenizer ${e.target.checked ? 'started (3500 rpm)' : 'stopped'}.`
+                        : `${x.reactor.minute} мин: Гомогенизатор ротор-статор ${e.target.checked ? 'включён (3500 об/мин)' : 'остановлен'}.`)
                     })}
                   />
                   <span><b>{tr('Гомогенизатор ротор-статор (3500 об/мин)')}</b><small>{tr('Дробит капли масла после ввода фазы B при 65–75 °C; нельзя включать на холодной сетке!')}</small></span>

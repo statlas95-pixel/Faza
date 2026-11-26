@@ -2,6 +2,8 @@
 // 1) Микробиологический Challenge Test (ISO 11930)
 // 2) Симулятор промышленной подгонки pH в 500-кг реакторе (с буфером и электролитным порогом карбомера)
 
+import { language } from './locale'
+
 export interface ChallengeStrain {
   id: string
   name: string
@@ -90,7 +92,14 @@ export function initialPhBatchState(): PhBatchState {
     naoh10Kg: 0,
     citric10Kg: 0,
     ...m,
-    history: [{ step: 0, action: 'Исходная ненейтрализованная дисперсия 0,5 % Carbomer (500 кг)', ph: m.ph, viscosityMpas: m.viscosityMpas }],
+    history: [{
+      step: 0,
+      action: language === 'en'
+        ? 'Initial unneutralized 0.5% Carbomer dispersion (500 kg)'
+        : 'Исходная ненейтрализованная дисперсия 0,5 % Carbomer (500 кг)',
+      ph: m.ph,
+      viscosityMpas: m.viscosityMpas,
+    }],
   }
 }
 
@@ -99,9 +108,10 @@ export function dosePhBatch(prev: PhBatchState, kind: 'naoh' | 'citric', kg: num
   const citric10Kg = r2(prev.citric10Kg + (kind === 'citric' ? kg : 0))
   const m = computePhBatchMetrics(naoh10Kg, citric10Kg)
   const step = prev.step + 1
+  const en = language === 'en'
   const action = kind === 'naoh'
-    ? `+${kg} кг р-ра 10 % NaOH (всего ${naoh10Kg} кг)`
-    : `+${kg} кг р-ра 10 % лимонной кислоты (коррекция перелёта)`
+    ? (en ? `+${kg} kg 10% NaOH solution (total ${naoh10Kg} kg)` : `+${kg} кг р-ра 10 % NaOH (всего ${naoh10Kg} кг)`)
+    : (en ? `+${kg} kg 10% citric acid solution (overshoot rollback)` : `+${kg} кг р-ра 10 % лимонной кислоты (коррекция перелёта)`)
   return {
     step,
     naoh10Kg,
@@ -123,12 +133,13 @@ export function evaluatePhBatch(s: PhBatchState): {
   const noOvershoot = s.citric10Kg === 0 && s.history.every((h) => h.ph <= 6.6)
   const pts = (phOk ? 0.5 : s.ph >= 5.4 && s.ph <= 6.7 ? 0.25 : 0) + (viscOk ? 0.3 : s.viscosityMpas >= 14000 ? 0.15 : 0) + (noOvershoot ? 0.2 : 0)
   const score = Number(pts.toFixed(3))
+  const en = language === 'en'
   const summary = phOk && viscOk && noOvershoot
-    ? `Точное попадание в pH ${s.ph} без перелёта и солевых качелей (${s.viscosityMpas} мПа·с).`
+    ? (en ? `Exact hit in pH ${s.ph} with no overshoot or salt swings (${s.viscosityMpas} mPa·s).` : `Точное попадание в pH ${s.ph} без перелёта и солевых качелей (${s.viscosityMpas} мПа·с).`)
     : !phOk
-      ? `Итоговый pH ${s.ph} вышел за допуск 5,7–6,3.`
+      ? (en ? `Final pH ${s.ph} is outside the 5.7–6.3 specification.` : `Итоговый pH ${s.ph} вышел за допуск 5,7–6,3.`)
       : !noOvershoot
-        ? `pH доведён до ${s.ph}, но из-за перелёта и обратной коррекции кислотой накопились соли (вязкость ${s.viscosityMpas} мПа·с).`
-        : `pH ${s.ph}, но вязкость ${s.viscosityMpas} мПа·с ниже нормы 18 000 мПа·с.`
+        ? (en ? `pH reached ${s.ph}, but overshoot and acid rollback built up excess citrate salt (viscosity ${s.viscosityMpas} mPa·s).` : `pH доведён до ${s.ph}, но из-за перелёта и обратной коррекции кислотой накопились соли (вязкость ${s.viscosityMpas} мПа·с).`)
+        : (en ? `pH ${s.ph}, but viscosity ${s.viscosityMpas} mPa·s is below the 18,000 mPa·s target.` : `pH ${s.ph}, но вязкость ${s.viscosityMpas} мПа·с ниже нормы 18 000 мПа·с.`)
   return { score, phOk, viscOk, noOvershoot, summary }
 }

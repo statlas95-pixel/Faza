@@ -2,6 +2,8 @@
 // 1) «Пульт вакуумного реактора в реальном времени» (500 кг крем O/W)
 // 2) «Реверс-инжиниринг этикетки INCI»
 
+import { language } from './locale'
+
 export type JacketMode = 'heat' | 'off' | 'cool'
 
 export interface ReactorControls {
@@ -39,7 +41,9 @@ export function initialReactorState(): ReactorState {
     phaseBAdded: false,
     phaseCAdded: false,
     wallFouling: false,
-    events: ['0 мин: В реактор загружена водная фаза A (370 кг, 24 °C). Масляная фаза B (95 кг) ждёт в плавильнике при 75 °C.'],
+    events: [language === 'en'
+      ? '0 min: Aqueous Phase A (370 kg, 24 °C) charged to reactor. Oil Phase B (95 kg) waiting in melter at 75 °C.'
+      : '0 мин: В реактор загружена водная фаза A (370 кг, 24 °C). Масляная фаза B (95 кг) ждёт в плавильнике при 75 °C.'],
   }
 }
 
@@ -64,7 +68,9 @@ export function stepReactor(prev: ReactorState, ctl: ReactorControls, dtMin = 2)
     if (!ctl.anchorOn && next.phaseBAdded && next.tempC < 58) {
       fouling = true
       if (!prev.wallFouling) {
-        next.events.push(`${next.minute} мин: ⚠ Охлаждение без якорной мешалки — крем прилипает к холодной стенке, теплообмен резко упал!`)
+        next.events.push(language === 'en'
+          ? `${next.minute} min: ⚠ Cooling without anchor mixer — cream adheres to cold wall, heat transfer dropped sharply!`
+          : `${next.minute} мин: ⚠ Охлаждение без якорной мешалки — крем прилипает к холодной стенке, теплообмен резко упал!`)
       }
     }
     const rate = ctl.anchorOn ? 2.6 : 0.7
@@ -87,14 +93,18 @@ export function stepReactor(prev: ReactorState, ctl: ReactorControls, dtMin = 2)
         // Высокий сдвиг ниже температуры кристаллизации жирных спиртов разрушает ламеллярную сетку!
         next.structurePct = r1(Math.max(35, next.structurePct - 14 * dtMin))
         if (prev.structurePct > 85) {
-          next.events.push(`${next.minute} мин: ⚠ Гомогенизатор при ${next.tempC} °C разрушает уже сформированную ламеллярную сетку (потеря вязкости)!`)
+          next.events.push(language === 'en'
+            ? `${next.minute} min: ⚠ Homogenizer at ${next.tempC} °C shears the formed lamellar gel network (viscosity loss)!`
+            : `${next.minute} мин: ⚠ Гомогенизатор при ${next.tempC} °C разрушает уже сформированную ламеллярную сетку (потеря вязкости)!`)
         }
       }
     }
     if (next.vacuumBar > -0.3) {
       next.airPct = r1(Math.min(32, next.airPct + 4.8 * dtMin))
       if (prev.airPct < 6 && next.airPct >= 6) {
-        next.events.push(`${next.minute} мин: ⚠ Гомогенизатор без вакуума затягивает воздух в массу (воздух ${next.airPct} %)!`)
+        next.events.push(language === 'en'
+          ? `${next.minute} min: ⚠ Homogenizer without vacuum entrains air into the batch (air ${next.airPct}%)!`
+          : `${next.minute} мин: ⚠ Гомогенизатор без вакуума затягивает воздух в массу (воздух ${next.airPct} %)!`)
       }
     } else {
       // под вакуумом воздух постепенно уходит
@@ -123,9 +133,13 @@ export function addPhaseB(prev: ReactorState): ReactorState {
   if (prev.tempC < 70) {
     droplet = 32
     structure = Math.min(structure, 72)
-    events.push(`${prev.minute} мин: ⚠ Фаза B (75 °C) загружена в недогретую водную фазу (${prev.tempC} °C < 70 °C) — шоковая кристаллизация восков!`)
+    events.push(language === 'en'
+      ? `${prev.minute} min: ⚠ Phase B (75 °C) charged into underheated aqueous phase (${prev.tempC} °C < 70 °C) — wax shock crystallization!`
+      : `${prev.minute} мин: ⚠ Фаза B (75 °C) загружена в недогретую водную фазу (${prev.tempC} °C < 70 °C) — шоковая кристаллизация восков!`)
   } else {
-    events.push(`${prev.minute} мин: ✓ Фаза B загружена при ${prev.tempC} °C (перепад температур в норме). Можно эмульгировать под вакуумом.`)
+    events.push(language === 'en'
+      ? `${prev.minute} min: ✓ Phase B charged at ${prev.tempC} °C (temperature delta within spec). Ready to emulsify under vacuum.`
+      : `${prev.minute} мин: ✓ Фаза B загружена при ${prev.tempC} °C (перепад температур в норме). Можно эмульгировать под вакуумом.`)
   }
   return {
     ...prev,
@@ -145,9 +159,13 @@ export function addPhaseC(prev: ReactorState): ReactorState {
   if (prev.tempC > 40.5) {
     const drop = Math.min(55, (prev.tempC - 40) * 2.2)
     integrity = r1(Math.max(25, integrity - drop))
-    events.push(`${prev.minute} мин: ⚠ Фаза C введена в горячую массу (${prev.tempC} °C > 40 °C) — термическая деградация активов и испарение отдушки!`)
+    events.push(language === 'en'
+      ? `${prev.minute} min: ⚠ Phase C added to hot batch (${prev.tempC} °C > 40 °C) — thermal degradation of actives and fragrance evaporation!`
+      : `${prev.minute} мин: ⚠ Фаза C введена в горячую массу (${prev.tempC} °C > 40 °C) — термическая деградация активов и испарение отдушки!`)
   } else {
-    events.push(`${prev.minute} мин: ✓ Фаза C аккуратно введена при ${prev.tempC} °C (≤ 40 °C).`)
+    events.push(language === 'en'
+      ? `${prev.minute} min: ✓ Phase C added safely at ${prev.tempC} °C (≤ 40 °C).`
+      : `${prev.minute} мин: ✓ Фаза C аккуратно введена при ${prev.tempC} °C (≤ 40 °C).`)
   }
   return {
     ...prev,
@@ -167,52 +185,53 @@ export interface ReactorCriterion {
 
 export function evaluateReactorRun(s: ReactorState): { score: number; criteria: ReactorCriterion[] } {
   const criteria: ReactorCriterion[] = []
+  const en = language === 'en'
 
   // 1. Ввод фазы B при 70–80 °C
   if (!s.phaseBAdded) {
-    criteria.push({ id: 'phaseB', title: 'Загрузка масляной фазы B', verdict: 'wrong', detail: 'Масляная фаза B так и не была загружена в реактор.' })
+    criteria.push({ id: 'phaseB', title: en ? 'Oil Phase B Charging' : 'Загрузка масляной фазы B', verdict: 'wrong', detail: en ? 'Oil Phase B was never charged into the reactor.' : 'Масляная фаза B так и не была загружена в реактор.' })
   } else if ((s.phaseBAddTempC ?? 0) >= 70 && (s.phaseBAddTempC ?? 0) <= 84) {
-    criteria.push({ id: 'phaseB', title: 'Загрузка масляной фазы B', verdict: 'ok', detail: `Загружена при ${s.phaseBAddTempC} °C — без температурного шока восков.` })
+    criteria.push({ id: 'phaseB', title: en ? 'Oil Phase B Charging' : 'Загрузка масляной фазы B', verdict: 'ok', detail: en ? `Charged at ${s.phaseBAddTempC} °C — no wax thermal shock.` : `Загружена при ${s.phaseBAddTempC} °C — без температурного шока восков.` })
   } else {
-    criteria.push({ id: 'phaseB', title: 'Загрузка масляной фазы B', verdict: 'wrong', detail: `Загружена при ${s.phaseBAddTempC} °C (норма 72–78 °C): образовались твёрдые крупинки.` })
+    criteria.push({ id: 'phaseB', title: en ? 'Oil Phase B Charging' : 'Загрузка масляной фазы B', verdict: 'wrong', detail: en ? `Charged at ${s.phaseBAddTempC} °C (spec 72–78 °C): solid wax grains formed.` : `Загружена при ${s.phaseBAddTempC} °C (норма 72–78 °C): образовались твёрдые крупинки.` })
   }
 
   // 2. Дисперсность (размер капель)
   if (s.dropletUm <= 4.0) {
-    criteria.push({ id: 'droplet', title: 'Дисперсность эмульсии', verdict: 'ok', detail: `Средний размер капель ${s.dropletUm} мкм — тонкая стабильная эмульсия.` })
+    criteria.push({ id: 'droplet', title: en ? 'Emulsion Droplet Fineness' : 'Дисперсность эмульсии', verdict: 'ok', detail: en ? `Mean droplet size ${s.dropletUm} μm — fine, stable emulsion.` : `Средний размер капель ${s.dropletUm} мкм — тонкая стабильная эмульсия.` })
   } else if (s.dropletUm <= 10.0) {
-    criteria.push({ id: 'droplet', title: 'Дисперсность эмульсии', verdict: 'weak', detail: `Капли ${s.dropletUm} мкм — гомогенизация была слишком короткой, риск кримирования и расслоения.` })
+    criteria.push({ id: 'droplet', title: en ? 'Emulsion Droplet Fineness' : 'Дисперсность эмульсии', verdict: 'weak', detail: en ? `Droplets ${s.dropletUm} μm — homogenization was too short; creaming/separation risk.` : `Капли ${s.dropletUm} мкм — гомогенизация была слишком короткой, риск кримирования и расслоения.` })
   } else {
-    criteria.push({ id: 'droplet', title: 'Дисперсность эмульсии', verdict: 'wrong', detail: `Капли ${s.dropletUm} мкм — грубая эмульсия, быстрое расслоение.` })
+    criteria.push({ id: 'droplet', title: en ? 'Emulsion Droplet Fineness' : 'Дисперсность эмульсии', verdict: 'wrong', detail: en ? `Droplets ${s.dropletUm} μm — coarse emulsion with rapid phase separation.` : `Капли ${s.dropletUm} мкм — грубая эмульсия, быстрое расслоение.` })
   }
 
   // 3. Деаэрация (воздух в креме)
   if (s.airPct <= 3.0) {
-    criteria.push({ id: 'air', title: 'Вакуумирование и воздух', verdict: 'ok', detail: `Остаточный воздух ${s.airPct} % — плотность и объём в тубе в норме.` })
+    criteria.push({ id: 'air', title: en ? 'Vacuum & Deaeration' : 'Вакуумирование и воздух', verdict: 'ok', detail: en ? `Residual air ${s.airPct}% — density and tube fill volume within spec.` : `Остаточный воздух ${s.airPct} % — плотность и объём в тубе в норме.` })
   } else if (s.airPct <= 7.0) {
-    criteria.push({ id: 'air', title: 'Вакуумирование и воздух', verdict: 'weak', detail: `Воздух ${s.airPct} % — заметная микропена, нужно дольше держать вакуум при охлаждении.` })
+    criteria.push({ id: 'air', title: en ? 'Vacuum & Deaeration' : 'Вакуумирование и воздух', verdict: 'weak', detail: en ? `Air ${s.airPct}% — noticeable micro-foam; hold vacuum longer during cooling.` : `Воздух ${s.airPct} % — заметная микропена, нужно дольше держать вакуум при охлаждении.` })
   } else {
-    criteria.push({ id: 'air', title: 'Вакуумирование и воздух', verdict: 'wrong', detail: `Воздух ${s.airPct} % — критическое завоздушивание (гомогенизатор работал без вакуума).` })
+    criteria.push({ id: 'air', title: en ? 'Vacuum & Deaeration' : 'Вакуумирование и воздух', verdict: 'wrong', detail: en ? `Air ${s.airPct}% — critical aeration (homogenizer ran without vacuum).` : `Воздух ${s.airPct} % — критическое завоздушивание (гомогенизатор работал без вакуума).` })
   }
 
   // 4. Сохранность активов фазы C
   if (!s.phaseCAdded) {
-    criteria.push({ id: 'phaseC', title: 'Ввод термолабильной фазы C', verdict: 'wrong', detail: 'Фаза C (активы и консервант) не загружена — партия без консерванта.' })
+    criteria.push({ id: 'phaseC', title: en ? 'Heat-Sensitive Phase C Addition' : 'Ввод термолабильной фазы C', verdict: 'wrong', detail: en ? 'Phase C (actives & preservative) was not added — unpreserved batch.' : 'Фаза C (активы и консервант) не загружена — партия без консерванта.' })
   } else if (s.activeIntegrityPct >= 95) {
-    criteria.push({ id: 'phaseC', title: 'Ввод термолабильной фазы C', verdict: 'ok', detail: `Введена при ${s.phaseCAddTempC} °C, сохранность активов ${s.activeIntegrityPct} %.` })
+    criteria.push({ id: 'phaseC', title: en ? 'Heat-Sensitive Phase C Addition' : 'Ввод термолабильной фазы C', verdict: 'ok', detail: en ? `Added at ${s.phaseCAddTempC} °C, active integrity ${s.activeIntegrityPct}%.` : `Введена при ${s.phaseCAddTempC} °C, сохранность активов ${s.activeIntegrityPct} %.` })
   } else if (s.activeIntegrityPct >= 75) {
-    criteria.push({ id: 'phaseC', title: 'Ввод термолабильной фазы C', verdict: 'weak', detail: `Введена при ${s.phaseCAddTempC} °C — частичная потеря активов (${s.activeIntegrityPct} %).` })
+    criteria.push({ id: 'phaseC', title: en ? 'Heat-Sensitive Phase C Addition' : 'Ввод термолабильной фазы C', verdict: 'weak', detail: en ? `Added at ${s.phaseCAddTempC} °C — partial active loss (${s.activeIntegrityPct}%).` : `Введена при ${s.phaseCAddTempC} °C — частичная потеря активов (${s.activeIntegrityPct} %).` })
   } else {
-    criteria.push({ id: 'phaseC', title: 'Ввод термолабильной фазы C', verdict: 'wrong', detail: `Перегрев при вводе (${s.phaseCAddTempC} °C) — сохранность упала до ${s.activeIntegrityPct} %.` })
+    criteria.push({ id: 'phaseC', title: en ? 'Heat-Sensitive Phase C Addition' : 'Ввод термолабильной фазы C', verdict: 'wrong', detail: en ? `Overheated during addition (${s.phaseCAddTempC} °C) — integrity dropped to ${s.activeIntegrityPct}%.` : `Перегрев при вводе (${s.phaseCAddTempC} °C) — сохранность упала до ${s.activeIntegrityPct} %.` })
   }
 
   // 5. Сохранность структуры и финальное охлаждение
   if (s.structurePct >= 90 && s.tempC <= 35) {
-    criteria.push({ id: 'struct', title: 'Охлаждение и ламеллярная сетка', verdict: 'ok', detail: `Выгрузка при ${s.tempC} °C, целостность сетки ${s.structurePct} %.` })
+    criteria.push({ id: 'struct', title: en ? 'Cooling & Lamellar Gel Network' : 'Охлаждение и ламеллярная сетка', verdict: 'ok', detail: en ? `Discharged at ${s.tempC} °C, network integrity ${s.structurePct}%.` : `Выгрузка при ${s.tempC} °C, целостность сетки ${s.structurePct} %.` })
   } else if (s.structurePct >= 75 && s.tempC <= 42) {
-    criteria.push({ id: 'struct', title: 'Охлаждение и ламеллярная сетка', verdict: 'weak', detail: `Выгрузка при ${s.tempC} °C, сетка ${s.structurePct} % — масса не доохлаждена или был лишний сдвиг.` })
+    criteria.push({ id: 'struct', title: en ? 'Cooling & Lamellar Gel Network' : 'Охлаждение и ламеллярная сетка', verdict: 'weak', detail: en ? `Discharged at ${s.tempC} °C, network ${s.structurePct}% — undercooled or excessive shear.` : `Выгрузка при ${s.tempC} °C, сетка ${s.structurePct} % — масса не доохлаждена или был лишний сдвиг.` })
   } else {
-    criteria.push({ id: 'struct', title: 'Охлаждение и ламеллярная сетка', verdict: 'wrong', detail: `Температура выгрузки ${s.tempC} °C, сетка ${s.structurePct} % — потеря вязкости от холодного сдвига или горячей выгрузки.` })
+    criteria.push({ id: 'struct', title: en ? 'Cooling & Lamellar Gel Network' : 'Охлаждение и ламеллярная сетка', verdict: 'wrong', detail: en ? `Discharge temperature ${s.tempC} °C, network ${s.structurePct}% — viscosity loss from cold shear or hot discharge.` : `Температура выгрузки ${s.tempC} °C, сетка ${s.structurePct} % — потеря вязкости от холодного сдвига или горячей выгрузки.` })
   }
 
   const pts = criteria.reduce((sum, c) => sum + (c.verdict === 'ok' ? 1 : c.verdict === 'weak' ? 0.5 : 0), 0)

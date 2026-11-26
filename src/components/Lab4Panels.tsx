@@ -92,13 +92,13 @@ export function Lab4Panels({ ev, batchGrams }: { ev: FormulaEvaluation; batchGra
         </div>
 
         <dl className="outcome">
-          <div><dt>{tr('Масса + потери')} ({lossPct}%)</dt><dd className="num">{econ.bulkCostPerUnit} ₽</dd></div>
-          <div><dt>{tr('Тара + этикетка + работа')}</dt><dd className="num">{econ.packagingTotal} ₽</dd></div>
-          <div><dt>{tr('Итого COGS за 1 шт.')}</dt><dd className="num"><b>{econ.totalCogs} ₽</b></dd></div>
+          <div><dt>{tr('Масса + потери')} ({lossPct}%)</dt><dd className="num">{econ.bulkCostPerUnit} {tr('₽')}</dd></div>
+          <div><dt>{tr('Тара + этикетка + работа')}</dt><dd className="num">{econ.packagingTotal} {tr('₽')}</dd></div>
+          <div><dt>{tr('Итого COGS за 1 шт.')}</dt><dd className="num"><b>{econ.totalCogs} {tr('₽')}</b></dd></div>
           <div><dt>{tr('Выход из партии')} ({batchGrams} {tr('г')})</dt><dd className="num">{econ.unitsPerBatch} {tr('шт.')}</dd></div>
         </dl>
         <p className="small muted" style={{ marginTop: 10, marginBottom: 0 }}>
-          {tr('Ориентир розничной цены (маржа ритейла/маркетплейса ×3…×5):')} <b className="num">{econ.suggestedRetail3x} – {econ.suggestedRetail5x} ₽</b>
+          {tr('Ориентир розничной цены (маржа ритейла/маркетплейса ×3…×5):')} <b className="num">{econ.suggestedRetail3x} – {econ.suggestedRetail5x} {tr('₽')}</b>
         </p>
       </section>
     </>

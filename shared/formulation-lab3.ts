@@ -5,6 +5,7 @@
 // 4) Подбор аналогов сырья
 
 import type { FormulaEvaluation, FormulaInput, Ingredient, Phase } from './formulation'
+import { language, tr } from './locale'
 
 export type StabilityVerdict = 'pass' | 'warn' | 'fail'
 export type TubeVisual = 'uniform' | 'creaming' | 'split' | 'crystals' | 'darkened' | 'syneresis'
@@ -376,7 +377,9 @@ export function computeSensoryProfile(ev: FormulaEvaluation, input: FormulaInput
   }
 
   const weakest = [...axes].sort((a, b) => a.score - b.score)[0]
-  const summary = `Профиль ближе всего к категории «${archetype}». Слабая точка сенсорики: ${weakest.label.toLowerCase()} (${weakest.score}/100) — ${weakest.note}`
+  const summary = language === 'en'
+    ? `Profile is closest to "${tr(archetype)}". Weakest sensory axis: ${tr(weakest.label).toLowerCase()} (${weakest.score}/100) — ${tr(weakest.note)}`
+    : `Профиль ближе всего к категории «${archetype}». Слабая точка сенсорики: ${weakest.label.toLowerCase()} (${weakest.score}/100) — ${weakest.note}`
 
   return { axes, archetype, summary }
 }
@@ -385,7 +388,8 @@ export function computeSensoryProfile(ev: FormulaEvaluation, input: FormulaInput
  * Генерирует пошаговый производственный протокол варки (SOP) с критическими контрольными точками (CCP).
  */
 export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput): ProtocolStep[] {
-  const fmtG = (g: number) => `${g} г`
+  const en = language === 'en'
+  const fmtG = (g: number) => en ? `${g} g` : `${g} г`
   const byPhase = (ph: Phase) => ev.rows.filter((r) => r.phase === ph && r.pct > 0)
   const rowsA = byPhase('A')
   const rowsB = byPhase('B')
@@ -400,7 +404,9 @@ export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput
 
   // Шаг 1: Подготовка фазы A
   const actionsA: string[] = [
-    `Отвесить в основной реактор очищенную воду и жидкие компоненты фазы A (всего ${fmtG(ev.phaseTotals.A.grams)}).`,
+    en
+      ? `Weigh purified water and liquid Phase A components into the main vessel (total ${fmtG(ev.phaseTotals.A.grams)}).`
+      : `Отвесить в основной реактор очищенную воду и жидкие компоненты фазы A (всего ${fmtG(ev.phaseTotals.A.grams)}).`,
   ]
   if (hasGums) {
     actionsA.push('Загустители (камеди/ГЭЦ/гуар) предварительно диспергировать в глицерине/пропандиоле и ввести в воронку при перемешивании без комков.')
@@ -409,7 +415,9 @@ export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput
     actionsA.push('Карбомер равномерно рассыпать по поверхности воды и выдержать до полного смачивания (15–20 мин) ДО ввода электролитов и нейтрализации.')
   }
   actionsA.push(
-    `Состав фазы A: ${rowsA.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ') || 'нет компонентов'}.`,
+    en
+      ? `Phase A composition: ${rowsA.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ') || 'no components'}.`
+      : `Состав фазы A: ${rowsA.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ') || 'нет компонентов'}.`,
   )
   steps.push({
     stepNo: no++,
@@ -432,11 +440,15 @@ export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput
       tempTarget: `${input.phaseTempC.B} °C`,
       mixing: 'Перемешивание до полной прозрачности расплава',
       actions: [
-        `Загрузить в плавильник компоненты фазы B (всего ${fmtG(ev.phaseTotals.B.grams)}): ${rowsB.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ')}.`,
+        en
+          ? `Charge Phase B components into the premix melter (total ${fmtG(ev.phaseTotals.B.grams)}): ${rowsB.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ')}.`
+          : `Загрузить в плавильник компоненты фазы B (всего ${fmtG(ev.phaseTotals.B.grams)}): ${rowsB.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ')}.`,
         'Нагреть до полного расплавления всех твёрдых эмульгаторов, жирных спиртов и восков.',
       ],
       ccp: hasWaxes
-        ? `CCP-2: Выдержать температуру расплава ≥ ${minMelt} °C и убедиться в отсутствии твёрдых крупинок воска/церамидов.`
+        ? (en
+            ? `CCP-2: Hold melt temperature ≥ ${minMelt} °C and confirm no solid wax/ceramide grains remain.`
+            : `CCP-2: Выдержать температуру расплава ≥ ${minMelt} °C и убедиться в отсутствии твёрдых крупинок воска/церамидов.`)
         : 'CCP-2: Разница температур между фазами A и B перед слиянием не должна превышать ±3 °C.',
     })
   }
@@ -467,10 +479,14 @@ export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput
       tempTarget: `≤ ${input.phaseTempC.C} °C`,
       mixing: 'Якорная мешалка 25–35 об/мин, без повторной высокосдвиговой гомогенизации',
       actions: [
-        `Охладить массу до ${input.phaseTempC.C} °C и последовательно ввести компоненты фазы C (всего ${fmtG(ev.phaseTotals.C.grams)}): ${rowsC.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ')}.`,
+        en
+          ? `Cool batch to ${input.phaseTempC.C} °C and add Phase C components sequentially (total ${fmtG(ev.phaseTotals.C.grams)}): ${rowsC.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ')}.`
+          : `Охладить массу до ${input.phaseTempC.C} °C и последовательно ввести компоненты фазы C (всего ${fmtG(ev.phaseTotals.C.grams)}): ${rowsC.map((r) => `${r.ingredient.name} — ${fmtG(r.grams)}`).join('; ')}.`,
         'Каждый компонент вводить после полного распределения предыдущего (отдушку при отсутствии масла предварительно смешать с солюбилизатором 1:4).',
       ],
-      ccp: `CCP-4: Контроль температуры массы перед вводом фазы C (не выше ${Math.min(40, input.phaseTempC.C)} °C для термолабильных активов).`,
+      ccp: en
+        ? `CCP-4: Verify bulk temperature before adding Phase C (≤ ${Math.min(40, input.phaseTempC.C)} °C for heat-sensitive actives).`
+        : `CCP-4: Контроль температуры массы перед вводом фазы C (не выше ${Math.min(40, input.phaseTempC.C)} °C для термолабильных активов).`,
     })
   }
 
@@ -482,11 +498,17 @@ export function generateBatchProtocol(ev: FormulaEvaluation, input: FormulaInput
     tempTarget: '20–25 °C',
     mixing: 'Деаэрация под вакуумом 5 мин перед выгрузкой',
     actions: [
-      `Проверить pH при 20–25 °C (целевое окно: ${input.targetPh} ± 0,2) и при необходимости скорректировать 10 % раствором кислоты/щёлочи.`,
-      `Зафиксировать массу готовой партии (${fmtG(input.batchGrams)}), плотность, органолептику и вязкость по Брукфильду через 24 ч созревания.`,
+      en
+        ? `Measure pH at 20–25 °C (target window: ${input.targetPh} ± 0.2) and adjust with 10% acid/base solution if needed.`
+        : `Проверить pH при 20–25 °C (целевое окно: ${input.targetPh} ± 0,2) и при необходимости скорректировать 10 % раствором кислоты/щёлочи.`,
+      en
+        ? `Record finished batch mass (${fmtG(input.batchGrams)}), density, appearance, and Brookfield viscosity after 24 h maturation.`
+        : `Зафиксировать массу готовой партии (${fmtG(input.batchGrams)}), плотность, органолептику и вязкость по Брукфильду через 24 ч созревания.`,
       'Отобрать арбитражную пробу (минимум 2×100 г) и передать образец в микробиологическую лабораторию.',
     ],
-    ccp: `CCP-5: Выпуск на фасовку разрешён только при соответствии pH (${input.targetPh} ± 0,2), отсутствии расслоения на центрифуге и чистоте микробиологии.`,
+    ccp: en
+      ? `CCP-5: Release for filling only after verifying pH (${input.targetPh} ± 0.2), zero centrifuge separation, and microbiological purity.`
+      : `CCP-5: Выпуск на фасовку разрешён только при соответствии pH (${input.targetPh} ± 0,2), отсутствии расслоения на центрифуге и чистоте микробиологии.`,
   })
 
   return steps
@@ -522,20 +544,22 @@ export function findIngredientSubstitutes(
     .slice(0, 3)
 
   return candidates.map(({ c }) => {
+    const en = language === 'en'
     const deltas: string[] = []
     if (src.hlb !== undefined && c.hlb !== undefined) {
-      deltas.push(`ГЛБ ${src.hlb} → ${c.hlb}`)
+      deltas.push(`${en ? 'HLB' : 'ГЛБ'} ${src.hlb} → ${c.hlb}`)
     } else if (src.reqHlb !== undefined && c.reqHlb !== undefined) {
       deltas.push(`reqHLB ${src.reqHlb} → ${c.reqHlb}`)
     }
     if (src.electrolyteSensitive && !c.electrolyteSensitive) {
-      deltas.push('устойчив к электролитам')
+      deltas.push(en ? 'electrolyte-tolerant' : 'устойчив к электролитам')
     }
     if (c.ionic !== src.ionic) {
-      deltas.push(`заряд: ${c.ionic}`)
+      deltas.push(`${en ? 'charge' : 'заряд'}: ${c.ionic}`)
     }
     const priceDiff = c.costPerKg - src.costPerKg
-    deltas.push(priceDiff === 0 ? 'та же цена' : priceDiff > 0 ? `+${priceDiff} ₽/кг` : `${priceDiff} ₽/кг`)
+    const unit = en ? 'RUB/kg' : '₽/кг'
+    deltas.push(priceDiff === 0 ? (en ? 'same cost' : 'та же цена') : priceDiff > 0 ? `+${priceDiff} ${unit}` : `${priceDiff} ${unit}`)
 
     return {
       ingredient: c,

@@ -2,6 +2,7 @@
 // + безопасный экспорт/импорт резервной копии прогресса и рецептур в JSON.
 
 import type { SkillState } from './mastery'
+import { language } from './locale'
 import { mergeProgress, normalize, type Progress } from './merge'
 
 export interface CompetencyDomainDef {
@@ -181,7 +182,9 @@ export function computeCareerGrade(profile: CompetencyDomainSummary[], completed
       badge: 'Грейд IV',
       description: 'Уверенно ведёт разработку, перенос на реактор и расследование производственного брака.',
       nextTitle: 'Главный технолог / R&D-директор',
-      nextRequirement: `До V грейда: ≥ 20 освоенных навыков (сейчас ${mastered}), ≥ 18 кейсов (${completedLabs}) и 5 сильных доменов (${strongDomains}).`,
+      nextRequirement: language === 'en'
+        ? `For Grade V: ≥ 20 mastered skills (now ${mastered}), ≥ 18 labs (${completedLabs}), and 5 strong domains (${strongDomains}).`
+        : `До V грейда: ≥ 20 освоенных навыков (сейчас ${mastered}), ≥ 18 кейсов (${completedLabs}) и 5 сильных доменов (${strongDomains}).`,
       progressPct: Math.min(99, Math.round(((mastered / 20) * 0.5 + (completedLabs / 18) * 0.5) * 100)),
     }
   }
@@ -192,7 +195,9 @@ export function computeCareerGrade(profile: CompetencyDomainSummary[], completed
       badge: 'Грейд III',
       description: 'Самостоятельно проектирует эмульсии/ПАВ-системы, проверяет комплаенс и анализирует отклонения.',
       nextTitle: 'Ведущий технолог',
-      nextRequirement: `До IV грейда: ≥ 12 освоенных навыков (сейчас ${mastered}), ≥ 10 кейсов (${completedLabs}) и 3 домена ≥ 50 % (${strongDomains}).`,
+      nextRequirement: language === 'en'
+        ? `For Grade IV: ≥ 12 mastered skills (now ${mastered}), ≥ 10 labs (${completedLabs}), and 3 domains ≥ 50% (${strongDomains}).`
+        : `До IV грейда: ≥ 12 освоенных навыков (сейчас ${mastered}), ≥ 10 кейсов (${completedLabs}) и 3 домена ≥ 50 % (${strongDomains}).`,
       progressPct: Math.min(99, Math.round(((mastered / 12) * 0.5 + (completedLabs / 10) * 0.5) * 100)),
     }
   }
@@ -203,7 +208,9 @@ export function computeCareerGrade(profile: CompetencyDomainSummary[], completed
       badge: 'Грейд II',
       description: 'Уверенно работает с базовыми расчётами, pH, ГЛБ и первыми лабораторными тренажёрами.',
       nextTitle: 'Разработчик рецептур (R&D)',
-      nextRequirement: `До III грейда: ≥ 6 освоенных навыков (сейчас ${mastered}) и ≥ 5 пройденных практических занятий (${completedLabs}).`,
+      nextRequirement: language === 'en'
+        ? `For Grade III: ≥ 6 mastered skills (now ${mastered}) and ≥ 5 completed labs (${completedLabs}).`
+        : `До III грейда: ≥ 6 освоенных навыков (сейчас ${mastered}) и ≥ 5 пройденных практических занятий (${completedLabs}).`,
       progressPct: Math.min(99, Math.round(((mastered / 6) * 0.5 + (completedLabs / 5) * 0.5) * 100)),
     }
   }
@@ -213,7 +220,9 @@ export function computeCareerGrade(profile: CompetencyDomainSummary[], completed
     badge: 'Грейд I',
     description: 'Начальный этап: пройдите первые 2 практических занятия или соберите и проверьте первую рецептуру.',
     nextTitle: 'Младший технолог',
-    nextRequirement: `До II грейда: пройдите 2 практических занятия (сейчас ${completedLabs}) или освойте 2 навыка (${mastered}).`,
+    nextRequirement: language === 'en'
+      ? `For Grade II: complete 2 practical labs (now ${completedLabs}) or master 2 skills (${mastered}).`
+      : `До II грейда: пройдите 2 практических занятия (сейчас ${completedLabs}) или освойте 2 навыка (${mastered}).`,
     progressPct: Math.min(99, Math.max(avgPct, Math.round((completedLabs / 2) * 100))),
   }
 }
@@ -266,7 +275,9 @@ export function buildRefreshQueue(
       out.push({
         skillId: sk.id,
         skillName: sk.name,
-        reason: `Последняя практика ${days} дн. назад — интервальное повторение укрепит уверенность.`,
+        reason: language === 'en'
+          ? `Last practiced ${days} days ago — spaced repetition will reinforce confidence.`
+          : `Последняя практика ${days} дн. назад — интервальное повторение укрепит уверенность.`,
         priority: 50 + Math.min(30, days),
         topicId: sk.topics[0],
         labId: sk.labs[0],
