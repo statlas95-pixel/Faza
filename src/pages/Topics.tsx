@@ -4,6 +4,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { topics, topicById, labById, sourceById, search, areaLabel, sourceTypeLabel, labs, terms, levelLabel, levelHint } from '../content'
 import { Md, citedIds } from '../md'
 import { BookmarkButton, Quiz, Question } from '../ui'
+import { NoteBox } from '../components/NoteBox'
 import { update, useProgress, getProgress } from '../store'
 import { useTitle } from './util'
 import { SourceFinder } from '../features/Sources'
@@ -111,6 +112,12 @@ export function TopicPage() {
         </aside>
         <div className="topic-body">
           <Md text={t.body} />
+          <NoteBox
+            noteId={`topic:${t.id}`}
+            kind="topic"
+            targetId={t.id}
+            title={t.title}
+          />
           <section id="check" className="check">
             <h2>{tr("Проверка понимания")}</h2>
             <p className="small">{tr("Пояснение даётся к каждому выбранному варианту. Ответы сохраняются.")}</p>

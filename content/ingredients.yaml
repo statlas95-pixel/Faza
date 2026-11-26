@@ -1603,3 +1603,236 @@
     - standard: "EU 1223/2009 (Прил. III, п. 62) · ТР ТС 009/2011 (Прил. 2)"
       leaveOnMax: 2.5
       note: "В несмываемых средствах максимум 2,5 % (для смываемых числовой потолок не установлен); чистота ≥ 99 %, вторичных аминов ≤ 0,5 %, не применять с нитрозирующими системами."
+
+
+# ===== Расширение Лаборатории 5.0 (Пакет E): пигменты, перламутры, W/O-системы, воски стиков и буферы (до 150 компонентов) =====
+
+- id: ci-77492
+  inci: CI 77492
+  name: "Оксид железа жёлтый (гидрофобно обработанный пигмент)"
+  role: colorant
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.3, 4.0]
+  costPerKg: 3900
+  note: "Базовый неорганический пигмент тёплого подтона для тональных эмульсий и BB-кремов; требует высокосдвигового перетира с диспергатором."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. IV) · ТР ТС 009/2011 (Прил. 3)"
+      note: "Разрешённый косметический краситель для всех категорий продукции при соблюдении критериев чистоты по тяжёлым металлам."
+
+- id: ci-77491
+  inci: CI 77491
+  name: "Оксид железа красный (пигмент тональных систем)"
+  role: colorant
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.1, 2.5]
+  costPerKg: 4100
+  note: "Красный железоокисный пигмент для балансировки оттенка кожи и губных помад; устойчив к свету и нагреву."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. IV) · ТР ТС 009/2011 (Прил. 3)"
+      note: "Разрешён во всех видах парфюмерно-косметической продукции."
+
+- id: ci-77499
+  inci: CI 77499
+  name: "Оксид железа чёрный (магнетитовый пигмент)"
+  role: colorant
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.05, 8.0]
+  costPerKg: 4300
+  note: "Чёрный неорганический пигмент для туши, подводок и корректировки глубины оттенка тональных кремов."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. IV) · ТР ТС 009/2011 (Прил. 3)"
+      note: "Разрешён для всех категорий косметических средств, включая область вокруг глаз."
+
+- id: tio2-pigment-ci77891
+  inci: CI 77891
+  name: "Диоксид титана пигментный (рутил 250 нм, силан-обработка)"
+  role: colorant
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [2.0, 14.0]
+  costPerKg: 3200
+  note: "Крупнокристаллический белый пигмент высокой укрывистости для тональных флюидов и консилеров (отличается от нано-TiO₂ УФ-фильтра оптическим размером частиц ~220–280 нм)."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. IV) · ТР ТС 009/2011 (Прил. 3)"
+      note: "Разрешён как белый пигмент; не применять в порошковых/аэрозольных продуктах с риском ингаляции."
+
+- id: mica-pearl
+  inci: Mica
+  name: "Серицитовая слюда косметическая (наполнитель и шёлк)"
+  role: colorant
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [1.0, 10.0]
+  costPerKg: 2600
+  note: "Пластинчатый алюмосиликатный минерал: улучшает скольжение, снижает липкость и служит подложкой перламутровых пигментов."
+
+- id: synthetic-fluorphlogopite
+  inci: Synthetic Fluorphlogopite
+  name: "Синтетический фторфлогопит (кристально чистая слюда)"
+  role: colorant
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.5, 8.0]
+  costPerKg: 5400
+  note: "Синтетический аналог слюды без примесей железа: даёт чистейшее сияние без серого подтона в хайлайтерах и кремах."
+
+- id: boron-nitride
+  inci: Boron Nitride
+  name: "Нитрид бора гексагональный («люксовое скольжение»)"
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.5, 5.0]
+  costPerKg: 14800
+  note: "Премиальный сенсорный порошок: придаёт эффект мягкого фокуса (blur), бархатное скольжение и высокую стойкость макияжа."
+
+- id: pg3-polyricinoleate
+  inci: Polyglyceryl-3 Polyricinoleate
+  name: "Полиглицерил-3 полирицинолеат (PGPR, W/O эмульгатор)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 3.6
+  typicalRange: [1.5, 4.5]
+  costPerKg: 4200
+  note: "Классический PEG-free эмульгатор для плотных защитных и детских обратных эмульсий W/O (ГЛБ ≈ 3,6); требует 0,7–1 % MgSO₄ или NaCl в воде."
+
+- id: cetyl-peg-ppg-dimethicone
+  inci: "Cetyl PEG/PPG-10/1 Dimethicone"
+  name: "Цетил ПЭГ/ППГ-10/1 диметикон (Abil EM 90, силиконовый W/O)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 5.0
+  typicalRange: [1.5, 3.5]
+  costPerKg: 5600
+  note: "Эталонный полиэфир-силиконовый эмульгатор для лёгких водостойких тональных флюидов и солнцезащитных средств W/O (ГЛБ ≈ 5,0)."
+
+- id: polyhydroxystearic-acid
+  inci: Polyhydroxystearic Acid
+  name: "Полигидроксистеариновая кислота (стерический диспергатор)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 6.0
+  typicalRange: [0.3, 2.0]
+  costPerKg: 6100
+  note: "Полимерный смачиватель и стерический стабилизатор неорганических пигментов, ZnO и TiO₂: снижает вязкость пасты в 2–3 раза и повышает SPF."
+
+- id: disteardimonium-hectorite
+  inci: Disteardimonium Hectorite
+  name: "Дистеардимония гекторит (Bentone 38, органоглина)"
+  role: thickener
+  recommendedPhase: B
+  ionic: cationic
+  typicalRange: [0.5, 2.5]
+  costPerKg: 4900
+  note: "Тиксотропный реомодификатор масляной фазы в W/O и безводных суспензиях; для раскрытия пластинок требует полярного активатора (пропиленкарбонат ~30 % от массы глины) и высокого сдвига."
+
+- id: propylene-carbonate
+  inci: Propylene Carbonate
+  name: "Пропиленкарбонат (полярный активатор гекторита)"
+  role: solvent
+  recommendedPhase: B
+  ionic: nonionic
+  typicalRange: [0.1, 1.0]
+  costPerKg: 1150
+  note: "Высокополярный апротонный растворитель, раздвигающий слои органоглины (Disteardimonium Hectorite) для формирования тиксотропного геля в маслах."
+
+- id: microcrystalline-wax
+  inci: Cera Microcristallina
+  name: "Микрокристаллический воск (ингибитор зернистости)"
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.5
+  typicalRange: [1.0, 8.0]
+  costPerKg: 1850
+  note: "Пластичный разветвлённо-нафтеновый воск: подавляет крупнокристаллическую зернистость масла ши и предотвращает «потение» (syneresis) помад и бальзамов."
+
+- id: carnauba-wax
+  inci: Copernicia Cerifera Cera
+  name: "Карнаубский воск (высокоплавкий каркас стиков)"
+  role: thickener
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 12.0
+  typicalRange: [0.5, 5.0]
+  costPerKg: 3400
+  note: "Самый твёрдый растительный воск (tпл ≈ 82–86 °C): повышает термостойкость губных помад и стиков, придаёт глянец и лёгкое извлечение из формы."
+
+- id: hydrogenated-polyisobutene
+  inci: Hydrogenated Polyisobutene
+  name: "Гидрогенизированный полиизобутен (глянцевый эмолент)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 8.0
+  typicalRange: [2.0, 20.0]
+  costPerKg: 2300
+  note: "Химически инертный углеводородный полимер (замена полибутена и сквалана): даёт зеркальный блеск в средствах для губ и водостойкость в SPF."
+
+- id: trimethylsiloxysilicate
+  inci: Trimethylsiloxysilicate
+  name: "Триметилсилоксисиликат (MQ-смола стойкости)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 6.0
+  typicalRange: [1.0, 6.0]
+  costPerKg: 6800
+  note: "Силиконовая смола-плёнкообразователь: обеспечивает устойчивость к трению, поту и воде (transfer-resistant) в тональных средствах и пляжных SPF."
+
+- id: ensulizole
+  inci: Phenylbenzimidazole Sulfonic Acid
+  name: "Энсулизол (водорастворимый УФ-B фильтр фазы A)"
+  role: uv_filter
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [6.8, 8.0]
+  isElectrolyte: true
+  typicalRange: [1.0, 4.0]
+  costPerKg: 11200
+  note: "Водорастворимый УФ-B фильтр (λmax ≈ 302 нм): позволяет разгрузить масляную фазу SPF-флюида, но требует строгой нейтрализации (NaOH/Tromethamine/Arginine) до pH ≥ 6,8, иначе выпадает колючими кристаллами!"
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. VI, п. 6) · ТР ТС 009/2011 (Прил. 5)"
+      leaveOnMax: 8.0
+      rinseOffMax: 8.0
+      note: "Максимум 8,0 % в пересчёте на свободную кислоту."
+
+- id: magnesium-sulfate
+  inci: Magnesium Sulfate
+  name: "Сульфат магния гептагидрат (стабилизатор W/O)"
+  role: electrolyte
+  recommendedPhase: A
+  ionic: nonionic
+  isElectrolyte: true
+  typicalRange: [0.3, 1.5]
+  costPerKg: 180
+  note: "Ключевой электролит водной фазы обратных эмульсий W/O: выравнивает осмотическое давление и блокирует коалесценцию и оствальдово созревание капель воды."
+
+- id: sodium-lactate
+  inci: Sodium Lactate
+  name: "Лактат натрия (увлажнитель NMF и буфер, 100 % акт.)"
+  role: humectant
+  recommendedPhase: C
+  ionic: anionic
+  isElectrolyte: true
+  maxTempC: 55
+  typicalRange: [0.5, 4.0]
+  costPerKg: 960
+  note: "Компонент натурального увлажняющего фактора; в паре с молочной кислотой образует мощный лактатный буфер (pH 4,8–5,8) для стабилизации кремов с мочевиной."
+
+- id: triethyl-citrate
+  inci: Triethyl Citrate
+  name: "Триэтилцитрат (дезодорирующий эфир и буфер-ловушка)"
+  role: active
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.5
+  typicalRange: [0.5, 5.0]
+  costPerKg: 1950
+  note: "Эфир лимонной кислоты: ингибирует эстеразы бактерий пота и стабилизирует pH рецептур с мочевиной, отщепляя кислоту при щелочном сдвиге."

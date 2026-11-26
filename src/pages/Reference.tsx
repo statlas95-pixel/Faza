@@ -5,7 +5,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { terms, sources, topics, labs, topicById, sourceById, sourceTypeLabel, labById, termById, termAreas } from '../content'
 import { Md } from '../md'
 import { ConfirmButton } from '../ui'
-import { resetProgress, useProgress, toggleBookmark } from '../store'
+import { resetProgress, useProgress, toggleBookmark, deleteNote } from '../store'
 import { useAccount, api } from '../account'
 import { useState } from 'react'
 import { useTitle } from './util'
@@ -122,6 +122,28 @@ export function Journal() {
             <li key={b.path}><Link to={b.path}><span className="kindtag">{b.kind}</span> {b.title}</Link>
               <button className="btn ghost small" onClick={() => toggleBookmark(b.path, b.title, b.kind)} aria-label={`${tr("Убрать закладку ")}${b.title}`}>{tr("убрать")}</button></li>))}</ul>
             : <p className="muted">{tr("Закладок нет. Кнопка «В закладки» есть на странице каждой темы и занятия.")}</p>}
+        </section>
+        <section><h2>{tr("Заметки технолога")}</h2>
+          {Object.values(p.notes).length ? (
+            <ul className="bms">
+              {Object.values(p.notes)
+                .sort((x, y) => y.at - x.at)
+                .map((n) => {
+                  const to = n.kind === 'topic' ? `/topics/${n.targetId}` : '/sandbox'
+                  return (
+                    <li key={n.id} style={{ alignItems: 'flex-start' }}>
+                      <div>
+                        <Link to={to}><span className="kindtag">{tr(n.kind)}</span> <b>{n.title}</b></Link>
+                        <p className="small" style={{ margin: '4px 0 0', whiteSpace: 'pre-wrap' }}>{n.text}</p>
+                      </div>
+                      <button className="btn ghost small" onClick={() => deleteNote(n.id)} aria-label={`${tr("Удалить заметку ")}${n.title}`}>{tr("убрать")}</button>
+                    </li>
+                  )
+                })}
+            </ul>
+          ) : (
+            <p className="muted">{tr("Личных заметок пока нет — добавляйте наблюдения на страницах тем и в Лаборатории рецептур.")}</p>
+          )}
         </section>
         <section><h2>{tr("Темы")}</h2>
           <table><thead><tr><th>{tr("Тема")}</th><th>{tr("Открывалась")}</th><th>{tr("Проверка понимания")}</th></tr></thead>

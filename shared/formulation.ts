@@ -22,6 +22,7 @@ export type IngredientRole =
   | 'fragrance'
   | 'chelator'
   | 'solubilizer'
+  | 'colorant'
 
 export interface RegulatoryRule {
   standard: string
@@ -139,7 +140,7 @@ const VALID_PHASES = new Set<Phase>(['A', 'B', 'C'])
 const VALID_IONIC = new Set<IonicType>(['nonionic', 'anionic', 'cationic', 'amphoteric'])
 const VALID_ROLES = new Set<IngredientRole>([
   'solvent', 'humectant', 'emollient', 'emulsifier', 'thickener', 'surfactant',
-  'active', 'preservative', 'uv_filter', 'ph_adjuster', 'electrolyte', 'antioxidant', 'fragrance', 'chelator', 'solubilizer',
+  'active', 'preservative', 'uv_filter', 'ph_adjuster', 'electrolyte', 'antioxidant', 'fragrance', 'chelator', 'solubilizer', 'colorant',
 ])
 
 const round = (n: number, digits = 2) => Number(n.toFixed(digits))
@@ -373,7 +374,7 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
   const isWoSystem =
     actualHlb !== null &&
     actualHlb <= 6.0 &&
-    emulRows.some((r) => r.ingredient.id === 'isolan-gps' || r.ingredient.id === 'sorbitan-oleate')
+    emulRows.some((r) => ['isolan-gps', 'sorbitan-oleate', 'pg3-polyricinoleate', 'cetyl-peg-ppg-dimethicone'].includes(r.ingredient.id))
 
   if (oilPhasePct >= 1 && emulsifierPct <= 0 && !hasPolymericOrCationicEmulsifier) {
     issues.push({
@@ -563,6 +564,7 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
     })
   }
   const meltChecks: { id: string; minT: number; label: string; labelEn: string }[] = [
+    { id: 'carnauba-wax', minT: 82, label: 'карнаубского воска (≥ 82 °C)', labelEn: 'Carnauba Wax (≥ 82 °C)' },
     { id: 'ceramide-np', minT: 80, label: 'церамида NP (≥ 80 °C)', labelEn: 'Ceramide NP (≥ 80 °C)' },
     { id: 'candelilla-wax', minT: 73, label: 'канделильского воска (≥ 73 °C)', labelEn: 'Candelilla Wax (≥ 73 °C)' },
     { id: 'behenyl-alcohol', minT: 70, label: 'бегенилового спирта (≥ 70 °C)', labelEn: 'Behenyl Alcohol (≥ 70 °C)' },

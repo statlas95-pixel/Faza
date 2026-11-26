@@ -25,7 +25,10 @@ import {
 import { api, ApiError, useAccount } from '../account'
 import { BatchProtocolPanel, SensoryProfilePanel, StabilityLabPanel } from '../components/Lab3Panels'
 import { Lab4Panels } from '../components/Lab4Panels'
+import { Lab5Panels } from '../components/Lab5Panels'
+import { NoteBox } from '../components/NoteBox'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
+import { buildFormulaCsv, decodeShareFormula, encodeShareFormula } from '../../shared/formulation-lab5'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
 import { renderSafe } from '../md'
 import { deleteSavedFormula, saveFormula, useProgress, type SavedFormulaRecord } from '../store'
@@ -67,6 +70,7 @@ const roleLabels: Record<IngredientRole, string> = {
   fragrance: tr('Отдушка'),
   chelator: tr('Хелатор'),
   solubilizer: tr('Солюбилизатор'),
+  colorant: tr('Пигмент / краситель'),
 }
 
 const phaseName: Record<Phase, string> = {
@@ -95,6 +99,7 @@ export default function SandboxPage() {
   const [saveName, setSaveName] = useState('')
   const saved = progress.savedFormulas
   const [copied, setCopied] = useState(false)
+  const [shareCopied, setShareCopied] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const simRef = useRef<HTMLDivElement>(null)
   const [showOnboard, setShowOnboard] = useState(() => {
@@ -111,7 +116,16 @@ export default function SandboxPage() {
     const addId = searchParams.get('add')
     const loadId = searchParams.get('load')
     const tpl = searchParams.get('template')
-    if (addId) {
+    const shareToken = searchParams.get('share')
+    if (shareToken) {
+      const validIds = new Set(ingredients.map((i) => i.id))
+      const decoded = decodeShareFormula(shareToken, validIds)
+      if (decoded) {
+        loadFormulaState(decoded.formula, '')
+        if (decoded.name) setSaveName(decoded.name)
+      }
+      setSearchParams({}, { replace: true })
+    } else if (addId) {
       const ing = ingredientById(addId)
       if (ing) {
         const defaultPct = Number(((ing.typicalRange[0] + Math.min(ing.typicalRange[1], ing.typicalRange[0] + 2)) / 2).toFixed(2))
@@ -276,6 +290,28 @@ export default function SandboxPage() {
     a.download = `faza-formula-${Date.now()}.json`
     a.click()
     URL.revokeObjectURL(url)
+  }
+
+  function exportCsv() {
+    const title = saveName.trim() || activePreset?.title || 'Faza Formula'
+    const csv = buildFormulaCsv(evaluation, formula, title)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `faza-batch-${Date.now()}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function copyShareLink() {
+    const title = saveName.trim() || activePreset?.title || undefined
+    const token = encodeShareFormula(formula, title)
+    const shareUrl = `${window.location.origin}${window.location.pathname}#/sandbox?share=${token}`
+    navigator.clipboard?.writeText(shareUrl).then(() => {
+      setShareCopied(true)
+      setTimeout(() => setShareCopied(false), 2000)
+    }).catch(() => {})
   }
 
   async function askTutorAboutFormula() {
@@ -808,10 +844,17 @@ export default function SandboxPage() {
         })()}
       </section>
 
-      {/* Лаборатория 3.0 и 4.0: Ускоренное старение, Сенсорная паутинка, Экономика COGS / ASM и Протокол варки (SOP) */}
+      {/* Лаборатория 3.0, 4.0 и 5.0: Ускоренное старение, Сенсорика, COGS/ASM, SPF/Пигменты, A/B-радар и SOP */}
       <StabilityLabPanel tests={stabilityTests} />
       <SensoryProfilePanel profile={sensory} />
       <Lab4Panels ev={evaluation} batchGrams={formula.batchGrams} />
+      <Lab5Panels
+        formula={formula}
+        ev={evaluation}
+        catalog={ingredients}
+        savedFormulas={saved}
+        presets={sandboxPresets}
+      />
       <BatchProtocolPanel steps={protocol} />
 
       {/* Диагностика, регуляторика и кнопка ИИ-наставника */}
@@ -902,6 +945,14 @@ export default function SandboxPage() {
         </div>
       </section>
 
+      {/* Личный лабораторный блокнот к текущей рецептуре */}
+      <NoteBox
+        noteId={`formula:${presetId || 'custom'}`}
+        kind="formula"
+        targetId={presetId || 'custom'}
+        title={activePreset?.title ?? tr('Свободная рецептура Лаборатории')}
+      />
+
       {/* Сохранение и экспорт */}
       <section className="panel">
         <h2>{tr('Сохранение и экспорт рецептуры')}</h2>
@@ -914,6 +965,12 @@ export default function SandboxPage() {
           />
           <button type="button" className="btn primary" onClick={handleSave}>
             {tr('Сохранить в портфолио')}
+          </button>
+          <button type="button" className="btn" onClick={exportCsv}>
+            📊 {tr('Таблица CSV (Excel)')}
+          </button>
+          <button type="button" className="btn" onClick={copyShareLink}>
+            🔗 {shareCopied ? tr('Ссылка скопирована!') : tr('Поделиться ссылкой')}
           </button>
           <button type="button" className="btn" onClick={exportJson}>
             {tr('Экспорт JSON')}
