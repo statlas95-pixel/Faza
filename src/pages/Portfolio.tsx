@@ -11,6 +11,7 @@ import {
 import { labById, labs } from '../content'
 import { skills, useLearning } from '../learning'
 import { syncNow, useAccount } from '../account'
+import { GradeExamModal } from '../components/GradeExamModal'
 import { getProgress, replaceState, useProgress } from '../store'
 import { useTitle } from './util'
 
@@ -61,6 +62,7 @@ export default function PortfolioPage() {
   const acc = useAccount()
   const formulas = progress.savedFormulas
   const [statusMsg, setStatusMsg] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
+  const [examOpen, setExamOpen] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const profile = useMemo(() => buildCompetencyProfile(learning.states), [learning.states])
@@ -68,6 +70,7 @@ export default function PortfolioPage() {
   const totalSkills = profile.reduce((s, d) => s + d.total, 0)
   const completedLabs = Object.entries(progress.labDone).sort((a, b) => b[1].at - a[1].at)
   const grade = useMemo(() => computeCareerGrade(profile, completedLabs.length), [profile, completedLabs.length])
+  const certified = progress.certifiedGrades[String(grade.level)]
 
   function handleExport() {
     const backup = createProgressBackup(getProgress(), formulas)
@@ -118,7 +121,14 @@ export default function PortfolioPage() {
       <section className="panel grade-card" aria-label={tr('Профессиональный грейд')}>
         <div className="grade-head">
           <div>
-            <span className="grade-badge">{tr(grade.badge)}</span>
+            <div className="row" style={{ gap: 8, marginBottom: 4 }}>
+              <span className="grade-badge">{tr(grade.badge)}</span>
+              {certified && (
+                <span className="chip on num" title={tr('Подтверждено независимым экзаменом без подсказок')}>
+                  ✓ {tr('Аттестован')} ({Math.round(certified.score * 100)} % · {new Date(certified.at).toLocaleDateString()})
+                </span>
+              )}
+            </div>
             <h2>{tr(grade.title)}</h2>
             <p className="small">{tr(grade.description)}</p>
           </div>
@@ -128,8 +138,24 @@ export default function PortfolioPage() {
           </div>
         </div>
         <div className="bar"><span style={{ width: `${Math.max(4, grade.progressPct)}%` }} /></div>
-        {grade.nextRequirement && <p className="small muted" style={{ marginTop: 8, marginBottom: 0 }}>{tr(grade.nextRequirement)}</p>}
+        <div className="sandbox-head-row" style={{ marginTop: 10 }}>
+          {grade.nextRequirement ? (
+            <p className="small muted" style={{ margin: 0 }}>{tr(grade.nextRequirement)}</p>
+          ) : <span />}
+          <button type="button" className="btn small no-print" onClick={() => setExamOpen(true)}>
+            🎓 {certified ? tr('Пересдать аттестацию на грейд') : tr('Пройти аттестацию на грейд')}
+          </button>
+        </div>
       </section>
+      {examOpen && (
+        <GradeExamModal
+          level={grade.level}
+          gradeTitle={grade.title}
+          gradeBadge={grade.badge}
+          onClose={() => setExamOpen(false)}
+          onCertified={() => { if (acc.status === 'user') void syncNow() }}
+        />
+      )}
 
       <dl className="traffic-totals">
         <div className="panel"><dt>{tr('Освоено навыков (≥ 3 ур.)')}</dt><dd>{totalMastered} / {totalSkills}</dd></div>

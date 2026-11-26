@@ -103,6 +103,28 @@ for (const l of labs) {
     if (!['A', 'B', 'fail'].includes(l.expectedCriterion)) err(l.file, 'challenge-test: expectedCriterion должен быть A, B или fail')
     if (!Array.isArray(l.remedies) || l.remedies.filter((r) => r.correct).length !== 1) err(l.file, 'challenge-test: в remedies нужен ровно один вариант с correct: true')
   }
+  if (l.engine === 'pack-compat') {
+    const pIds = new Set((l.packs ?? []).map((p) => p.id))
+    if (pIds.size < 3 || !Array.isArray(l.products) || l.products.length < 2) err(l.file, 'pack-compat: нужны packs (>=3) и products (>=2)')
+    for (const prod of l.products ?? []) {
+      if (!pIds.has(prod.correctPackId)) err(l.file, `pack-compat: у ${prod.id} неизвестный correctPackId`)
+      if (!(prod.results ?? []).some((r) => r.passed)) err(l.file, `pack-compat: у ${prod.id} нет ни одного passed: true`)
+    }
+    for (const q of l.questions ?? []) if ((q.options ?? []).filter((o) => o.correct).length !== 1) err(l.file, `pack-compat: вопрос ${q.id} должен иметь ровно один correct`)
+  }
+  if (l.engine === 'wpu-audit') {
+    const ptIds = new Set((l.points ?? []).map((p) => p.id))
+    if (ptIds.size < 3 || !ptIds.has(l.hotspotPointId)) err(l.file, 'wpu-audit: нужны points (>=3) и валидный hotspotPointId')
+    if ((l.conductivityQuestions ?? []).filter((o) => o.correct).length !== 1) err(l.file, 'wpu-audit: нужен ровно один correct в conductivityQuestions')
+    if ((l.capaOptions ?? []).filter((c) => c.valid).length < 2) err(l.file, 'wpu-audit: нужно не менее 2 валидных мер в capaOptions')
+  }
+  if (l.engine === 'triage') {
+    if (!Array.isArray(l.cases) || l.cases.length < 3) err(l.file, 'triage: нужно не менее 3 кейсов в cases')
+    for (const c of l.cases ?? []) {
+      if ((c.mechanisms ?? []).filter((m) => m.correct).length !== 1) err(l.file, `triage: у ${c.id} нужен ровно один верный механизм`)
+      if ((c.fixes ?? []).filter((f) => f.correct).length !== 1) err(l.file, `triage: у ${c.id} нужно ровно одно верное решение`)
+    }
+  }
 }
 for (const t of site.tasks ?? []) { const m = t.to.match(/^\/(topics|labs)\/(.+)$/); if (m && !(m[1] === 'topics' ? topicIds : labIds).has(m[2])) err('site.yaml', `tasks: нет страницы ${t.to}`) }
 for (const s of site.track?.steps ?? []) { if (s.topic && !topicIds.has(s.topic)) err('site.yaml', `track: нет темы ${s.topic}`); if (s.lab && !labIds.has(s.lab)) err('site.yaml', `track: нет занятия ${s.lab}`) }

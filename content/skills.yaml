@@ -206,6 +206,7 @@
     - water-sanitation
   labs:
     - water-sanitation-sheet
+    - wpu-biofilm-hunt
 - id: pump-selection
   name: Определять рабочую точку насоса
   outcome: определять рабочую точку насоса
@@ -261,7 +262,7 @@
   name: Проектировать фотостабильные SPF-системы
   outcome: подбирать пары УФ-фильтров, растворители и проверять лимиты Прил. VI EU 1223/2009 и Прил. 5 ТР ТС 009/2011
   topics: [sunscreens-spf]
-  labs: []
+  labs: [spf-formulator-lab]
 - id: hair-care-systems
   name: Разрабатывать кондиционирующие системы для волос
   outcome: различать катионные ламеллярные бальзамы и коацерватные шампуни с поликватерниумами и гуаром
@@ -271,9 +272,29 @@
   name: Стабилизировать капризные активы (вит. C, ретинол, кислоты)
   outcome: задавать рабочее окно pH, хелатно-антиоксидантную защиту и учитывать лимиты EU 2024/996
   topics: [unstable-actives]
-  labs: [marketing-brief-branch]
+  labs: [marketing-brief-branch, stability-triage]
 - id: packaging-compatibility
   name: Подбирать упаковку и проверять совместимость с рецептурой
   outcome: выбирать материал тары (HDPE/PP/PET/airless) и планировать тесты совместимости по ISO/TR 18811
   topics: [packaging-compatibility]
-  labs: [challenge-test-iso11930]
+  labs: [challenge-test-iso11930, packaging-iso18811]
+- id: pigment-dispersions
+  name: Диспергировать пигменты и стабилизировать суспензии в тональных системах
+  outcome: рассчитывать маслоёмкость, подбирать полимерный диспергатор и предотвращать флокуляцию оксидов железа и TiO₂
+  topics: [pigment-dispersions]
+  labs: [stability-triage]
+- id: anhydrous-sticks-balms
+  name: Проектировать восковые матрицы безводных стиков и бальзамов
+  outcome: балансировать твёрдые и микрокристаллические воски с маслами, управлять температурой розлива и исключать зернистость баттеров
+  topics: [anhydrous-sticks-balms]
+  labs: [stability-triage]
+- id: inverse-emulsions-wo
+  name: Создавать обратные эмульсии W/O со стабилизацией электролитами
+  outcome: подбирать полиглицериловые и силиконовые эмульгаторы с низким ГЛБ (3–6), электролит водной фазы и гекторитовый реологический каркас
+  topics: [inverse-emulsions-wo]
+  labs: [spf-formulator-lab]
+- id: fragrances-allergens
+  name: Вводить парфюмерные композиции и рассчитывать декларируемые аллергены
+  outcome: рассчитывать пороги маркировки 0,001 % (leave-on) и 0,01 % (rinse-off) по EU 2023/1545 и оценивать совместимость отдушки с полимерной тарой
+  topics: [fragrances-allergens]
+  labs: [packaging-iso18811]

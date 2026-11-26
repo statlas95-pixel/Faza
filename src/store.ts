@@ -1,9 +1,9 @@
 import { recordActivity } from './statistics'
 import { tr } from '../shared/locale'
 import { useSyncExternalStore } from 'react'
-import { type Progress, type Attempt, type SavedSource, type SavedFormulaRecord, type Settings, normalize, emptyProgress } from '../shared/merge'
+import { type Progress, type Attempt, type SavedSource, type SavedFormulaRecord, type CertifiedGradeRecord, type LabNoteRecord, type Settings, normalize, emptyProgress } from '../shared/merge'
 import type { Evidence } from '../shared/mastery'
-export type { Progress, Attempt, SavedSource, SavedFormulaRecord, Settings }
+export type { Progress, Attempt, SavedSource, SavedFormulaRecord, CertifiedGradeRecord, LabNoteRecord, Settings }
 
 const LEGACY_FORMULAS_KEY = 'faza.sandbox.saved.v1'
 function loadLegacyFormulas(): SavedFormulaRecord[] {
@@ -94,5 +94,29 @@ export function saveFormula(entry: SavedFormulaRecord) {
 export function deleteSavedFormula(id: string) {
   update((p) => {
     p.savedFormulas = p.savedFormulas.filter((x) => x.id !== id)
+  })
+}
+export function certifyGrade(level: number, score: number) {
+  update((p) => {
+    const key = String(level)
+    const prev = p.certifiedGrades[key]
+    if (!prev || score >= prev.score) {
+      p.certifiedGrades[key] = { level, score, at: Date.now() }
+    }
+  })
+}
+export function saveNote(entry: Omit<LabNoteRecord, 'at'>) {
+  update((p) => {
+    const trimmed = entry.text.trim()
+    if (!trimmed) {
+      delete p.notes[entry.id]
+    } else {
+      p.notes[entry.id] = { ...entry, text: trimmed, at: Date.now() }
+    }
+  })
+}
+export function deleteNote(id: string) {
+  update((p) => {
+    delete p.notes[id]
   })
 }

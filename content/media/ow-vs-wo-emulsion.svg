@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 264" role="img" aria-label="Сравнение прямой эмульсии O/W и обратной эмульсии W/O">
+  <rect width="760" height="264" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">Прямая эмульсия O/W vs Обратная эмульсия W/O (роль электролита)</text>
+  <g transform="translate(32,48)">
+    <rect width="332" height="194" rx="14" fill="#E6F6FE" stroke="#8ED6F8" stroke-width="1.8"/>
+    <text x="166" y="24" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#0C5E80">Прямая O/W (ГЛБ 8–16)</text>
+    <circle cx="104" cy="96" r="28" fill="#FF968A" stroke="#E05545" stroke-width="2"/>
+    <circle cx="224" cy="102" r="24" fill="#FF968A" stroke="#E05545" stroke-width="2"/>
+    <text x="104" y="100" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">Масло</text>
+    <text x="224" y="106" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">Масло</text>
+    <text x="166" y="154" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#182026">Внешняя фаза — вода (электропроводна)</text>
+    <text x="166" y="172" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#5B6770">Загущается карбомером / ксантаном / LGN</text>
+  </g>
+  <g transform="translate(396,48)">
+    <rect width="332" height="194" rx="14" fill="#FFEAE7" stroke="#FF968A" stroke-width="1.8"/>
+    <text x="166" y="24" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#9A3528">Обратная W/O (ГЛБ 3–6)</text>
+    <circle cx="108" cy="96" r="28" fill="#8ED6F8" stroke="#0C5E80" stroke-width="2.5" stroke-dasharray="5 2"/>
+    <circle cx="226" cy="100" r="26" fill="#8ED6F8" stroke="#0C5E80" stroke-width="2.5" stroke-dasharray="5 2"/>
+    <text x="108" y="100" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#182026">H₂O+MgSO₄</text>
+    <text x="226" y="104" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#182026">H₂O+NaCl</text>
+    <text x="166" y="154" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#182026">Внешняя фаза — масло/силикон (водостойкая)</text>
+    <text x="166" y="172" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3528" font-weight="600">0,7–1,2 % соли гасит созревание Оствальда!</text>
+  </g>
+</svg>

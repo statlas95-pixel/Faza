@@ -29,7 +29,7 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
     title: 'Эмульсии и дисперсные системы',
     shortTitle: 'Эмульсии',
     description: 'Механизмы нестабильности, подбор ГЛБ, ламеллярные сетки, диспергирование порошков и испытания стабильности.',
-    skills: ['mech', 'struct', 'emul', 'stabtest', 'disperse', 'emulsifier-selection', 'colloidstab', 'oil-oxidation', 'particle-sizing', 'powder-wetting', 'sunscreens-spf'],
+    skills: ['mech', 'struct', 'emul', 'stabtest', 'disperse', 'emulsifier-selection', 'colloidstab', 'oil-oxidation', 'particle-sizing', 'powder-wetting', 'sunscreens-spf', 'pigment-dispersions', 'anhydrous-sticks-balms', 'inverse-emulsions-wo'],
   },
   {
     id: 'surfactants',
@@ -50,7 +50,7 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
     title: 'Консервация, активы, pH и сырьё',
     shortTitle: 'Консервация',
     description: 'Активная форма консервантов при заданном pH, стабильность активов, буферы, вода как сырьё, чтение INCI и спецификаций сырья.',
-    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve', 'unstable-actives'],
+    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve', 'unstable-actives', 'fragrances-allergens'],
   },
   {
     id: 'scaleup',

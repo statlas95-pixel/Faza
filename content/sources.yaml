@@ -469,3 +469,13 @@
   supports: Классификация трёх товарных марок по назначению и INCI в каталоге производителя.
   verified: Сверены строки таблицы BASF для Cetiol® CC, Cosmedia® Gel CC и Plantacare® 2000 UP.
     Таблица описывает марки, а показатели партии следует брать из её сертификата.
+
+- id: eu2023-1545
+  type: regulation
+  authors: Европейская комиссия
+  title: "Commission Regulation (EU) 2023/1545 amending Regulation (EC) No 1223/2009 as regards labelling of fragrance allergens in cosmetic products"
+  where: "Official Journal of the European Union, L 188, 27.7.2023"
+  year: 2023
+  url: https://eur-lex.europa.eu/eli/reg/2023/1545/oj
+  supports: "Расширение перечня индивидуально декларируемых парфюмерных аллергенов в Приложении III к Регламенту (ЕС) № 1223/2009 при превышении порогов 0,001 % в несмываемых (leave-on) и 0,01 % в смываемых (rinse-off) продуктах."
+  verified: "Номер регламента, дата опубликования в OJEU и пороги 0,001 % / 0,01 % сверены по публичным данным EUR-Lex."
