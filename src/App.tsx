@@ -65,10 +65,12 @@ function Shell() {
     const page = publicPage(loc.pathname)
     if (page && (!/^\/(topics|labs)\//.test(page) || ctx)) recordActivity('view', page)
   }, [loc.pathname, ctx])
+  const inTopic = /^\/topics\/.+/.test(loc.pathname)
   useEffect(() => {
     document.body.dataset.mode = inLab ? 'focus' : 'explore'
+    document.body.dataset.surface = inLab || inTopic ? 'reading' : 'mesh'
     if (!loc.hash) window.scrollTo(0, 0)
-  }, [loc.pathname, inLab])
+  }, [loc.pathname, inLab, inTopic])
   useEffect(() => {
     const t = document.title
     if (loc.pathname !== '/') update((p) => { p.last = { path: loc.pathname, title: t, at: Date.now() } })
