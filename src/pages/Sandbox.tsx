@@ -33,6 +33,7 @@ import { NoteBox } from '../components/NoteBox'
 import { showToast } from '../components/Toast'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
 import { buildFormulaCsv, decodeShareFormula, encodeShareFormula } from '../../shared/formulation-lab5'
+import { computeIso16128 } from '../../shared/engineering-tools'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
 import { renderSafe } from '../md'
 import { deleteSavedFormula, saveCampaignProgress, saveFormula, useProgress, type SavedFormulaRecord } from '../store'
@@ -190,6 +191,7 @@ export default function SandboxPage() {
 
   const activePreset = sandboxPresets.find((p) => p.id === presetId) ?? null
   const evaluation = useMemo(() => evaluateFormula(formula, ingredients), [formula])
+  const iso16128 = useMemo(() => computeIso16128(formula.rows, ingredients), [formula.rows])
   const forecast = useMemo(() => predictProcessAppearance(evaluation, formula), [evaluation, formula])
   const stabilityTests = useMemo(() => simulateAcceleratedStability(evaluation, formula), [evaluation, formula])
   const sensory = useMemo(() => computeSensoryProfile(evaluation, formula), [evaluation, formula])
@@ -409,9 +411,15 @@ export default function SandboxPage() {
           >
             {snapshot ? tr('Скрыть «До / После»') : tr('Зафиксировать «До»')}
           </button>
+          <button type="button" className="btn" onClick={exportCsv}>
+            📊 {tr('Excel / CSV карта')}
+          </button>
           <button type="button" className="btn" onClick={() => window.print()}>
             🖨 {tr('Карта варки (печать)')}
           </button>
+          <Link to="/tools" className="btn ghost">
+            🧰 {tr('Утилиты 2.0')}
+          </Link>
         </div>
       </div>
       <p className="lead">
@@ -492,6 +500,9 @@ export default function SandboxPage() {
           </span>
           <span className={`sb-pill ${evaluation.errorsCount === 0 ? 'ok' : 'bad'}`}>
             {tr('Ошибки:')} <b>{evaluation.errorsCount}</b>
+          </span>
+          <span className="sb-pill" title={tr('Индекс натурального происхождения ISO 16128 (с водой)')}>
+            ISO 16128: <b>{iso16128.noiWithWaterPct} %</b>
           </span>
           <span className="sb-pill">
             <b>{evaluation.costPerKg} {tr('₽/кг')}</b>

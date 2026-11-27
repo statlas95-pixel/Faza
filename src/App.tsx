@@ -23,6 +23,7 @@ import { topicById, labById } from './content'
 
 // Ленивая подгрузка тяжёлых страниц-симуляторов для быстрого старта и кешируемых чанков
 const SandboxPage = lazy(() => import('./pages/Sandbox'))
+const ToolsPage = lazy(() => import('./pages/Tools'))
 const ReactionsPage = lazy(() => import('./pages/Reactions'))
 const CampaignsPage = lazy(() => import('./pages/Campaigns'))
 const PortfolioPage = lazy(() => import('./pages/Portfolio'))
@@ -177,7 +178,7 @@ function Shell() {
         <header className="top">
           <Link to="/" className="logo" aria-label={`${site.name}${tr(" — на главную")}`}><span className="logo-drop" aria-hidden />{site.name}</Link>
           <nav aria-label={tr("Основные разделы")}>
-            <NavLink to="/route">{tr("Маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/sandbox">{tr("Лаборатория")}</NavLink><NavLink to="/reactions">{tr("Реакции")}</NavLink><NavLink to="/campaigns">{tr("Кампании")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink><NavLink to="/journal">{tr("Журнал")}</NavLink>
+            <NavLink to="/route">{tr("Маршрут")}</NavLink><NavLink to="/map">{tr("Карта знаний")}</NavLink><NavLink to="/sandbox">{tr("Лаборатория")}</NavLink><NavLink to="/tools">{tr("Утилиты")}</NavLink><NavLink to="/reactions">{tr("Реакции")}</NavLink><NavLink to="/campaigns">{tr("Кампании")}</NavLink><NavLink to="/portfolio">{tr("Портфолио")}</NavLink>
             <NavLink to="/account" className="acct">{acc.status === 'user' ? acc.user?.name : acc.status === 'offline' ? tr("Без сервера") : tr("Войти")}</NavLink>
           </nav><div className="top-tools">{cmdButton}{themeButton}{languagePicker}</div>
         </header>)}
@@ -200,6 +201,7 @@ function Shell() {
             <Route path="/diagnostic" element={<DiagnosticPage />} />
             <Route path="/statistics" element={<StatisticsPage />} />
             <Route path="/sandbox" element={<SandboxPage />} />
+            <Route path="/tools" element={<ToolsPage />} />
             <Route path="/reactions" element={<ReactionsPage />} />
             <Route path="/campaigns" element={<CampaignsPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
@@ -247,7 +249,7 @@ function Shell() {
         <footer className="foot">
           <p><b>{site.name}</b>{tr(" · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.")}</p>
           {acc.status === 'user' && acc.user?.canReadStatistics && <p><Link to="/statistics">{tr("Статистика сайта")}</Link></p>}
-          <p><Link to="/about">{tr("О платформе, методике и изображениях")}</Link> · <Link to="/about#authoring">{tr("Как редактировать материалы")}</Link></p>
+          <p><Link to="/journal">{tr("Журнал")}</Link> · <Link to="/tools">{tr("Инженерные утилиты 2.0")}</Link> · <Link to="/about">{tr("О платформе, методике и изображениях")}</Link> · <Link to="/about#authoring">{tr("Как редактировать материалы")}</Link></p>
         </footer>)}
     </>)
 }

@@ -1577,3 +1577,42 @@ input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;b
   .sc-scene.is-tilting .sc-card{transform:none}
   .sc-scene.is-flipped .sc-card{transform:rotateY(180deg)}
 }
+
+
+/* ─── Package R: Engineering Utilities 2.0 ─────────────────────────────────── */
+.tools-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tools-textarea{
+  width:100%;margin-top:12px;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);background:var(--glass-bg,rgba(255,255,255,.72));
+  color:var(--ink);font:400 .92rem/1.5 var(--mono);resize:vertical;
+}
+.tools-kpi-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-top:14px;
+}
+.tools-kpi{
+  padding:12px 14px;border-radius:14px;border:1px solid var(--line);
+  background:var(--glass-bg,rgba(255,255,255,.56));display:grid;gap:4px;
+}
+.tools-kpi.accent{border-color:rgba(14,124,123,.45);background:rgba(14,124,123,.09)}
+.tools-kpi.ok{border-color:rgba(21,128,61,.45);background:rgba(21,128,61,.10)}
+.tools-kpi.err{border-color:rgba(220,38,38,.45);background:rgba(220,38,38,.10)}
+.tools-insights{
+  margin:12px 0 0;padding:10px 14px 10px 28px;border-radius:12px;
+  background:rgba(14,124,123,.07);border:1px solid rgba(14,124,123,.2);font-size:.88rem;line-height:1.5;
+}
+.tools-row-marker td{background:rgba(240,109,93,.09)}
+.tools-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.tools-form-grid label{display:grid;gap:5px}
+.tools-inci-box{
+  padding:12px 14px;border-radius:12px;border:1px dashed var(--line);
+  background:var(--glass-bg,rgba(255,255,255,.55));
+}
+.tools-inci-box code{display:block;font-family:var(--mono);font-size:.86rem;line-height:1.5;word-break:break-word;color:var(--ink)}
+.tools-page .num-in{
+  width:100%;max-width:130px;padding:7px 10px;border-radius:10px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);font-family:var(--mono);
+}
+.tools-page .sel{
+  padding:8px 12px;border-radius:10px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);font:500 .88rem var(--sans);
+}
