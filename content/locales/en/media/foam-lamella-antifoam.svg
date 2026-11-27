@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Foam lamella vs antifoam">
+  <style>
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  @keyframes rise{0%{transform:translateY(14px);opacity:.25}50%{opacity:.95}100%{transform:translateY(-22px);opacity:.1}}
+  @keyframes pulse{0%,100%{opacity:.95}50%{opacity:.55}}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .flow{stroke-dasharray:6 4;animation:flow 1.8s linear infinite}
+  .rise{animation:rise 2.8s ease-in-out infinite}
+  .rise2{animation:rise 3.4s ease-in-out infinite .9s}
+  .pulse{animation:pulse 2.4s ease-in-out infinite}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 7s linear infinite}
+  @media (prefers-reduced-motion:reduce){.flow,.rise,.rise2,.pulse,.spin{animation:none!important}}
+</style>
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Foam Lamella Stability (Marangoni) vs Antifoam Bridging Rupture</text>
+  <g transform="translate(28,48)">
+        <rect width="340" height="198" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#0C5E80">Marangoni Elasticity Heals Thinning</text>
+        <path d="M40,70 Q170,84 300,70 L300,132 Q170,118 40,132 Z" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
+        <g stroke="#0369A1" stroke-width="2" class="flow"><line x1="72" y1="100" x2="152" y2="100"/><line x1="268" y1="100" x2="188" y2="100"/></g>
+        <text x="170" y="160" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Surfactant drags water back to thin spot</text>
+        <text x="170" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">High elasticity = persistent foam</text>
+      </g>
+      <g transform="translate(392,48)">
+        <rect width="340" height="198" rx="14" fill="#FFF1F0" stroke="#FF968A" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#9A3528">Silicone + Silica Antifoam Bridge</text>
+        <path d="M40,70 L146,84 L146,118 L40,132 Z" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
+        <path d="M300,70 L194,84 L194,118 L300,132 Z" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
+        <ellipse cx="170" cy="101" rx="28" ry="22" fill="#F59E0B" stroke="#B45309" stroke-width="2" class="pulse"/>
+        <text x="170" y="105" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#FFF">SiO₂+Oil</text>
+        <text x="170" y="160" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3528" font-weight="600">Entry E > 0 & Spreading S > 0 → film snaps!</text>
+        <text x="170" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Simethicone / silica at 0.02–0.1%</text>
+      </g>
+</svg>

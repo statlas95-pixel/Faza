@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Полиморфизм и плавление жиров">
+  
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Полиморфизм твёрдых масел (ши / какао): гладкая β′ vs крупинки β</text>
+  <g transform="translate(36,52)">
+        <rect x="0" y="10" width="204" height="176" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
+        <text x="102" y="34" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">α-форма (нестабильна)</text>
+        <text x="102" y="54" text-anchor="middle" font-family="monospace" font-size="11" fill="#475569">T_m ≈ 22–26 °C</text>
+        <g fill="#94A3B8" opacity=".6"><circle cx="72" cy="100" r="8"/><circle cx="102" cy="112" r="9"/><circle cx="132" cy="96" r="7"/></g>
+        <text x="102" y="160" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#475569">Рыхлая при шоковом холоде</text>
+      </g>
+      <path d="M248,140 L272,140" stroke="#0EA5E9" stroke-width="3" marker-end="none"/>
+      <g transform="translate(278,52)">
+        <rect x="0" y="10" width="204" height="176" rx="14" fill="#ECFDF5" stroke="#34D399" stroke-width="2"/>
+        <text x="102" y="34" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#065F46">β′-форма (ЦЕЛЕВАЯ)</text>
+        <text x="102" y="54" text-anchor="middle" font-family="monospace" font-size="11" fill="#047857">T_m ≈ 30–34 °C</text>
+        <g fill="#10B981" opacity=".75">
+          <rect x="66" y="80" width="12" height="12" rx="2"/><rect x="86" y="84" width="12" height="12" rx="2"/><rect x="108" y="80" width="12" height="12" rx="2"/><rect x="128" y="86" width="12" height="12" rx="2"/>
+          <rect x="74" y="104" width="12" height="12" rx="2"/><rect x="96" y="106" width="12" height="12" rx="2"/><rect x="118" y="104" width="12" height="12" rx="2"/>
+        </g>
+        <text x="102" y="160" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#065F46">Мелкие кристаллы · тает на коже</text>
+      </g>
+      <path d="M490,140 L514,140" stroke="#EF4444" stroke-width="3"/>
+      <g transform="translate(520,52)">
+        <rect x="0" y="10" width="204" height="176" rx="14" fill="#FFF1F0" stroke="#FF968A" stroke-width="1.6"/>
+        <text x="102" y="34" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#9A3528">β-форма (КРУПИНКИ)</text>
+        <text x="102" y="54" text-anchor="middle" font-family="monospace" font-size="11" fill="#B91C1C">T_m ≈ 37–42 °C</text>
+        <g fill="#F97316" stroke="#9A3412" stroke-width="1.5">
+          <polygon points="74,116 90,82 110,114"/><polygon points="104,122 126,84 146,120"/>
+        </g>
+        <text x="102" y="160" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3528">Тугоплавкая зернистость</text>
+      </g>
+</svg>

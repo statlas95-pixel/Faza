@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Three stages of pigment dispersion">
+  <style>
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  @keyframes rise{0%{transform:translateY(14px);opacity:.25}50%{opacity:.95}100%{transform:translateY(-22px);opacity:.1}}
+  @keyframes pulse{0%,100%{opacity:.95}50%{opacity:.55}}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .flow{stroke-dasharray:6 4;animation:flow 1.8s linear infinite}
+  .rise{animation:rise 2.8s ease-in-out infinite}
+  .rise2{animation:rise 3.4s ease-in-out infinite .9s}
+  .pulse{animation:pulse 2.4s ease-in-out infinite}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 7s linear infinite}
+  @media (prefers-reduced-motion:reduce){.flow,.rise,.rise2,.pulse,.spin{animation:none!important}}
+</style>
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Pigment Dispersion: 1) Wetting → 2) Shear Milling → 3) Steric Stabilization</text>
+  <g transform="translate(24,52)">
+        <rect width="218" height="186" rx="14" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.6"/>
+        <text x="109" y="24" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#9A3412">1. Wetting</text>
+        <g fill="#B45309"><circle cx="96" cy="96" r="14"/><circle cx="116" cy="92" r="13"/><circle cx="106" cy="112" r="14"/><circle cx="122" cy="110" r="11"/></g>
+        <circle cx="109" cy="102" r="36" fill="none" stroke="#0EA5E9" stroke-width="2" class="flow"/>
+        <text x="109" y="164" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Ester displaces trapped air</text>
+      </g>
+      <g transform="translate(271,52)">
+        <rect width="218" height="186" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
+        <text x="109" y="24" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0C5E80">2. Three-Roll / Shear</text>
+        <circle cx="74" cy="100" r="24" fill="#CBD5E1" stroke="#334155" stroke-width="2" class="spin"/>
+        <circle cx="144" cy="100" r="24" fill="#CBD5E1" stroke="#334155" stroke-width="2" class="spin"/>
+        <g fill="#B45309"><circle cx="109" cy="88" r="5"/><circle cx="109" cy="100" r="4"/><circle cx="109" cy="112" r="4.5"/></g>
+        <text x="109" y="164" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Breaks agglomerates ≤ 5 μm</text>
+      </g>
+      <g transform="translate(518,52)">
+        <rect width="218" height="186" rx="14" fill="#ECFDF5" stroke="#34D399" stroke-width="1.6"/>
+        <text x="109" y="24" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#065F46">3. Steric Barrier</text>
+        <g>
+          <circle cx="72" cy="84" r="14" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="3 2"/><circle cx="72" cy="84" r="6" fill="#B45309"/>
+          <circle cx="146" cy="84" r="14" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="3 2"/><circle cx="146" cy="84" r="6" fill="#B45309"/>
+          <circle cx="109" cy="126" r="14" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="3 2"/><circle cx="109" cy="126" r="6" fill="#B45309"/>
+        </g>
+        <text x="109" y="164" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#065F46" font-weight="600">Dispersant stops reflocculation</text>
+      </g>
+</svg>

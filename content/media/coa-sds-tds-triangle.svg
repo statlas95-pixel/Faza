@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Треугольник документов TDS SDS CoA">
+  
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Документация на сырьё: зачем нужны TDS, SDS и CoA</text>
+  <g transform="translate(26,52)">
+        <rect width="218" height="186" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.8"/>
+        <text x="109" y="28" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#0C5E80">TDS</text>
+        <text x="109" y="46" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#0369A1">Техническая спецификация</text>
+        <g font-family="sans-serif" font-size="10.5" fill="#182026">
+          <text x="18" y="78">• INCI и % активного в-ва</text>
+          <text x="18" y="100">• Дозировка и окно pH</text>
+          <text x="18" y="122">• Растворимость и T_max</text>
+          <text x="18" y="144">• Срок годности и хранение</text>
+        </g>
+        <text x="109" y="172" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#0C5E80">Для разработки рецептуры</text>
+      </g>
+      <g transform="translate(271,52)">
+        <rect width="218" height="186" rx="14" fill="#FFF1F0" stroke="#FF968A" stroke-width="1.8"/>
+        <text x="109" y="28" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#9A3528">SDS (MSDS)</text>
+        <text x="109" y="46" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#B91C1C">Паспорт безопасности</text>
+        <g font-family="sans-serif" font-size="10.5" fill="#182026">
+          <text x="18" y="78">• Коды опасности GHS</text>
+          <text x="18" y="100">• СИЗ и вентиляция в цехе</text>
+          <text x="18" y="122">• CAS и следовые примеси</text>
+          <text x="18" y="144">• Точка вспышки и утилизация</text>
+        </g>
+        <text x="109" y="172" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#9A3528">Для охраны труда и PIF</text>
+      </g>
+      <g transform="translate(516,52)">
+        <rect width="218" height="186" rx="14" fill="#ECFDF5" stroke="#34D399" stroke-width="1.8"/>
+        <text x="109" y="28" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#065F46">CoA</text>
+        <text x="109" y="46" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#047857">Сертификат анализа партии</text>
+        <g font-family="sans-serif" font-size="10.5" fill="#182026">
+          <text x="18" y="78">• Номер партии и срок</text>
+          <text x="18" y="100">• Факт: % соли / титр</text>
+          <text x="18" y="122">• Перекисное / кислотное</text>
+          <text x="18" y="144">• Микробиология TAMC</text>
+        </g>
+        <text x="109" y="172" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#065F46">Входной контроль партии</text>
+      </g>
+</svg>

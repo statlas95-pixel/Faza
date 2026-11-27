@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Polymer thickener comparison map">
+  
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Polymer Thickeners: Yield Stress (Suspension) vs Electrolyte Tolerance</text>
+  <g transform="translate(56,48)">
+        <rect width="648" height="196" rx="14" fill="#FFFFFF" stroke="#DCE6EE"/>
+        <line x1="324" y1="18" x2="324" y2="178" stroke="#CBD5E1" stroke-dasharray="4 3"/>
+        <line x1="24" y1="98" x2="624" y2="98" stroke="#CBD5E1" stroke-dasharray="4 3"/>
+        <rect x="44" y="24" width="248" height="62" rx="12" fill="#EFF9FF" stroke="#8ED6F8"/>
+        <text x="168" y="48" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">Carbomer / Ultrez 21</text>
+        <text x="168" y="68" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#475569">High τ₀ · Clear · Salt-sensitive!</text>
+
+        <rect x="356" y="24" width="248" height="62" rx="12" fill="#ECFDF5" stroke="#34D399"/>
+        <text x="480" y="48" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#065F46">Xanthan / Sepimax Zen</text>
+        <text x="480" y="68" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#047857">High τ₀ + Salt & Acid tolerant</text>
+
+        <rect x="44" y="110" width="248" height="62" rx="12" fill="#FFF7ED" stroke="#FDBA74"/>
+        <text x="168" y="134" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#9A3412">Aristoflex AVC</text>
+        <text x="168" y="154" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#7C2D12">Light silk texture · Low salt limit</text>
+
+        <rect x="356" y="110" width="248" height="62" rx="12" fill="#F5F3FF" stroke="#C4B5FD"/>
+        <text x="480" y="134" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#5B21B6">HEC / HPMC / Guar</text>
+        <text x="480" y="154" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#4C1D95">Nonionic · Salt-proof · Lower τ₀</text>
+      </g>
+</svg>

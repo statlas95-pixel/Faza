@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Polymer fish-eye prevention">
+  <style>
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  @keyframes rise{0%{transform:translateY(14px);opacity:.25}50%{opacity:.95}100%{transform:translateY(-22px);opacity:.1}}
+  @keyframes pulse{0%,100%{opacity:.95}50%{opacity:.55}}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .flow{stroke-dasharray:6 4;animation:flow 1.8s linear infinite}
+  .rise{animation:rise 2.8s ease-in-out infinite}
+  .rise2{animation:rise 3.4s ease-in-out infinite .9s}
+  .pulse{animation:pulse 2.4s ease-in-out infinite}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 7s linear infinite}
+  @media (prefers-reduced-motion:reduce){.flow,.rise,.rise2,.pulse,.spin{animation:none!important}}
+</style>
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Polymer Dissolution: "Fish-Eye" Lumps vs Glycerin Premix</text>
+  <g transform="translate(28,46)">
+        <rect width="340" height="202" rx="14" fill="#FFF1F0" stroke="#FF968A" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#9A3528">Fast Bulk Dumping → "Fish-Eye" Lumps</text>
+        <circle cx="170" cy="102" r="44" fill="#BAE6FD" stroke="#0284C7" stroke-width="4" stroke-dasharray="6 3"/>
+        <circle cx="170" cy="102" r="24" fill="#FDE68A" stroke="#D97706" stroke-width="1.6"/>
+        <text x="170" y="105" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#78350F">Dry core</text>
+        <text x="170" y="172" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3528">Hydrated outer gel skin blocks water from entering</text>
+      </g>
+      <g transform="translate(392,46)">
+        <rect width="340" height="202" rx="14" fill="#ECFDF5" stroke="#34D399" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#065F46">Glycerin Slurry (1:3) → Uniform Hydration</text>
+        <g class="pulse">
+          <circle cx="96" cy="88" r="14" fill="rgba(16,185,129,.22)" stroke="#10B981" stroke-width="1.6"/><circle cx="96" cy="88" r="4" fill="#D97706"/>
+          <circle cx="170" cy="82" r="14" fill="rgba(16,185,129,.22)" stroke="#10B981" stroke-width="1.6"/><circle cx="170" cy="82" r="4" fill="#D97706"/>
+          <circle cx="244" cy="92" r="14" fill="rgba(16,185,129,.22)" stroke="#10B981" stroke-width="1.6"/><circle cx="244" cy="92" r="4" fill="#D97706"/>
+          <circle cx="132" cy="126" r="14" fill="rgba(16,185,129,.22)" stroke="#10B981" stroke-width="1.6"/><circle cx="132" cy="126" r="4" fill="#D97706"/>
+          <circle cx="212" cy="126" r="14" fill="rgba(16,185,129,.22)" stroke="#10B981" stroke-width="1.6"/><circle cx="212" cy="126" r="4" fill="#D97706"/>
+        </g>
+        <text x="170" y="172" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#065F46" font-weight="600">Particles stay separated until dispersed into vortex</text>
+      </g>
+</svg>

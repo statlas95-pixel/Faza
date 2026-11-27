@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Full vs fractional factorial cube">
+  
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Design of Experiments: Full 2³ (8 Runs) vs 2³⁻¹ Half-Fraction (4 Runs)</text>
+  <g transform="translate(46,48)">
+        <rect width="290" height="198" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
+        <text x="145" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">Full 2³ (8 batches)</text>
+        <g stroke="#64748B" stroke-width="1.6" fill="none">
+          <rect x="78" y="66" width="94" height="84"/><rect x="114" y="46" width="94" height="84"/>
+          <line x1="78" y1="66" x2="114" y2="46"/><line x1="172" y1="66" x2="208" y2="46"/>
+          <line x1="78" y1="150" x2="114" y2="130"/><line x1="172" y1="150" x2="208" y2="130"/>
+        </g>
+        <g fill="#0EA5E9" stroke="#FFF" stroke-width="1.5">
+          <circle cx="78" cy="66" r="6"/><circle cx="172" cy="66" r="6"/><circle cx="78" cy="150" r="6"/><circle cx="172" cy="150" r="6"/>
+          <circle cx="114" cy="46" r="6"/><circle cx="208" cy="46" r="6"/><circle cx="114" cy="130" r="6"/><circle cx="208" cy="130" r="6"/>
+        </g>
+        <text x="145" y="182" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Separates all A, B, C, AB, AC, BC</text>
+      </g>
+      <g transform="translate(384,48)">
+        <rect width="330" height="198" rx="14" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.6"/>
+        <text x="165" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#9A3412">Half-Fraction 2³⁻¹ (4 runs · C = A·B)</text>
+        <g stroke="#94A3B8" stroke-width="1.4" fill="none" stroke-dasharray="4 3">
+          <rect x="86" y="66" width="94" height="84"/><rect x="122" y="46" width="94" height="84"/>
+          <line x1="86" y1="66" x2="122" y2="46"/><line x1="180" y1="66" x2="216" y2="46"/>
+          <line x1="86" y1="150" x2="122" y2="130"/><line x1="180" y1="150" x2="216" y2="130"/>
+        </g>
+        <g fill="#F97316" stroke="#FFF" stroke-width="1.8">
+          <circle cx="86" cy="66" r="7.5"/><circle cx="180" cy="150" r="7.5"/><circle cx="216" cy="46" r="7.5"/><circle cx="122" cy="130" r="7.5"/>
+        </g>
+        <text x="165" y="172" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#9A3412">Aliasing: A = B·C, B = A·C, C = A·B</text>
+        <text x="165" y="188" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Use Resolution IV+ for 4–7 screening factors</text>
+      </g>
+</svg>

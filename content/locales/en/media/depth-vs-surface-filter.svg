@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Depth vs surface filtration">
+  <style>
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  @keyframes rise{0%{transform:translateY(14px);opacity:.25}50%{opacity:.95}100%{transform:translateY(-22px);opacity:.1}}
+  @keyframes pulse{0%,100%{opacity:.95}50%{opacity:.55}}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .flow{stroke-dasharray:6 4;animation:flow 1.8s linear infinite}
+  .rise{animation:rise 2.8s ease-in-out infinite}
+  .rise2{animation:rise 3.4s ease-in-out infinite .9s}
+  .pulse{animation:pulse 2.4s ease-in-out infinite}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 7s linear infinite}
+  @media (prefers-reduced-motion:reduce){.flow,.rise,.rise2,.pulse,.spin{animation:none!important}}
+</style>
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Two-Stage Filtration: Depth Pre-Filter → 0.22 μm Surface Membrane</text>
+  <g transform="translate(28,48)">
+        <rect width="340" height="198" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#0C5E80">1. Depth Filter (High Dirt Capacity)</text>
+        <rect x="44" y="64" width="252" height="72" rx="8" fill="#CBD5E1" stroke="#64748B" stroke-width="1.5"/>
+        <g stroke="#0EA5E9" stroke-width="2.2" fill="none" class="flow">
+          <path d="M92,40 C92,76 112,96 96,158"/><path d="M170,40 C170,72 148,104 176,158"/><path d="M248,40 C248,76 266,100 242,158"/>
+        </g>
+        <g fill="#B45309"><circle cx="96" cy="82" r="5"/><circle cx="164" cy="96" r="4"/><circle cx="252" cy="112" r="4.5"/><circle cx="128" cy="118" r="3.5"/></g>
+        <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Particles trapped throughout tortuous matrix</text>
+      </g>
+      <g transform="translate(392,48)">
+        <rect width="340" height="198" rx="14" fill="#ECFDF5" stroke="#34D399" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#065F46">2. Surface Membrane (0.22 μm Absolute)</text>
+        <rect x="44" y="96" width="252" height="10" rx="3" fill="#059669"/>
+        <g stroke="#10B981" stroke-width="2.2" fill="none" class="flow">
+          <line x1="96" y1="42" x2="96" y2="156"/><line x1="170" y1="42" x2="170" y2="156"/><line x1="244" y1="42" x2="244" y2="156"/>
+        </g>
+        <g fill="#DC2626"><circle cx="80" cy="91" r="4"/><circle cx="134" cy="91" r="4.5"/><circle cx="206" cy="91" r="4"/><circle cx="268" cy="91" r="4"/></g>
+        <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#065F46" font-weight="600">Strict size cutoff · retains bacteria > 0.22 μm</text>
+      </g>
+</svg>

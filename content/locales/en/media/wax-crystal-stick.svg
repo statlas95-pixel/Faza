@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Anhydrous stick wax lattice">
+  <style>
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  @keyframes rise{0%{transform:translateY(14px);opacity:.25}50%{opacity:.95}100%{transform:translateY(-22px);opacity:.1}}
+  @keyframes pulse{0%,100%{opacity:.95}50%{opacity:.55}}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .flow{stroke-dasharray:6 4;animation:flow 1.8s linear infinite}
+  .rise{animation:rise 2.8s ease-in-out infinite}
+  .rise2{animation:rise 3.4s ease-in-out infinite .9s}
+  .pulse{animation:pulse 2.4s ease-in-out infinite}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 7s linear infinite}
+  @media (prefers-reduced-motion:reduce){.flow,.rise,.rise2,.pulse,.spin{animation:none!important}}
+</style>
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Anhydrous Stick: 3D Wax Lattice vs Oil Sweating</text>
+  <g transform="translate(28,46)">
+        <rect width="340" height="202" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#0C5E80">Controlled cooling → Fine wax lattice</text>
+        <rect x="34" y="42" width="272" height="106" rx="12" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.4"/>
+        <g stroke="#B45309" stroke-width="2.2" stroke-linecap="round">
+          <line x1="56" y1="62" x2="112" y2="128"/><line x1="114" y1="54" x2="64" y2="132"/>
+          <line x1="138" y1="58" x2="196" y2="132"/><line x1="202" y1="56" x2="146" y2="128"/>
+          <line x1="226" y1="62" x2="284" y2="130"/><line x1="280" y1="56" x2="224" y2="128"/>
+        </g>
+        <g fill="#0EA5E9" opacity=".65"><circle cx="96" cy="94" r="6"/><circle cx="170" cy="96" r="6"/><circle cx="250" cy="92" r="6"/></g>
+        <text x="170" y="170" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#182026">10–18% wax scaffold traps liquid esters in pores</text>
+        <text x="170" y="188" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#047857" font-weight="600">Clean payoff · high snap strength</text>
+      </g>
+      <g transform="translate(392,46)">
+        <rect width="340" height="202" rx="14" fill="#FFF1F0" stroke="#FF968A" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#9A3528">Poor compatibility → Oil sweating (syneresis)</text>
+        <rect x="64" y="48" width="212" height="98" rx="14" fill="#FDE68A" stroke="#D97706" stroke-width="1.6"/>
+        <g fill="#F59E0B" stroke="#B45309" stroke-width="1.2" class="pulse">
+          <circle cx="92" cy="46" r="7"/><circle cx="144" cy="44" r="8"/><circle cx="204" cy="45" r="7"/><circle cx="252" cy="47" r="6"/>
+        </g>
+        <text x="170" y="102" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#92400E">Coarse wax crystals + expelled oil</text>
+        <text x="170" y="170" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#182026">Triggered by thermal cycling (4 °C ↔ 40 °C)</text>
+        <text x="170" y="188" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#B91C1C" font-weight="600">Fix: polar ester + Ozokerite / Cera Alba balance</text>
+      </g>
+</svg>

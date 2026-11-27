@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Адсорбционный монослой Гиббса">
+  <style>
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  @keyframes rise{0%{transform:translateY(14px);opacity:.25}50%{opacity:.95}100%{transform:translateY(-22px);opacity:.1}}
+  @keyframes pulse{0%,100%{opacity:.95}50%{opacity:.55}}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .flow{stroke-dasharray:6 4;animation:flow 1.8s linear infinite}
+  .rise{animation:rise 2.8s ease-in-out infinite}
+  .rise2{animation:rise 3.4s ease-in-out infinite .9s}
+  .pulse{animation:pulse 2.4s ease-in-out infinite}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 7s linear infinite}
+  @media (prefers-reduced-motion:reduce){.flow,.rise,.rise2,.pulse,.spin{animation:none!important}}
+</style>
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Адсорбция Гиббса: плотная упаковка монослоя ПАВ до насыщения (Γ_max)</text>
+  <g transform="translate(28,48)">
+        <rect width="348" height="198" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
+        <text x="174" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">Монослой ПАВ на границе воздух / вода</text>
+        <rect x="22" y="96" width="304" height="72" rx="10" fill="#BAE6FD"/>
+        <g>
+          <line x1="44" y1="62" x2="44" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="44" cy="98" r="5.5" fill="#0284C7"/><line x1="66" y1="62" x2="66" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="66" cy="98" r="5.5" fill="#0284C7"/><line x1="88" y1="62" x2="88" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="88" cy="98" r="5.5" fill="#0284C7"/><line x1="110" y1="62" x2="110" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="110" cy="98" r="5.5" fill="#0284C7"/><line x1="132" y1="62" x2="132" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="132" cy="98" r="5.5" fill="#0284C7"/><line x1="154" y1="62" x2="154" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="154" cy="98" r="5.5" fill="#0284C7"/><line x1="176" y1="62" x2="176" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="176" cy="98" r="5.5" fill="#0284C7"/><line x1="198" y1="62" x2="198" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="198" cy="98" r="5.5" fill="#0284C7"/><line x1="220" y1="62" x2="220" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="220" cy="98" r="5.5" fill="#0284C7"/><line x1="242" y1="62" x2="242" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="242" cy="98" r="5.5" fill="#0284C7"/><line x1="264" y1="62" x2="264" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="264" cy="98" r="5.5" fill="#0284C7"/><line x1="286" y1="62" x2="286" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="286" cy="98" r="5.5" fill="#0284C7"/><line x1="308" y1="62" x2="308" y2="96" stroke="#F59E0B" stroke-width="2.4"/><circle cx="308" cy="98" r="5.5" fill="#0284C7"/>
+        </g>
+        <g class="rise"><circle cx="110" cy="144" r="5" fill="#0284C7"/><line x1="110" y1="139" x2="110" y2="124" stroke="#F59E0B" stroke-width="2"/></g>
+        <g class="rise2"><circle cx="238" cy="144" r="5" fill="#0284C7"/><line x1="238" y1="139" x2="238" y2="124" stroke="#F59E0B" stroke-width="2"/></g>
+        <text x="174" y="186" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#0C5E80">a₀ = 1 / (N_A · Γ_max)</text>
+      </g>
+      <g transform="translate(392,48)">
+        <rect width="340" height="198" rx="14" fill="#FFFFFF" stroke="#DCE6EE" stroke-width="1.6"/>
+        <text x="170" y="24" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#182026">Изотерма адсорбции Γ(c)</text>
+        <line x1="54" y1="158" x2="310" y2="158" stroke="#64748B" stroke-width="1.5"/>
+        <line x1="54" y1="44" x2="54" y2="158" stroke="#64748B" stroke-width="1.5"/>
+        <path d="M54,158 C88,92 140,66 206,62 L304,62" fill="none" stroke="#10B981" stroke-width="3"/>
+        <line x1="54" y1="62" x2="304" y2="62" stroke="#10B981" stroke-dasharray="4 3" opacity=".6"/>
+        <text x="298" y="54" text-anchor="end" font-family="monospace" font-size="10.5" font-weight="700" fill="#047857">Γ_max</text>
+        <text x="182" y="180" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#475569">Концентрация ПАВ в объёме c</text>
+      </g>
+</svg>

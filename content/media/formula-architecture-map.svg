@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Архитектура косметической рецептуры">
+  
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Анатомия косметической рецептуры O/W (Фаза A + Фаза B + Фаза C = 100 %)</text>
+  <g transform="translate(26,50)">
+        <rect width="234" height="192" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.8"/>
+        <text x="117" y="26" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#0C5E80">Фаза A · Водная (~65–80 %)</text>
+        <g font-family="sans-serif" font-size="11" fill="#182026">
+          <text x="18" y="58">• Вода очищенная (до 100 %)</text>
+          <text x="18" y="84">• Увлажнители (глицерин 3–5 %)</text>
+          <text x="18" y="110">• Полимеры (ксантан / карбомер)</text>
+          <text x="18" y="136">• Хелатор (EDTA 0,1 %)</text>
+        </g>
+        <text x="117" y="172" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#0369A1">70–75 °C</text>
+      </g>
+      <g transform="translate(274,50)">
+        <rect width="218" height="192" rx="14" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.8"/>
+        <text x="109" y="26" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#92400E">Фаза B · Масляная (~15–25 %)</text>
+        <g font-family="sans-serif" font-size="11" fill="#182026">
+          <text x="16" y="58">• Эмоленты и масла</text>
+          <text x="16" y="84">• Эмульгаторы (ГЛБ)</text>
+          <text x="16" y="110">• Жирные спирты / воски</text>
+          <text x="16" y="136">• УФ-фильтры / BHT</text>
+        </g>
+        <text x="109" y="172" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#B45309">70–75 °C</text>
+      </g>
+      <g transform="translate(506,50)">
+        <rect width="228" height="192" rx="14" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1.8"/>
+        <text x="114" y="26" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#5B21B6">Фаза C · Охлаждение (~2–8 %)</text>
+        <g font-family="sans-serif" font-size="11" fill="#182026">
+          <text x="16" y="58">• Термолабильные активы</text>
+          <text x="16" y="84">• Консервирующая пара</text>
+          <text x="16" y="110">• Отдушка и токоферол</text>
+          <text x="16" y="136">• Коррекция pH (финиш)</text>
+        </g>
+        <text x="114" y="172" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#6D28D9">≤ 35–40 °C</text>
+      </g>
+</svg>

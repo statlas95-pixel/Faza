@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Четыре зоны испытаний стабильности">
+  
+  <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Матрица испытаний стабильности (ISO/TR 18811): что ловит каждая камера</text>
+  <g transform="translate(26,50)">
+        <rect width="168" height="192" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.8"/>
+        <text x="84" y="30" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="#0C5E80">+4 °C</text>
+        <text x="84" y="52" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#0369A1">Холодильник</text>
+        <text x="84" y="92" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Кристаллизация</text>
+        <text x="84" y="110" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">УФ и аллантоина</text>
+        <text x="84" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Поляризатор 90°</text>
+      </g>
+      <g transform="translate(206,50)">
+        <rect width="168" height="192" rx="14" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1.8"/>
+        <text x="84" y="30" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="#5B21B6">−10 ↔ +25 °C</text>
+        <text x="84" y="52" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#6D28D9">Термоциклы (3–5×)</text>
+        <text x="84" y="92" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Разрыв плёнки и</text>
+        <text x="84" y="110" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">синерезис зимой</text>
+        <text x="84" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Зимняя логистика</text>
+      </g>
+      <g transform="translate(386,50)">
+        <rect width="168" height="192" rx="14" fill="#FFF1F0" stroke="#FF968A" stroke-width="1.8"/>
+        <text x="84" y="30" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="#9A3528">+45 °C</text>
+        <text x="84" y="52" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#B91C1C">Термостат (3 мес.)</text>
+        <text x="84" y="92" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Расслоение, pH,</text>
+        <text x="84" y="110" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">распад активов</text>
+        <text x="84" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Ускорение Q₁₀ ≈ 2–3×</text>
+      </g>
+      <g transform="translate(566,50)">
+        <rect width="168" height="192" rx="14" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.8"/>
+        <text x="84" y="30" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="#92400E">UV / Lux</text>
+        <text x="84" y="52" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#B45309">Фотостабильность</text>
+        <text x="84" y="92" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">Пожелтение ΔE и</text>
+        <text x="84" y="110" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#182026">распад отдушек</text>
+        <text x="84" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Тест прозрачной тары</text>
+      </g>
+</svg>

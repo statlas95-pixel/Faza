@@ -4,6 +4,7 @@ import { Chart, Slider, fmt, range } from '../ui'
 import { media, mediaUrl } from '../content'
 import { saltViscosity } from '../models/physics'
 import { stokesVelocity, hbViscosity, hbStress, unprocessed, coolingMinutes } from '../models/physics'
+import { CppPackingWidget, CmcSolubilizeWidget, JacketHeatmapWidget, WettingContactWidget } from './ExplorableWidgets'
 
 function Frame({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
   return (
@@ -391,4 +392,5 @@ function MediaRegistry() {
 export const widgets: Record<string, ComponentType> = {
   'media-registry': MediaRegistry, saltcurve: SaltCurveW, interaction: InteractionW, preservative: PreservativeW, mixre: MixReW, dilution: DilutionW, buffer: BufferW, disperse: DisperseW, debye: DebyeW, pipe: PipeW, wall: WallW,
   stokes: Stokes, flowcurve: FlowCurve, passes: Passes, cooling: Cooling, 'demo-destabilization': Demo,
+  'cpp-packing': CppPackingWidget, 'cmc-solubilize': CmcSolubilizeWidget, 'jacket-heatmap': JacketHeatmapWidget, 'wetting-contact': WettingContactWidget,
 }
