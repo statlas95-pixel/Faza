@@ -59,7 +59,9 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
     if (!q) {
       return [
         { id: 'q:sandbox', kind: 'Занятие' as const, title: tr('Лаборатория рецептур и фаз'), sub: tr('Конструктор, 5 стадий варки, ГЛБ и лимиты ТР ТС / EU'), to: '/sandbox', search: '' },
+        { id: 'q:reactions', kind: 'Занятие' as const, title: tr('Реакции и механизмы'), sub: tr('RK4-моделирование органических и коллоидных реакций косметики'), to: '/reactions', search: '' },
         { id: 'q:map', kind: 'Тема' as const, title: tr('Карта знаний'), sub: tr('Все разделы, темы и практические тренажёры'), to: '/map', search: '' },
+        { id: 'q:catalog', kind: 'Тема' as const, title: tr('Каталог и поиск по материалам'), sub: tr('Фильтр всех тем, терминов, источников и занятий'), to: '/catalog', search: '' },
         { id: 'q:portfolio', kind: 'Занятие' as const, title: tr('Карта компетенций и портфолио'), sub: tr('Профиль по 6 направлениям и сохранённые рецептуры'), to: '/portfolio', search: '' },
         ...labs.slice(0, 5).map((l) => ({
           id: `ql:${l.id}`,
