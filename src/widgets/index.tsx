@@ -1,7 +1,8 @@
 import { tr } from '../../shared/locale'
 import { useState, ComponentType } from 'react'
 import { Chart, Slider, fmt, range } from '../ui'
-import { media, mediaUrl } from '../content'
+import { media, mediaSvgRaw, mediaUrl } from '../content'
+import { themeSvgMarkup } from '../components/GlassFigure'
 import { saltViscosity } from '../models/physics'
 import { stokesVelocity, hbViscosity, hbStress, unprocessed, coolingMinutes } from '../models/physics'
 import { CppPackingWidget, CmcSolubilizeWidget, JacketHeatmapWidget, WettingContactWidget } from './ExplorableWidgets'
@@ -382,9 +383,18 @@ function MediaRegistry() {
     <div className="table-wrap" tabIndex={0}>
       <table><caption>{tr("Реестр использованных изображений")}</caption>
         <thead><tr><th>{tr("Изображение")}</th><th>{tr("Автор")}</th><th>{tr("Источник")}</th><th>{tr("Лицензия")}</th><th>{tr("Атрибуция")}</th></tr></thead>
-        <tbody>{media.map((m) => (
-          <tr key={m.file}><td><img src={mediaUrl(m.file)} alt="" style={{ width: 120, display: 'block' }} />{m.title}<br /><code>{m.file}</code></td>
-            <td>{m.author}</td><td>{m.source}</td><td>{m.license}</td><td>{m.attribution}</td></tr>))}</tbody>
+        <tbody>{media.map((m, idx) => {
+          const raw = mediaSvgRaw(m.file)
+          return (
+          <tr key={m.file}><td>
+            {raw ? (
+              <div className="media-thumb" dangerouslySetInnerHTML={{ __html: themeSvgMarkup(raw, `reg${idx}`) }} />
+            ) : (
+              <img src={mediaUrl(m.file)} alt="" style={{ width: 120, display: 'block', borderRadius: 8 }} />
+            )}
+            {m.title}<br /><code>{m.file}</code></td>
+            <td>{m.author}</td><td>{m.source}</td><td>{m.license}</td><td>{m.attribution}</td></tr>)
+        })}</tbody>
       </table>
     </div>)
 }

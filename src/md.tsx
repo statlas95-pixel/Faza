@@ -3,6 +3,7 @@ import MarkdownIt from 'markdown-it'
 import katex from 'katex'
 import { Fragment, useMemo } from 'react'
 import { termById, sourceById, mediaUrl, mediaByFile } from './content'
+import { GlassFigure } from './components/GlassFigure'
 import { widgets } from './widgets'
 
 const mdi = new MarkdownIt({ html: true, linkify: false, typographer: false })
@@ -71,17 +72,41 @@ export function renderMd(src: string): string {
   return html
 }
 
-/** Рендер текста с интерактивными вставками {{widget:имя}}. */
+/** Рендер текста с интерактивными вставками {{widget:имя}} и адаптивными Liquid Glass иллюстрациями ![...](media:...). */
 export function Md({ text, className = 'prose' }: { text: string; className?: string }) {
-  const parts = useMemo(() => text.split(/^\{\{widget:([\w-]+)\}\}[ \t]*$/m), [text])
+  const blocks = useMemo(() => {
+    const out: (
+      | { kind: 'md'; text: string }
+      | { kind: 'widget'; name: string }
+      | { kind: 'figure'; file: string; alt: string; caption?: string }
+    )[] = []
+    const tokenRe = /^(?:\{\{widget:([\w-]+)\}\}|!\[([^\]]*)\]\(media:([^\s)"]+)(?:\s+"([^"]*)")?\))[ \t]*$/gm
+    let last = 0
+    let m: RegExpExecArray | null
+    while ((m = tokenRe.exec(text)) !== null) {
+      if (m.index > last) out.push({ kind: 'md', text: text.slice(last, m.index) })
+      if (m[1]) {
+        out.push({ kind: 'widget', name: m[1] })
+      } else {
+        out.push({ kind: 'figure', alt: m[2] ?? '', file: m[3], caption: m[4] })
+      }
+      last = m.index + m[0].length
+    }
+    if (last < text.length) out.push({ kind: 'md', text: text.slice(last) })
+    return out
+  }, [text])
+
   return (
     <div className={className}>
-      {parts.map((p, i) => {
-        if (i % 2 === 1) {
-          const W = widgets[p]
-          return W ? <W key={i} /> : <p key={i} className="broken">{tr("Неизвестный виджет: ")}{p}</p>
+      {blocks.map((b, i) => {
+        if (b.kind === 'widget') {
+          const W = widgets[b.name]
+          return W ? <W key={i} /> : <p key={i} className="broken">{tr("Неизвестный виджет: ")}{b.name}</p>
         }
-        return <Fragment key={i}><div dangerouslySetInnerHTML={{ __html: renderMd(p) }} /></Fragment>
+        if (b.kind === 'figure') {
+          return <GlassFigure key={i} file={b.file} alt={b.alt} caption={b.caption} />
+        }
+        return <Fragment key={i}><div dangerouslySetInnerHTML={{ __html: renderMd(b.text) }} /></Fragment>
       })}
     </div>
   )

@@ -8,6 +8,7 @@ const rawTopics = import.meta.glob('/content/topics/*.md', { query: '?raw', impo
 const rawLabs = import.meta.glob('/content/labs/*.yaml', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 const rawYaml = import.meta.glob('/content/*.yaml', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 const mediaUrls = import.meta.glob(['/content/media/*.{svg,png,jpg,jpeg,webp}', '/content/locales/en/media/*.svg'], { query: '?url', import: 'default', eager: true }) as Record<string, string>
+const mediaRawSvgs = import.meta.glob(['/content/media/*.svg', '/content/locales/en/media/*.svg'], { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 
 export interface Check { q: string; options: { text: string; correct?: boolean; why: string }[] }
 export interface Topic {
@@ -56,6 +57,10 @@ export const sourceById = (id: string) => sourceMap.get(id)
 export const labById = (id: string) => labMap.get(id)
 export const ingredientById = (id: string) => ingredientMap.get(id)
 export const mediaUrl = (file: string) => (language === 'en' && mediaUrls[`/content/locales/en/media/${file}`]) || mediaUrls[`/content/media/${file}`]
+export const mediaSvgRaw = (file: string) =>
+  file.endsWith('.svg')
+    ? (language === 'en' && mediaRawSvgs[`/content/locales/en/media/${file}`]) || mediaRawSvgs[`/content/media/${file}`]
+    : undefined
 export const mediaByFile = (file: string) => mediaMap.get(file)
 
 /** Ступени сложности темы: от простого к сложному. */

@@ -7,6 +7,13 @@ import { LEVELS, CONF, diagItemsForTrack, diagTotal, type SkillState, type Route
 import { buildRefreshQueue } from '../../shared/competencies'
 import { parseNum, ConfirmButton } from '../ui'
 import { useTitle } from './util'
+import chemCover from '../assets/covers/chem.jpg'
+import procCover from '../assets/covers/proc.jpg'
+
+const SECTION_COVERS: Record<string, string> = {
+  chem: chemCover,
+  proc: procCover,
+}
 
 export function LevelBar({ s, compact }: { s?: SkillState; compact?: boolean }) {
   const lvl = s?.level ?? 0
@@ -103,9 +110,17 @@ export function MapPage() {
       <h1>{tr("Карта знаний")}</h1>
       <p className="lead">{tr("Раздел → модуль → тема. Внутри модуля темы идут от простого к сложному. Открыть можно любую тему в любом порядке; «после» показывает предпосылку.")}</p>
       <p className="legend-levels">{[1, 2, 3].map((n) => <span key={n}><span className={`lvtag lv${n}`}>{levelLabel[n]}</span> {levelHint[n]}</span>)}</p>
-      {curriculum.sections.map((sec) => (
+      {curriculum.sections.map((sec) => {
+        const cover = SECTION_COVERS[sec.id]
+        return (
         <section key={sec.id} className={`mapsec c-${sec.color}`}>
-          <header><span className={`swatch ${sec.color}`} aria-hidden /><div><h2>{sec.name}</h2><p>{sec.text}</p></div></header>
+          <header className={cover ? 'mapsec-hero' : undefined}>
+            {cover && <img src={cover} alt="" aria-hidden="true" className="mapsec-cover-img" loading="lazy" />}
+            <div className="mapsec-hero-content">
+              <span className={`swatch ${sec.color}`} aria-hidden />
+              <div><h2>{sec.name}</h2><p>{sec.text}</p></div>
+            </div>
+          </header>
           <div className="modules">{sec.modules.map((m) => (
             <div key={m.id} className="module"><h3>{m.name}</h3>
               <ul>{[...m.topics.map((t) => ({ ...t, shared: false })), ...(m.also ?? []).map((id) => ({ id, prereq: [] as string[], shared: true }))].sort((a, b) => (topicById(a.id)?.level ?? 2) - (topicById(b.id)?.level ?? 2)).map((ref) => { const t = topicById(ref.id); if (!t) return null; const sk = skillOfTopic(t.id), s = sk ? L.states[sk.id] : undefined, r = L.route.find((x) => x.topic === t.id); return (
@@ -122,7 +137,8 @@ export function MapPage() {
                   )}
                   {!!ref.prereq?.length && <span className="small prereq">{tr("после: ")}{ref.prereq.map((x) => topicById(x)?.title).join('; ')}</span>}</li>) })}
                 {(m.planned ?? []).map((x) => <li key={x} className="mtopic planned"><b>{x}</b><span className="mmeta"><span className="tag">{tr("в плане, ещё не опубликована")}</span></span></li>)}</ul></div>))}</div>
-        </section>))}
+        </section>)
+      })}
       <p className="small">{tr("Обозначения: точки — уровень навыка по шкале из четырёх ступеней (см. «Мой маршрут»); «открывалась» — прохождение, а не владение.")}</p>
     </div>)
 }
