@@ -42,4 +42,13 @@ describe('Liquid Glass SVG theming (Package L)', () => {
       }
     }
   })
+
+  it('matches standalone media figure lines even with Windows CRLF line endings', () => {
+    const tokenRe = /^(?:\{\{widget:([\w-]+)\}\}|!\[([^\]]*)\]\(media:([^\s)"]+)(?:\s+"([^"]*)")?\))[ \t\r]*$/gm
+    const md = '\r\n![Alt text](media:formula-architecture-map.svg "Caption text")\r\n\r\n## Heading\r\n'
+    const matches = [...md.matchAll(tokenRe)]
+    expect(matches.length).toBe(1)
+    expect(matches[0][3]).toBe('formula-architecture-map.svg')
+    expect(matches[0][4]).toBe('Caption text')
+  })
 })

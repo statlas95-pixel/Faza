@@ -83,7 +83,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'sles-oversalt',
       code: 'AL-01',
-      reactor: 'R-102 (1500 кг)',
+      reactor: 'R-102',
       batchKg: 1500,
       product: tr('Гель для душа SLES / CAPB'),
       title: tr('Обвал вязкости шампуня после ввода расчётной соли'),
@@ -148,7 +148,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'vacuum-seal-leak',
       code: 'AL-02',
-      reactor: 'VR-204 (800 кг)',
+      reactor: 'VR-204',
       batchKg: 800,
       product: tr('Питательный ламеллярный крем O/W'),
       title: tr('Падение вакуума и аэрация эмульсии в разгар гомогенизации'),
@@ -213,7 +213,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'jacket-valve-stuck',
       code: 'AL-03',
-      reactor: 'VR-301 (1000 кг)',
+      reactor: 'VR-301',
       batchKg: 1000,
       product: tr('Ночной антивозрастной крем с ретинолом'),
       title: tr('Заклинил клапан охлаждающей рубашки при 62 °C'),
@@ -278,7 +278,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'carbomer-electrolyte-collapse',
       code: 'AL-04',
-      reactor: 'M-108 (500 кг)',
+      reactor: 'M-108',
       batchKg: 500,
       product: tr('Увлажняющий гель-сыворотка на карбомере'),
       title: tr('Мгновенное разжижение геля при вводе комплекса Na-PCA и Zn-PCA'),
@@ -408,7 +408,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'coa-peroxide-spike',
       code: 'AL-06',
-      reactor: 'B-05 (800 кг)',
+      reactor: 'B-05',
       batchKg: 800,
       product: tr('Восстанавливающий масляный эликсир / крем'),
       title: tr('Скрытый всплеск перекисного числа (PV = 18 мэкв/кг) у масла виноградной косточки'),
@@ -473,7 +473,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'organic-acid-high-ph',
       code: 'AL-07',
-      reactor: 'VR-105 (600 кг)',
+      reactor: 'VR-105',
       batchKg: 600,
       product: tr('Крем с мочевиной 5 % и бензоатом/сорбатом'),
       title: tr('Дрейф pH готовой партии до 6,7 на консервации органическими кислотами'),
@@ -538,7 +538,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'pigment-hegman-agglomerates',
       code: 'AL-08',
-      reactor: 'D-201 (400 кг)',
+      reactor: 'D-201',
       batchKg: 400,
       product: tr('Тональный флюид SPF 30 с оксидами железа'),
       title: tr('Крупинки > 45 мкм на клине Хегмана и «проявление полос» при нанесении'),
@@ -668,7 +668,7 @@ export function getNightShiftPool(): NightShiftIncident[] {
     {
       id: 'wo-phase-inversion',
       code: 'AL-10',
-      reactor: 'VR-110 (500 кг)',
+      reactor: 'VR-110',
       batchKg: 500,
       product: tr('Водостойкий защитный крем W/O (cold-process)'),
       title: tr('Внезапная инверсия фаз при сборке обратной эмульсии W/O'),

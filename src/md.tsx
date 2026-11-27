@@ -80,7 +80,7 @@ export function Md({ text, className = 'prose' }: { text: string; className?: st
       | { kind: 'widget'; name: string }
       | { kind: 'figure'; file: string; alt: string; caption?: string }
     )[] = []
-    const tokenRe = /^(?:\{\{widget:([\w-]+)\}\}|!\[([^\]]*)\]\(media:([^\s)"]+)(?:\s+"([^"]*)")?\))[ \t]*$/gm
+    const tokenRe = /^(?:\{\{widget:([\w-]+)\}\}|!\[([^\]]*)\]\(media:([^\s)"]+)(?:\s+"([^"]*)")?\))[ \t\r]*$/gm
     let last = 0
     let m: RegExpExecArray | null
     while ((m = tokenRe.exec(text)) !== null) {
