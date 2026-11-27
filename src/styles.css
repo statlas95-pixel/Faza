@@ -918,3 +918,97 @@ input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;b
   border:1px solid var(--border);
   box-shadow:0 24px 64px -16px rgba(0,0,0,.45);
 }
+
+/* ==================== Лаборатория 6.0: Живые приборы (Брукфильд + Поляризационный микроскоп) ==================== */
+.lab6-stack{display:grid;gap:18px;margin-top:18px}
+.lab6-panel{display:grid;gap:12px}
+.lab6-grid{
+  display:grid;
+  grid-template-columns:minmax(290px,1fr) minmax(320px,1.15fr);
+  gap:20px;align-items:start;margin-top:6px;
+}
+@media (max-width:900px){.lab6-grid{grid-template-columns:1fr}}
+
+.lab6-bezel{display:grid;gap:12px}
+.lab6-lcd{
+  padding:14px 16px;border-radius:18px;
+  background:linear-gradient(150deg,#0E1B2A 0%,#142638 100%);
+  color:#E6F4FE;border:1px solid rgba(142,214,248,.32);
+  box-shadow:inset 0 2px 10px rgba(0,0,0,.38),0 10px 26px -14px rgba(14,27,42,.55);
+  display:grid;gap:8px;
+}
+.lab6-lcd.over{border-color:rgba(248,113,113,.65);box-shadow:inset 0 0 16px rgba(239,68,68,.24)}
+.lab6-lcd.under{border-color:rgba(251,191,36,.55)}
+.lab6-lcd-top,.lab6-lcd-sub{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  font-size:.74rem;letter-spacing:.04em;color:#93C5FD;opacity:.92;
+}
+.lab6-lcd-main{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.lab6-lcd-val{font-size:2.1rem;font-weight:700;letter-spacing:-.02em;color:#F8FAFC}
+.lab6-lcd-unit{font-size:.85rem;color:#93C5FD;margin-left:6px}
+.lab6-lcd-torque{text-align:right;display:grid;gap:1px}
+.lab6-lcd-torque span{font-size:.66rem;letter-spacing:.08em;color:#94A3B8}
+.lab6-lcd-torque b{font-size:1.15rem;color:#38BDF8}
+.lab6-lcd.ok .lab6-lcd-torque b{color:#34D399}
+.lab6-lcd.under .lab6-lcd-torque b{color:#FBBF24}
+.lab6-lcd.over .lab6-lcd-torque b{color:#F87171}
+
+.lab6-torque-bar{
+  position:relative;height:10px;border-radius:99px;
+  background:rgba(148,163,184,.2);overflow:hidden;
+}
+.lab6-torque-window{
+  position:absolute;left:10%;width:80%;top:0;bottom:0;
+  border-left:1.5px dashed rgba(52,211,153,.75);
+  border-right:1.5px dashed rgba(52,211,153,.75);
+  background:rgba(16,185,129,.12);
+}
+.lab6-torque-fill{
+  position:relative;height:100%;border-radius:99px;
+  transition:width .2s ease;background:#34D399;
+}
+.lab6-torque-fill.under{background:#FBBF24}
+.lab6-torque-fill.over{background:#EF4444}
+
+.lab6-status{
+  margin:0;padding:8px 12px;border-radius:12px;
+  background:rgba(16,185,129,.11);border:1px solid rgba(16,185,129,.28);color:var(--fg);
+}
+.lab6-status.under{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.34)}
+.lab6-status.over{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.36)}
+
+.lab6-ctrl-block{display:grid;gap:6px}
+.lab6-rpm-chips{flex-wrap:wrap;gap:5px}
+.lab6-rpm-chips .chip{padding:4px 9px;font-size:.8rem}
+
+.lab6-chart-col{display:grid;gap:10px}
+.lab6-chart-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.lab6-rheogram{
+  width:100%;height:auto;max-height:240px;display:block;
+  border-radius:14px;background:var(--surface-2,rgba(148,163,184,.06));
+  border:1px solid var(--border);padding:4px;
+}
+.lab6-axis-lbl{font:500 9.5px var(--mono);fill:var(--fg2)}
+.lab6-axis-title{font:600 10px var(--sans);fill:var(--fg2)}
+.lab6-kpis{margin-top:2px}
+.lab6-log{margin-top:8px;padding-top:12px;border-top:1px solid var(--border);display:grid;gap:8px}
+
+/* Поляризационный микроскоп */
+.lab6-micro-grid{
+  display:grid;grid-template-columns:260px minmax(0,1fr);
+  gap:22px;align-items:center;margin-top:4px;
+}
+@media (max-width:780px){.lab6-micro-grid{grid-template-columns:1fr;justify-items:center}}
+.lab6-scope-wrap{width:250px;max-width:100%;aspect-ratio:1/1}
+.lab6-scope-svg{
+  width:100%;height:100%;display:block;border-radius:50%;
+  box-shadow:0 16px 38px -12px rgba(15,23,42,.38),0 0 0 2px rgba(142,214,248,.22);
+}
+.lab6-micro-ctrl{width:100%;display:grid;gap:12px}
+.lab6-lambda-toggle{
+  display:flex;align-items:center;gap:8px;cursor:pointer;
+  padding:8px 12px;border-radius:12px;border:1px solid var(--border);
+  background:var(--surface-2,rgba(148,163,184,.06));
+}
+.lab6-lambda-toggle input{width:16px;height:16px;accent-color:var(--accent)}
+.lab6-micro-kpis{margin-top:0}

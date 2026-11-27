@@ -26,6 +26,7 @@ import { api, ApiError, useAccount } from '../account'
 import { BatchProtocolPanel, SensoryProfilePanel, StabilityLabPanel } from '../components/Lab3Panels'
 import { Lab4Panels } from '../components/Lab4Panels'
 import { Lab5Panels } from '../components/Lab5Panels'
+import { Lab6Instruments } from '../components/Lab6Instruments'
 import { NoteBox } from '../components/NoteBox'
 import { showToast } from '../components/Toast'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
@@ -848,6 +849,9 @@ export default function SandboxPage() {
           )
         })()}
       </section>
+
+      {/* Лаборатория 6.0: Живые приборы (Вискозиметр Брукфильда + Поляризационный микроскоп) */}
+      <Lab6Instruments formula={formula} ev={evaluation} />
 
       {/* Лаборатория 3.0, 4.0 и 5.0: Ускоренное старение, Сенсорика, COGS/ASM, SPF/Пигменты, A/B-радар и SOP */}
       <StabilityLabPanel tests={stabilityTests} />
