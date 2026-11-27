@@ -70,7 +70,7 @@ export function StabilityLabPanel({ tests }: { tests: StabilityTestResult[] }) {
     <section className="panel lab3-panel">
       <div className="sandbox-head-row">
         <div>
-          <h2>{tr('Испытания ускоренного старения («Термостат и центрифуга»)')}</h2>
+          <h2>{tr('Испытания ускоренного старения')}</h2>
           <p className="small">
             {tr('Проверьте, выдержит ли собранная рецептура центрифугу 3000 об/мин, зимнюю заморозку, месяц при +45 °C и дневной свет.')}
           </p>
@@ -130,7 +130,7 @@ export function SensoryProfilePanel({ profile }: { profile: SensoryProfile }) {
 
   return (
     <section className="panel lab3-panel">
-      <h2>{tr('Сенсорный профиль («Сенсорная паутинка»)')}</h2>
+      <h2>{tr('Сенсорный профиль')}</h2>
       <p className="small">{tr(profile.summary)}</p>
       <div className="comp-grid">
         <div className="comp-radar-wrap">
