@@ -60,6 +60,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       return [
         { id: 'q:sandbox', kind: 'Занятие' as const, title: tr('Лаборатория рецептур и фаз'), sub: tr('Конструктор, 5 стадий варки, ГЛБ и лимиты ТР ТС / EU'), to: '/sandbox', search: '' },
         { id: 'q:tools', kind: 'Занятие' as const, title: tr('Инженерные утилиты 2.0'), sub: tr('Paste-to-Lab INCI, ISO 16128 (NOI), 82 аллергена EU 2023/1545 и SCCS MoS'), to: '/tools', search: '' },
+        { id: 'q:flashcards', kind: 'Занятие' as const, title: tr('Флеш-тренажёр SM-2'), sub: tr('120 интервальных карточек: INCI, лимиты EU/ТР ТС, дефекты и формулы'), to: '/flashcards', search: '' },
         { id: 'q:reactions', kind: 'Занятие' as const, title: tr('Реакции и механизмы'), sub: tr('RK4-моделирование органических и коллоидных реакций косметики'), to: '/reactions', search: '' },
         { id: 'q:campaigns', kind: 'Занятие' as const, title: tr('Кампании запуска продукта'), sub: tr('Сквозные 5-этапные запуски SPF 50+ и Retinol 0,3 % до серии 1 000 кг'), to: '/campaigns', search: '' },
         { id: 'q:map', kind: 'Тема' as const, title: tr('Карта знаний'), sub: tr('Все разделы, темы и практические тренажёры'), to: '/map', search: '' },

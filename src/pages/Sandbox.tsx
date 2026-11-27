@@ -29,6 +29,7 @@ import { BatchProtocolPanel, SensoryProfilePanel, StabilityLabPanel } from '../c
 import { Lab4Panels } from '../components/Lab4Panels'
 import { Lab5Panels } from '../components/Lab5Panels'
 import { Lab6Instruments } from '../components/Lab6Instruments'
+import { FormulaDefenseModal } from '../components/FormulaDefenseModal'
 import { NoteBox } from '../components/NoteBox'
 import { showToast } from '../components/Toast'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
@@ -188,6 +189,7 @@ export default function SandboxPage() {
   const [aiAnswer, setAiAnswer] = useState('')
   const [aiErr, setAiErr] = useState('')
   const [subRowIdx, setSubRowIdx] = useState<number | null>(null)
+  const [defenseOpen, setDefenseOpen] = useState(false)
 
   const activePreset = sandboxPresets.find((p) => p.id === presetId) ?? null
   const evaluation = useMemo(() => evaluateFormula(formula, ingredients), [formula])
@@ -411,6 +413,9 @@ export default function SandboxPage() {
           >
             {snapshot ? tr('Скрыть «До / После»') : tr('Зафиксировать «До»')}
           </button>
+          <button type="button" className="btn primary" onClick={() => setDefenseOpen(true)}>
+            🛡 {tr('QA-защита')}
+          </button>
           <button type="button" className="btn" onClick={exportCsv}>
             📊 {tr('Excel / CSV карта')}
           </button>
@@ -425,6 +430,15 @@ export default function SandboxPage() {
       <p className="lead">
         {tr('Собирайте косметические рецептуры по фазам A, B и C с прогнозом внешнего вида на 5 стадиях, микроскопией, балансом 100 %, расчётом ГЛБ, проверкой конфликтов и лимитов ТР ТС 009/2011 и EU 1223/2009.')}
       </p>
+      {defenseOpen && (
+        <FormulaDefenseModal
+          formula={formula}
+          evaluation={evaluation}
+          catalog={ingredients}
+          onClose={() => setDefenseOpen(false)}
+          onAskAi={askTutorAboutFormula}
+        />
+      )}
 
       {/* Баннер активной кампании запуска (передача рецептуры в Этап 2) */}
       {activeCampaignId && (() => {

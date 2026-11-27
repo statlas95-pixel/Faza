@@ -18,6 +18,7 @@ import { labById, labs } from '../content'
 import { skills, useLearning } from '../learning'
 import { syncNow, useAccount } from '../account'
 import { GradeExamModal } from '../components/GradeExamModal'
+import { ActivityHeatmap } from '../components/ActivityHeatmap'
 import { ScientistGallery } from '../components/ScientistGallery'
 import { useScientistCards } from '../components/ScientistWatcher'
 import { showToast } from '../components/Toast'
@@ -399,11 +400,16 @@ export default function PortfolioPage() {
                   {legendaryCards > 0 ? ` · ✦ ${tr('Легендарных:')} ${legendaryCards}` : ''}
                 </p>
               </div>
-              <button type="button" className="btn small primary" onClick={() => setTab('gallery')}>
-                {tr('Открыть галерею →')}
-              </button>
+              <div className="row" style={{ gap: 8 }}>
+                <Link to="/flashcards" className="btn small ghost">⚡ {tr('Флеш-тренажёр SM-2')}</Link>
+                <button type="button" className="btn small primary" onClick={() => setTab('gallery')}>
+                  {tr('Открыть галерею →')}
+                </button>
+              </div>
             </div>
           </section>
+
+          <ActivityHeatmap progress={progress} />
 
           <dl className="traffic-totals">
             <div className="panel"><dt>{tr('Освоено навыков (≥ 3 ур.)')}</dt><dd>{totalMastered} / {totalSkills}</dd></div>
