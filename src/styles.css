@@ -1696,3 +1696,73 @@ input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;b
 .micro3d-leg-row{display:flex;align-items:center;gap:8px}
 .micro3d-dot{width:10px;height:10px;border-radius:50%;flex:none}
 @media (max-width:760px){.micro3d-grid{grid-template-columns:1fr}}
+
+
+/* ─── Textbook 2.0 Reading Experience (Pilot) ──────────────────────────────── */
+.prose{font-size:1.055rem;line-height:1.76;letter-spacing:-0.003em}
+.prose p,.prose li{max-width:68ch}
+.prose p{margin:0 0 1.08em}
+.prose h2{margin-top:2.4em;margin-bottom:.65em;padding-top:.45em;border-top:1px solid var(--line)}
+.prose > div:first-child > h2:first-child{margin-top:.4em;border-top:none;padding-top:0}
+.prose h3{margin-top:1.7em;margin-bottom:.45em}
+.prose ul,.prose ol{margin:0 0 1.15em;padding-left:1.35em}
+.prose li{margin:.42em 0}
+.prose .term{
+  text-decoration:underline dotted rgba(14,139,153,.58) 1.5px;
+  text-underline-offset:3px;transition:color .15s,text-decoration-color .15s;
+}
+.prose .term:hover{color:var(--teal);text-decoration-color:var(--teal)}
+.prose .cites{margin-left:2px;white-space:nowrap}
+.prose .cite.cite-sup{
+  vertical-align:super;font:600 .69rem/1 var(--mono);
+  padding:1px 4px;margin-left:2px;border-radius:5px;
+  background:transparent;color:var(--ink-2);opacity:.78;text-decoration:none;
+  border:1px solid rgba(148,163,184,.28);transition:opacity .15s,color .15s,border-color .15s;
+}
+.prose .cite.cite-sup:hover{opacity:1;color:var(--teal);border-color:var(--teal);background:rgba(14,139,153,.08)}
+[data-theme="dark"] .prose .cite.cite-sup{background:transparent;color:#94A3B8;border-color:rgba(148,163,184,.3)}
+[data-theme="dark"] .prose .cite.cite-sup:hover{color:#8ED6F8;border-color:#8ED6F8;background:rgba(142,214,248,.12)}
+
+.topic-tldr{
+  margin:0 0 26px;padding:18px 20px;border-radius:16px;
+  border:1px solid rgba(14,139,153,.28);
+  background:linear-gradient(145deg,rgba(14,139,153,.07),rgba(255,255,255,.55));
+}
+[data-theme="dark"] .topic-tldr{
+  background:linear-gradient(145deg,rgba(14,139,153,.14),rgba(15,24,38,.72));
+  border-color:rgba(142,214,248,.24);
+}
+.topic-tldr-eyebrow{
+  font:700 .72rem/1 var(--sans);text-transform:uppercase;letter-spacing:.08em;
+  color:var(--teal);margin:0 0 8px;
+}
+.topic-tldr-list{margin:0;padding-left:1.25em;display:grid;gap:5px;font-size:.94rem;line-height:1.5;color:var(--ink)}
+
+.callout.takeaways{
+  border-left:4px solid var(--teal);
+  background:linear-gradient(145deg,rgba(14,139,153,.08),rgba(255,255,255,.6));
+  border-radius:14px;padding:16px 20px;margin:24px 0;
+}
+[data-theme="dark"] .callout.takeaways{
+  background:linear-gradient(145deg,rgba(14,139,153,.16),rgba(13,22,36,.75));
+}
+.callout.tip{
+  border-left:4px solid #D97706;
+  background:rgba(217,119,6,.07);border-radius:14px;padding:14px 18px;margin:20px 0;
+}
+.topic-ext-find{margin-top:16px}
+.topic-ext-find summary{cursor:pointer;font-weight:600}
+.topic-pager{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;
+  padding-top:20px;border-top:1px solid var(--line);
+}
+.topic-pager-link{
+  display:grid;gap:4px;padding:14px 16px;border-radius:14px;
+  border:1px solid var(--line);background:var(--glass-bg,rgba(255,255,255,.55));
+  text-decoration:none;color:var(--ink);transition:border-color .15s,transform .15s;
+}
+.topic-pager-link:hover{border-color:var(--teal);transform:translateY(-1px)}
+.topic-pager-link.next{text-align:right}
+.topic-pager-dir{font:600 .74rem var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.topic-pager-title{font:600 .96rem/1.35 var(--sans)}
+@media (max-width:640px){.topic-pager{grid-template-columns:1fr}.topic-pager-link.next{text-align:left}}

@@ -8,7 +8,7 @@ import { NoteBox } from '../components/NoteBox'
 import { update, useProgress, getProgress } from '../store'
 import { useTitle } from './util'
 import { SourceFinder } from '../features/Sources'
-import { recordCheck, skillOfTopic, moduleOfTopic, useLearning } from '../learning'
+import { recordCheck, skillOfTopic, moduleOfTopic, topicRefs, useLearning } from '../learning'
 import { LevelBar } from './Learning'
 
 export function Catalog() {
@@ -97,6 +97,9 @@ export function TopicPage() {
   const cited = citedIds(t.body).map(sourceById).filter(Boolean)
   const answers = p.checks[t.id] ?? {}
   const qs: Question[] = t.checks.map((c) => ({ type: 'mc', ...c }))
+  const refIdx = topicRefs.findIndex((r) => r.id === t.id)
+  const prevTopic = refIdx > 0 ? topicById(topicRefs[refIdx - 1].id) : undefined
+  const nextTopic = refIdx >= 0 && refIdx < topicRefs.length - 1 ? topicById(topicRefs[refIdx + 1].id) : undefined
   return (
     <article className="topic" ref={ref}>
       <div className="reading-progress no-print" aria-hidden="true">
@@ -127,6 +130,14 @@ export function TopicPage() {
           <ul className="qs">{t.questions.map((x) => <li key={x}>{x}</li>)}</ul>
         </aside>
         <div className="topic-body">
+          {t.questions.length > 0 && (
+            <section className="topic-tldr" aria-label={tr("Главное за 30 секунд")}>
+              <p className="topic-tldr-eyebrow">{tr("Главное за 30 секунд · После этой главы вы сможете ответить на вопросы:")}</p>
+              <ul className="topic-tldr-list">
+                {t.questions.map((x) => <li key={x}>{x}</li>)}
+              </ul>
+            </section>
+          )}
           <Md text={t.body} />
           <NoteBox
             noteId={`topic:${t.id}`}
@@ -158,14 +169,35 @@ export function TopicPage() {
               </li>))}</ol>
             <p className="review"><b>{tr("Статус рецензии:")}</b> {t.review}</p>
           </section>
-          <section className="refs" id="find">
-            <h2>{tr("Найти внешние источники по теме")}</h2>
-            <p className="small">{tr("Поиск по библиографической базе Crossref и каталогу платформы. Найденное можно сохранить в личную подборку как кандидата на проверку.")}</p>
-            <SourceFinder suggestions={t.search} topic={t.id} />
-          </section>
+          <details className="deep topic-ext-find" id="find">
+            <summary>
+              <span className="deep-tag">Crossref</span>
+              {tr("Найти дополнительные научные статьи по теме")}
+            </summary>
+            <div className="deep-body">
+              <p className="small">{tr("Поиск по библиографической базе Crossref и каталогу платформы. Найденное можно сохранить в личную подборку как кандидата на проверку.")}</p>
+              <SourceFinder suggestions={t.search} topic={t.id} />
+            </div>
+          </details>
           {t.related.length > 0 && (
             <nav className="related" aria-label={tr("Связанные темы")}><h2>{tr("Связанные темы")}</h2>
               <ul>{t.related.map((r) => topicById(r)).filter(Boolean).map((r) => <li key={r!.id}><Link to={`/topics/${r!.id}`}>{r!.title}</Link></li>)}</ul></nav>)}
+          {(prevTopic || nextTopic) && (
+            <nav className="topic-pager no-print" aria-label={tr("Навигация по главам учебника")}>
+              {prevTopic ? (
+                <Link className="topic-pager-link prev" to={`/topics/${prevTopic.id}`}>
+                  <span className="topic-pager-dir">← {tr("Предыдущая тема")}</span>
+                  <span className="topic-pager-title">{prevTopic.title}</span>
+                </Link>
+              ) : <span />}
+              {nextTopic ? (
+                <Link className="topic-pager-link next" to={`/topics/${nextTopic.id}`}>
+                  <span className="topic-pager-dir">{tr("Следующая тема")} →</span>
+                  <span className="topic-pager-title">{nextTopic.title}</span>
+                </Link>
+              ) : <span />}
+            </nav>
+          )}
         </div>
       </div>
     </article>)

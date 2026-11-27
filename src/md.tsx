@@ -15,7 +15,11 @@ export function renderSafe(text: string, frags: { id: string; title: string; pat
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
 const calloutTitle: Record<string, string> = {
-  model: tr("Учебная модель и границы вывода"), decision: tr("К практике"), warn: tr("Внимание"),
+  model: tr("Учебная модель и границы вывода"),
+  decision: tr("К практике"),
+  warn: tr("Внимание"),
+  takeaways: tr("Запомнить главное"),
+  tip: tr("На заметку технологу"),
 }
 
 export function shortAuthor(authors: string) {
@@ -24,11 +28,11 @@ export function shortAuthor(authors: string) {
 }
 
 /** Markdown с расширениями платформы -> HTML. Синтаксис описан в docs/AUTHORING.md. */
-export function renderMd(src: string): string {
+export function renderMd(src: string, citeNumbers?: Map<string, number>): string {
   const blocks: string[] = []
   // :::deep Заголовок ... :::   :::model ... :::
   src = src.replace(/^:::(\w+)[ \t]*(.*)\r?\n([\s\S]*?)\r?\n:::[ \t]*$/gm, (_m, kind: string, title: string, body: string) => {
-    const inner = renderMd(body)
+    const inner = renderMd(body, citeNumbers)
     const html = kind === 'deep'
       ? `<details class="deep"><summary><span class="deep-tag">${esc(tr('Глубже'))}</span>${esc(title || tr("Подробности"))}</summary><div class="deep-body">${inner}</div></details>`
       : `<aside class="callout ${kind}"><div class="callout-h">${esc(title || calloutTitle[kind] || '')}</div>${inner}</aside>`
@@ -50,13 +54,15 @@ export function renderMd(src: string): string {
     const label = text ?? (pre !== undefined ? t.term : t.term.charAt(0).toLowerCase() + t.term.slice(1))
     return `${pre ?? ''}<a class="term" href="#/glossary/${id}" data-tip="${esc(t.short)}">${label}</a>`
   })
-  // ссылки на источники
+  // ссылки на источники — тихие надстрочные номера [1], [2], совпадающие со списком «Источники этой темы»
   src = src.replace(/\[@([^\]]+)\]/g, (_m, list: string) => {
     const links = list.split(';').map((x) => x.trim().replace(/^@/, '')).map((id) => {
       const s = sourceById(id)
-      return s
-        ? `<a class="cite" href="#/sources/${id}" data-tip="${esc(s.title)}">${esc(shortAuthor(s.authors))}, ${s.year.toString().slice(0, 4)}</a>`
-        : `<span class="broken">[@${id}]</span>`
+      if (!s) return `<span class="broken">[@${id}]</span>`
+      const num = citeNumbers?.get(id)
+      const tip = `${shortAuthor(s.authors)}, ${s.year.toString().slice(0, 4)} — ${s.title}`
+      const label = num ? `[${num}]` : `${shortAuthor(s.authors)}, ${s.year.toString().slice(0, 4)}`
+      return `<a class="cite ${num ? 'cite-sup' : ''}" href="#/sources/${id}" data-tip="${esc(tip)}">${esc(label)}</a>`
     })
     return `<span class="cites">${links.join('')}</span>`
   })
@@ -96,6 +102,11 @@ export function Md({ text, className = 'prose' }: { text: string; className?: st
     return out
   }, [text])
 
+  const citeNumbers = useMemo(() => {
+    const ids = citedIds(text)
+    return new Map(ids.map((id, idx) => [id, idx + 1]))
+  }, [text])
+
   return (
     <div className={className}>
       {blocks.map((b, i) => {
@@ -106,7 +117,7 @@ export function Md({ text, className = 'prose' }: { text: string; className?: st
         if (b.kind === 'figure') {
           return <GlassFigure key={i} file={b.file} alt={b.alt} caption={b.caption} />
         }
-        return <Fragment key={i}><div dangerouslySetInnerHTML={{ __html: renderMd(b.text) }} /></Fragment>
+        return <Fragment key={i}><div dangerouslySetInnerHTML={{ __html: renderMd(b.text, citeNumbers) }} /></Fragment>
       })}
     </div>
   )
