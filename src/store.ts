@@ -1,9 +1,9 @@
 import { recordActivity } from './statistics'
 import { tr } from '../shared/locale'
 import { useSyncExternalStore } from 'react'
-import { type Progress, type Attempt, type SavedSource, type SavedFormulaRecord, type CertifiedGradeRecord, type LabNoteRecord, type Settings, normalize, emptyProgress } from '../shared/merge'
+import { type Progress, type Attempt, type SavedSource, type SavedFormulaRecord, type CertifiedGradeRecord, type LabNoteRecord, type CampaignProgressRecord, type Settings, normalize, emptyProgress } from '../shared/merge'
 import type { Evidence } from '../shared/mastery'
-export type { Progress, Attempt, SavedSource, SavedFormulaRecord, CertifiedGradeRecord, LabNoteRecord, Settings }
+export type { Progress, Attempt, SavedSource, SavedFormulaRecord, CertifiedGradeRecord, LabNoteRecord, CampaignProgressRecord, Settings }
 
 const LEGACY_FORMULAS_KEY = 'faza.sandbox.saved.v1'
 function loadLegacyFormulas(): SavedFormulaRecord[] {
@@ -118,5 +118,22 @@ export function saveNote(entry: Omit<LabNoteRecord, 'at'>) {
 export function deleteNote(id: string) {
   update((p) => {
     delete p.notes[id]
+  })
+}
+export function saveCampaignProgress(id: string, patch: Partial<CampaignProgressRecord>) {
+  update((p) => {
+    const prev = p.campaigns[id] ?? { id, stage: 0, choices: {}, at: Date.now() }
+    p.campaigns[id] = {
+      ...prev,
+      ...patch,
+      id,
+      choices: patch.choices ? { ...prev.choices, ...patch.choices } : prev.choices,
+      at: Date.now(),
+    }
+  })
+}
+export function resetCampaign(id: string) {
+  update((p) => {
+    delete p.campaigns[id]
   })
 }

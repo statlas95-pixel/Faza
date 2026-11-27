@@ -5,6 +5,16 @@ export interface SavedSource { key: string; title: string; authors: string; year
 export interface SavedFormulaRecord { id: string; name: string; at: number; presetId?: string; formula: any }
 export interface CertifiedGradeRecord { level: number; score: number; at: number }
 export interface LabNoteRecord { id: string; kind: 'topic' | 'ingredient' | 'formula'; targetId: string; title: string; text: string; at: number }
+export interface CampaignProgressRecord {
+  id: string
+  stage: number
+  choices: Record<string, string>
+  labFormula?: any
+  labSummary?: { score: number; passed: boolean; costPerKg: number; errors: number; spf?: number; notes: string[] }
+  finalScore?: number
+  completedAt?: number
+  at: number
+}
 import type { Evidence, Result, DiagTrack } from './mastery'
 export interface Profile { goal?: string; context?: string; at?: number }
 export interface Diag { answers: Record<string, { result: Result; note?: string; value?: string; at: number }>; track?: DiagTrack; changedAt?: number; startedAt?: number; finishedAt?: number }
@@ -18,12 +28,13 @@ export interface Progress {
   attempts: Attempt[]; savedSources: SavedSource[]; savedFormulas: SavedFormulaRecord[]; settings: Settings
   certifiedGrades: Record<string, CertifiedGradeRecord>
   notes: Record<string, LabNoteRecord>
+  campaigns: Record<string, CampaignProgressRecord>
   last?: { path: string; title: string; at: number }
   profile: Profile; diag: Diag; evidence: Evidence[]; hints: Record<string, number>
 }
 export const emptyProgress = (): Progress => ({
   visited: {}, scroll: {}, checks: {}, labs: {}, labDone: {}, bookmarks: [], attempts: [], savedSources: [], savedFormulas: [],
-  certifiedGrades: {}, notes: {},
+  certifiedGrades: {}, notes: {}, campaigns: {},
   settings: { level: 'practitioner', hints: true }, profile: {}, diag: { answers: {} }, evidence: [], hints: {},
 })
 /** Приводит объект любой прошлой версии к текущей форме (миграция данных 0.1 -> 0.2). */
@@ -51,7 +62,23 @@ export function normalize(p: any): Progress {
       }
     }
   }
-  return { ...e, ...p, settings: { ...e.settings, ...(p.settings ?? {}) }, attempts: Array.isArray(p.attempts) ? p.attempts : [], savedSources: Array.isArray(p.savedSources) ? p.savedSources : [], savedFormulas: Array.isArray(p.savedFormulas) ? p.savedFormulas.filter((f: any) => f && typeof f.id === 'string' && f.formula) : [], certifiedGrades, notes, bookmarks: Array.isArray(p.bookmarks) ? p.bookmarks : [], profile: p.profile ?? {}, diag: { answers: {}, ...(p.diag ?? {}) }, evidence: Array.isArray(p.evidence) ? p.evidence : [], hints: p.hints ?? {} }
+  const rawCampaigns = p.campaigns && typeof p.campaigns === 'object' ? p.campaigns : {}
+  const campaigns: Record<string, CampaignProgressRecord> = {}
+  for (const [k, v] of Object.entries<any>(rawCampaigns)) {
+    if (v && typeof v === 'object') {
+      campaigns[k] = {
+        id: String(v.id ?? k),
+        stage: Number.isFinite(v.stage) ? Math.max(0, Math.min(5, Number(v.stage))) : 0,
+        choices: v.choices && typeof v.choices === 'object' ? { ...v.choices } : {},
+        labFormula: v.labFormula,
+        labSummary: v.labSummary,
+        finalScore: Number.isFinite(v.finalScore) ? Number(v.finalScore) : undefined,
+        completedAt: Number.isFinite(v.completedAt) ? Number(v.completedAt) : undefined,
+        at: Number(v.at ?? 0),
+      }
+    }
+  }
+  return { ...e, ...p, settings: { ...e.settings, ...(p.settings ?? {}) }, attempts: Array.isArray(p.attempts) ? p.attempts : [], savedSources: Array.isArray(p.savedSources) ? p.savedSources : [], savedFormulas: Array.isArray(p.savedFormulas) ? p.savedFormulas.filter((f: any) => f && typeof f.id === 'string' && f.formula) : [], certifiedGrades, notes, campaigns, bookmarks: Array.isArray(p.bookmarks) ? p.bookmarks : [], profile: p.profile ?? {}, diag: { answers: {}, ...(p.diag ?? {}) }, evidence: Array.isArray(p.evidence) ? p.evidence : [], hints: p.hints ?? {} }
 }
 const maxMap = (a: Record<string, number>, b: Record<string, number>) => {
   const o: Record<string, number> = { ...a }
@@ -91,6 +118,10 @@ export function mergeProgress(aRaw: any, bRaw: any): Progress {
   for (const k of new Set([...Object.keys(a.notes), ...Object.keys(b.notes)])) {
     const x = a.notes[k], y = b.notes[k]
     out.notes[k] = !x ? y : !y ? x : y.at >= x.at ? y : x
+  }
+  for (const k of new Set([...Object.keys(a.campaigns), ...Object.keys(b.campaigns)])) {
+    const x = a.campaigns[k], y = b.campaigns[k]
+    out.campaigns[k] = !x ? y : !y ? x : (y.stage > x.stage || (y.stage === x.stage && y.at >= x.at)) ? y : x
   }
   out.last = !a.last ? b.last : !b.last ? a.last : b.last.at >= a.last.at ? b.last : a.last
   out.settings = { ...a.settings, ...b.settings }
@@ -138,6 +169,7 @@ export function fingerprint(p: any) {
   if (n.savedFormulas.length) parts.push(n.savedFormulas.map((f) => f.id).sort())
   if (Object.keys(n.certifiedGrades).length) parts.push(Object.keys(n.certifiedGrades).sort())
   if (Object.keys(n.notes).length) parts.push(Object.keys(n.notes).sort())
+  if (Object.keys(n.campaigns).length) parts.push(Object.keys(n.campaigns).sort())
   const s = JSON.stringify(parts)
   let h1 = 0x811c9dc5, h2 = 0x1b873593
   for (let i = 0; i < s.length; i++) { h1 = Math.imul(h1 ^ s.charCodeAt(i), 16777619); h2 = Math.imul(h2 + s.charCodeAt(i), 0x85ebca6b) ^ (h2 >>> 13) }

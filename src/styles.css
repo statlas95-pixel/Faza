@@ -1100,3 +1100,87 @@ input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;b
 .rx-mol-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .rx-mol-list li{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .rx-smiles{font-size:.74rem;color:var(--fg2);word-break:break-all}
+
+/* ==================== Кампании запуска продукта (Направление H) ==================== */
+.camp-picker{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:12px;margin:16px 0;
+}
+.camp-card-tab{
+  text-align:left;padding:14px 16px;border-radius:18px;cursor:pointer;
+  border:1.5px solid var(--border);background:var(--surface);color:var(--fg);
+  display:grid;gap:6px;font:inherit;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+.camp-card-tab:hover{transform:translateY(-1px);border-color:rgba(14,165,233,.45)}
+.camp-card-tab.on{
+  border-color:#0EA5E9;
+  background:linear-gradient(135deg,rgba(142,214,248,.22),rgba(255,255,255,.72));
+  box-shadow:0 12px 28px -14px rgba(14,165,233,.4);
+}
+[data-theme="dark"] .camp-card-tab.on{
+  background:linear-gradient(135deg,rgba(14,165,233,.24),rgba(18,30,46,.84));
+}
+
+.camp-stepper{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:16px;
+}
+@media (max-width:860px){.camp-stepper{grid-template-columns:1fr}}
+.camp-step{
+  display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px;
+  border-radius:14px;border:1.5px solid var(--border);background:var(--surface);
+  color:var(--fg);cursor:pointer;font:inherit;
+}
+.camp-step.cur{border-color:#0EA5E9;box-shadow:0 6px 18px -10px rgba(14,165,233,.5)}
+.camp-step.done .camp-step-num{background:#10B981;color:#FFF;border-color:#10B981}
+.camp-step.locked{opacity:.52;cursor:not-allowed}
+.camp-step-num{
+  width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-size:.82rem;font-weight:700;border:1.5px solid var(--border);
+}
+.camp-step-txt{display:grid;gap:2px;min-width:0}
+.camp-step-txt b{font-size:.82rem}
+.camp-step-txt span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.camp-conseq{
+  margin-bottom:14px;border-color:rgba(245,158,11,.42);
+  background:rgba(245,158,11,.1);
+}
+.camp-stage-panel{display:grid;gap:14px}
+.camp-options{display:grid;gap:10px}
+.camp-opt{
+  text-align:left;padding:14px 16px;border-radius:16px;cursor:pointer;
+  border:1.5px solid var(--border);background:var(--surface-2,rgba(148,163,184,.05));
+  color:var(--fg);display:grid;gap:6px;font:inherit;
+  transition:border-color .15s ease,transform .15s ease;
+}
+.camp-opt:hover{border-color:rgba(14,165,233,.5);transform:translateY(-1px)}
+.camp-opt.on{
+  border-color:#0EA5E9;background:rgba(142,214,248,.16);
+}
+.camp-opt-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.camp-lab-box{
+  padding:14px 16px;border-radius:16px;border:1px solid var(--border);
+  background:var(--surface-2,rgba(148,163,184,.05));
+}
+.camp-report{
+  margin-top:16px;border-color:rgba(16,185,129,.4);
+  background:linear-gradient(135deg,rgba(16,185,129,.12),var(--surface));
+}
+.camp-handoff-bar{
+  margin-bottom:14px;border-color:rgba(14,165,233,.45);
+  background:linear-gradient(135deg,rgba(142,214,248,.18),var(--surface));
+}
+.home-showcase{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;margin:18px 0 8px;
+}
+.home-showcase-card{
+  display:grid;gap:6px;padding:18px 20px;border-radius:22px;text-decoration:none;
+  color:var(--fg);border:1px solid var(--border);
+  background:var(--surface);box-shadow:var(--shadow-sm,0 10px 26px -16px rgba(15,23,42,.18));
+  transition:transform .18s ease,border-color .18s ease;
+}
+.home-showcase-card:hover{transform:translateY(-2px);border-color:rgba(14,165,233,.45)}
+.home-showcase-card h3{margin:0;font-size:1.06rem}
+.home-showcase-card p{margin:0;color:var(--fg2);font-size:.88rem}

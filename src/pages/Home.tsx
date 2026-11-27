@@ -248,6 +248,18 @@ export default function Home() {
         <EmulsionOrbArt />
       </section>
       <Entries />
+      <section className="home-showcase" aria-label={tr("Интерактивные симуляторы платформы")}>
+        <Link to="/campaigns" className="home-showcase-card">
+          <span className="eyebrow">{tr("Сквозной симулятор · 5 этапов")}</span>
+          <h3>{tr("Кампании запуска: от брифа до серии 1 000 кг")}</h3>
+          <p>{tr("Проведите SPF 50+ флюид или сыворотку 0,3 % Retinol через Лабораторию, упаковку, реактор и рекламацию.")}</p>
+        </Link>
+        <Link to="/reactions" className="home-showcase-card">
+          <span className="eyebrow">{tr("Органика и коллоиды · RK4 60 FPS")}</span>
+          <h3>{tr("Реакции и механизмы косметической химии")}</h3>
+          <p>{tr("Живая кинетика омыления, коллапса карбомера, окисления ПНЖК, гидролиза активов и мицеллярного экрана.")}</p>
+        </Link>
+      </section>
       <div className="strip">
         <DailyCaseCard />
       </div>

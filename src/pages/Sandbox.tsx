@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { language, tr } from '../../shared/locale'
+import { evaluateCampaignLabFormula, getCampaign, type CampaignId } from '../../shared/campaigns'
 import {
   autoBalanceWater,
   checkPresetGoals,
@@ -33,7 +34,7 @@ import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../compone
 import { buildFormulaCsv, decodeShareFormula, encodeShareFormula } from '../../shared/formulation-lab5'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
 import { renderSafe } from '../md'
-import { deleteSavedFormula, saveFormula, useProgress, type SavedFormulaRecord } from '../store'
+import { deleteSavedFormula, saveCampaignProgress, saveFormula, useProgress, type SavedFormulaRecord } from '../store'
 import { useTitle } from './util'
 
 const ONBOARD_KEY = 'faza.lab.onboard.v1'
@@ -102,7 +103,9 @@ export default function SandboxPage() {
   const saved = progress.savedFormulas
   const [copied, setCopied] = useState(false)
   const [shareCopied, setShareCopied] = useState(false)
+  const [activeCampaignId, setActiveCampaignId] = useState<CampaignId | null>(null)
   const [searchParams, setSearchParams] = useSearchParams()
+  const nav = useNavigate()
   const simRef = useRef<HTMLDivElement>(null)
   const [showOnboard, setShowOnboard] = useState(() => {
     try { return localStorage.getItem(ONBOARD_KEY) !== 'done' } catch { return true }
@@ -119,7 +122,17 @@ export default function SandboxPage() {
     const loadId = searchParams.get('load')
     const tpl = searchParams.get('template')
     const shareToken = searchParams.get('share')
-    if (shareToken) {
+    const campParam = searchParams.get('campaign')
+    if (campParam) {
+      const camp = getCampaign(campParam)
+      if (camp) {
+        const existing = progress.campaigns[camp.id]?.labFormula
+        loadFormulaState(existing ?? camp.starterFormula, '')
+        setActiveCampaignId(camp.id)
+        setSaveName(language === 'en' ? camp.titleEn : camp.titleRu)
+      }
+      setSearchParams({}, { replace: true })
+    } else if (shareToken) {
       const validIds = new Set(ingredients.map((i) => i.id))
       const decoded = decodeShareFormula(shareToken, validIds)
       if (decoded) {
@@ -404,6 +417,50 @@ export default function SandboxPage() {
       <p className="lead">
         {tr('Собирайте косметические рецептуры по фазам A, B и C с прогнозом внешнего вида на 5 стадиях, микроскопией, балансом 100 %, расчётом ГЛБ, проверкой конфликтов и лимитов ТР ТС 009/2011 и EU 1223/2009.')}
       </p>
+
+      {/* Баннер активной кампании запуска (передача рецептуры в Этап 2) */}
+      {activeCampaignId && (() => {
+        const camp = getCampaign(activeCampaignId)
+        if (!camp) return null
+        const check = evaluateCampaignLabFormula(camp.id, formula, ingredients)
+        return (
+          <section className="panel camp-handoff-bar" role="region" aria-label={tr('Связка с кампанией запуска')}>
+            <div className="sandbox-head-row">
+              <div>
+                <p className="eyebrow">{tr('Активная кампания запуска · Этап 2')}</p>
+                <b>{language === 'en' ? camp.titleEn : camp.titleRu}</b>{' '}
+                <span className="tag num">{check.score}/20 · {check.passed ? tr('✓ Готово к Этапу 3') : tr('Требует доработки')}</span>
+              </div>
+              <div className="row">
+                <button
+                  type="button"
+                  className="btn small primary"
+                  onClick={() => {
+                    const prevStage = progress.campaigns[camp.id]?.stage ?? 0
+                    saveCampaignProgress(camp.id, {
+                      stage: Math.max(prevStage, 2),
+                      labFormula: JSON.parse(JSON.stringify(formula)),
+                      labSummary: {
+                        score: check.score,
+                        passed: check.passed,
+                        costPerKg: check.costPerKg,
+                        errors: check.errors,
+                        spf: check.spf,
+                        notes: check.notes,
+                      },
+                    })
+                    showToast(tr('Рецептура передана в Этап 2 кампании!'))
+                    nav(`/campaigns?id=${camp.id}`)
+                  }}
+                >
+                  {tr('Передать рецептуру в кампанию →')}
+                </button>
+                <button type="button" className="btn small ghost" onClick={() => setActiveCampaignId(null)}>×</button>
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       {/* Короткий онбординг «Первая варка» */}
       {showOnboard && (
