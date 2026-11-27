@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img" aria-label="Классы органического косметического сырья и связь с аналитическими числами CoA">
+  <defs>
+    <marker id="ogCor" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M1 1L9 5L1 9z" fill="#C4382A"/>
+    </marker>
+    <marker id="ogAmb" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M1 1L9 5L1 9z" fill="#B45309"/>
+    </marker>
+    <marker id="ogVio" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M1 1L9 5L1 9z" fill="#6D28D9"/>
+    </marker>
+  </defs>
+  <rect width="760" height="320" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Органические классы косметического сырья и аналитические числа CoA</text>
+
+  <!-- 5 классов сырья (y=44, h=144, w=136, gap=10) -->
+  <!-- 1. Алканы -->
+  <g transform="translate(20,44)">
+    <rect width="136" height="144" rx="12" fill="#FFF7ED" stroke="#B45309" stroke-width="1.3"/>
+    <text x="68" y="20" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#B45309">1. Алканы</text>
+    <rect x="10" y="28" width="116" height="44" rx="7" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <polyline points="22,55 36,43 50,55 64,43 78,55 92,43 106,55 116,46" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="68" y="67" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">C_nH_{2n+2}</text>
+    <text x="68" y="88" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#182026">Сквалан, вазелин,</text>
+    <text x="68" y="101" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">изододекан</text>
+    <rect x="14" y="114" width="108" height="20" rx="5" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="68" y="128" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#5B6770">AV, IV, OHV ≈ 0</text>
+  </g>
+
+  <!-- 2. Триглицериды / Эфиры + гидролиз -->
+  <g transform="translate(166,44)">
+    <rect width="136" height="144" rx="12" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.3"/>
+    <text x="68" y="20" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#C4382A">2. Эфиры и масла</text>
+    <rect x="8" y="28" width="120" height="54" rx="7" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="68" y="43" text-anchor="middle" font-family="monospace" font-size="9.8" font-weight="700" fill="#C4382A">R–C(=O)–O–R'</text>
+    <text x="68" y="57" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#B45309">↓ +H₂O (гидролиз)</text>
+    <text x="68" y="72" text-anchor="middle" font-family="monospace" font-size="8.8" fill="#182026">R–COOH + R'–OH</text>
+    <text x="68" y="97" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#182026">Триглицериды (C=C),</text>
+    <text x="68" y="110" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">CCT, IPM, эфиры</text>
+    <text x="68" y="131" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#C4382A">Контроль: AV + IV</text>
+  </g>
+
+  <!-- 3. Жирные спирты vs Жирные кислоты -->
+  <g transform="translate(312,44)">
+    <rect width="136" height="144" rx="12" fill="#ECFDF5" stroke="#047857" stroke-width="1.3"/>
+    <text x="68" y="20" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#047857">3. Спирты vs Кислоты</text>
+    <rect x="8" y="28" width="120" height="54" rx="7" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="68" y="44" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#6D28D9">R–OH (спирт)</text>
+    <line x1="20" y1="53" x2="116" y2="53" stroke="#DCE6EE" stroke-width="1"/>
+    <text x="68" y="69" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#C4382A">R–COOH (кислота)</text>
+    <text x="68" y="97" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#182026">Цетиловый (LGN)</text>
+    <text x="68" y="110" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">vs стеариновая к-та</text>
+    <text x="68" y="131" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#047857">Контроль: OHV / AV</text>
+  </g>
+
+  <!-- 4. Силиконы -->
+  <g transform="translate(458,44)">
+    <rect width="136" height="144" rx="12" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.3"/>
+    <text x="68" y="20" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0C5E80">4. Силиконы</text>
+    <rect x="8" y="28" width="120" height="44" rx="7" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="68" y="48" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#0C5E80">–Si(Me)₂–O–Si–</text>
+    <text x="68" y="64" text-anchor="middle" font-family="sans-serif" font-size="8.8" fill="#5B6770">Силоксановая цепь</text>
+    <text x="68" y="88" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#182026">Диметикон, D5</text>
+    <text x="68" y="101" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Низк. γ, гидрофобны</text>
+    <rect x="14" y="114" width="108" height="20" rx="5" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="68" y="128" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#0C5E80">Инертны · вязк. cSt</text>
+  </g>
+
+  <!-- 5. Полиолы -->
+  <g transform="translate(604,44)">
+    <rect width="136" height="144" rx="12" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.3"/>
+    <text x="68" y="20" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#6D28D9">5. Полиолы</text>
+    <rect x="8" y="28" width="120" height="44" rx="7" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="68" y="47" text-anchor="middle" font-family="monospace" font-size="9.2" font-weight="700" fill="#6D28D9">HO–CH₂–CH(OH)–</text>
+    <text x="68" y="62" text-anchor="middle" font-family="monospace" font-size="9.2" font-weight="700" fill="#6D28D9">CH₂–OH (много –OH)</text>
+    <text x="68" y="88" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#182026">Глицерин, гликоли</text>
+    <text x="68" y="101" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Увлажнители (a_w ↓)</text>
+    <text x="68" y="131" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#6D28D9">Контроль: OHV</text>
+  </g>
+
+  <!-- Соединительные линии к 3 аналитическим числам CoA (y=188..218) -->
+  <!-- Эфиры -> Кислотное число (AV) -->
+  <polyline points="214,188 214,198 118,198 118,216" fill="none" stroke="#C4382A" stroke-width="1.6" marker-end="url(#ogCor)"/>
+  <!-- Жирные кислоты -> Кислотное число (AV) -->
+  <polyline points="354,188 354,204 166,204 166,216" fill="none" stroke="#C4382A" stroke-width="1.6" stroke-dasharray="4 2" marker-end="url(#ogCor)"/>
+  <!-- Триглицериды C=C -> Йодное число (IV) -->
+  <polyline points="256,188 256,210 380,210 380,216" fill="none" stroke="#B45309" stroke-width="1.8" marker-end="url(#ogAmb)"/>
+  <!-- Жирные спирты -> Гидроксильное число (OHV) -->
+  <polyline points="406,188 406,198 594,198 594,216" fill="none" stroke="#6D28D9" stroke-width="1.6" marker-end="url(#ogVio)"/>
+  <!-- Полиолы -> Гидроксильное число (OHV) -->
+  <line x1="672" y1="188" x2="672" y2="216" stroke="#6D28D9" stroke-width="1.8" marker-end="url(#ogVio)"/>
+
+  <!-- 3 нижние карточки чисел CoA (y=218, h=86, w=230, gap=15) -->
+  <g transform="translate(20,218)">
+    <rect width="230" height="86" rx="12" fill="#FFEAE7" stroke="#C4382A" stroke-width="1.4"/>
+    <text x="115" y="21" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#C4382A">Кислотное число (AV)</text>
+    <text x="115" y="38" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#182026">мг KOH / г образца</text>
+    <text x="115" y="57" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Свободные –COOH группы</text>
+    <text x="115" y="72" text-anchor="middle" font-family="sans-serif" font-size="9.3" fill="#5B6770">Рост AV = гидролиз эфира / порча масла</text>
+  </g>
+
+  <g transform="translate(265,218)">
+    <rect width="230" height="86" rx="12" fill="#FEF3C7" stroke="#B45309" stroke-width="1.4"/>
+    <text x="115" y="21" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#B45309">Йодное число (IV)</text>
+    <text x="115" y="38" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#182026">г I₂ / 100 г образца</text>
+    <text x="115" y="57" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Степень ненасыщенности (C=C)</text>
+    <text x="115" y="72" text-anchor="middle" font-family="sans-serif" font-size="9.3" fill="#5B6770">IV &gt; 100 → быстрое прогоркание масла</text>
+  </g>
+
+  <g transform="translate(510,218)">
+    <rect width="230" height="86" rx="12" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.4"/>
+    <text x="115" y="21" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#6D28D9">Гидроксильное число (OHV)</text>
+    <text x="115" y="38" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#182026">мг KOH / г образца</text>
+    <text x="115" y="57" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Концентрация групп –OH</text>
+    <text x="115" y="72" text-anchor="middle" font-family="sans-serif" font-size="9.3" fill="#5B6770">Длина цепи C₁₆/C₁₈ · моноглицериды</text>
+  </g>
+</svg>

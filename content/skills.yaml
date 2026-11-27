@@ -298,3 +298,28 @@
   outcome: рассчитывать пороги маркировки 0,001 % (leave-on) и 0,01 % (rinse-off) по EU 2023/1545 и оценивать совместимость отдушки с полимерной тарой
   topics: [fragrances-allergens]
   labs: [packaging-iso18811]
+- id: cosmetic-organic-chemistry
+  name: Ориентироваться в классах органических соединений и показателях CoA
+  outcome: различать углеводороды, эфиры, триглицериды, жирные спирты и силиконы, читать кислотное, йодное и гидроксильное числа
+  topics: [cosmetic-organic-chemistry]
+  labs: [inci-sheet]
+- id: skin-barrier-biology
+  name: Связывать строение рогового слоя кожи с выбором компонентов рецептуры
+  outcome: подбирать хумектанты, эмоленты, окклюзивы и физиологический pH с учётом липидного барьера и TEWL
+  topics: [skin-barrier-biology]
+  labs: [inci-sheet]
+- id: lab-bench-technique
+  name: Воспроизводимо вести лабораторную варку и базовые измерения
+  outcome: выбирать весы под навеску, исключать аэрацию при перемешивании, калибровать pH-метр и корректно снимать вязкость на ротационном вискозиметре
+  topics: [lab-bench-technique]
+  labs: [solutions-sheet, mixing-sheet]
+- id: stoichiometry-active-matter
+  name: Выполнять стехиометрические расчёты и пересчёт на активное вещество
+  outcome: переходить от молярной массы к кристаллогидратам и товарным растворам по CoA со сведением баланса воды до 100 %
+  topics: [stoichiometry-active-matter]
+  labs: [solutions-sheet, ph-sheet]
+- id: regulatory-gmp-map
+  name: Ориентироваться в регламентах EU 1223/2009, ТР ТС 009/2011, IFRA и ISO GMP
+  outcome: различать Приложения II–VI, PIF/CPSR, декларацию ЕАС и СГР, а также связывать ISO 11930, ISO/TR 18811 и ISO 22716
+  topics: [regulatory-gmp-map]
+  labs: [label-claims-audit, gmp-batch-record]

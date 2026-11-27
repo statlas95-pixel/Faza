@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" role="img" aria-label="Цепочка стехиометрии и пересчёта товарного сырья на активное вещество">
+  <rect width="760" height="300" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">От формулы вещества к карте взвешивания: 4 шага технолога</text>
+
+  <!-- Step 1 -->
+  <rect x="22" y="54" width="164" height="220" rx="12" fill="#EFF9FF" stroke="#1F648A" stroke-width="1.3"/>
+  <text x="104" y="76" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0C5E80">1. Стехиометрия</text>
+  <rect x="34" y="90" width="140" height="44" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="104" y="110" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#182026">n = m / M</text>
+  <text x="104" y="126" text-anchor="middle" font-family="monospace" font-size="10" fill="#5B6770">C = n / V (моль/л)</text>
+  <text x="104" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Нейтрализация, буферы,</text>
+  <text x="104" y="170" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">ионная сила солей:</text>
+  <text x="104" y="192" text-anchor="middle" font-family="monospace" font-size="10" fill="#0C5E80">NaCl → Na⁺ + Cl⁻</text>
+  <text x="104" y="208" text-anchor="middle" font-family="monospace" font-size="10" fill="#C4382A">MgSO₄ → Mg²⁺ + SO₄²⁻</text>
+  <text x="104" y="238" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Заряд z = 2 усиливает</text>
+  <text x="104" y="252" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">ионную силу в 4 раза!</text>
+
+  <!-- Arrow 1->2 -->
+  <line x1="186" y1="158" x2="202" y2="158" stroke="#0C5E80" stroke-width="2"/>
+  <polygon points="200,153 208,158 200,163" fill="#0C5E80"/>
+
+  <!-- Step 2 -->
+  <rect x="208" y="54" width="164" height="220" rx="12" fill="#FFF7ED" stroke="#B45309" stroke-width="1.3"/>
+  <text x="290" y="76" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#B45309">2. Кристаллогидраты</text>
+  <rect x="220" y="90" width="140" height="44" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="290" y="110" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#182026">MgSO₄·7H₂O</text>
+  <text x="290" y="126" text-anchor="middle" font-family="monospace" font-size="10" fill="#B45309">M = 246,5 г/моль</text>
+  <text x="290" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Безводная MgSO₄:</text>
+  <text x="290" y="172" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#182026">120,4 / 246,5 = 48,8 %</text>
+  <text x="290" y="196" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#B45309">Чтобы внести 1,0 г соли,</text>
+  <text x="290" y="212" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#B45309">взвесьте 2,05 г гидрата!</text>
+  <text x="290" y="240" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">То же для лимонной</text>
+  <text x="290" y="254" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">кислоты · H₂O (91,4 %)</text>
+
+  <!-- Arrow 2->3 -->
+  <line x1="372" y1="158" x2="388" y2="158" stroke="#0C5E80" stroke-width="2"/>
+  <polygon points="386,153 394,158 386,163" fill="#0C5E80"/>
+
+  <!-- Step 3 -->
+  <rect x="394" y="54" width="164" height="220" rx="12" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.3"/>
+  <text x="476" y="76" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#6D28D9">3. Товарное сырьё</text>
+  <rect x="406" y="90" width="140" height="44" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="476" y="110" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#182026">m_тов = m_акт / w</text>
+  <text x="476" y="126" text-anchor="middle" font-family="monospace" font-size="10" fill="#6D28D9">w берём из CoA</text>
+  <text x="476" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Нужно 10 % акт. SLES</text>
+  <text x="476" y="172" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">из 70 % пасты:</text>
+  <text x="476" y="194" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#6D28D9">10 / 0,70 = 14,29 %</text>
+  <text x="476" y="218" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Вместе с пастой в котёл</text>
+  <text x="476" y="232" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">попадает 4,29 % воды</text>
+  <text x="476" y="252" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">(и соль CAPB из CoA!)</text>
+
+  <!-- Arrow 3->4 -->
+  <line x1="558" y1="158" x2="574" y2="158" stroke="#0C5E80" stroke-width="2"/>
+  <polygon points="572,153 580,158 572,163" fill="#0C5E80"/>
+
+  <!-- Step 4 -->
+  <rect x="580" y="54" width="158" height="220" rx="12" fill="#ECFDF5" stroke="#047857" stroke-width="1.3"/>
+  <text x="659" y="76" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#047857">4. Баланс 100 %</text>
+  <rect x="592" y="90" width="134" height="44" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="659" y="110" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#047857">Σ wᵢ = 100,00 %</text>
+  <text x="659" y="126" text-anchor="middle" font-family="monospace" font-size="10" fill="#5B6770">Aqua q.s. ad 100</text>
+  <text x="659" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Вычитаем воду из всех</text>
+  <text x="659" y="170" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">водных растворов и</text>
+  <text x="659" y="184" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">корректоров pH.</text>
+  <text x="659" y="214" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#047857">Итог: точная карта</text>
+  <text x="659" y="230" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#047857">взвешивания (г / кг)</text>
+  <text x="659" y="252" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">на любую партию</text>
+</svg>

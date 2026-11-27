@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img" aria-label="Четыре типа мешалок реактора: пропеллерная, турбина Раштона, наклонно-лопастная PBT и якорная со скребками">
+  <defs>
+    <marker id="imSky" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M1 1L9 5L1 9z" fill="#0C5E80"/>
+    </marker>
+    <marker id="imCor" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M1 1L9 5L1 9z" fill="#C4382A"/>
+    </marker>
+    <marker id="imVio" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M1 1L9 5L1 9z" fill="#6D28D9"/>
+    </marker>
+    <marker id="imEm" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M1 1L9 5L1 9z" fill="#047857"/>
+    </marker>
+  </defs>
+  <rect width="760" height="320" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Типы мешалок в реакторе: гидродинамика потоков и диапазон вязкости η</text>
+
+  <!-- 1. Пропеллерная (Осевой поток) -->
+  <g transform="translate(20,46)">
+    <rect width="172" height="256" rx="14" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.3"/>
+    <text x="86" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">Пропеллерная</text>
+    <text x="86" y="36" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Осевой поток (Axial)</text>
+
+    <!-- Реактор -->
+    <path d="M30 50 L30 148 Q30 166 86 166 Q142 166 142 148 L142 50 Z" fill="#FFFFFF" stroke="#182026" stroke-width="1.5"/>
+    <!-- Вал и лопасти пропеллера -->
+    <line x1="86" y1="44" x2="86" y2="128" stroke="#182026" stroke-width="2.4"/>
+    <ellipse cx="70" cy="128" rx="15" ry="4.5" transform="rotate(-18 70 128)" fill="#0C5E80"/>
+    <ellipse cx="102" cy="128" rx="15" ry="4.5" transform="rotate(18 102 128)" fill="#0C5E80"/>
+    <circle cx="86" cy="128" r="4" fill="#182026"/>
+    <!-- Осевые петли циркуляции -->
+    <path d="M78 72 L78 144 Q52 154 44 134 L44 82 Q48 64 68 68" fill="none" stroke="#0C5E80" stroke-width="1.6" marker-end="url(#imSky)"/>
+    <path d="M94 72 L94 144 Q120 154 128 134 L128 82 Q124 64 104 68" fill="none" stroke="#0C5E80" stroke-width="1.6" marker-end="url(#imSky)"/>
+
+    <!-- Параметры -->
+    <rect x="12" y="178" width="148" height="22" rx="6" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="86" y="193" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#0C5E80">η &lt; 0,5 Па·с</text>
+    <text x="86" y="218" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">Быстрая циркуляция</text>
+    <text x="86" y="233" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Тоники, мицеллярка,</text>
+    <text x="86" y="246" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">водные сыворотки</text>
+  </g>
+
+  <!-- 2. Турбина Раштона (Радиальный сдвиг) -->
+  <g transform="translate(204,46)">
+    <rect width="172" height="256" rx="14" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.3"/>
+    <text x="86" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#C4382A">Турбина Раштона</text>
+    <text x="86" y="36" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Радиальный сдвиг</text>
+
+    <!-- Реактор + отражательные перегородки -->
+    <path d="M30 50 L30 148 Q30 166 86 166 Q142 166 142 148 L142 50 Z" fill="#FFFFFF" stroke="#182026" stroke-width="1.5"/>
+    <rect x="30" y="64" width="5" height="82" fill="#E2E8F0" stroke="#64748B" stroke-width="0.9"/>
+    <rect x="137" y="64" width="5" height="82" fill="#E2E8F0" stroke="#64748B" stroke-width="0.9"/>
+    <!-- Диск с вертикальными лопатками -->
+    <line x1="86" y1="44" x2="86" y2="112" stroke="#182026" stroke-width="2.4"/>
+    <line x1="60" y1="112" x2="112" y2="112" stroke="#C4382A" stroke-width="3"/>
+    <rect x="58" y="104" width="6" height="16" rx="1" fill="#C4382A"/>
+    <rect x="108" y="104" width="6" height="16" rx="1" fill="#C4382A"/>
+    <rect x="83" y="105" width="6" height="14" rx="1" fill="#182026"/>
+    <!-- 4 радиальные петли (верх + низ) -->
+    <path d="M60 107 L44 107 Q40 82 54 74 Q74 70 76 92" fill="none" stroke="#E05545" stroke-width="1.5" marker-end="url(#imCor)"/>
+    <path d="M60 117 L44 117 Q40 144 56 150 Q74 152 76 130" fill="none" stroke="#E05545" stroke-width="1.5" marker-end="url(#imCor)"/>
+    <path d="M112 107 L128 107 Q132 82 118 74 Q98 70 96 92" fill="none" stroke="#E05545" stroke-width="1.5" marker-end="url(#imCor)"/>
+    <path d="M112 117 L128 117 Q132 144 116 150 Q98 152 96 130" fill="none" stroke="#E05545" stroke-width="1.5" marker-end="url(#imCor)"/>
+
+    <rect x="12" y="178" width="148" height="22" rx="6" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="86" y="193" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#C4382A">η = 0,1–5 Па·с</text>
+    <text x="86" y="218" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">Высокий локальный сдвиг</text>
+    <text x="86" y="233" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Диспергирование, пре-</text>
+    <text x="86" y="246" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">эмульсии, ввод порошков</text>
+  </g>
+
+  <!-- 3. Наклонно-лопастная PBT (Смешанный поток) -->
+  <g transform="translate(388,46)">
+    <rect width="172" height="256" rx="14" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.3"/>
+    <text x="86" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#6D28D9">Турбина PBT (45°)</text>
+    <text x="86" y="36" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Смешанный поток</text>
+
+    <!-- Реактор -->
+    <path d="M30 50 L30 148 Q30 166 86 166 Q142 166 142 148 L142 50 Z" fill="#FFFFFF" stroke="#182026" stroke-width="1.5"/>
+    <!-- Вал и наклонные 45° лопасти -->
+    <line x1="86" y1="44" x2="86" y2="120" stroke="#182026" stroke-width="2.4"/>
+    <polygon points="82,115 56,124 60,131 82,122" fill="#6D28D9"/>
+    <polygon points="90,115 116,124 112,131 90,122" fill="#6D28D9"/>
+    <circle cx="86" cy="119" r="4.5" fill="#182026"/>
+    <!-- Диагональные смешанные петли -->
+    <path d="M74 128 L52 146 Q40 132 42 94 Q46 66 72 72 L76 96" fill="none" stroke="#6D28D9" stroke-width="1.6" marker-end="url(#imVio)"/>
+    <path d="M98 128 L120 146 Q132 132 130 94 Q126 66 100 72 L96 96" fill="none" stroke="#6D28D9" stroke-width="1.6" marker-end="url(#imVio)"/>
+
+    <rect x="12" y="178" width="148" height="22" rx="6" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="86" y="193" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#6D28D9">η = 0,5–15 Па·с</text>
+    <text x="86" y="218" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">Прокачка + умерен. сдвиг</text>
+    <text x="86" y="233" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Шампуни, молочко,</text>
+    <text x="86" y="246" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">текучие гели и лосьоны</text>
+  </g>
+
+  <!-- 4. Якорная со скребками (Высокая вязкость) -->
+  <g transform="translate(572,46)">
+    <rect width="172" height="256" rx="14" fill="#ECFDF5" stroke="#047857" stroke-width="1.3"/>
+    <text x="86" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#047857">Якорная + скребки</text>
+    <text x="86" y="36" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Тангенциальн. обметание</text>
+
+    <!-- Реактор с рубашкой -->
+    <path d="M26 56 L26 150 Q26 170 86 170 Q146 170 146 150 L146 56" fill="none" stroke="#0C5E80" stroke-width="2" stroke-dasharray="3 2"/>
+    <path d="M32 50 L32 146 Q32 164 86 164 Q140 164 140 146 L140 50 Z" fill="#FFFFFF" stroke="#182026" stroke-width="1.5"/>
+    <!-- Вал + U-образный якорь вдоль стенок -->
+    <line x1="86" y1="44" x2="86" y2="156" stroke="#182026" stroke-width="2.4"/>
+    <path d="M40 72 L40 142 Q40 156 86 156 Q132 156 132 142 L132 72" fill="none" stroke="#047857" stroke-width="3.6" stroke-linecap="round"/>
+    <line x1="40" y1="98" x2="132" y2="98" stroke="#047857" stroke-width="2.4"/>
+    <!-- PTFE скребки у стенки -->
+    <rect x="33" y="82" width="7" height="11" rx="1.5" fill="#B45309"/>
+    <rect x="33" y="122" width="7" height="11" rx="1.5" fill="#B45309"/>
+    <rect x="132" y="82" width="7" height="11" rx="1.5" fill="#B45309"/>
+    <rect x="132" y="122" width="7" height="11" rx="1.5" fill="#B45309"/>
+    <!-- Тангенциальные дуги потока -->
+    <path d="M52 72 Q86 60 120 72" fill="none" stroke="#047857" stroke-width="1.6" marker-end="url(#imEm)"/>
+    <path d="M120 134 Q86 146 52 134" fill="none" stroke="#047857" stroke-width="1.6" marker-end="url(#imEm)"/>
+
+    <rect x="12" y="178" width="148" height="22" rx="6" fill="#FFFFFF" stroke="#DCE6EE"/>
+    <text x="86" y="193" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#047857">η = 10–150+ Па·с</text>
+    <text x="86" y="218" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">Срезает пристеночный слой</text>
+    <text x="86" y="233" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Густые кремы, маски,</text>
+    <text x="86" y="246" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">баттеры + теплообмен</text>
+  </g>
+</svg>

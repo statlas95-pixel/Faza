@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" role="img" aria-label="Contact angle wetting and polymer fish-eye lump formation">
+  <rect width="760" height="300" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">Powder Wetting (Contact Angle θ) and Polymer Fish-Eye Mechanism</text>
+
+  <rect x="24" y="48" width="230" height="232" rx="12" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="139" y="70" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">1. Young Contact Angle θ</text>
+  <line x1="44" y1="145" x2="234" y2="145" stroke="#182026" stroke-width="2"/>
+  <path d="M84 145 Q139 112 194 145 Z" fill="#E6F6FE" stroke="#0E8B99" stroke-width="2"/>
+  <text x="139" y="138" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#047857">θ &lt; 90° (wettable)</text>
+  <text x="139" y="160" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Spontaneous Washburn imbibition</text>
+
+  <line x1="44" y1="238" x2="234" y2="238" stroke="#182026" stroke-width="2"/>
+  <circle cx="139" cy="214" r="24" fill="#FFEAE7" stroke="#C4382A" stroke-width="2"/>
+  <text x="139" y="218" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#C4382A">θ &gt; 90°</text>
+  <text x="139" y="256" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Hydrophobic powder floats in clumps</text>
+
+  <rect x="268" y="48" width="232" height="232" rx="12" fill="#FFF1F0" stroke="#E05545" stroke-width="1.2"/>
+  <text x="384" y="70" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#C4382A">2. Defect: "Fish-Eye" Lump</text>
+  <text x="384" y="86" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Dumping xanthan/carbomer directly into water</text>
+  <circle cx="384" cy="158" r="52" fill="#E6F6FE" stroke="#0E8B99" stroke-width="2.5" stroke-dasharray="5 3"/>
+  <circle cx="384" cy="158" r="30" fill="#FEF3C7" stroke="#B45309" stroke-width="2"/>
+  <text x="384" y="155" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#B45309">Dry</text>
+  <text x="384" y="168" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#B45309">core</text>
+  <text x="384" y="121" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#0C5E80">Swollen gel shell</text>
+  <text x="384" y="232" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#C4382A">Water cannot diffuse through</text>
+  <text x="384" y="247" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#C4382A">the hydrated outer polymer skin</text>
+
+  <rect x="514" y="48" width="222" height="232" rx="12" fill="#ECFDF5" stroke="#047857" stroke-width="1.2"/>
+  <text x="625" y="70" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#047857">3. Fix: Glycol Pre-Slurry</text>
+  <text x="625" y="86" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Glycerin / propanediol (3:1 – 5:1)</text>
+  <rect x="540" y="106" width="170" height="96" rx="10" fill="#FFFFFF" stroke="#047857" stroke-width="1.4"/>
+  <circle cx="570" cy="134" r="7" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5"/>
+  <circle cx="606" cy="148" r="7" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5"/>
+  <circle cx="645" cy="130" r="7" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5"/>
+  <circle cx="680" cy="156" r="7" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5"/>
+  <circle cx="585" cy="176" r="7" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5"/>
+  <circle cx="635" cy="178" r="7" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5"/>
+  <text x="625" y="224" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#047857">Particles separated by non-solvent</text>
+  <text x="625" y="240" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">No swelling before water addition →</text>
+  <text x="625" y="255" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">fast, lump-free hydration</text>
+</svg>

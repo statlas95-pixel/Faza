@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-label="Полный факторный план 2³ в сравнении с поочерёдным методом OFAT">
+  <rect width="760" height="310" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">Полный факторный план 2³ против поочерёдного подхода OFAT</text>
+
+  <!-- Left panel: OFAT -->
+  <rect x="24" y="46" width="336" height="244" rx="12" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="192" y="68" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#C4382A">OFAT (по одному фактору)</text>
+  <text x="192" y="84" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#5B6770">Пропускает взаимодействие факторов A × B</text>
+
+  <!-- Contour ellipses showing diagonal ridge optimum -->
+  <g transform="translate(64,98)">
+    <line x1="0" y1="150" x2="255" y2="150" stroke="#182026" stroke-width="1.4"/>
+    <line x1="0" y1="10" x2="0" y2="150" stroke="#182026" stroke-width="1.4"/>
+    <text x="128" y="172" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#5B6770">Фактор A (% загустителя)</text>
+    <text x="-12" y="80" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#5B6770" transform="rotate(-90 -12 80)">Фактор B (pH)</text>
+
+    <!-- Diagonal optimum ridge -->
+    <ellipse cx="185" cy="52" rx="68" ry="24" transform="rotate(-28 185 52)" fill="#ECFDF5" stroke="#047857" stroke-width="1.2" opacity="0.8"/>
+    <ellipse cx="195" cy="46" rx="34" ry="12" transform="rotate(-28 195 46)" fill="#F2FBD9" stroke="#3D5A08" stroke-width="1.4"/>
+    <text x="200" y="49" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#3D5A08">Пик</text>
+
+    <!-- OFAT path -->
+    <line x1="35" y1="120" x2="115" y2="120" stroke="#E05545" stroke-width="2.2" stroke-dasharray="5 3"/>
+    <line x1="115" y1="120" x2="115" y2="82" stroke="#E05545" stroke-width="2.2" stroke-dasharray="5 3"/>
+    <circle cx="35" cy="120" r="5" fill="#FFFFFF" stroke="#E05545" stroke-width="2"/>
+    <circle cx="75" cy="120" r="5" fill="#FFFFFF" stroke="#E05545" stroke-width="2"/>
+    <circle cx="115" cy="120" r="5.5" fill="#FFF1F0" stroke="#C4382A" stroke-width="2"/>
+    <circle cx="115" cy="82" r="5.5" fill="#E05545"/>
+    <text x="115" y="72" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#C4382A">Ложный оптимум</text>
+  </g>
+
+  <!-- Right panel: 2^3 Factorial Cube -->
+  <rect x="380" y="46" width="356" height="244" rx="12" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="558" y="68" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#0C5E80">Полный факторный план 2³ + центр</text>
+  <text x="558" y="84" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#5B6770">8 вершин (эффекты + взаимодействия) + 3 повтора в центре</text>
+
+  <!-- 3D Cube projection -->
+  <g transform="translate(462,102)">
+    <!-- Back face -->
+    <polygon points="55,10 175,10 175,110 55,110" fill="#EFF9FF" stroke="#1F648A" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.65"/>
+    <!-- Connecting edges -->
+    <line x1="15" y1="45" x2="55" y2="10" stroke="#1F648A" stroke-width="1.4"/>
+    <line x1="135" y1="45" x2="175" y2="10" stroke="#1F648A" stroke-width="1.4"/>
+    <line x1="15" y1="145" x2="55" y2="110" stroke="#1F648A" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <line x1="135" y1="145" x2="175" y2="110" stroke="#1F648A" stroke-width="1.4"/>
+    <!-- Front face -->
+    <polygon points="15,45 135,45 135,145 15,145" fill="none" stroke="#0C5E80" stroke-width="2"/>
+
+    <!-- 8 vertices -->
+    <circle cx="15" cy="145" r="5" fill="#0E8B99"/>
+    <circle cx="135" cy="145" r="5" fill="#0E8B99"/>
+    <circle cx="15" cy="45" r="5" fill="#0E8B99"/>
+    <circle cx="135" cy="45" r="5" fill="#0E8B99"/>
+    <circle cx="55" cy="110" r="5" fill="#1F648A"/>
+    <circle cx="175" cy="110" r="5" fill="#1F648A"/>
+    <circle cx="55" cy="10" r="5" fill="#1F648A"/>
+    <circle cx="175" cy="10" r="6.5" fill="#047857"/>
+
+    <!-- Center point (0,0,0) -->
+    <circle cx="95" cy="78" r="6" fill="#FEF3C7" stroke="#B45309" stroke-width="2"/>
+    <text x="95" y="96" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#B45309">Центр (0,0,0) × 3</text>
+    <text x="95" y="108" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">шум + кривизна</text>
+
+    <!-- Axis labels -->
+    <text x="75" y="164" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#182026">A (-1 → +1)</text>
+    <text x="-8" y="95" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#182026" transform="rotate(-90 -8 95)">B (-1 → +1)</text>
+    <text x="180" y="132" font-family="monospace" font-size="10.5" font-weight="700" fill="#182026">C</text>
+    <text x="190" y="14" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#047857">(+,+,+)</text>
+  </g>
+</svg>

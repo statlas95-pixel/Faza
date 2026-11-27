@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img" aria-label="Локализация солюбилизата в мицелле ПАВ и порог помутнения">
+  <defs>
+    <marker id="msArrDark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1 1L9 5L1 9z" fill="#182026"/>
+    </marker>
+    <marker id="msArrCoral" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1 1L9 5L1 9z" fill="#C4382A"/>
+    </marker>
+  </defs>
+  <rect width="760" height="320" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Солюбилизация в мицелле ПАВ: зоны локализации и порог помутнения</text>
+
+  <!-- Левая панель: сечение мицеллы и 3 локуса -->
+  <rect x="20" y="44" width="462" height="258" rx="14" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="150" y="64" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0C5E80">Сечение мицеллы (c &gt; ККМ)</text>
+
+  <!-- Концентрические зоны мицеллы (cx=150, cy=178) -->
+  <circle cx="150" cy="178" r="94" fill="#E6F6FE" stroke="#0C5E80" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <circle cx="150" cy="178" r="66" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <circle cx="150" cy="178" r="35" fill="#FEF3C7" stroke="#B45309" stroke-width="1.4"/>
+
+  <!-- Хвосты ПАВ (16 лучей от r=66 к r=35) -->
+  <g stroke="#0E8B99" stroke-width="1.8" stroke-linecap="round">
+    <line x1="215" y1="178" x2="186" y2="178"/>
+    <line x1="210" y1="203" x2="183" y2="192"/>
+    <line x1="196" y1="224" x2="175" y2="203"/>
+    <line x1="175" y1="238" x2="164" y2="211"/>
+    <line x1="150" y1="243" x2="150" y2="214"/>
+    <line x1="125" y1="238" x2="136" y2="211"/>
+    <line x1="104" y1="224" x2="125" y2="203"/>
+    <line x1="90" y1="203" x2="117" y2="192"/>
+    <line x1="85" y1="178" x2="114" y2="178"/>
+    <line x1="90" y1="153" x2="117" y2="164"/>
+    <line x1="104" y1="132" x2="125" y2="153"/>
+    <line x1="125" y1="118" x2="136" y2="145"/>
+    <line x1="150" y1="113" x2="150" y2="142"/>
+    <line x1="175" y1="118" x2="164" y2="145"/>
+    <line x1="196" y1="132" x2="175" y2="153"/>
+    <line x1="210" y1="153" x2="183" y2="164"/>
+  </g>
+
+  <!-- Полярные головки ПАВ на r=70 -->
+  <g fill="#0C5E80" stroke="#EFF9FF" stroke-width="1.2">
+    <circle cx="220" cy="178" r="5.2"/>
+    <circle cx="215" cy="205" r="5.2"/>
+    <circle cx="200" cy="228" r="5.2"/>
+    <circle cx="177" cy="243" r="5.2"/>
+    <circle cx="150" cy="248" r="5.2"/>
+    <circle cx="123" cy="243" r="5.2"/>
+    <circle cx="100" cy="228" r="5.2"/>
+    <circle cx="85" cy="205" r="5.2"/>
+    <circle cx="80" cy="178" r="5.2"/>
+    <circle cx="85" cy="151" r="5.2"/>
+    <circle cx="100" cy="128" r="5.2"/>
+    <circle cx="123" cy="113" r="5.2"/>
+    <circle cx="150" cy="108" r="5.2"/>
+    <circle cx="177" cy="113" r="5.2"/>
+    <circle cx="200" cy="128" r="5.2"/>
+    <circle cx="215" cy="151" r="5.2"/>
+  </g>
+
+  <!-- Молекулы солюбилизата: неполярные в ядре -->
+  <g fill="#B45309">
+    <circle cx="139" cy="170" r="5.5"/>
+    <circle cx="162" cy="176" r="6"/>
+    <circle cx="148" cy="192" r="5"/>
+  </g>
+
+  <!-- Амфифильные молекулы в палисадном слое -->
+  <g fill="#6D28D9">
+    <ellipse cx="192" cy="202" rx="4.2" ry="8.5" transform="rotate(-55 192 202)"/>
+    <ellipse cx="108" cy="196" rx="4.2" ry="8.5" transform="rotate(64 108 196)"/>
+    <ellipse cx="161" cy="128" rx="4.2" ry="8.5" transform="rotate(14 161 128)"/>
+  </g>
+
+  <!-- Гидратная корона / ПЭГ-цепи -->
+  <g fill="none" stroke="#1F648A" stroke-width="1.3" opacity="0.8">
+    <path d="M225 178 Q232 174 238 178"/>
+    <path d="M204 232 Q211 235 215 241"/>
+    <path d="M150 253 Q154 260 150 266"/>
+    <path d="M96 232 Q89 236 85 242"/>
+    <path d="M75 178 Q68 182 62 178"/>
+    <path d="M96 124 Q89 120 85 114"/>
+    <path d="M150 103 Q146 96 150 90"/>
+    <path d="M204 124 Q211 121 215 115"/>
+  </g>
+  <text x="150" y="290" text-anchor="middle" font-family="monospace" font-size="10" fill="#5B6770">d ≈ 4–12 нм · ПЭГ-40 HCO / Полисорбат-20</text>
+
+  <!-- Выноски 3 локусов справа внутри левой панели -->
+  <polyline points="167,172 254,96 272,96" fill="none" stroke="#B45309" stroke-width="1.5"/>
+  <circle cx="167" cy="172" r="2.5" fill="#B45309"/>
+  <rect x="272" y="64" width="196" height="66" rx="10" fill="#FEF3C7" stroke="#B45309" stroke-width="1.3"/>
+  <text x="282" y="83" font-family="sans-serif" font-size="11" font-weight="700" fill="#B45309">1. Гидрофобное ядро</text>
+  <text x="282" y="100" font-family="sans-serif" font-size="10" fill="#182026">Лимонен, сквалан, алканы</text>
+  <text x="282" y="116" font-family="sans-serif" font-size="9.5" fill="#5B6770">Неполярные масла (log P &gt; 4)</text>
+
+  <polyline points="196,204 256,174 272,174" fill="none" stroke="#6D28D9" stroke-width="1.5"/>
+  <circle cx="196" cy="204" r="2.5" fill="#6D28D9"/>
+  <rect x="272" y="142" width="196" height="66" rx="10" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.3"/>
+  <text x="282" y="161" font-family="sans-serif" font-size="11" font-weight="700" fill="#6D28D9">2. Палисадный слой</text>
+  <text x="282" y="178" font-family="sans-serif" font-size="10" fill="#182026">Линалоол, феноксиэтанол</text>
+  <text x="282" y="194" font-family="sans-serif" font-size="9.5" fill="#5B6770">Полярные душистые и консерванты</text>
+
+  <polyline points="222,235 256,252 272,252" fill="none" stroke="#0C5E80" stroke-width="1.5"/>
+  <circle cx="222" cy="235" r="2.5" fill="#0C5E80"/>
+  <rect x="272" y="220" width="196" height="66" rx="10" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.3"/>
+  <text x="282" y="239" font-family="sans-serif" font-size="11" font-weight="700" fill="#0C5E80">3. Гидрофильная корона</text>
+  <text x="282" y="256" font-family="sans-serif" font-size="10" fill="#182026">ПЭГ-цепи + гидратная вода</text>
+  <text x="282" y="272" font-family="sans-serif" font-size="9.5" fill="#5B6770">Определяет точку помутнения T_cl</text>
+
+  <!-- Правая панель: предел солюбилизации и помутнение -->
+  <rect x="496" y="44" width="244" height="258" rx="14" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="618" y="64" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#182026">Порог ёмкости и помутнение</text>
+
+  <!-- Состояние 1: Прозрачный раствор -->
+  <rect x="510" y="74" width="216" height="90" rx="10" fill="#ECFDF5" stroke="#047857" stroke-width="1.4"/>
+  <text x="618" y="92" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#047857">c_масла ≤ S_max · Прозрачно</text>
+  <g fill="#E6F6FE" stroke="#047857" stroke-width="1.4">
+    <circle cx="552" cy="118" r="11"/>
+    <circle cx="618" cy="116" r="11"/>
+    <circle cx="684" cy="120" r="11"/>
+  </g>
+  <g fill="#B45309">
+    <circle cx="552" cy="118" r="4"/>
+    <circle cx="618" cy="116" r="4"/>
+    <circle cx="684" cy="120" r="4"/>
+  </g>
+  <text x="618" y="144" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">d &lt; 20 нм (≪ λ света)</text>
+  <text x="618" y="157" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Солюбилизатор : отдушка ≈ 4:1–6:1</text>
+
+  <!-- Стрелка перехода -->
+  <line x1="618" y1="166" x2="618" y2="194" stroke="#C4382A" stroke-width="2" marker-end="url(#msArrCoral)"/>
+  <text x="626" y="184" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#C4382A">+ масло &gt; S_max / T &gt; T_cl</text>
+
+  <!-- Состояние 2: Помутнение / расслоение -->
+  <rect x="510" y="198" width="216" height="92" rx="10" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.4"/>
+  <text x="618" y="216" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#C4382A">c_масла &gt; S_max · Помутнение</text>
+  <!-- Всплывающий слой масла -->
+  <rect x="524" y="224" width="188" height="8" rx="4" fill="#FEF3C7" stroke="#B45309" stroke-width="1.2"/>
+  <g fill="#FEF3C7" stroke="#C4382A" stroke-width="1.3">
+    <circle cx="554" cy="248" r="10"/>
+    <circle cx="598" cy="245" r="13"/>
+    <circle cx="646" cy="249" r="11"/>
+    <circle cx="688" cy="244" r="9"/>
+  </g>
+  <text x="618" y="272" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">Капли &gt; 100 нм → опалесценция</text>
+  <text x="618" y="284" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#C4382A">Выделение свободной фазы масла</text>
+</svg>

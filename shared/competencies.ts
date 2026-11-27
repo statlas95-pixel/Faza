@@ -50,14 +50,14 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
     title: 'Консервация, активы, pH и сырьё',
     shortTitle: 'Консервация',
     description: 'Активная форма консервантов при заданном pH, стабильность активов, буферы, вода как сырьё, чтение INCI и спецификаций сырья.',
-    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve', 'unstable-actives', 'fragrances-allergens'],
+    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve', 'unstable-actives', 'fragrances-allergens', 'cosmetic-organic-chemistry', 'skin-barrier-biology', 'stoichiometry-active-matter', 'regulatory-gmp-map'],
   },
   {
     id: 'scaleup',
     title: 'Оборудование, процессы и масштабирование',
     shortTitle: 'Масштабирование',
     description: 'Перенос со стакана на реактор, перемешивание, теплообмен, вакуумирование, насосы, фильтрование и планирование эксперимента (DoE).',
-    skills: ['scale', 'mixing', 'heat', 'vacuum', 'pump-selection', 'porous-flow', 'impeller-geometry', 'fat-melting', 'flow-exchangers', 'filtration', 'doe', 'fractional-design'],
+    skills: ['scale', 'mixing', 'heat', 'vacuum', 'pump-selection', 'porous-flow', 'impeller-geometry', 'fat-melting', 'flow-exchangers', 'filtration', 'doe', 'fractional-design', 'lab-bench-technique'],
   },
   {
     id: 'gmp',

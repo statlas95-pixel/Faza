@@ -2174,3 +2174,103 @@
   see:
     - absolute-pressure
     - mass-transfer
+
+
+- id: stratum-corneum
+  term: "Роговой слой"
+  en: "stratum corneum"
+  area: raw
+  level: base
+  short: "Наружный защитный слой эпидермиса (10–20 мкм), построенный по модели «кирпичи и раствор» из корнеоцитов и межклеточных липидных бислоёв."
+  long: "Обеспечивает главный барьер кожи против потери воды и проникновения раздражителей; межклеточный матрикс состоит из церамидов, холестерина и свободных жирных кислот."
+  topics: [skin-barrier-biology, cleanser-mildness]
+  sources: [barel2009]
+  see: [tewl, acid-mantle, occlusive]
+
+- id: tewl
+  term: "ТЭПВ (трансэпидермальная потеря воды)"
+  en: "transepidermal water loss (TEWL)"
+  area: raw
+  level: base
+  short: "Скорость пассивного испарения воды из глубоких слоёв кожи через роговой слой в окружающий воздух, измеряемая в г/(м²·ч)."
+  long: "Ключевой объективный маркер целостности кожного барьера: при повреждении липидных бислоёв TEWL резко возрастает, а при нанесении окклюзивов снижается."
+  topics: [skin-barrier-biology]
+  sources: [barel2009]
+  see: [stratum-corneum, occlusive, humectant]
+
+- id: acid-mantle
+  term: "Кислотная мантия кожи"
+  en: "acid mantle"
+  area: raw
+  level: base
+  short: "Слабокислая плёнка на поверхности здоровой кожи с физиологическим pH 4,5–5,5."
+  long: "Необходима для работы ферментов синтеза барьерных липидов (включая β-глюкоцереброзидазу) и поддержания нормального микробиома кожи."
+  topics: [skin-barrier-biology, ph-buffers]
+  sources: [barel2009, buck2002]
+  see: [stratum-corneum, ph]
+
+- id: occlusive
+  term: "Окклюзив"
+  en: "occlusive"
+  area: raw
+  level: base
+  short: "Гидрофобный компонент, образующий на поверхности кожи физический барьер и снижающий трансэпидермальную потерю воды."
+  long: "К окклюзивам относятся петролатум, минеральное масло, воски, диметикон и плотные баттеры; в рецептурах их обычно сочетают с хумектантами и эмолентами."
+  topics: [skin-barrier-biology, raw-functions]
+  sources: [barel2009]
+  see: [emollient, humectant, tewl]
+
+- id: hydrolysis
+  term: "Гидролиз"
+  en: "hydrolysis"
+  area: raw
+  level: base
+  short: "Химическое расщепление связи (например, сложноэфирной −COO−) под действием воды, ускоряемое кислотами, щелочами и нагревом."
+  long: "В косметике гидролиз сложных эфиров и триглицеридов приводит к росту кислотного числа, дрейфу pH и появлению постороннего запаха."
+  topics: [cosmetic-organic-chemistry, ph-buffers]
+  sources: [barel2009]
+  see: [ester-oil, triglyceride, acid-value]
+
+- id: molar-mass
+  term: "Молярная масса"
+  en: "molar mass"
+  area: raw
+  level: base
+  short: "Масса одного моля вещества, выражаемая в г/моль; связывает массу навески с количеством вещества через формулу n = m / M."
+  long: "Используется при стехиометрических расчётах нейтрализации, переводе массовой доли в молярность и пересчёте безводных солей на кристаллогидраты."
+  topics: [stoichiometry-active-matter, solutions-basics]
+  sources: [iupac-green]
+  see: [molarity, hydrate, stoichiometry]
+
+- id: stoichiometry
+  term: "Стехиометрия"
+  en: "stoichiometry"
+  area: raw
+  level: base
+  short: "Количественные мольные соотношения между реагентами и продуктами химической реакции."
+  long: "В косметической технологии применяется при расчёте нейтрализации кислот и полимеров, приготовлении буферных растворов и пересчёте кристаллогидратов."
+  topics: [stoichiometry-active-matter, solutions-basics]
+  sources: [iupac-green, butler1998]
+  see: [molar-mass, mass-balance, neutralization]
+
+- id: pif-cpsr
+  term: "PIF и CPSR (досье и отчёт о безопасности)"
+  en: "PIF and CPSR (Product Information File & Safety Report)"
+  area: reg
+  level: base
+  short: "Обязательное техническое досье косметического продукта в ЕС (PIF), включающее отчёт о безопасности CPSR из частей A (данные) и B (заключение токсиколога)."
+  long: "Ведётся Ответственным лицом по Регламенту (ЕС) № 1223/2009 и хранится не менее 10 лет после выпуска последней партии на рынок."
+  topics: [regulatory-gmp-map]
+  sources: [eu1223]
+  see: [gmp, coa, ifra]
+
+- id: ifra
+  term: "Стандарты IFRA"
+  en: "IFRA Standards"
+  area: reg
+  level: base
+  short: "Международные стандарты безопасности парфюмерных композиций, задающие максимальный ввод отдушки для 12 категорий косметической продукции."
+  long: "Соответствие подтверждается сертификатом IFRA от поставщика отдушки; 51-я поправка обновляет лимиты для сенсибилизирующих и фототоксичных душистых веществ."
+  topics: [regulatory-gmp-map, fragrances-allergens]
+  sources: [eu1223, eu2023-1545]
+  see: [pif-cpsr, inci]

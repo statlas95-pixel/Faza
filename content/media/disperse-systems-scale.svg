@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img" aria-label="Логарифмическая шкала размеров дисперсных систем от истинных растворов до эмульсий и суспензий">
+  <rect width="760" height="320" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Логарифмическая шкала дисперсных систем: броуновское движение vs Стокс</text>
+
+  <!-- Main card -->
+  <rect x="24" y="42" width="712" height="260" rx="14" fill="#FFFFFF" stroke="#DCE6EE"/>
+
+  <!-- Regime bands at top -->
+  <rect x="64" y="54" width="356" height="28" rx="7" fill="#ECFDF5" stroke="#047857" stroke-width="1.2"/>
+  <text x="242" y="72" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#047857">Броуновское движение k_B·T (диффузия доминирует)</text>
+
+  <rect x="424" y="54" width="58" height="28" rx="7" fill="#FEF3C7" stroke="#B45309" stroke-width="1.2"/>
+  <text x="453" y="72" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#B45309">Pe ≈ 1</text>
+
+  <rect x="486" y="54" width="210" height="28" rx="7" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.2"/>
+  <text x="591" y="72" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#C4382A">Седиментация Стокса (v ∝ d²)</text>
+
+  <!-- Vertical logarithmic decade gridlines: 0.1nm=64, 1nm=169, 10nm=275, 100nm=380, 1µm=485, 10µm=591, 100µm=696 -->
+  <g stroke="#DCE6EE" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="64" y1="88" x2="64" y2="232"/>
+    <line x1="169" y1="88" x2="169" y2="232"/>
+    <line x1="275" y1="88" x2="275" y2="232"/>
+    <line x1="380" y1="88" x2="380" y2="232"/>
+    <line x1="485" y1="88" x2="485" y2="232"/>
+    <line x1="591" y1="88" x2="591" y2="232"/>
+    <line x1="696" y1="88" x2="696" y2="232"/>
+  </g>
+
+  <!-- Optical wavelength reference line ~400 nm (x=443) -->
+  <line x1="443" y1="88" x2="443" y2="232" stroke="#6D28D9" stroke-width="1.3" stroke-dasharray="5 3"/>
+
+  <!-- Lane 1: True solutions (< 1 nm: x=64..169) -->
+  <rect x="64" y="96" width="105" height="26" rx="6" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.5"/>
+  <g fill="#0C5E80">
+    <circle cx="80" cy="109" r="2"/><circle cx="92" cy="104" r="2"/><circle cx="102" cy="113" r="2"/>
+    <circle cx="114" cy="107" r="2"/><circle cx="126" cy="112" r="2"/>
+  </g>
+  <text x="158" y="113" text-anchor="end" font-family="monospace" font-size="9.5" font-weight="700" fill="#0C5E80">&lt; 1 нм</text>
+  <text x="178" y="113" font-family="sans-serif" font-size="11" font-weight="700" fill="#182026">Истинные растворы: <tspan font-weight="400" fill="#5B6770">ионы, глицерин, соли — прозрачны</tspan></text>
+
+  <!-- Lane 2: Micelles & colloids (1–100 nm: x=169..380) -->
+  <rect x="169" y="130" width="211" height="26" rx="6" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.5"/>
+  <g fill="#6D28D9" opacity="0.85">
+    <circle cx="190" cy="143" r="4"/><circle cx="212" cy="139" r="5"/><circle cx="236" cy="146" r="5.5"/>
+    <circle cx="264" cy="142" r="6.5"/>
+  </g>
+  <text x="370" y="147" text-anchor="end" font-family="monospace" font-size="10" font-weight="700" fill="#6D28D9">1–100 нм</text>
+  <text x="390" y="147" font-family="sans-serif" font-size="11" font-weight="700" fill="#182026">Мицеллы и коллоиды: <tspan font-weight="400" fill="#5B6770">ПАВ, полимеры, золи</tspan></text>
+
+  <!-- Lane 3: Nanoemulsions (50–200 nm: x=348..412) -->
+  <rect x="348" y="164" width="64" height="26" rx="6" fill="#ECFDF5" stroke="#047857" stroke-width="1.6"/>
+  <g fill="#047857" opacity="0.85">
+    <circle cx="366" cy="177" r="5.5"/><circle cx="383" cy="174" r="6.5"/><circle cx="399" cy="180" r="5"/>
+  </g>
+  <text x="339" y="181" text-anchor="end" font-family="monospace" font-size="10" font-weight="700" fill="#047857">50–200 нм</text>
+  <text x="422" y="181" font-family="sans-serif" font-size="11" font-weight="700" fill="#182026">Наноэмульсии: <tspan font-weight="400" fill="#5B6770">полупрозрачны (эффект Тиндаля)</tspan></text>
+
+  <!-- Lane 4: Emulsions & suspensions (0.5–50 µm: x=454..664) -->
+  <rect x="454" y="198" width="210" height="26" rx="6" fill="#FFF7ED" stroke="#B45309" stroke-width="1.6"/>
+  <g fill="#FEF3C7" stroke="#B45309" stroke-width="1.4">
+    <circle cx="474" cy="211" r="6.5"/><circle cx="498" cy="211" r="8"/><circle cx="526" cy="211" r="9.5"/>
+  </g>
+  <text x="654" y="215" text-anchor="end" font-family="monospace" font-size="10" font-weight="700" fill="#B45309">0,5–50 мкм</text>
+  <text x="444" y="215" text-anchor="end" font-family="sans-serif" font-size="11" font-weight="700" fill="#182026">Эмульсии и суспензии: <tspan font-weight="400" fill="#5B6770">кремы, пигменты (мутные)</tspan></text>
+
+  <!-- Logarithmic axis -->
+  <line x1="58" y1="232" x2="704" y2="232" stroke="#182026" stroke-width="1.6"/>
+  <g stroke="#182026" stroke-width="1.4">
+    <line x1="64" y1="228" x2="64" y2="237"/>
+    <line x1="169" y1="228" x2="169" y2="237"/>
+    <line x1="275" y1="228" x2="275" y2="237"/>
+    <line x1="380" y1="228" x2="380" y2="237"/>
+    <line x1="485" y1="228" x2="485" y2="237"/>
+    <line x1="591" y1="228" x2="591" y2="237"/>
+    <line x1="696" y1="228" x2="696" y2="237"/>
+  </g>
+  <g font-family="monospace" font-size="10.5" fill="#5B6770" text-anchor="middle">
+    <text x="64" y="252">0,1 нм</text>
+    <text x="169" y="252">1 нм</text>
+    <text x="275" y="252">10 нм</text>
+    <text x="380" y="252">100 нм</text>
+    <text x="485" y="252">1 мкм</text>
+    <text x="591" y="252">10 мкм</text>
+    <text x="696" y="252">100 мкм</text>
+  </g>
+
+  <!-- Bottom note strip -->
+  <rect x="44" y="264" width="672" height="26" rx="7" fill="#EFF9FF" stroke="#DCE6EE"/>
+  <text x="380" y="281" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#0C5E80" font-weight="600">Оптическая граница λ ≈ 400 нм (фиолетовый пунктир): капли &lt; 100 нм прозрачны, &gt; 1 мкм рассеивают свет (белый крем)</text>
+</svg>

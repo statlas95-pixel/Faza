@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img" aria-label="Изотерма поверхностного натяжения от логарифма концентрации ПАВ с наклоном Гиббса, точкой ККМ и плато мицеллообразования">
+  <defs>
+    <marker id="arrSky" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 1L10 5L0 9z" fill="#0C5E80"/>
+    </marker>
+  </defs>
+  <rect width="760" height="320" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Изотерма поверхностного натяжения γ(lg C) и точка ККМ</text>
+
+  <!-- Main chart card -->
+  <rect x="24" y="44" width="712" height="258" rx="14" fill="#FFFFFF" stroke="#DCE6EE"/>
+
+  <!-- Two concentration regime background zones inside plot (x=88..696, y=64..242) -->
+  <rect x="88" y="64" width="350" height="178" fill="#EFF9FF" opacity="0.65"/>
+  <rect x="438" y="64" width="258" height="178" fill="#ECFDF5" opacity="0.65"/>
+
+  <!-- Horizontal reference gridlines -->
+  <g stroke="#DCE6EE" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="88" y1="82" x2="696" y2="82"/>
+    <line x1="88" y1="122" x2="696" y2="122"/>
+    <line x1="88" y1="162" x2="696" y2="162"/>
+    <line x1="88" y1="202" x2="696" y2="202"/>
+  </g>
+
+  <!-- Axes -->
+  <line x1="88" y1="242" x2="702" y2="242" stroke="#182026" stroke-width="1.6"/>
+  <line x1="88" y1="60" x2="88" y2="242" stroke="#182026" stroke-width="1.6"/>
+
+  <!-- Y axis ticks & labels -->
+  <g font-family="monospace" font-size="10" fill="#5B6770" text-anchor="end">
+    <text x="80" y="86" font-weight="700" fill="#0C5E80">72,8</text>
+    <text x="80" y="126">60</text>
+    <text x="80" y="166">45</text>
+    <text x="80" y="206" font-weight="700" fill="#047857">32</text>
+    <text x="80" y="244">20</text>
+  </g>
+  <text x="42" y="152" transform="rotate(-90 42 152)" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#182026">Натяжение γ, мН/м</text>
+
+  <!-- X axis ticks & labels -->
+  <g stroke="#182026" stroke-width="1.2">
+    <line x1="124" y1="238" x2="124" y2="246"/>
+    <line x1="230" y1="238" x2="230" y2="246"/>
+    <line x1="336" y1="238" x2="336" y2="246"/>
+    <line x1="438" y1="238" x2="438" y2="246"/>
+    <line x1="546" y1="238" x2="546" y2="246"/>
+    <line x1="654" y1="238" x2="654" y2="246"/>
+  </g>
+  <g font-family="monospace" font-size="10" fill="#5B6770" text-anchor="middle">
+    <text x="124" y="260">10⁻⁵</text>
+    <text x="230" y="260">10⁻⁴</text>
+    <text x="336" y="260">10⁻³</text>
+    <text x="438" y="261" font-weight="700" fill="#C4382A">ККМ</text>
+    <text x="546" y="260">10⁻²</text>
+    <text x="654" y="260">10⁻¹</text>
+  </g>
+  <text x="392" y="286" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#182026">Логарифм концентрации ПАВ, lg C (моль/л)</text>
+
+  <!-- Pure water badge -->
+  <text x="96" y="76" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#0C5E80">Чистая вода (20 °C)</text>
+
+  <!-- CMC vertical line -->
+  <line x1="438" y1="64" x2="438" y2="242" stroke="#C4382A" stroke-width="1.6" stroke-dasharray="5 3"/>
+
+  <!-- Gibbs slope tangent guide & triangle -->
+  <path d="M 314 142 L 314 176 L 384 176" fill="none" stroke="#B45309" stroke-width="1.4" stroke-dasharray="3 2"/>
+  <text x="308" y="164" text-anchor="end" font-family="monospace" font-size="9.5" font-weight="700" fill="#B45309">−dγ</text>
+  <text x="349" y="188" text-anchor="middle" font-family="monospace" font-size="9.5" font-weight="700" fill="#B45309">d ln C</text>
+
+  <!-- Surface tension isotherm curve -->
+  <path d="M 88 82 L 144 83 C 184 85 216 95 244 108 L 438 202 L 690 202" fill="none" stroke="#0C5E80" stroke-width="3.2" stroke-linejoin="round"/>
+
+  <!-- CMC inflection point -->
+  <circle cx="438" cy="202" r="5.5" fill="#C4382A" stroke="#FFFFFF" stroke-width="1.8"/>
+  <rect x="448" y="210" width="234" height="24" rx="6" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.1"/>
+  <text x="565" y="226" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#C4382A">Излом ККМ → плато γ_min ≈ 32 мН/м</text>
+
+  <!-- Gibbs equation callout box (above slope, x=268..430, y=68..112) -->
+  <rect x="262" y="68" width="168" height="44" rx="8" fill="#FFF7ED" stroke="#B45309" stroke-width="1.2"/>
+  <text x="346" y="84" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#B45309">Наклон Гиббса (ниже ККМ)</text>
+  <text x="346" y="102" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#182026">Γ = −(1/RT)·(dγ/d ln C)</text>
+
+  <!-- Left schematic inset: Below CMC monolayer adsorption (x=98..286, y=148..232) -->
+  <g transform="translate(98,148)">
+    <rect width="188" height="84" rx="9" fill="#FFFFFF" stroke="#0C5E80" stroke-width="1.2"/>
+    <text x="94" y="16" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#0C5E80">Ниже ККМ: адсорбция</text>
+    <rect x="10" y="42" width="168" height="28" rx="4" fill="#E6F6FE"/>
+    <line x1="10" y1="42" x2="178" y2="42" stroke="#0C5E80" stroke-width="1.2"/>
+    <!-- Sparse surfactant molecules at interface -->
+    <g stroke="#B45309" stroke-width="2" stroke-linecap="round">
+      <line x1="30" y1="26" x2="30" y2="42"/><line x1="62" y1="26" x2="62" y2="42"/>
+      <line x1="94" y1="26" x2="94" y2="42"/><line x1="126" y1="26" x2="126" y2="42"/>
+      <line x1="158" y1="26" x2="158" y2="42"/>
+    </g>
+    <g fill="#0C5E80">
+      <circle cx="30" cy="43" r="3.8"/><circle cx="62" cy="43" r="3.8"/>
+      <circle cx="94" cy="43" r="3.8"/><circle cx="126" cy="43" r="3.8"/>
+      <circle cx="158" cy="43" r="3.8"/>
+    </g>
+    <!-- Free monomers rising -->
+    <line x1="76" y1="62" x2="76" y2="52" stroke="#B45309" stroke-width="1.6"/>
+    <circle cx="76" cy="63" r="3" fill="#0C5E80"/>
+    <line x1="138" y1="63" x2="138" y2="53" stroke="#B45309" stroke-width="1.6"/>
+    <circle cx="138" cy="64" r="3" fill="#0C5E80"/>
+    <text x="94" y="80" text-anchor="middle" font-family="sans-serif" font-size="8.8" fill="#5B6770">Мономеры заполняют поверхность</text>
+  </g>
+
+  <!-- Right schematic inset: Above CMC saturated monolayer + bulk micelles (x=456..684, y=72..188) -->
+  <g transform="translate(456,72)">
+    <rect width="228" height="116" rx="9" fill="#FFFFFF" stroke="#047857" stroke-width="1.2"/>
+    <text x="114" y="16" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#047857">Выше ККМ: мицеллы в объёме</text>
+    <rect x="10" y="40" width="208" height="58" rx="5" fill="#E6F6FE"/>
+    <line x1="10" y1="40" x2="218" y2="40" stroke="#047857" stroke-width="1.2"/>
+    <!-- Tightly packed monolayer -->
+    <g stroke="#B45309" stroke-width="2" stroke-linecap="round">
+      <line x1="22" y1="25" x2="22" y2="40"/><line x1="40" y1="25" x2="40" y2="40"/>
+      <line x1="58" y1="25" x2="58" y2="40"/><line x1="76" y1="25" x2="76" y2="40"/>
+      <line x1="94" y1="25" x2="94" y2="40"/><line x1="112" y1="25" x2="112" y2="40"/>
+      <line x1="130" y1="25" x2="130" y2="40"/><line x1="148" y1="25" x2="148" y2="40"/>
+      <line x1="166" y1="25" x2="166" y2="40"/><line x1="184" y1="25" x2="184" y2="40"/>
+      <line x1="202" y1="25" x2="202" y2="40"/>
+    </g>
+    <g fill="#047857">
+      <circle cx="22" cy="41" r="3.4"/><circle cx="40" cy="41" r="3.4"/>
+      <circle cx="58" cy="41" r="3.4"/><circle cx="76" cy="41" r="3.4"/>
+      <circle cx="94" cy="41" r="3.4"/><circle cx="112" cy="41" r="3.4"/>
+      <circle cx="130" cy="41" r="3.4"/><circle cx="148" cy="41" r="3.4"/>
+      <circle cx="166" cy="41" r="3.4"/><circle cx="184" cy="41" r="3.4"/>
+      <circle cx="202" cy="41" r="3.4"/>
+    </g>
+    <!-- 3 Bulk spherical micelles -->
+    <g transform="translate(52,72)">
+      <circle cx="0" cy="0" r="13" fill="#FEF3C7" stroke="#047857" stroke-width="1.6" stroke-dasharray="4 2"/>
+      <g stroke="#B45309" stroke-width="1.4">
+        <line x1="-8" y1="0" x2="8" y2="0"/><line x1="0" y1="-8" x2="0" y2="8"/>
+        <line x1="-6" y1="-6" x2="6" y2="6"/><line x1="-6" y1="6" x2="6" y2="-6"/>
+      </g>
+    </g>
+    <g transform="translate(114,72)">
+      <circle cx="0" cy="0" r="14" fill="#FEF3C7" stroke="#047857" stroke-width="1.6" stroke-dasharray="4 2"/>
+      <g stroke="#B45309" stroke-width="1.4">
+        <line x1="-9" y1="0" x2="9" y2="0"/><line x1="0" y1="-9" x2="0" y2="9"/>
+        <line x1="-6" y1="-6" x2="6" y2="6"/><line x1="-6" y1="6" x2="6" y2="-6"/>
+      </g>
+    </g>
+    <g transform="translate(176,72)">
+      <circle cx="0" cy="0" r="13" fill="#FEF3C7" stroke="#047857" stroke-width="1.6" stroke-dasharray="4 2"/>
+      <g stroke="#B45309" stroke-width="1.4">
+        <line x1="-8" y1="0" x2="8" y2="0"/><line x1="0" y1="-8" x2="0" y2="8"/>
+        <line x1="-6" y1="-6" x2="6" y2="6"/><line x1="-6" y1="6" x2="6" y2="-6"/>
+      </g>
+    </g>
+    <text x="114" y="110" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#047857" font-weight="600">Монослой насыщен (Γ_max) → рост мицелл</text>
+  </g>
+</svg>
