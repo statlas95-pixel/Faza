@@ -132,6 +132,9 @@ export function deriveRheologyModel(ev: FormulaEvaluation, input: FormulaInput):
     pctOf('beeswax') + pctOf('candelilla-wax') + pctOf('carnauba-wax') + pctOf('ozokerite') + pctOf('shea-butter') * 0.45 + pctOf('cocoa-butter') * 0.55
   const lgnEmulsifierPct =
     pctOf('olivem-1000') + pctOf('montanov-68') + pctOf('montanov-202') + pctOf('polawax') + pctOf('emulgade-pl6850') + pctOf('glyceryl-stearate') * 0.5
+  const woEmulsifierPct =
+    pctOf('cetyl-peg-ppg-dimethicone') + pctOf('pg3-polyricinoleate') + pctOf('sorbitan-oleate') + pctOf('sorbitan-isostearate')
+  const isWO = ev.oilPhasePct >= 10 && woEmulsifierPct >= 1.5 && (ev.actualHlb === null || ev.actualHlb <= 6.2)
 
   const surfactantPct = ev.rows
     .filter((r) => r.pct > 0 && r.ingredient.role === 'surfactant')
@@ -176,11 +179,26 @@ export function deriveRheologyModel(ev: FormulaEvaluation, input: FormulaInput):
     yieldStressPa += synthPolyPct * 16 + gumPct * 9 + clayPct * 14
     consistencyK += synthPolyPct * 14 + gumPct * 11 + clayPct * 9
 
-    // 3. Вклад ламеллярной гелевой сети (LGN: жирные спирты + эмульгаторы + масляная фаза)
+    // 3. Вклад ламеллярной гелевой сети (LGN) или обратной эмульсии W/O (упаковка внутренней водной фазы)
     const lgnStrength = phaseSplit
       ? 0.12
       : Math.min(1.4, (fattyAlcPct * 0.22 + lgnEmulsifierPct * 0.18) * (ev.oilPhasePct >= 3 ? 1 : 0.35))
-    if (lgnStrength > 0.2) {
+    if (isWO && !phaseSplit) {
+      // Обратная эмульсия W/O: чем выше внутренняя водная фаза φ (обычно 55–75 %), тем выше вязкость (Кригер–Доэрти)
+      const phi = Math.min(0.76, waterPct / 100)
+      const packBoost = Math.pow(1 - phi / 0.82, -1.6)
+      yieldStressPa += 8 + packBoost * 2.2 + waxPct * 3.8 + clayPct * 12
+      consistencyK += 6 + packBoost * 2.6 + waxPct * 4.0 + woEmulsifierPct * 1.4
+      thixotropyIndex += Math.min(0.28, 0.12 + clayPct * 0.08 + waxPct * 0.018)
+      tempSensitivity = Math.max(tempSensitivity, 0.048)
+      if (saltPct < 0.4) {
+        notes.push(
+          en
+            ? 'W/O emulsion with low electrolyte (< 0.4% MgSO₄/NaCl): internal water droplets risk Ostwald ripening and viscosity drift.'
+            : 'Обратная эмульсия W/O с дефицитом электролита (< 0,4 % MgSO₄/NaCl): риск созревания Оствальда и просадки вязкости при хранении.',
+        )
+      }
+    } else if (lgnStrength > 0.2) {
       yieldStressPa += lgnStrength * 22 + waxPct * 3.5
       consistencyK += lgnStrength * 20 + waxPct * 4.2 + ev.oilPhasePct * 0.12
       thixotropyIndex += Math.min(0.30, lgnStrength * 0.24)

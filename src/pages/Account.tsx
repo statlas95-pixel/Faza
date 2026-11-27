@@ -1,8 +1,8 @@
 import { tr } from '../../shared/locale'
 import { useEffect, useState, FormEvent } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
-import { useAccount, signIn, signUp, signOut, requestReset, resetPassword, importGuest, dismissImport, syncNow } from '../account'
-import { useProgress, setSettings } from '../store'
+import { api, useAccount, signIn, signUp, signOut, requestReset, resetPassword, importGuest, dismissImport, syncNow } from '../account'
+import { resetProgress, useProgress, setSettings } from '../store'
 import { ConfirmButton } from '../ui'
 import { SavedSources } from '../features/Sources'
 import { useTitle } from './util'
@@ -107,7 +107,7 @@ export default function AccountPage() {
         <section className="panel"><h3>{tr("Сохранённые источники")}</h3><SavedSources /></section>
         <section className="panel"><h3>{tr("Удаление данных")}</h3>
           <p className="small">{tr("Удаляет прогресс, историю попыток и подборку на сервере. Аккаунт остаётся.")}</p>
-          <ConfirmButton label={tr("Удалить мои учебные данные")} ask={tr("Удалить прогресс и историю без возможности восстановления?")} onConfirm={async () => { const { api } = await import('../account'); const { resetProgress } = await import('../store'); await api('DELETE', '/api/me'); resetProgress() }} /></section>
+          <ConfirmButton label={tr("Удалить мои учебные данные")} ask={tr("Удалить прогресс и историю без возможности восстановления?")} onConfirm={async () => { await api('DELETE', '/api/me'); resetProgress() }} /></section>
       </>)}
     </div>)
 }

@@ -43,13 +43,20 @@ export const ingredients: Ingredient[] = y('ingredients')
 export const sandboxPresets: SandboxPreset[] = y('sandbox-presets')
 export const labs: LabMeta[] = Object.values(rawLabs).map((r) => localizeMaterial(YAML.parse(r)) as LabMeta).sort((a, b) => a.order - b.order)
 
-export const topicById = (id: string) => topics.find((t) => t.id === id)
-export const termById = (id: string) => terms.find((t) => t.id === id)
-export const sourceById = (id: string) => sources.find((s) => s.id === id)
-export const labById = (id: string) => labs.find((l) => l.id === id)
-export const ingredientById = (id: string) => ingredients.find((i) => i.id === id)
+const topicMap = new Map(topics.map((t) => [t.id, t]))
+const termMap = new Map(terms.map((t) => [t.id, t]))
+const sourceMap = new Map(sources.map((s) => [s.id, s]))
+const labMap = new Map(labs.map((l) => [l.id, l]))
+const ingredientMap = new Map(ingredients.map((i) => [i.id, i]))
+const mediaMap = new Map(media.map((m) => [m.file, m]))
+
+export const topicById = (id: string) => topicMap.get(id)
+export const termById = (id: string) => termMap.get(id)
+export const sourceById = (id: string) => sourceMap.get(id)
+export const labById = (id: string) => labMap.get(id)
+export const ingredientById = (id: string) => ingredientMap.get(id)
 export const mediaUrl = (file: string) => (language === 'en' && mediaUrls[`/content/locales/en/media/${file}`]) || mediaUrls[`/content/media/${file}`]
-export const mediaByFile = (file: string) => media.find((m) => m.file === file)
+export const mediaByFile = (file: string) => mediaMap.get(file)
 
 /** Ступени сложности темы: от простого к сложному. */
 export const levelLabel: Record<number, string> = { 1: tr("Основа"), 2: tr("Практика"), 3: tr("Углублённо") }
@@ -68,18 +75,24 @@ const norm = (s: string) => s.toLowerCase().replace(/ё/g, 'е')
 const stem = (w: string) => (w.length > 5 ? w.slice(0, w.length - 2) : w.length > 3 ? w.slice(0, w.length - 1) : w)
 const tokens = (s: string) => norm(s).split(/[^a-zа-я0-9]+/).filter((w) => w.length > 1)
 interface Doc { kind: Hit['kind']; title: string; text: string; path: string; body: string }
-const docs: Doc[] = [
-  ...topics.map((t) => ({ kind: 'Тема' as const, title: t.title, text: t.summary, path: `/topics/${t.id}`, body: t.questions.join(' ') + ' ' + t.body })),
-  ...topics.flatMap((t) => t.questions.map((q) => ({ kind: 'Рабочий вопрос' as const, title: q, text: `${tr("Разбирается в теме «")}${t.title}»`, path: `/topics/${t.id}`, body: '' }))),
-  ...terms.map((t) => ({ kind: 'Термин' as const, title: t.term, text: t.short, path: `/glossary/${t.id}`, body: (t.en ?? '') + ' ' + (t.long ?? '') })),
-  ...sources.map((s) => ({ kind: 'Источник' as const, title: `${s.authors} (${s.year})`, text: s.title, path: `/sources/${s.id}`, body: s.supports + ' ' + s.where })),
-  ...labs.map((l) => ({ kind: 'Занятие' as const, title: l.title, text: l.summary, path: `/labs/${l.id}`, body: l.skill + ' ' + l.role })),
-]
+let _docs: Doc[] | null = null
+function getDocs(): Doc[] {
+  if (!_docs) {
+    _docs = [
+      ...topics.map((t) => ({ kind: 'Тема' as const, title: t.title, text: t.summary, path: `/topics/${t.id}`, body: t.questions.join(' ') + ' ' + t.body })),
+      ...topics.flatMap((t) => t.questions.map((q) => ({ kind: 'Рабочий вопрос' as const, title: q, text: `${tr("Разбирается в теме «")}${t.title}»`, path: `/topics/${t.id}`, body: '' }))),
+      ...terms.map((t) => ({ kind: 'Термин' as const, title: t.term, text: t.short, path: `/glossary/${t.id}`, body: (t.en ?? '') + ' ' + (t.long ?? '') })),
+      ...sources.map((s) => ({ kind: 'Источник' as const, title: `${s.authors} (${s.year})`, text: s.title, path: `/sources/${s.id}`, body: s.supports + ' ' + s.where })),
+      ...labs.map((l) => ({ kind: 'Занятие' as const, title: l.title, text: l.summary, path: `/labs/${l.id}`, body: l.skill + ' ' + l.role })),
+    ]
+  }
+  return _docs
+}
 export function search(q: string): Hit[] {
   const qs = tokens(q).map(stem)
   if (!qs.length) return []
   const hits: Hit[] = []
-  for (const d of docs) {
+  for (const d of getDocs()) {
     const tt = tokens(d.title), tx = tokens(d.text), tb = tokens(d.body)
     let score = 0, all = true
     for (const s of qs) {

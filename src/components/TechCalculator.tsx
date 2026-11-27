@@ -41,6 +41,8 @@ export function TechCalculator() {
         type="button"
         className="calc-fab"
         aria-expanded={open}
+        aria-label={tr('Калькулятор технолога')}
+        title={tr('Калькулятор технолога')}
         onClick={() => setOpen((v) => !v)}
       >
         🧮 <span>{tr('Калькулятор')}</span>

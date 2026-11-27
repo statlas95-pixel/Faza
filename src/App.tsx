@@ -1,16 +1,11 @@
 import { chooseLanguage } from './language'
 import { tr, language } from '../shared/locale'
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { HashRouter, Routes, Route, NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { site } from './content'
 import { update } from './store'
 import { recordActivity } from './statistics'
 import { publicPage } from '../shared/statistics'
-import StatisticsPage from './pages/Statistics'
-import SandboxPage from './pages/Sandbox'
-import ReactionsPage from './pages/Reactions'
-import CampaignsPage from './pages/Campaigns'
-import PortfolioPage from './pages/Portfolio'
 import { TechCalculator } from './components/TechCalculator'
 import { CommandPalette } from './components/CommandPalette'
 import { ToastViewport } from './components/Toast'
@@ -18,12 +13,20 @@ import Home from './pages/Home'
 import { Catalog, TopicPage } from './pages/Topics'
 import { Glossary, Sources, Journal, About, AttemptPage } from './pages/Reference'
 import AccountPage, { ImportBanner } from './pages/Account'
-import { FindPage } from './features/Sources'
+import StatisticsPage from './pages/Statistics'
 import { Tutor } from './features/Tutor'
 import { init, useAccount } from './account'
 import { RoutePage, MapPage, DiagnosticPage } from './pages/Learning'
 import { topicById, labById } from './content'
-import { LabsIndex, LabPage } from './labs/LabPage'
+
+// Ленивая подгрузка тяжёлых страниц-симуляторов для быстрого старта и кешируемых чанков
+const SandboxPage = lazy(() => import('./pages/Sandbox'))
+const ReactionsPage = lazy(() => import('./pages/Reactions'))
+const CampaignsPage = lazy(() => import('./pages/Campaigns'))
+const PortfolioPage = lazy(() => import('./pages/Portfolio'))
+const FindPage = lazy(() => import('./features/Sources').then((m) => ({ default: m.FindPage })))
+const LabsIndex = lazy(() => import('./labs/LabPage').then((m) => ({ default: m.LabsIndex })))
+const LabPage = lazy(() => import('./labs/LabPage').then((m) => ({ default: m.LabPage })))
 
 function SearchBox() {
   const nav = useNavigate()
@@ -180,29 +183,31 @@ function Shell() {
       {inLab && <div className="lab-language">{cmdButton}{themeButton}{languagePicker}</div>}
       <ImportBanner />
       <main id="main" tabIndex={-1}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/topics/:id" element={<TopicPage />} />
-          <Route path="/labs" element={<LabsIndex />} />
-          <Route path="/labs/:id" element={<LabPage />} />
-          <Route path="/glossary" element={<Glossary />} /><Route path="/glossary/:id" element={<Glossary />} />
-          <Route path="/sources" element={<Sources />} /><Route path="/sources/:id" element={<Sources />} />
-          <Route path="/journal" element={<Journal />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/route" element={<RoutePage />} />
-          <Route path="/map" element={<MapPage />} />
-          <Route path="/diagnostic" element={<DiagnosticPage />} />
-          <Route path="/statistics" element={<StatisticsPage />} />
-          <Route path="/sandbox" element={<SandboxPage />} />
-          <Route path="/reactions" element={<ReactionsPage />} />
-          <Route path="/campaigns" element={<CampaignsPage />} />
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/find" element={<FindPage />} />
-          <Route path="/attempts/:id" element={<AttemptPage />} />
-          <Route path="*" element={<div className="page"><h1>{tr("Страница не найдена")}</h1><p><Link to="/">{tr("На главную")}</Link></p></div>} />
-        </Routes>
+        <Suspense fallback={<div className="page"><p className="small muted">{tr("Загрузка раздела…")}</p></div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalog" element={<Catalog />} />
+            <Route path="/topics/:id" element={<TopicPage />} />
+            <Route path="/labs" element={<LabsIndex />} />
+            <Route path="/labs/:id" element={<LabPage />} />
+            <Route path="/glossary" element={<Glossary />} /><Route path="/glossary/:id" element={<Glossary />} />
+            <Route path="/sources" element={<Sources />} /><Route path="/sources/:id" element={<Sources />} />
+            <Route path="/journal" element={<Journal />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/route" element={<RoutePage />} />
+            <Route path="/map" element={<MapPage />} />
+            <Route path="/diagnostic" element={<DiagnosticPage />} />
+            <Route path="/statistics" element={<StatisticsPage />} />
+            <Route path="/sandbox" element={<SandboxPage />} />
+            <Route path="/reactions" element={<ReactionsPage />} />
+            <Route path="/campaigns" element={<CampaignsPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="/find" element={<FindPage />} />
+            <Route path="/attempts/:id" element={<AttemptPage />} />
+            <Route path="*" element={<div className="page"><h1>{tr("Страница не найдена")}</h1><p><Link to="/">{tr("На главную")}</Link></p></div>} />
+          </Routes>
+        </Suspense>
       </main>
       {m && ctx && <Tutor kind={m[1] === 'topics' ? 'topic' : 'lab'} id={ctx.id} title={ctx.title} />}
       <TechCalculator />

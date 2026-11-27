@@ -111,4 +111,27 @@ describe('Lab 6.0 — Brookfield Viscometer & Polarized Light Microscope', () =>
     expect(mBad.hasPigments).toBe(true)
     expect(mBad.pigmentsAgglomerated).toBe(true)
   })
+
+  it('models inverse W/O emulsion Krieger-Dougherty viscosity and flags missing MgSO4 electrolyte', () => {
+    const woCream: FormulaInput = {
+      productType: 'leave-on',
+      targetPh: 5.8,
+      batchGrams: 500,
+      phaseTempC: { A: 25, B: 25, C: 25 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 65.2 },
+        { ingredientId: 'glycerin', phase: 'A', pct: 4.0 },
+        { ingredientId: 'caprylic-triglyceride', phase: 'B', pct: 18.0 },
+        { ingredientId: 'squalane', phase: 'B', pct: 8.0 },
+        { ingredientId: 'cetyl-peg-ppg-dimethicone', phase: 'B', pct: 4.0 },
+        { ingredientId: 'phenoxyethanol', phase: 'C', pct: 0.8 },
+      ],
+    }
+    const evWo = evaluateFormula(woCream, catalog)
+    const model = deriveRheologyModel(evWo, woCream)
+    expect(model.yieldStressPa).toBeGreaterThan(10)
+    expect(model.notes.some((n) => /MgSO₄|W\/O/.test(n))).toBe(true)
+    const micro = analyzePolarizedMicroscopy(evWo, woCream)
+    expect(micro.emulsionState).toBe('wo')
+  })
 })

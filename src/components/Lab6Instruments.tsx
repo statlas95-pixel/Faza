@@ -153,10 +153,14 @@ export function Lab6Instruments({ formula, ev }: Lab6Props) {
             <h2>{tr('Цифровой вискозиметр Брукфильда и петля тиксотропии')}</h2>
           </div>
           <div className="row">
-            <button type="button" className="btn small" onClick={applyOptimalSpindle}>
+            <button
+              type="button"
+              className={`btn small ${reading.status !== 'ok' ? 'primary' : ''}`}
+              onClick={applyOptimalSpindle}
+            >
               {tr('Подобрать шпиндель')} ({reading.recommendedSpindle} · {reading.recommendedRpm})
             </button>
-            <button type="button" className="btn small primary" onClick={recordReading}>
+            <button type="button" className="btn small" onClick={recordReading}>
               {tr('+ Замер в протокол')}
             </button>
           </div>
@@ -192,8 +196,8 @@ export function Lab6Instruments({ formula, ev }: Lab6Props) {
                 <div className={`lab6-torque-fill ${torqueClass}`} style={{ width: `${torqueClamped}%` }} />
               </div>
               <div className="lab6-lcd-sub num">
-                <span>γ̇ = {reading.shearRate} {tr('с⁻¹')}</span>
-                <span>τ = {reading.shearStressPa} {tr('Па')}</span>
+                <span>γ̇_eff ≈ {reading.shearRate} {tr('с⁻¹')}</span>
+                <span>τ ≈ {reading.shearStressPa} {tr('Па')}</span>
                 <span>FSR = {fmtVis(reading.fsrMPas)}</span>
               </div>
             </div>
@@ -346,6 +350,10 @@ export function Lab6Instruments({ formula, ev }: Lab6Props) {
             <ul className="linklist small" style={{ marginTop: 8 }}>
               {rheo.notes.map((n, i) => <li key={i}>{n}</li>)}
             </ul>
+            <p className="small muted" style={{ margin: '4px 0 0' }}>
+              <b>{tr('Границы модели:')}</b>{' '}
+              {tr('расчёт отражает порядок величин (±30–50 %) и физический тренд. Реальная вязкость зависит от сдвига гомогенизатора, скорости охлаждения, созревания 24–72 ч и партии полимера. На дисковых шпинделях S62–S64 скорость сдвига γ̇_eff ориентировочная — точную реограмму снимают на коаксиальном цилиндре (SC4/DIN) или конус-плоскости.')}
+            </p>
           </div>
         </div>
 
@@ -489,7 +497,7 @@ export function Lab6Instruments({ formula, ev }: Lab6Props) {
                     {dropletCoords.map(([x, y, r], idx) => {
                       const R = r * 1.12
                       return (
-                        <g key={`m-${idx}`} transform={`translate(${x} ${y}) rotate(${90 - polAngle})`}>
+                        <g key={`m-${idx}`} transform={`translate(${x} ${y})`}>
                           <circle cx="0" cy="0" r={R} fill="url(#lab6-maltese-glow)" />
                           {/* Четыре тёмных луча гашения (мальтийский крест) */}
                           <path
@@ -636,6 +644,10 @@ export function Lab6Instruments({ formula, ev }: Lab6Props) {
                 </li>
               ))}
             </ul>
+            <p className="small muted" style={{ margin: '4px 0 0' }}>
+              <b>{tr('Границы модели:')}</b>{' '}
+              {tr('оптическая микроскопия (×100/×400) надёжно фиксирует капли > 1 мкм, мальтийские кресты LGN, кристаллы и агломераты, но ниже дифракционного предела (~0,5 мкм) субмикронные наноэмульсии и мицеллы невидимы — для них нужен лазерный анализатор (DLS).')}
+            </p>
           </div>
         </div>
       </section>
