@@ -1580,6 +1580,9 @@ input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;b
 
 
 /* ─── Package R: Engineering Utilities 2.0 ─────────────────────────────────── */
+.tbl-wrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl-wrap table{width:100%;border-collapse:collapse}
+.tools-page .panel{min-width:0;max-width:100%;overflow-x:hidden}
 .tools-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .tools-textarea{
   width:100%;margin-top:12px;padding:12px 14px;border-radius:14px;
