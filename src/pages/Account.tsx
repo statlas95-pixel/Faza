@@ -99,6 +99,7 @@ export default function AccountPage() {
           <fieldset><legend>{tr("Мой уровень — влияет на объяснения ИИ-наставника")}</legend>
             <div className="seg">{([['novice', tr("Начинающий")], ['practitioner', tr("Практик")], ['expert', tr("Эксперт")]] as const).map(([k, l]) => <label key={k} className={p.settings.level === k ? 'on' : ''}><input type="radio" name="lvl" checked={p.settings.level === k} onChange={() => setSettings({ level: k })} />{l}</label>)}</div></fieldset>
           <label className="choice sm"><input type="checkbox" checked={p.settings.hints} onChange={(e) => setSettings({ hints: e.target.checked })} /><span>{tr("Показывать кнопку подсказок в занятиях")}<small>{tr("Опытным пользователям её можно отключить")}</small></span></label>
+          <label className="choice sm"><input type="checkbox" checked={p.settings.cardToasts !== false} onChange={(e) => setSettings({ cardToasts: e.target.checked })} /><span>{tr("Уведомления о карточках учёных")}<small>{tr("Деликатное оповещение при открытии или повышении ранга коллекционной карточки")}</small></span></label>
           {ai?.configured && (
             <label className="field">{tr("Модель наставника по умолчанию ")}<select value={p.settings.aiModel ?? ''} onChange={(e) => setSettings({ aiModel: e.target.value || undefined })}>
                 <option value="">{tr("— первая из настроенных —")}</option>{ai.models.map((m: any) => <option key={m.id} value={m.id}>{m.label} — {m.note}</option>)}</select></label>)}

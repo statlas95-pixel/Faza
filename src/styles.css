@@ -1378,3 +1378,202 @@ input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;b
 .ns-feedback.v-partial{background:var(--weak-bg);border-color:var(--weak)}
 .ns-feedback.v-bad{background:var(--wrong-bg);border-color:var(--wrong)}
 .ns-feedback p{margin:0}
+
+/* ==================== Пакет O + P: Портфолио 2.0 и 3D-галерея великих химиков ==================== */
+.print-only{display:none}
+@media print{
+  .print-only{display:flex!important}
+  .print-resume-head{
+    justify-content:space-between;align-items:baseline;gap:12px;
+    padding-bottom:10px;margin-bottom:14px;border-bottom:2px solid #182026;
+    font-size:.9rem;color:#182026;
+  }
+}
+.portfolio-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 18px}
+.share-banner{
+  border-color:rgba(14,165,233,.46);
+  background:linear-gradient(135deg,rgba(142,214,248,.16),var(--surface));
+  display:grid;gap:10px;
+}
+.share-url-input{
+  width:100%;font-size:.82rem;padding:8px 12px;border-radius:12px;
+  border:1px solid var(--border);background:var(--paper-2);color:var(--fg);
+}
+.sc-teaser{
+  border-left:5px solid #8ED6F8;
+  background:linear-gradient(135deg,rgba(142,214,248,.12),var(--surface));
+}
+.sc-gallery-head{display:grid;gap:14px}
+.sc-counters{display:flex;gap:14px;flex-wrap:wrap;font-size:.86rem;color:var(--fg2)}
+.sc-counters b{color:var(--fg)}
+
+.sc-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(248px,100%),1fr));
+  gap:20px;margin-top:16px;
+}
+.sc-scene{
+  perspective:1100px;
+  aspect-ratio:3 / 4.25;
+  position:relative;
+}
+.sc-card{
+  position:relative;width:100%;height:100%;cursor:pointer;
+  transform-style:preserve-3d;
+  border-radius:22px;
+  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+  transition:transform .28s cubic-bezier(.22,.68,.3,1);
+  outline:none;
+}
+.sc-scene.is-tilting .sc-card{transition:transform .08s linear}
+.sc-scene.is-flipped .sc-card{transform:rotateY(180deg)}
+.sc-card:focus-visible{box-shadow:0 0 0 3px var(--sky)}
+
+.sc-face{
+  position:absolute;inset:0;border-radius:22px;overflow:hidden;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border:1.5px solid rgba(186,222,250,.22);
+  background:#0B1320;color:#EDF3F8;
+  box-shadow:0 18px 40px -16px rgba(6,12,24,.68);
+}
+
+/* Огранка редкости (строго за мастерство) */
+.sc-scene.tier-common .sc-face{
+  border-color:rgba(203,213,225,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 18px 38px -16px rgba(10,18,30,.58);
+}
+.sc-scene.tier-rare .sc-face{
+  border-color:rgba(142,214,248,.68);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 18px 42px -14px rgba(14,165,233,.42);
+}
+.sc-scene.tier-epic .sc-face{
+  border-color:rgba(255,176,138,.78);
+  box-shadow:inset 0 1px 0 rgba(255,240,210,.4),0 20px 46px -14px rgba(240,109,93,.46);
+}
+.sc-scene.tier-legendary .sc-face{
+  border:2px solid transparent;
+  background-image:
+    linear-gradient(#0B1320,#0B1320),
+    linear-gradient(135deg,#8ED6F8 0%,#E8B4FF 34%,#FF968A 66%,#FDE68A 100%);
+  background-origin:border-box;
+  background-clip:padding-box,border-box;
+  box-shadow:0 22px 52px -14px rgba(142,214,248,.48),0 0 24px -8px rgba(255,150,138,.36);
+}
+
+.sc-portrait{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;
+  transition:transform .4s ease,filter .3s ease;
+}
+.sc-scene:hover .sc-portrait{transform:scale(1.03)}
+.sc-scene.tier-locked .sc-portrait{
+  filter:blur(9px) grayscale(1) brightness(.34) contrast(1.08);
+  transform:scale(1.08);
+}
+.sc-vignette{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(8,14,24,.52) 0%,rgba(8,14,24,.06) 34%,rgba(8,14,24,.18) 58%,rgba(8,14,24,.94) 100%);
+}
+
+/* Голографическая фольга и световой блик, реагирующий на угол карты */
+.sc-foil{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s ease}
+.sc-scene.tier-rare .sc-foil{
+  opacity:.24;mix-blend-mode:screen;
+  background:linear-gradient(125deg,transparent 24%,rgba(142,214,248,.42) 50%,transparent 76%);
+  background-size:220% 220%;
+  background-position:var(--mx,50%) var(--my,50%);
+}
+.sc-scene.tier-epic .sc-foil{
+  opacity:.32;mix-blend-mode:screen;
+  background:linear-gradient(125deg,transparent 18%,rgba(255,150,138,.42) 45%,rgba(253,230,138,.44) 58%,transparent 82%);
+  background-size:220% 220%;
+  background-position:var(--mx,50%) var(--my,50%);
+}
+.sc-scene.tier-legendary .sc-foil{
+  opacity:.46;mix-blend-mode:color-dodge;
+  background:
+    repeating-linear-gradient(118deg,
+      rgba(142,214,248,.38) 0%,
+      rgba(232,180,255,.36) 14%,
+      rgba(255,150,138,.38) 28%,
+      rgba(200,233,114,.32) 42%,
+      rgba(142,214,248,.38) 56%);
+  background-size:260% 260%;
+  background-position:calc(var(--mx,50%) * 1.1) calc(var(--my,50%) * 1.1);
+}
+.sc-glare{
+  position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s ease;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 58%);
+}
+.sc-scene.is-tilting:not(.tier-locked) .sc-glare{opacity:1}
+
+.sc-top-bar{
+  position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:12px 12px 0;
+}
+.sc-tier-pill{
+  font:700 .66rem var(--sans);text-transform:uppercase;letter-spacing:.06em;
+  padding:3px 9px;border-radius:999px;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.22);
+}
+.sc-tier-pill.t-locked{background:rgba(15,23,42,.74);color:#94A3B8}
+.sc-tier-pill.t-common{background:rgba(226,232,240,.22);color:#F1F5F9;border-color:rgba(226,232,240,.42)}
+.sc-tier-pill.t-rare{background:rgba(14,165,233,.28);color:#BAE6FD;border-color:rgba(142,214,248,.58)}
+.sc-tier-pill.t-epic{background:rgba(240,109,93,.3);color:#FED7AA;border-color:rgba(255,176,138,.65)}
+.sc-tier-pill.t-legendary{
+  background:linear-gradient(120deg,rgba(142,214,248,.34),rgba(232,180,255,.34),rgba(255,150,138,.36));
+  color:#FFFBEB;border-color:rgba(253,230,138,.72);
+}
+.sc-era{font-size:.7rem;color:rgba(226,232,240,.82);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+
+.sc-lock-crest{
+  position:absolute;inset:0;z-index:2;display:grid;place-items:center;
+  color:rgba(186,222,250,.65);pointer-events:none;padding-bottom:46px;
+}
+
+.sc-plaque{
+  position:absolute;left:10px;right:10px;bottom:10px;z-index:2;
+  padding:11px 12px;border-radius:15px;
+  background:rgba(10,18,30,.72);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%);
+  border:1px solid rgba(255,255,255,.16);
+  display:grid;gap:3px;
+}
+.sc-disc{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:#8ED6F8;font-weight:600}
+.sc-plaque h3{margin:0;font-size:1.05rem;line-height:1.2;color:#FFFFFF}
+.sc-foot-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:3px}
+.sc-eq-mini{font-size:.72rem;color:rgba(226,232,240,.84);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-flip-cue{font-size:.82rem;color:rgba(226,232,240,.65);flex:none}
+
+/* Оборотная сторона */
+.sc-back{
+  transform:rotateY(180deg);
+  padding:14px;display:flex;flex-direction:column;gap:8px;
+  background:linear-gradient(155deg,#101D30 0%,#0B1320 100%);
+}
+.sc-back-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sc-back h3{margin:2px 0 0;font-size:1.08rem;color:#FFFFFF}
+.sc-back-disc{margin:0;font-size:.74rem;color:#8ED6F8;font-weight:600}
+.sc-eq-box{
+  padding:7px 10px;border-radius:10px;font-size:.78rem;
+  background:rgba(142,214,248,.12);border:1px solid rgba(142,214,248,.28);color:#E0F2FE;
+  text-align:center;
+}
+.sc-contrib{margin:0;font-size:.8rem;line-height:1.45;color:rgba(237,243,248,.9)}
+.sc-mastery-box{
+  margin-top:auto;padding-top:8px;border-top:1px solid rgba(186,222,250,.18);
+  display:grid;gap:5px;
+}
+.sc-mastery-row{display:flex;justify-content:space-between;font-size:.74rem;color:#CBD5E1}
+.sc-bar{height:6px;border-radius:99px;background:rgba(148,163,184,.24);overflow:hidden}
+.sc-bar span{
+  display:block;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#38BDF8,#FF968A,#FDE68A);
+}
+.sc-next-hint{margin:0;font-size:.72rem;line-height:1.35;color:#94A3B8}
+
+@media (prefers-reduced-motion:reduce){
+  .sc-card,.sc-portrait{transition:none!important}
+  .sc-scene.is-tilting .sc-card{transform:none}
+  .sc-scene.is-flipped .sc-card{transform:rotateY(180deg)}
+}

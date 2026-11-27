@@ -9,6 +9,7 @@ import { publicPage } from '../shared/statistics'
 import { TechCalculator } from './components/TechCalculator'
 import { CommandPalette } from './components/CommandPalette'
 import { ToastViewport } from './components/Toast'
+import { CardUnlockWatcher } from './components/ScientistWatcher'
 import Home from './pages/Home'
 import { Catalog, TopicPage } from './pages/Topics'
 import { Glossary, Sources, Journal, About, AttemptPage } from './pages/Reference'
@@ -212,6 +213,7 @@ function Shell() {
       {m && ctx && <Tutor kind={m[1] === 'topics' ? 'topic' : 'lab'} id={ctx.id} title={ctx.title} />}
       <TechCalculator />
       <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
+      <CardUnlockWatcher />
       <ToastViewport />
       {!inLab && (
         <nav className="mobile-nav no-print" aria-label={tr("Мобильная навигация")}>
