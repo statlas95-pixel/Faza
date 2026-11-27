@@ -24,7 +24,7 @@
   name: Переносить процесс на другой масштаб
   outcome: пересчитать обороты, время и охлаждение и спланировать проверку до первой партии
   topics: [scale-up]
-  labs: [scale-up-2000, scaleup-troubleshooting]
+  labs: [scale-up-2000, scaleup-troubleshooting, night-shift-chp]
 - id: stabtest
   name: Выбирать испытание стабильности под риск
   outcome: сказать, какой механизм ускоряет тест и какой вывод из него нельзя делать

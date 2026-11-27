@@ -26,6 +26,7 @@ import ReverseInci from './ReverseInci'
 import ChallengeTest from './ChallengeTest'
 import PhTitrationSim from './PhTitrationSim'
 import { PackCompatSim, SpfFormulatorSim, WpuBiofilmSim, StabilityTriageSim } from './PackageFTrainers'
+import NightShiftSim from './NightShiftSim'
 
 export function LabsIndex() {
   useTitle(tr("Занятия"))
@@ -138,7 +139,7 @@ export function LabPage() {
   const lab = labById(id)
   useTitle(lab?.title ?? tr("Занятие не найдено"))
   if (!lab) return <div className="page"><h1>{tr("Занятие не найдено")}</h1><Link to="/labs">{tr("К занятиям")}</Link></div>
-  const E = { investigation: Investigation, stability: StabilityBench, scaleup: ScaleUp, rheo: RheoCabinet, salt: SaltDosing, doe: DoePlan, worksheet: Worksheet, gmp: GmpTrainer, branching: BranchingSim, 'shift-trend': ShiftTrend, coa: CoaAudit, 'label-audit': LabelAudit, reactor: ReactorSim, 'reverse-inci': ReverseInci, 'challenge-test': ChallengeTest, 'ph-titration': PhTitrationSim, 'pack-compat': PackCompatSim, 'spf-lab': SpfFormulatorSim, 'wpu-audit': WpuBiofilmSim, triage: StabilityTriageSim }[lab.engine as string]
+  const E = { investigation: Investigation, stability: StabilityBench, scaleup: ScaleUp, rheo: RheoCabinet, salt: SaltDosing, doe: DoePlan, worksheet: Worksheet, gmp: GmpTrainer, branching: BranchingSim, 'shift-trend': ShiftTrend, coa: CoaAudit, 'label-audit': LabelAudit, reactor: ReactorSim, 'reverse-inci': ReverseInci, 'challenge-test': ChallengeTest, 'ph-titration': PhTitrationSim, 'pack-compat': PackCompatSim, 'spf-lab': SpfFormulatorSim, 'wpu-audit': WpuBiofilmSim, triage: StabilityTriageSim, 'night-shift': NightShiftSim }[lab.engine as string]
   if (!E) return <div className="page"><h1>{tr("Неизвестный тип занятия: ")}{lab.engine}</h1></div>
   return <E key={lab.id} lab={lab} />
 }

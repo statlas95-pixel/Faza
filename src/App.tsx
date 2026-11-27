@@ -14,6 +14,7 @@ import { Catalog, TopicPage } from './pages/Topics'
 import { Glossary, Sources, Journal, About, AttemptPage } from './pages/Reference'
 import AccountPage, { ImportBanner } from './pages/Account'
 import StatisticsPage from './pages/Statistics'
+import { FindPage } from './features/Sources'
 import { Tutor } from './features/Tutor'
 import { init, useAccount } from './account'
 import { RoutePage, MapPage, DiagnosticPage } from './pages/Learning'
@@ -24,7 +25,6 @@ const SandboxPage = lazy(() => import('./pages/Sandbox'))
 const ReactionsPage = lazy(() => import('./pages/Reactions'))
 const CampaignsPage = lazy(() => import('./pages/Campaigns'))
 const PortfolioPage = lazy(() => import('./pages/Portfolio'))
-const FindPage = lazy(() => import('./features/Sources').then((m) => ({ default: m.FindPage })))
 const LabsIndex = lazy(() => import('./labs/LabPage').then((m) => ({ default: m.LabsIndex })))
 const LabPage = lazy(() => import('./labs/LabPage').then((m) => ({ default: m.LabPage })))
 
@@ -215,10 +215,6 @@ function Shell() {
       <ToastViewport />
       {!inLab && (
         <nav className="mobile-nav no-print" aria-label={tr("Мобильная навигация")}>
-          <NavLink to="/" end>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>
-            <span>{tr("Главная")}</span>
-          </NavLink>
           <NavLink to="/route">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19c2.5-5 5.5-7 9-7s5-2 5-7M19 5l-3 2m3-2 2 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="5" cy="19" r="2" stroke="currentColor" strokeWidth="1.8" /></svg>
             <span>{tr("Маршрут")}</span>
@@ -229,11 +225,19 @@ function Shell() {
           </NavLink>
           <NavLink to="/sandbox">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3h6m-5 0v5.4L5.2 17a2.5 2.5 0 0 0 2.2 3.7h9.2a2.5 2.5 0 0 0 2.2-3.7L14 8.4V3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><path d="M7.5 14.5h9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
-            <span>{tr("Лаборатория")}</span>
+            <span>{tr("Лаб")}</span>
           </NavLink>
-          <NavLink to="/catalog">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8" /><path d="m16 16 4.5 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
-            <span>{tr("Поиск")}</span>
+          <NavLink to="/reactions">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8" /><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(30 12 12)" stroke="currentColor" strokeWidth="1.5" /><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(-30 12 12)" stroke="currentColor" strokeWidth="1.5" /></svg>
+            <span>{tr("Реакции")}</span>
+          </NavLink>
+          <NavLink to="/campaigns">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 18V6l6 3 6-3 4 2v12l-4-2-6 3-6-3Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" /></svg>
+            <span>{tr("Кампании")}</span>
+          </NavLink>
+          <NavLink to="/portfolio">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3.5" stroke="currentColor" strokeWidth="1.8" /><path d="M8 10h8M8 14h5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" /></svg>
+            <span>{tr("Профиль")}</span>
           </NavLink>
         </nav>
       )}
