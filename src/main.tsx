@@ -25,5 +25,10 @@ async function start() {
   await loadLanguage()
   const { default: App } = await import('./App')
   createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>)
+  if ('serviceWorker' in navigator && import.meta.env.PROD && /^https?:$/.test(window.location.protocol)) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    })
+  }
 }
 void start()

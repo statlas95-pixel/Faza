@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { tr } from '../../shared/locale'
 import { evaluateGradeExam, getExamQuestionsForGrade } from '../../shared/grade-exam'
 import { certifyGrade } from '../store'
+import { showToast } from './Toast'
 
 interface Props {
   level: number
@@ -44,6 +45,7 @@ export function GradeExamModal({ level, gradeTitle, gradeBadge, onClose, onCerti
     setSubmitted(true)
     if (res.passed) {
       certifyGrade(level, res.score)
+      showToast(tr('Грейд успешно аттестован!'))
       onCertified?.(res.score)
     }
   }

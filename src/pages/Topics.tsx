@@ -68,16 +68,29 @@ export function TopicPage() {
   const ref = useRef<HTMLDivElement>(null)
   const [saved] = useState(() => getProgress().scroll[id] ?? 0)
   const [resumeShown, setResumeShown] = useState(true)
+  const [readPct, setReadPct] = useState(0)
   useTitle(t?.title ?? tr("Тема не найдена"))
   const toc = useMemo(() => (t ? [...t.body.matchAll(/^## (.+)$/gm)].map((m) => m[1]) : []), [t])
   useEffect(() => {
     if (!t) return
+    setReadPct(0)
     update((s) => { s.visited[t.id] = Date.now() })
     ref.current?.querySelectorAll('.prose > div > h2').forEach((h, i) => { h.id = `s${i + 1}` })
     let timer: any
-    const onScroll = () => { clearTimeout(timer); timer = setTimeout(() => update((s) => { s.scroll[t.id] = Math.round(window.scrollY) }), 400) }
+    let raf = 0
+    const onScroll = () => {
+      if (!raf) {
+        raf = requestAnimationFrame(() => {
+          raf = 0
+          const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+          setReadPct(Math.min(100, Math.max(0, Math.round((window.scrollY / max) * 100))))
+        })
+      }
+      clearTimeout(timer)
+      timer = setTimeout(() => update((s) => { s.scroll[t.id] = Math.round(window.scrollY) }), 400)
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => { window.removeEventListener('scroll', onScroll); clearTimeout(timer) }
+    return () => { window.removeEventListener('scroll', onScroll); clearTimeout(timer); if (raf) cancelAnimationFrame(raf) }
   }, [t])
   if (!t) return <div className="page"><h1>{tr("Тема не найдена")}</h1><Link to="/catalog">{tr("К каталогу")}</Link></div>
   const sk = skillOfTopic(t.id)
@@ -86,6 +99,9 @@ export function TopicPage() {
   const qs: Question[] = t.checks.map((c) => ({ type: 'mc', ...c }))
   return (
     <article className="topic" ref={ref}>
+      <div className="reading-progress no-print" aria-hidden="true">
+        <span style={{ width: `${readPct}%` }} />
+      </div>
       <header className={`topic-head sw-${t.swatch}`}>
         <span className={`swatch ${t.swatch} big`} aria-hidden />
         <div>

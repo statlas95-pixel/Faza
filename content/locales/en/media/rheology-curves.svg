@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 265" role="img" aria-label="Rheological flow curves and thixotropic hysteresis loop">
+  <rect width="760" height="265" rx="18" fill="#FBF8F3" stroke="#E4DACB"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#2A1B3D">Flow Curves τ(γ̇) &amp; Thixotropic Hysteresis Loop</text>
+  <g transform="translate(28,44)">
+    <rect width="344" height="202" rx="14" fill="#FFFFFF" stroke="#E6DACB"/>
+    <line x1="48" y1="168" x2="320" y2="168" stroke="#2A1B3D" stroke-width="1.5"/>
+    <line x1="48" y1="26" x2="48" y2="168" stroke="#2A1B3D" stroke-width="1.5"/>
+    <text x="184" y="190" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#2A1B3D">Shear rate γ̇, s⁻¹</text>
+    <text x="18" y="98" transform="rotate(-90 18 98)" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#2A1B3D">Shear stress τ, Pa</text>
+    <line x1="48" y1="168" x2="296" y2="86" stroke="#8A7D9A" stroke-width="2" stroke-dasharray="5 3"/>
+    <text x="298" y="84" font-family="sans-serif" font-size="10" fill="#5B4C6E">Newtonian</text>
+    <path d="M48 168 Q120 116 300 102" fill="none" stroke="#0E7C7B" stroke-width="2.5"/>
+    <text x="228" y="122" font-family="sans-serif" font-size="10" font-weight="700" fill="#0E7C7B">Shear-thinning</text>
+    <path d="M48 122 Q125 68 300 44" fill="none" stroke="#D9482B" stroke-width="2.8"/>
+    <circle cx="48" cy="122" r="4" fill="#D9482B"/>
+    <text x="58" y="118" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#D9482B">τ₀</text>
+    <text x="208" y="42" font-family="sans-serif" font-size="10" font-weight="700" fill="#D9482B">Herschel–Bulkley (τ₀ &gt; 0)</text>
+  </g>
+  <g transform="translate(388,44)">
+    <rect width="344" height="202" rx="14" fill="#FFFFFF" stroke="#E6DACB"/>
+    <line x1="48" y1="168" x2="320" y2="168" stroke="#2A1B3D" stroke-width="1.5"/>
+    <line x1="48" y1="26" x2="48" y2="168" stroke="#2A1B3D" stroke-width="1.5"/>
+    <text x="184" y="190" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#2A1B3D">Shear rate γ̇ (ramp up ↑ &amp; down ↓)</text>
+    <text x="18" y="98" transform="rotate(-90 18 98)" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#2A1B3D">Shear stress τ, Pa</text>
+    <path d="M48 134 C100 68 185 48 292 42 C215 96 135 128 48 152 Z" fill="#EDE4FF" opacity="0.65"/>
+    <path d="M48 134 C100 68 185 48 292 42" fill="none" stroke="#6E4FA3" stroke-width="2.8"/>
+    <path d="M292 42 C215 96 135 128 48 152" fill="none" stroke="#0E7C7B" stroke-width="2.5" stroke-dasharray="5 3"/>
+    <text x="132" y="60" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#6E4FA3">Up-curve ↑ (network breakdown)</text>
+    <text x="158" y="128" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#0E7C7B">Down-curve ↓ (recovery)</text>
+    <text x="184" y="156" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B4C6E">Loop area = Thixotropy</text>
+  </g>
+</svg>

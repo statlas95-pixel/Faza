@@ -27,6 +27,7 @@ import { BatchProtocolPanel, SensoryProfilePanel, StabilityLabPanel } from '../c
 import { Lab4Panels } from '../components/Lab4Panels'
 import { Lab5Panels } from '../components/Lab5Panels'
 import { NoteBox } from '../components/NoteBox'
+import { showToast } from '../components/Toast'
 import { HlbGauge, PreservativePhCurve, ProcessSimulatorPanel } from '../components/SandboxVisuals'
 import { buildFormulaCsv, decodeShareFormula, encodeShareFormula } from '../../shared/formulation-lab5'
 import { ingredientById, ingredients, sandboxPresets } from '../content'
@@ -261,6 +262,7 @@ export default function SandboxPage() {
     }
     saveFormula(entry)
     setSaveName('')
+    showToast(tr('Рецептура сохранена в портфолио'))
   }
 
   function deleteSaved(id: string) {
@@ -302,6 +304,7 @@ export default function SandboxPage() {
     a.download = `faza-batch-${Date.now()}.csv`
     a.click()
     URL.revokeObjectURL(url)
+    showToast(tr('Технологическая карта выгружена в CSV'))
   }
 
   function copyShareLink() {
@@ -310,6 +313,7 @@ export default function SandboxPage() {
     const shareUrl = `${window.location.origin}${window.location.pathname}#/sandbox?share=${token}`
     navigator.clipboard?.writeText(shareUrl).then(() => {
       setShareCopied(true)
+      showToast(tr('Ссылка на рецептуру скопирована в буфер'))
       setTimeout(() => setShareCopied(false), 2000)
     }).catch(() => {})
   }
@@ -371,6 +375,7 @@ export default function SandboxPage() {
     if (!fullInci) return
     navigator.clipboard?.writeText(fullInci).then(() => {
       setCopied(true)
+      showToast(tr('Декларация INCI скопирована'))
       setTimeout(() => setCopied(false), 1800)
     }).catch(() => {})
   }

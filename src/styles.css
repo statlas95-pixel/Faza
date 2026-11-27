@@ -810,3 +810,96 @@ input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;b
 @media print{
   .calc-fab,.calc-drawer,.sb-top-actions,.sb-antipatterns,.sandbox-presets,.sb-catalog,.sb-pct-slider,.phase-switch{display:none!important}
 }
+
+
+/* ===== Пакет D: Прогресс чтения, Liquid Glass Тосты, Тёмная адаптация схем и Мобильный таб-бар ===== */
+.reading-progress{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:60;
+  background:transparent;pointer-events:none;
+}
+.reading-progress>span{
+  display:block;height:100%;
+  background:linear-gradient(90deg,#38BDF8 0%,#0E8B99 55%,#C8E972 100%);
+  box-shadow:0 0 10px rgba(56,189,248,.45);
+  transition:width .12s ease-out;
+}
+
+.toast-stack{
+  position:fixed;right:max(18px,env(safe-area-inset-right));bottom:22px;z-index:90;
+  display:grid;gap:8px;pointer-events:none;
+}
+.toast-pill{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:10px 16px;border-radius:999px;
+  font:600 .86rem var(--sans);color:var(--ink);
+  background:rgba(255,255,255,.86);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  backdrop-filter:blur(14px) saturate(160%);
+  border:1px solid rgba(142,214,248,.65);
+  box-shadow:0 14px 36px -10px rgba(15,23,42,.24);
+  animation:toastIn .18s ease-out;
+}
+[data-theme="dark"] .toast-pill{
+  background:rgba(16,28,44,.9);color:#EDF3F8;
+  border-color:rgba(142,214,248,.35);
+  box-shadow:0 16px 38px -10px rgba(0,0,0,.68);
+}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,.22)}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Аккуратная подача светлых научных SVG-схем и микроскопа в тёмной теме + таблицы без разрыва коротких слов */
+[data-theme="dark"] .fig img{
+  border-radius:16px;
+  border:1px solid rgba(142,214,248,.22);
+  box-shadow:0 12px 32px -12px rgba(0,0,0,.55);
+  filter:brightness(.95) contrast(1.02);
+}
+[data-theme="dark"] .sb-micro-svg{
+  border-radius:50%;
+  box-shadow:0 0 0 2px rgba(142,214,248,.24),0 8px 20px rgba(0,0,0,.45);
+}
+.prose table td,.prose table th{word-break:normal;overflow-wrap:normal}
+.note-box textarea{
+  font:inherit;padding:10px 12px;border-radius:14px;
+  border:1.5px solid var(--border);background:var(--surface);color:var(--fg);
+}
+
+/* Мобильный стеклянный таб-бар (≤ 760px) */
+.mobile-nav{display:none}
+@media (max-width:760px){
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+  .top nav{display:none}
+  .mobile-nav{
+    position:fixed;left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));z-index:45;
+    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;
+    padding:6px 8px;border-radius:22px;
+    background:rgba(255,255,255,.84);
+    -webkit-backdrop-filter:blur(16px) saturate(165%);
+    backdrop-filter:blur(16px) saturate(165%);
+    border:1px solid rgba(255,255,255,.92);
+    box-shadow:0 14px 36px -10px rgba(15,23,42,.22),0 0 0 1px rgba(24,32,38,.07);
+  }
+  [data-theme="dark"] .mobile-nav{
+    background:rgba(13,22,34,.86);
+    border-color:rgba(186,222,250,.18);
+    box-shadow:0 16px 40px -10px rgba(0,0,0,.72);
+  }
+  .mobile-nav a{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    padding:6px 2px;border-radius:15px;text-decoration:none;
+    font:600 .68rem var(--sans);color:var(--fg2);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .mobile-nav a.active{
+    color:var(--ink);
+    background:rgba(142,214,248,.28);
+  }
+  [data-theme="dark"] .mobile-nav a.active{
+    color:#EDF3F8;
+    background:rgba(142,214,248,.18);
+  }
+  .calc-fab{bottom:calc(78px + env(safe-area-inset-bottom))}
+  .calc-drawer{bottom:calc(128px + env(safe-area-inset-bottom))}
+  .tutor-fab{bottom:calc(78px + env(safe-area-inset-bottom))!important}
+  .toast-stack{bottom:calc(82px + env(safe-area-inset-bottom));left:14px;right:14px;justify-items:center}
+}

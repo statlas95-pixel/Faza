@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { tr } from '../../shared/locale'
 import { deleteNote, saveNote, useProgress } from '../store'
+import { showToast } from './Toast'
 
 interface NoteBoxProps {
   noteId: string
@@ -27,6 +28,7 @@ export function NoteBox({ noteId, kind, targetId, title, placeholder, onSaved }:
   function handleSave() {
     saveNote({ id: noteId, kind, targetId, title, text: draft })
     setSavedFlash(true)
+    showToast(tr('Заметка сохранена в журнале'))
     onSaved?.()
     setTimeout(() => setSavedFlash(false), 1600)
   }

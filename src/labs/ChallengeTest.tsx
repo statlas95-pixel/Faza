@@ -14,7 +14,7 @@ interface S {
   finished?: boolean
 }
 
-const STRAIN_COLORS = ['#0E7C7B', '#4B2E83', '#3FA7D6', '#C98A00', '#D9482B']
+const STRAIN_COLORS = ['#14B8A6', '#A78BFA', '#38BDF8', '#F59E0B', '#EF4444']
 
 export default function ChallengeTest({ lab }: { lab: LabMeta }) {
   const data = lab as unknown as ChallengeTestLabData
@@ -81,8 +81,8 @@ export default function ChallengeTest({ lab }: { lab: LabMeta }) {
               <line x1="56" y1={yAt(0)} x2="528" y2={yAt(0)} stroke="#D9482B" strokeDasharray="5 3" strokeWidth="1.4" />
               <text x="528" y={yAt(0) - 5} textAnchor="end" fontSize="9.5" fill="#D9482B">{tr('Δlog = 0 (граница роста)')}</text>
               {/* Линия +3 log (бактерии) */}
-              <line x1="56" y1={yAt(3)} x2="528" y2={yAt(3)} stroke="#0E7C7B" strokeDasharray="4 4" strokeWidth="1" opacity="0.6" />
-              <text x="528" y={yAt(3) - 4} textAnchor="end" fontSize="9" fill="#0E7C7B">{tr('+3 log (порог бактерий)')}</text>
+              <line x1="56" y1={yAt(3)} x2="528" y2={yAt(3)} stroke="#14B8A6" strokeDasharray="4 4" strokeWidth="1.2" opacity="0.85" />
+              <text x="528" y={yAt(3) - 4} textAnchor="end" fontSize="9.5" fontWeight="600" fill="#14B8A6">{tr('+3 log (порог бактерий)')}</text>
               <line x1="56" y1="176" x2="528" y2="176" stroke="currentColor" opacity="0.25" />
               <line x1="56" y1="24" x2="56" y2="176" stroke="currentColor" opacity="0.25" />
               {['День 0', 'День 7', 'День 14', 'День 28'].map((lbl, idx) => (
