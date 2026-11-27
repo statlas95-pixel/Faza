@@ -11,6 +11,7 @@ import {
   type IngredientRole,
   type Phase,
   type ProductType,
+  type ProductZone,
 } from '../../shared/formulation'
 import {
   ANTIPATTERNS,
@@ -583,14 +584,27 @@ export default function SandboxPage() {
         <h2>{tr('Параметры процесса и партии')}</h2>
         <div className="sandbox-param-grid">
           <label>
-            <span className="sb-param-head"><span>{tr('Тип продукта (регуляторика)')}</span></span>
-            <select
-              value={formula.productType}
-              onChange={(e) => setFormula((prev) => ({ ...prev, productType: e.target.value as ProductType }))}
-            >
-              <option value="leave-on">{tr('Несмываемый (leave-on)')}</option>
-              <option value="rinse-off">{tr('Смываемый (rinse-off)')}</option>
-            </select>
+            <span className="sb-param-head"><span>{tr('Тип и зона продукта (регуляторика)')}</span></span>
+            <div className="row" style={{ gap: 6, flexWrap: 'nowrap' }}>
+              <select
+                value={formula.productType}
+                aria-label={tr('Тип продукта (регуляторика)')}
+                onChange={(e) => setFormula((prev) => ({ ...prev, productType: e.target.value as ProductType }))}
+              >
+                <option value="leave-on">{tr('Несмываемый (leave-on)')}</option>
+                <option value="rinse-off">{tr('Смываемый (rinse-off)')}</option>
+              </select>
+              <select
+                value={formula.productZone ?? 'face'}
+                aria-label={tr('Зона нанесения')}
+                onChange={(e) => setFormula((prev) => ({ ...prev, productZone: e.target.value as ProductZone }))}
+              >
+                <option value="face">{tr('Лицо / руки')}</option>
+                <option value="body">{tr('Тело (body)')}</option>
+                <option value="hair">{tr('Волосы (hair)')}</option>
+                <option value="spray">{tr('Спрей / аэрозоль')}</option>
+              </select>
+            </div>
           </label>
           <label>
             <span className="sb-param-head"><span>{tr('Целевой pH')}</span><b className="num">{formula.targetPh}</b></span>

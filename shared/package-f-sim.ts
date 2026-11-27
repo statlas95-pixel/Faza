@@ -115,9 +115,9 @@ export function computeSpfLabMetrics(s: SpfFilterState): SpfLabMetrics {
   const en = language === 'en'
   const totalFiltersPct = Number((s.dhhb + s.bemotrizinol + s.ethylhexylTriazone + s.avobenzone + s.ensulizole).toFixed(2))
 
-  // Потребность твёрдых кристаллических УФ-фильтров в полярных эмолентах при хранении +4 °C
+  // Потребность твёрдых кристаллических УФ-фильтров в полярных эмолентах при хранении +4 °C (единые коэффициенты с Lab 5)
   const minPolarRequiredPct = Number(
-    (s.dhhb * 1.15 + s.bemotrizinol * 1.3 + s.ethylhexylTriazone * 1.95 + s.avobenzone * 1.45).toFixed(1),
+    (s.dhhb * 1.2 + s.bemotrizinol * 1.35 + s.ethylhexylTriazone * 1.95 + s.avobenzone * 1.5).toFixed(1),
   )
   const crystalFree = s.polarEsterPct + 0.05 >= minPolarRequiredPct
 
@@ -126,15 +126,15 @@ export function computeSpfLabMetrics(s: SpfFilterState): SpfLabMetrics {
   const photostable = !avoUnstabilized
   const avoRetention = avoUnstabilized ? 0.42 : 0.95
 
-  // Регуляторные потолки EU 1223/2009 Annex VI и ТР ТС 009/2011 Прил. 5
+  // Регуляторные потолки EU 1223/2009 Annex VI и ТР ТС 009/2011 Прил. 5 (отдельно от эстетического бюджета 22 %)
   const overLimits: string[] = []
   if (s.dhhb > 10) overLimits.push('DHHB > 10 %')
   if (s.bemotrizinol > 10) overLimits.push('Bemotrizinol > 10 %')
   if (s.ethylhexylTriazone > 5) overLimits.push('Ethylhexyl Triazone > 5 %')
   if (s.avobenzone > 5) overLimits.push('Avobenzone > 5 %')
   if (s.ensulizole > 8) overLimits.push('Ensulizole > 8 %')
-  if (totalFiltersPct > 22) overLimits.push(en ? 'Total UV filters > 22% sensory budget' : 'Сумма УФ-фильтров > 22 % (бюджет сенсорики)')
   const regCompliant = overLimits.length === 0
+  const sensoryHeavy = totalFiltersPct > 22
 
   // Расчёт монохроматического поглощения A(λ) при толщине плёнки ~2 мг/см² (с поправкой на однородность плёнки)
   const filmFactor = crystalFree ? 1.0 : 0.62
@@ -155,9 +155,9 @@ export function computeSpfLabMetrics(s: SpfFilterState): SpfLabMetrics {
     })
   }
 
-  // Солнечно-эритемная эффективность E(λ)·I(λ) (пик наземного эритемного спектра 306–308 нм по CIE / ISO 24443)
+  // Солнечно-эритемная эффективность E(λ)·I(λ) по CIE / ISO 24443 (пик 308 нм + реалистичный UVA-хвост ~3.5%)
   const solarEryWeight = (nm: number) =>
-    gauss(nm, 308, 7.2) + 0.0008 * gauss(nm, 335, 16)
+    gauss(nm, 308, 7.2) + 0.035 * gauss(nm, 332, 16)
 
   let numEry = 0
   let denEry = 0
@@ -172,10 +172,10 @@ export function computeSpfLabMetrics(s: SpfFilterState): SpfLabMetrics {
     denEry += wE * trans
     totalArea += pt.absAfterUv
     if (pt.nm >= 320 && pt.nm <= 400) {
-      // Спектр действия PPD × I_UVA (ISO 24443: максимум фотопигментации 335–355 нм, резкий спад к 390–400 нм)
+      // Спектр действия PPD × I_UVA (ISO 24443: максимум фотопигментации 335–355 нм, без искусственных множителей)
       const wU = gauss(pt.nm, 344, 12.5)
       numUva += wU
-      denUva += wU * Math.pow(10, -Math.min(2.15, pt.absAfterUv * 1.08))
+      denUva += wU * Math.pow(10, -Math.min(2.15, pt.absAfterUv))
     }
   }
 
@@ -183,13 +183,21 @@ export function computeSpfLabMetrics(s: SpfFilterState): SpfLabMetrics {
   const uvaPf = Number(Math.max(1, Math.min(45, numUva / Math.max(1e-6, denUva))).toFixed(1))
   const uvaRatio = Number((uvaPf / Math.max(1, inSilicoSpf)).toFixed(2))
 
-  // Критическая длина волны λc (интеграл 90 % площади спектра 290–400 нм)
+  // Критическая длина волны λc по ISO 24443 (трапецеидальный интеграл 90 % площади спектра 290–400 нм)
+  let trapTotal = 0
+  for (let i = 1; i < spectrum.length; i++) {
+    trapTotal += 0.5 * (spectrum[i - 1].absAfterUv + spectrum[i].absAfterUv) * (spectrum[i].nm - spectrum[i - 1].nm)
+  }
   let acc = 0
   let criticalWavelengthNm = 290
-  for (const pt of spectrum) {
-    acc += pt.absAfterUv
-    if (totalArea > 0 && acc >= 0.9 * totalArea) {
-      criticalWavelengthNm = pt.nm
+  const targetArea = 0.9 * trapTotal
+  for (let i = 1; i < spectrum.length; i++) {
+    const seg = 0.5 * (spectrum[i - 1].absAfterUv + spectrum[i].absAfterUv) * (spectrum[i].nm - spectrum[i - 1].nm)
+    const prevAcc = acc
+    acc += seg
+    if (trapTotal > 0 && acc >= targetArea) {
+      const frac = seg > 0 ? (targetArea - prevAcc) / seg : 1
+      criticalWavelengthNm = Number((spectrum[i - 1].nm + frac * (spectrum[i].nm - spectrum[i - 1].nm)).toFixed(1))
       break
     }
   }
@@ -198,8 +206,15 @@ export function computeSpfLabMetrics(s: SpfFilterState): SpfLabMetrics {
   if (!regCompliant) {
     warnings.push(
       en
-        ? `Regulatory / budget violation: ${overLimits.join(', ')}.`
-        : `Превышены регуляторные лимиты или бюджет вводов: ${overLimits.join(', ')}.`,
+        ? `EU Annex VI / TR CU 009 regulatory limit exceeded: ${overLimits.join(', ')}.`
+        : `Превышены регуляторные лимиты EU Annex VI / ТР ТС 009: ${overLimits.join(', ')}.`,
+    )
+  }
+  if (sensoryHeavy) {
+    warnings.push(
+      en
+        ? `Total UV filter load (${totalFiltersPct}%) exceeds 22% sensory comfort budget (heavy/greasy skin feel).`
+        : `Сумма УФ-фильтров (${totalFiltersPct} %) превышает сенсорный бюджет 22 % — риск тяжёлого и липкого финиша.`,
     )
   }
   if (!crystalFree) {

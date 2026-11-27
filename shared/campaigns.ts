@@ -688,8 +688,8 @@ export function evaluateCampaignLabFormula(
 
   // retinol-03-serum
   const retinolPct = pctOf('retinol')
-  const hasAox = pctOf('tocopherol') + pctOf('bht') + pctOf('ascorbyl-palmitate') > 0
-  const hasChelator = pctOf('disodium-edta') + pctOf('sodium-phytate') > 0
+  const hasAox = ev.rows.some((r) => r.pct > 0 && r.ingredient.role === 'antioxidant') || pctOf('tocopherol') + pctOf('bht') > 0
+  const hasChelator = ev.rows.some((r) => r.pct > 0 && r.ingredient.role === 'chelator') || pctOf('disodium-edta') + pctOf('sodium-phytate') > 0
   const phOk = formula.targetPh >= 5.5 && formula.targetPh <= 6.5
   const tempCOk = formula.phaseTempC.C <= 35
 

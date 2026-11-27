@@ -82,7 +82,8 @@ export function simulateAcceleratedStability(
   const ionicConflict = hasCode('conflict:anionic-cationic') || hasCode('conflict:carbomer-cationic')
   const unmeltedWax = hasCode('melt:phase-b')
   const hasMinerals = pctOf('zinc-oxide') + pctOf('titanium-dioxide') >= 2
-  const hasSuspender = has('veegum') || has('xanthan-gum') || has('sclerotium-gum') || has('sepimax-zen') || has('carbomer')
+  const isWo = hasCode('hlb:wo-info')
+  const hasSuspender = has('veegum') || has('disteardimonium-hectorite') || has('xanthan-gum') || has('sclerotium-gum') || has('sepimax-zen') || has('carbomer')
 
   // 1. Центрифуга 3000 об/мин, 20 мин
   let centVerdict: StabilityVerdict = 'pass'
@@ -115,7 +116,9 @@ export function simulateAcceleratedStability(
       ? 'Высокая плотность ZnO/TiO₂ (> 4 г/см³) вызывает оседание без тиксотропного загустителя.'
       : 'Небольшой дрейф ГЛБ или низкий предел текучести внешней фазы ускоряют всплывание крупных капель.'
     centAdv = hasMinerals && !hasSuspender
-      ? 'Добавьте 0,5–1 % Veegum или 0,3 % ксантановой камеди для удержания суспензии.'
+      ? (isWo
+          ? 'Добавьте 0,5–1,5 % Disteardimonium Hectorite в масляную фазу для удержания минеральных частиц в W/O.'
+          : 'Добавьте 0,5–1 % Veegum или 0,3 % ксантановой камеди для удержания суспензии.')
       : 'Уточните баланс ГЛБ до |Δ| ≤ 0,8 и добавьте 0,2–0,4 % полимера в водную фазу.'
   }
 

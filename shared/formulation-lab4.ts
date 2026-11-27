@@ -38,8 +38,8 @@ export function computeUnitEconomics(
   const labor = Math.max(0, Number.isFinite(opts.laborRub) ? opts.laborRub : 0)
 
   const rawCostPerUnit = (ev.costPerKg * unitG) / 1000
-  const lossCostPerUnit = rawCostPerUnit * (loss / 100)
-  const bulkCostPerUnit = rawCostPerUnit + lossCostPerUnit
+  const bulkCostPerUnit = rawCostPerUnit / (1 - loss / 100)
+  const lossCostPerUnit = bulkCostPerUnit - rawCostPerUnit
   const packagingTotal = pack + label + labor
   const totalCogs = bulkCostPerUnit + packagingTotal
   const usableMass = batchGrams * (1 - loss / 100)
@@ -73,7 +73,9 @@ export interface SurfactantProfile {
 /** Рассчитывает % активного ПАВ (ASM) и индекс мягкости для очищающих/моющих систем. */
 export function computeSurfactantProfile(ev: FormulaEvaluation): SurfactantProfile | null {
   const surfRows = ev.rows.filter((r) => r.pct > 0 && r.ingredient.role === 'surfactant')
-  if (!surfRows.length) return null
+  // Катионные кондиционеры для волос (BTAC/CTAC) без моющих ПАВ не являются очищающей ПАВ-системой
+  const hasCleanser = surfRows.some((r) => r.ingredient.ionic !== 'cationic')
+  if (!surfRows.length || !hasCleanser) return null
 
   let anionic = 0, amphoteric = 0, nonionic = 0, cationic = 0
   let harshWeighted = 0

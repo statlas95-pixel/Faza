@@ -120,24 +120,33 @@ export function deriveRheologyModel(ev: FormulaEvaluation, input: FormulaInput):
   const hasCode = (prefix: string) => ev.issues.some((i) => i.code === prefix || i.code.startsWith(prefix))
 
   const carbomerPct =
-    pctOf('carbomer') + pctOf('ultrez-21') + pctOf('pemulen-tr1') + pctOf('pemulen-tr2')
+    pctOf('carbomer') + pctOf('ultrez-21')
   const synthPolyPct =
-    pctOf('aristoflex-avc') + pctOf('sepimax-zen') + pctOf('simulgel-eg') + pctOf('sepiplus-400')
+    pctOf('aristoflex-avc') + pctOf('sepimax-zen') + pctOf('simulgel-eg')
   const gumPct =
-    pctOf('xanthan-gum') + pctOf('sclerotium-gum') + pctOf('guar-gum') + pctOf('hec') + pctOf('hydroxypropyl-methylcellulose') + pctOf('sodium-hyaluronate') * 0.6
+    pctOf('xanthan-gum') + pctOf('sclerotium-gum') + pctOf('guar-hptc') + pctOf('hec') + pctOf('hyaluronic-acid') * 0.6
   const clayPct = pctOf('veegum') + pctOf('disteardimonium-hectorite')
   const fattyAlcPct =
-    pctOf('cetearyl-alcohol') + pctOf('cetyl-alcohol') + pctOf('stearyl-alcohol') + pctOf('behenyl-alcohol')
+    pctOf('cetearyl-alcohol') + pctOf('cetyl-alcohol') + pctOf('behenyl-alcohol')
   const waxPct =
-    pctOf('beeswax') + pctOf('candelilla-wax') + pctOf('carnauba-wax') + pctOf('ozokerite') + pctOf('shea-butter') * 0.45 + pctOf('cocoa-butter') * 0.55
+    pctOf('beeswax') + pctOf('candelilla-wax') + pctOf('carnauba-wax') + pctOf('microcrystalline-wax') + pctOf('shea-butter') * 0.45
   const lgnEmulsifierPct =
-    pctOf('olivem-1000') + pctOf('montanov-68') + pctOf('montanov-202') + pctOf('polawax') + pctOf('emulgade-pl6850') + pctOf('glyceryl-stearate') * 0.5
+    pctOf('olivem-1000') + pctOf('montanov-68') + pctOf('montanov-202') + pctOf('glyceryl-stearate') * 0.5
   const woEmulsifierPct =
-    pctOf('cetyl-peg-ppg-dimethicone') + pctOf('pg3-polyricinoleate') + pctOf('sorbitan-oleate') + pctOf('sorbitan-isostearate')
+    pctOf('cetyl-peg-ppg-dimethicone') + pctOf('pg3-polyricinoleate') + pctOf('sorbitan-oleate') + pctOf('isolan-gps')
   const isWO = ev.oilPhasePct >= 10 && woEmulsifierPct >= 1.5 && (ev.actualHlb === null || ev.actualHlb <= 6.2)
 
+  // Солевая кривая (NaCl) работает для солечувствительных анионно-амфотерных ПАВ (SLES/SCS/CAPB/саркозинаты),
+  // но НЕ для чистых неионогенных глюкозидов или глутаматов!
+  const SALT_RESPONSIVE_SURFS = new Set([
+    'sles', 'capb', 'sodium-coco-sulfate', 'sodium-lauroyl-sarcosinate',
+    'disodium-sulfosuccinate', 'cocamide-dea', 'sodium-methyl-cocoyl-taurate',
+  ])
   const surfactantPct = ev.rows
-    .filter((r) => r.pct > 0 && r.ingredient.role === 'surfactant')
+    .filter((r) => r.pct > 0 && r.ingredient.role === 'surfactant' && r.ingredient.ionic !== 'cationic')
+    .reduce((s, r) => s + r.pct, 0)
+  const saltResponsiveSurfPct = ev.rows
+    .filter((r) => r.pct > 0 && SALT_RESPONSIVE_SURFS.has(r.ingredient.id))
     .reduce((s, r) => s + r.pct, 0)
   const saltPct = pctOf('sodium-chloride') + pctOf('magnesium-sulfate')
 
@@ -208,10 +217,10 @@ export function deriveRheologyModel(ev: FormulaEvaluation, input: FormulaInput):
       consistencyK += ev.oilPhasePct * 0.14
     }
 
-    // 4. ПАВ-системы и солевая кривая (колоколообразный пик около 1.5–2.2 % NaCl)
-    if (surfactantPct >= 5 && ev.oilPhasePct < 3) {
+    // 4. ПАВ-системы и солевая кривая (только для солечувствительных ПАВ; чистые глюкозиды/глутаматы солью не загущаются)
+    if (saltResponsiveSurfPct >= 5 && ev.oilPhasePct < 3) {
       const saltFactor = saltPct > 0 ? Math.exp(-Math.pow((saltPct - 1.8) / 1.15, 2)) : 0.18
-      const surfBase = Math.min(25, surfactantPct) * (0.12 + 0.55 * saltFactor)
+      const surfBase = Math.min(25, saltResponsiveSurfPct) * (0.12 + 0.55 * saltFactor)
       consistencyK += surfBase
       yieldStressPa += saltFactor * 1.4
       thixotropyIndex += 0.04
@@ -220,6 +229,15 @@ export function deriveRheologyModel(ev: FormulaEvaluation, input: FormulaInput):
           en
             ? 'Salting-out zone (> 3.2% NaCl): wormlike micelles branch and viscosity collapses on the right side of the salt curve.'
             : 'Зона пересола (> 3,2 % NaCl): червеобразные мицеллы переходят в разветвлённую сетку — вязкость падает на правой ветви солевой кривой.',
+        )
+      }
+    } else if (surfactantPct >= 5 && ev.oilPhasePct < 3) {
+      consistencyK += Math.min(20, surfactantPct) * 0.04
+      if (saltPct >= 0.5) {
+        notes.push(
+          en
+            ? 'Sulfate-free nonionic/glutamate surfactant base: NaCl does not build wormlike micelles — thicken with a polymer (Xanthan / HEC / Sclerotium Gum).'
+            : 'Бессульфатная база (глюкозиды/глутаматы): NaCl не образует червеобразных мицелл — загущайте полимером (ксантан, ГЭЦ, склероций).',
         )
       }
     }
@@ -537,9 +555,9 @@ export function analyzePolarizedMicroscopy(
     (ev.actualHlb === null || ev.actualHlb <= 6.2)
 
   const fattyAlcPct =
-    pctOf('cetearyl-alcohol') + pctOf('cetyl-alcohol') + pctOf('stearyl-alcohol') + pctOf('behenyl-alcohol')
+    pctOf('cetearyl-alcohol') + pctOf('cetyl-alcohol') + pctOf('behenyl-alcohol')
   const lgnEmulPct =
-    pctOf('olivem-1000') + pctOf('montanov-68') + pctOf('montanov-202') + pctOf('emulgade-pl6850') + pctOf('polawax')
+    pctOf('olivem-1000') + pctOf('montanov-68') + pctOf('montanov-202')
 
   const hasMalteseCrosses =
     hasOil &&
@@ -566,7 +584,7 @@ export function analyzePolarizedMicroscopy(
     crystalCause = en
       ? 'Sharp needles of precipitated Ensulizole at pH < 6.8'
       : 'Острые иглы осаждённого Ensulizole при pH < 6,8'
-  } else if (pctOf('salicylic-acid') >= 1.2 && pctOf('propylene-glycol') + pctOf('propanediol') + pctOf('ethanol') < 5) {
+  } else if (pctOf('salicylic-acid') >= 1.2 && pctOf('propanediol') + pctOf('pentylene-glycol') < 5) {
     crystalCause = en
       ? 'Needle crystals of Salicylic Acid (insufficient glycol co-solvent)'
       : 'Иглы салициловой кислоты (недостаточно гликолей-сорастворителей)'

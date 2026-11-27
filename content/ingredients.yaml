@@ -151,6 +151,7 @@
   role: surfactant
   recommendedPhase: A
   ionic: anionic
+  isElectrolyte: true
   typicalRange: [3, 14]
   costPerKg: 540
   note: Основной анионный ПАВ для смываемых систем; несовместим с катионными ПАВ (образует нерастворимый комплекс).
@@ -384,6 +385,7 @@
   role: ph_adjuster
   recommendedPhase: C
   ionic: anionic
+  isElectrolyte: true
   typicalRange: [0.02, 0.3]
   costPerKg: 290
   note: Нейтрализатор карбомеров и регулятор pH в щелочную сторону (на производстве вводится в виде 10–20 % водного раствора).
@@ -885,6 +887,7 @@
   role: emulsifier
   recommendedPhase: A
   ionic: anionic
+  isElectrolyte: true
   hlb: 12.0
   phRange: [5.0, 8.0]
   typicalRange: [0.2, 1.5]
@@ -897,6 +900,7 @@
   role: emulsifier
   recommendedPhase: B
   ionic: anionic
+  isElectrolyte: true
   hlb: 9.6
   phRange: [5.5, 8.5]
   typicalRange: [0.5, 3.0]
@@ -1165,7 +1169,7 @@
   note: "Максимально эффективный окклюзив (снижает ТЭПВ > 95 %); в высоких дозах ощущается плотным и жирным."
 
 - id: simulgel-eg
-  inci: "Sodium Acrylate/Sodium Acryloyldimethyl Taurate Copolymer, Isohexadecane, Polysorbate 80"
+  inci: "Aqua, Sodium Acrylate/Sodium Acryloyldimethyl Taurate Copolymer, Isohexadecane, Polysorbate 80"
   name: "Simulgel EG (жидкий полимерный эмульгатор-загуститель)"
   role: thickener
   recommendedPhase: A
@@ -1257,6 +1261,7 @@
   role: surfactant
   recommendedPhase: A
   ionic: anionic
+  isElectrolyte: true
   phRange: [5.0, 7.5]
   typicalRange: [2, 10]
   costPerKg: 2450
@@ -1278,6 +1283,7 @@
   role: surfactant
   recommendedPhase: A
   ionic: anionic
+  isElectrolyte: true
   phRange: [5.0, 7.0]
   typicalRange: [2, 10]
   costPerKg: 1120
@@ -1316,6 +1322,7 @@
   role: active
   recommendedPhase: C
   ionic: anionic
+  isElectrolyte: true
   phRange: [4.2, 5.2]
   typicalRange: [2, 10]
   costPerKg: 5800

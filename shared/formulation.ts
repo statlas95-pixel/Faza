@@ -5,6 +5,7 @@ import { language } from './locale'
 
 export type Phase = 'A' | 'B' | 'C'
 export type ProductType = 'leave-on' | 'rinse-off'
+export type ProductZone = 'face' | 'body' | 'hair' | 'spray'
 export type IonicType = 'nonionic' | 'anionic' | 'cationic' | 'amphoteric'
 export type IngredientRole =
   | 'solvent'
@@ -64,6 +65,7 @@ export interface FormulaRow {
 
 export interface FormulaInput {
   productType: ProductType
+  productZone?: ProductZone
   targetPh: number
   batchGrams: number
   phaseTempC: Record<Phase, number>
@@ -248,8 +250,8 @@ export function buildInciList(rows: EvaluatedRow[]): { aboveOne: string[]; oneOr
   }
   const entries = [...byInci.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
   return {
-    aboveOne: entries.filter(([, pct]) => pct >= 1 - 1e-6).map(([inci]) => inci),
-    oneOrLess: entries.filter(([, pct]) => pct < 1 - 1e-6).map(([inci]) => inci),
+    aboveOne: entries.filter(([, pct]) => pct > 1 + 1e-6).map(([inci]) => inci),
+    oneOrLess: entries.filter(([, pct]) => pct <= 1 + 1e-6).map(([inci]) => inci),
   }
 }
 
@@ -355,8 +357,10 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
     }
   }
 
-  // 3. Требуемый и фактический ГЛБ (O/W)
-  const oilRows = rows.filter((r) => r.pct > 0 && r.ingredient.reqHlb !== undefined)
+  // 3. Требуемый и фактический ГЛБ (O/W) — твёрдые неорганические порошки (ZnO, TiO₂) исключены из расчёта reqHLB жидких масел
+  const SOLID_MINERAL_UV = new Set(['zinc-oxide', 'titanium-dioxide'])
+  const waterPct = totalByIngredient.get('aqua') ?? 0
+  const oilRows = rows.filter((r) => r.pct > 0 && r.ingredient.reqHlb !== undefined && !SOLID_MINERAL_UV.has(r.ingredient.id))
   const emulRows = rows.filter((r) => r.pct > 0 && r.ingredient.role === 'emulsifier' && r.ingredient.hlb !== undefined)
   const oilPhasePct = round(oilRows.reduce((s, r) => s + r.pct, 0), 2)
   const emulsifierPct = round(emulRows.reduce((s, r) => s + r.pct, 0), 2)
@@ -369,14 +373,14 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
   const hlbDelta = requiredHlb !== null && actualHlb !== null ? round(Math.abs(actualHlb - requiredHlb), 2) : null
 
   const hasPolymericOrCationicEmulsifier = rows.some(
-    (r) => r.pct > 0 && (r.ingredient.id === 'simulgel-eg' || r.ingredient.id === 'btms'),
+    (r) => r.pct > 0 && (r.ingredient.id === 'simulgel-eg' || r.ingredient.id === 'btms' || r.ingredient.id === 'behentrimonium-chloride'),
   )
   const isWoSystem =
     actualHlb !== null &&
     actualHlb <= 6.0 &&
     emulRows.some((r) => ['isolan-gps', 'sorbitan-oleate', 'pg3-polyricinoleate', 'cetyl-peg-ppg-dimethicone'].includes(r.ingredient.id))
 
-  if (oilPhasePct >= 1 && emulsifierPct <= 0 && !hasPolymericOrCationicEmulsifier) {
+  if (waterPct >= 1 && oilPhasePct >= 1 && emulsifierPct <= 0 && !hasPolymericOrCationicEmulsifier) {
     issues.push({
       code: 'hlb:no-emulsifier',
       severity: 'error',
@@ -566,22 +570,26 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
   const meltChecks: { id: string; minT: number; label: string; labelEn: string }[] = [
     { id: 'carnauba-wax', minT: 82, label: 'карнаубского воска (≥ 82 °C)', labelEn: 'Carnauba Wax (≥ 82 °C)' },
     { id: 'ceramide-np', minT: 80, label: 'церамида NP (≥ 80 °C)', labelEn: 'Ceramide NP (≥ 80 °C)' },
+    { id: 'microcrystalline-wax', minT: 78, label: 'микрокристаллического воска (≥ 78 °C)', labelEn: 'Microcrystalline Wax (≥ 78 °C)' },
     { id: 'candelilla-wax', minT: 73, label: 'канделильского воска (≥ 73 °C)', labelEn: 'Candelilla Wax (≥ 73 °C)' },
     { id: 'behenyl-alcohol', minT: 70, label: 'бегенилового спирта (≥ 70 °C)', labelEn: 'Behenyl Alcohol (≥ 70 °C)' },
     { id: 'beeswax', minT: 68, label: 'пчелиного воска (≥ 68 °C)', labelEn: 'Beeswax (≥ 68 °C)' },
     { id: 'cetearyl-alcohol', minT: 68, label: 'цетилстеарилового спирта (≥ 68 °C)', labelEn: 'Cetearyl Alcohol (≥ 68 °C)' },
   ]
-  const unmelted = meltChecks.find((m) => (totalByIngredient.get(m.id) ?? 0) > 0 && input.phaseTempC.B < m.minT)
-  if (unmelted) {
+  const unmeltedList = meltChecks.filter((m) => (totalByIngredient.get(m.id) ?? 0) > 0 && input.phaseTempC.B < m.minT)
+  if (unmeltedList.length > 0) {
+    const highest = unmeltedList[0]
+    const namesRu = unmeltedList.map((u) => u.label).join(', ')
+    const namesEn = unmeltedList.map((u) => u.labelEn).join(', ')
     issues.push({
       code: 'melt:phase-b',
       severity: 'warn',
       title: en
-        ? `Phase B temperature too low (${input.phaseTempC.B} °C < ${unmelted.minT} °C) to melt ${unmelted.labelEn}`
-        : `Низкая температура фазы B (${input.phaseTempC.B} °C < ${unmelted.minT} °C) для расплавления ${unmelted.label}`,
+        ? `Phase B temperature too low (${input.phaseTempC.B} °C < ${highest.minT} °C) to melt ${namesEn}`
+        : `Низкая температура фазы B (${input.phaseTempC.B} °C < ${highest.minT} °C) для расплавления ${namesRu}`,
       detail: en
-        ? 'Solid waxes, fatty alcohols, or ceramides may not melt completely — creating graininess during emulsification. Raise Phase B above the melting point.'
-        : 'Твёрдые воски, жирные спирты или церамиды могут не полностью расплавиться — при эмульгировании появятся крупинки. Поднимите температуру фазы B выше точки плавления.',
+        ? 'Solid waxes, fatty alcohols, or ceramides may not melt completely — creating graininess during emulsification. Raise Phase B above the highest melting point.'
+        : 'Твёрдые воски, жирные спирты или церамиды могут не полностью расплавиться — при эмульгировании появятся крупинки. Поднимите температуру фазы B выше самой высокой точки плавления.',
     })
   }
   const parfumPct = totalByIngredient.get('parfum') ?? 0
@@ -601,7 +609,6 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
   }
 
   // 7. Наличие консерванта в водной системе
-  const waterPct = totalByIngredient.get('aqua') ?? 0
   const hasPreservative = activeRows.some((r) => r.ingredient.role === 'preservative')
   if (waterPct >= 5 && !hasPreservative) {
     issues.push({
@@ -614,12 +621,30 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
     })
   }
 
-  // 8. Регуляторные лимиты (ТР ТС 009/2011 и EU 1223/2009)
+  // 8. Регуляторные лимиты (ТР ТС 009/2011 и EU 1223/2009) с учётом зоны нанесения (productZone)
+  const zone: ProductZone = input.productZone ?? 'face'
   for (const [id, pct] of totalByIngredient.entries()) {
     if (pct <= 0) continue
     const ing = byId.get(id)!
     for (const rule of ing.regulatory ?? []) {
-      const limit = input.productType === 'leave-on' ? rule.leaveOnMax : rule.rinseOffMax
+      let limit = input.productType === 'leave-on' ? rule.leaveOnMax : rule.rinseOffMax
+      // Зональные уточнения EU 1223/2009 / 2022/2195 / 2024/996
+      if (id === 'salicylic-acid') {
+        if (zone === 'spray') limit = 0
+        else if (input.productType === 'rinse-off' && zone !== 'hair') limit = 2.0
+        else if (input.productType === 'leave-on' && zone === 'body') limit = 0.5
+      } else if (id === 'homosalate' && (zone === 'body' || zone === 'spray')) {
+        limit = 0
+      } else if (id === 'retinol' && zone === 'body') {
+        limit = 0.05
+      } else if (id === 'alpha-arbutin' && zone === 'body') {
+        limit = 0.5
+      } else if (id === 'kojic-acid' && zone === 'body') {
+        limit = 0
+      } else if (id === 'cetrimonium-chloride' && input.productType === 'leave-on' && zone === 'hair') {
+        limit = 1.0
+      }
+
       const factor = rule.acidFactor ?? 1
       const effectivePct = round(pct * factor, 3)
       const exceeded = limit !== undefined && (rule.strictMax ? effectivePct >= limit - 1e-6 : effectivePct > limit + 1e-6)
@@ -632,8 +657,8 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
           ingredientId: ing.id,
           standard: rule.standard,
           title: en
-            ? `Regulatory limit exceeded for ${ing.inci}: ${pct}%${calcNote} ${op} ${limit}% (${input.productType})`
-            : `Превышен лимит ${ing.inci}: ${pct} %${calcNote} ${op} ${limit} % (${input.productType})`,
+            ? `Regulatory limit exceeded for ${ing.inci}: ${pct}%${calcNote} ${op} ${limit}% (${input.productType}, ${zone})`
+            : `Превышен лимит ${ing.inci}: ${pct} %${calcNote} ${op} ${limit} % (${input.productType}, зона: ${zone})`,
           detail: `${rule.standard}. ${rule.note}`,
         })
       } else if (rule.warnAbove !== undefined && effectivePct > rule.warnAbove + 1e-6) {
@@ -662,6 +687,41 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
         })
       }
     }
+  }
+
+  // Суммарный лимит катионных четвертичных аммонийных солей (CTAC + BTAC, EU Annex III/286-287)
+  const ctacPct = totalByIngredient.get('cetrimonium-chloride') ?? 0
+  const btacPct = totalByIngredient.get('behentrimonium-chloride') ?? 0
+  if (ctacPct > 0 && btacPct > 0) {
+    const quatSum = round(ctacPct + btacPct, 2)
+    const quatMax = input.productType === 'rinse-off' ? 5.0 : 3.0
+    if (quatSum > quatMax + 1e-6) {
+      issues.push({
+        code: 'reg:quat-sum',
+        severity: 'error',
+        standard: 'EU 1223/2009 Annex III/286–287',
+        title: en
+          ? `Combined CTAC + BTAC exceeds limit: ${quatSum}% > ${quatMax}%`
+          : `Превышена сумма CTAC + BTAC: ${quatSum} % > ${quatMax} %`,
+        detail: en
+          ? 'EU 1223/2009 Annex III/286–287 caps the combined sum of Cetrimonium, Steartrimonium, and Behentrimonium chlorides.'
+          : 'Приложение III (пп. 286–287) EU 1223/2009 ограничивает суммарное содержание хлоридов цетримония, стеартримония и бегентримония.',
+      })
+    }
+  }
+  // Ингаляционный запрет для минеральных УФ-фильтров в спреях
+  if (zone === 'spray' && ((totalByIngredient.get('zinc-oxide') ?? 0) > 0 || (totalByIngredient.get('titanium-dioxide') ?? 0) > 0)) {
+    issues.push({
+      code: 'reg:mineral-spray',
+      severity: 'error',
+      standard: 'EU 1223/2009 Annex VI/27,30',
+      title: en
+        ? 'Mineral UV filters (ZnO / TiO₂) prohibited in inhalable sprays'
+        : 'Минеральные УФ-фильтры (ZnO / TiO₂) запрещены в ингаляционных спреях',
+      detail: en
+        ? 'Nano/powdered Zinc Oxide and Titanium Dioxide must not be used in applications that may lead to lung exposure by inhalation.'
+        : 'Оксид цинка и диоксид титана (особенно в нано-форме) запрещены в формах, создающих риск ингаляции в лёгкие.',
+    })
   }
 
   const batchCost = round(rows.reduce((s, r) => s + r.cost, 0), 2)

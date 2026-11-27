@@ -105,10 +105,20 @@ export function analyzeSpfAndPigments(ev: FormulaEvaluation, input: FormulaInput
   minPolarNeededPct = Number(minPolarNeededPct.toFixed(1))
   const crystalSafe = solidUvPct === 0 || polarSolventPct + 0.05 >= minPolarNeededPct
   const hasFilmBoost = pctOf('trimethylsiloxysilicate') + pctOf('polyhydroxystearic-acid') > 0
+  const avoUnstabilized =
+    pctOf('avobenzone') > 0 &&
+    pctOf('octinoxate') > 0 &&
+    pctOf('octocrylene') < 2 &&
+    pctOf('tinosorb-s') < 1.5
   const boost = (crystalSafe ? 1.0 : 0.65) * (hasFilmBoost ? 1.12 : 1.0)
+  // Нелинейное насыщение Бера–Ламберта при высоких загрузках УФ-фильтров (плато микрорельефа кожи) + фотодеградация нестабилизированного авобензона
+  const satSpf = rawSpf <= 45 ? rawSpf : 45 + (rawSpf - 45) / (1 + 0.012 * (rawSpf - 45))
+  const satUva = rawUva <= 20 ? rawUva : 20 + (rawUva - 20) / (1 + 0.018 * (rawUva - 20))
+  const photoSpfFactor = avoUnstabilized ? 0.82 : 1.0
+  const photoUvaFactor = avoUnstabilized ? 0.58 : 1.0
 
-  const estimatedSpf = uvRows.length ? Math.max(2, Math.min(80, Math.round(rawSpf * boost))) : 0
-  const estimatedUvaPf = uvRows.length ? Number(Math.max(1, Math.min(40, rawUva * boost)).toFixed(1)) : 0
+  const estimatedSpf = uvRows.length ? Math.max(2, Math.min(80, Math.round(satSpf * boost * photoSpfFactor))) : 0
+  const estimatedUvaPf = uvRows.length ? Number(Math.max(1, Math.min(40, satUva * boost * photoUvaFactor)).toFixed(1)) : 0
   const uvaRatio = estimatedSpf > 0 ? Number((estimatedUvaPf / estimatedSpf).toFixed(2)) : 0
   const uvaCirclePass = estimatedSpf > 0 && uvaRatio >= 0.33
 

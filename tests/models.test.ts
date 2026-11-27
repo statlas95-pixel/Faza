@@ -132,7 +132,7 @@ describe('Планирование эксперимента', () => {
     expect(P.doeInteraction(ofat).estimable).toBe(false); expect(P.doeMainEffect(ofat, 'A')).toMatchObject({ estimable: true, pairs: 1 })
     expect(P.doeMainEffect(ofat, 'A').value).toBe(34)
   })
-  it('интервал шире при малом числе повторов', () => { expect(P.tCrit(1)).toBeGreaterThan(P.tCrit(3)); expect(P.tCrit(0)).toBe(Infinity); expect(P.tCrit(50)).toBe(2.2) })
+  it('интервал шире при малом числе повторов', () => { expect(P.tCrit(1)).toBeGreaterThan(P.tCrit(3)); expect(P.tCrit(0)).toBe(Infinity); expect(P.tCrit(50)).toBeLessThan(2.05); expect(P.tCrit(50)).toBeGreaterThanOrEqual(1.96) })
   it('пример из темы: 17, 13 и 7', () => {
     const d = [run(-1, -1, -1, 20), run(1, -1, -1, 30), run(-1, 1, -1, 26), run(1, 1, -1, 50)]
     expect(P.doeMainEffect(d, 'A').value).toBe(17); expect(P.doeMainEffect(d, 'B').value).toBe(13); expect(P.doeInteraction(d).value).toBe(7)

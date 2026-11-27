@@ -116,11 +116,11 @@ export function solveOdeRK4(
   for (let i = 0; i < steps; i++) {
     const t = i * dt
     const k1 = deriv(t, y)
-    const y2 = y.map((v, j) => Math.max(0, v + 0.5 * dt * k1[j]))
+    const y2 = y.map((v, j) => v + 0.5 * dt * k1[j])
     const k2 = deriv(t + 0.5 * dt, y2)
-    const y3 = y.map((v, j) => Math.max(0, v + 0.5 * dt * k2[j]))
+    const y3 = y.map((v, j) => v + 0.5 * dt * k2[j])
     const k3 = deriv(t + 0.5 * dt, y3)
-    const y4 = y.map((v, j) => Math.max(0, v + dt * k3[j]))
+    const y4 = y.map((v, j) => v + dt * k3[j])
     const k4 = deriv(t + dt, y4)
 
     y = y.map((v, j) => Math.max(0, v + (dt / 6) * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j])))
@@ -514,10 +514,11 @@ export function simulateReaction(
         const lhFrac = lh / 100
         // Когда антиоксидант исчерпан, автокаталитический распад LOOH ускоряет окисление
         const inhib = 1 / (1 + aox * kinh)
-        const rateOx = (ki + kp * pv * 0.032) * lhFrac * inhib
+        const rateOx = (ki + kp * Math.max(0, pv) * 0.032) * Math.max(0, lhFrac) * inhib
         const dPv = rateOx * 18
-        const dLh = -rateOx * 1.8
-        const dAox = aox > 0 ? -Math.min(aox, (ki * 22 + kp * pv * 0.09) * (aox / (aox + 2))) : 0
+        // Стехиометрия: ~64 мэкв/кг PV на 1 % окисленной ПНЖК (M ≈ 312 г/моль, 2 экв/моль) → dLh ≈ −dPv / 64
+        const dLh = -dPv * 0.016
+        const dAox = aox > 0 ? -Math.min(aox, (ki * 22 + kp * Math.max(0, pv) * 0.09) * (aox / (aox + 2))) : 0
         return [dLh, dPv, dAox]
       },
       tMax,

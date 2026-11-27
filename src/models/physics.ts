@@ -102,8 +102,11 @@ export function coolingMinutes(m: number, cp: number, U: number, A: number, T0: 
 
 // ---------- Реология ----------
 export interface HB { sy: number; K: number; n: number }
-export const hbStress = (s: HB, rate: number) => s.sy + s.K * Math.pow(rate, s.n)
-export const hbViscosity = (s: HB, rate: number) => hbStress(s, rate) / rate
+export const hbStress = (s: HB, rate: number) => s.sy + s.K * Math.pow(Math.max(0, rate), s.n)
+export const hbViscosity = (s: HB, rate: number) => {
+  const g = Math.max(rate, 1e-9)
+  return hbStress(s, g) / g
+}
 export const pipeWallRate = (Q: number, R: number) => (4 * Q) / (Math.PI * R * R * R)
 export const filmStress = (rho: number, h: number) => rho * G * h
 /** Восстановление структуры после сдвига: доля исходной вязкости через t секунд. */
@@ -167,7 +170,15 @@ export function doeInteraction(runs: DoeRun[]): Effect {
   return { estimable: true, value: mean(vals), pairs: vals.length, se: sd !== undefined ? (sd * Math.sqrt(invN)) / vals.length : undefined }
 }
 /** Двусторонний 95 %-й квантиль Стьюдента: при малом числе повторов интервал заметно шире «двух сигм». */
-export const tCrit = (df: number) => [Infinity, 12.71, 4.30, 3.18, 2.78, 2.57, 2.45, 2.36, 2.31, 2.26][df] ?? 2.2
+export const tCrit = (df: number) => {
+  const table = [
+    Infinity, 12.71, 4.30, 3.18, 2.78, 2.57, 2.45, 2.36, 2.31, 2.26,
+    2.23, 2.20, 2.18, 2.16, 2.14, 2.13, 2.12, 2.11, 2.10, 2.09,
+    2.09, 2.08, 2.07, 2.07, 2.06, 2.06, 2.06, 2.05, 2.05, 2.05, 2.04,
+  ]
+  if (df <= 0) return Infinity
+  return table[df] ?? 1.96
+}
 
 /** Inference for the observed contrast, using pure error from replicated cells. */
 export function doeConclusion(effect: Effect, df: number): 'yes' | 'no' | 'unknown' {

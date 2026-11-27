@@ -106,7 +106,8 @@ export function QuestionCard({ q, n, value, onAnswer }: { q: Question; n: number
   const name = useId()
   if (q.type === 'num') {
     const done = typeof value === 'number'
-    const ok = done && Math.abs(value - q.answer!) <= (q.tol ?? 0.05) * Math.abs(q.answer!)
+    const tolBound = q.answer === 0 ? (q.tol ?? 0.05) : (q.tol ?? 0.05) * Math.abs(q.answer!)
+    const ok = done && Math.abs(value - q.answer!) <= tolBound
     return (
       <div className="qcard">
         <p className="q"><span className="qn">{n}</span>{q.q}</p>
@@ -136,8 +137,14 @@ export function QuestionCard({ q, n, value, onAnswer }: { q: Question; n: number
       })}
     </fieldset>)
 }
-export const isCorrect = (q: Question, v: any) =>
-  q.type === 'num' ? typeof v === 'number' && Math.abs(v - q.answer!) <= (q.tol ?? 0.05) * Math.abs(q.answer!) : v !== undefined && !!q.options![v]?.correct
+export const isCorrect = (q: Question, v: any) => {
+  if (q.type === 'num') {
+    if (typeof v !== 'number') return false
+    const tolBound = q.answer === 0 ? (q.tol ?? 0.05) : (q.tol ?? 0.05) * Math.abs(q.answer!)
+    return Math.abs(v - q.answer!) <= tolBound
+  }
+  return v !== undefined && !!q.options![v]?.correct
+}
 
 export function Quiz({ questions, answers, onAnswer }: { questions: Question[]; answers: Record<number, any>; onAnswer: (i: number, v: any) => void }) {
   const right = questions.filter((q, i) => isCorrect(q, answers[i])).length
