@@ -25,7 +25,6 @@ export function Lab4Panels({ ev, batchGrams }: { ev: FormulaEvaluation; batchGra
     <>
       {asm && (
         <section className="panel lab4-panel">
-          <p className="eyebrow">{tr('Анализ моющей / кондиционирующей базы')}</p>
           <h2>{tr('Активные ПАВ (% ASM) и индекс мягкости')}</h2>
           <dl className="outcome">
             <div><dt>{tr('Сумма активных ПАВ (ASM)')}</dt><dd className="num">{asm.totalAsmPct} %</dd></div>
@@ -46,7 +45,6 @@ export function Lab4Panels({ ev, batchGrams }: { ev: FormulaEvaluation; batchGra
       <section className="panel lab4-panel">
         <div className="sandbox-head-row">
           <div>
-            <p className="eyebrow">{tr('Экономика R&D (COGS на 1 готовую единицу)')}</p>
             <h2>{tr('Себестоимость флакона с учётом тары и потерь')}</h2>
           </div>
           <div className="row">

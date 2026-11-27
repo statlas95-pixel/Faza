@@ -75,7 +75,6 @@ export function Lab5Panels({ formula, ev, catalog, savedFormulas, presets }: Lab
     <>
       {spfPigment && (
         <section className="panel lab4-panel">
-          <p className="eyebrow">{tr('Лаборатория 5.0 · Оптический и дисперсионный расчёт')}</p>
           <h2>
             {spfPigment.hasUvFilters && spfPigment.hasPigments
               ? tr('Анализатор SPF / UVA-PF и пигментной суспензии')
@@ -139,7 +138,6 @@ export function Lab5Panels({ formula, ev, catalog, savedFormulas, presets }: Lab
       <section className="panel lab4-panel">
         <div className="sandbox-head-row">
           <div>
-            <p className="eyebrow">{tr('Лаборатория 5.0 · Сравнительный R&D-бенчмаркинг')}</p>
             <h2>{tr('Матрица сравнения рецептур A / B и двойной сенсорный радар')}</h2>
           </div>
           <button type="button" className="btn" onClick={() => setCompareOpen((v) => !v)}>

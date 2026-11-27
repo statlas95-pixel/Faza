@@ -109,7 +109,6 @@ export default function CampaignsPage() {
     <div className="page campaigns-page">
       <div className="sandbox-head-row">
         <div>
-          <p className="eyebrow">{tr('Направление H · Сквозной промышленный симулятор запуска')}</p>
           <h1>{tr('Кампании запуска: от R&D-брифа до серии 1 000 кг')}</h1>
         </div>
         {rec && (

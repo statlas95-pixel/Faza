@@ -149,7 +149,6 @@ export function Lab6Instruments({ formula, ev }: Lab6Props) {
       <section className="panel lab6-panel" aria-label={tr('Цифровой вискозиметр Брукфильда')}>
         <div className="sandbox-head-row">
           <div>
-            <p className="eyebrow">{tr('Лаборатория 6.0 · Ротационная реометрия')}</p>
             <h2>{tr('Цифровой вискозиметр Брукфильда и петля тиксотропии')}</h2>
           </div>
           <div className="row">
@@ -401,7 +400,6 @@ export function Lab6Instruments({ formula, ev }: Lab6Props) {
       <section className="panel lab6-panel" aria-label={tr('Поляризационный микроскоп')}>
         <div className="sandbox-head-row">
           <div>
-            <p className="eyebrow">{tr('Лаборатория 6.0 · Оптическая и поляризационная микроскопия')}</p>
             <h2>{tr('Поляризационный микроскоп (×100 / ×400 · поляризатор 90°)')}</h2>
           </div>
           <div className="row">

@@ -106,7 +106,6 @@ export default function PortfolioPage() {
     <div className="page portfolio">
       <div className="sandbox-head-row">
         <div>
-          <p className="eyebrow">{tr('Профиль специалиста · 6 направлений')}</p>
           <h1>{tr('Карта компетенций и портфолио кейсов')}</h1>
         </div>
         <button type="button" className="btn no-print" onClick={() => window.print()}>

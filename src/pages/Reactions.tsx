@@ -372,7 +372,6 @@ export default function ReactionsPage() {
     <div className="page reactions-page">
       <div className="sandbox-head-row">
         <div>
-          <p className="eyebrow">{tr('Численный RK4-решатель ОДУ · Аррениус · 60 FPS оффлайн')}</p>
           <h1>{tr('Реакции и механизмы косметической химии')}</h1>
         </div>
         <div className="row">

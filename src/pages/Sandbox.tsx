@@ -398,7 +398,6 @@ export default function SandboxPage() {
     <div className="page sandbox">
       <div className="sandbox-head-row">
         <div>
-          <p className="eyebrow">{tr('Интерактивный конструктор')} · {ingredients.length} {tr('компонентов · детерминированный расчёт')}</p>
           <h1>{tr('Лаборатория рецептур и фаз')}</h1>
         </div>
         <div className="row sb-top-actions">
