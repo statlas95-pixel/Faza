@@ -5,10 +5,11 @@
 
 import { evaluateFormula, type FormulaInput, type Ingredient } from './formulation'
 import { analyzeSpfAndPigments } from './formulation-lab5'
+import { computeIso16128 } from './engineering-tools'
 import { language } from './locale'
 import type { CampaignProgressRecord } from './merge'
 
-export type CampaignId = 'spf50-city-fluid' | 'retinol-03-serum'
+export type CampaignId = 'spf50-city-fluid' | 'retinol-03-serum' | 'dms-green-iso16128'
 
 export interface CampaignChoiceOption {
   id: string
@@ -597,6 +598,260 @@ export const CAMPAIGNS: CampaignDefinition[] = [
       },
     ],
   },
+  {
+    id: 'dms-green-iso16128',
+    badgeRu: 'Кампания 3 · Clean Beauty 2026 · 500 кг',
+    badgeEn: 'Campaign 3 · Clean Beauty 2026 · 500 kg',
+    titleRu: 'Зелёный DMS-крем ISO 16128 ≥ 96 %',
+    titleEn: 'Green Biomimetic DMS Cream (ISO 16128 ≥ 96%)',
+    subtitleRu: 'Создайте и выведите в серию 500 кг биомиметический ламеллярный крем без D5, ПЭГ, EDTA и парабенов: сборка в Лаборатории под ISO 16128 ≥ 96 %, барьерная консервация ISO 11930 и гомогенизация бислоёв.',
+    subtitleEn: 'Develop and scale a 500 kg biomimetic DMS barrier cream free of D5, PEGs, EDTA, and parabens: live Lab formulation meeting ISO 16128 ≥ 96%, hurdle preservation, and lamellar homogenization.',
+    batchScaleKg: 500,
+    targetCostRubPerKg: 2600,
+    starterFormula: {
+      productType: 'leave-on',
+      targetPh: 6.2,
+      batchGrams: 500,
+      phaseTempC: { A: 72, B: 72, C: 40 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 74.9 },
+        { ingredientId: 'glycerin', phase: 'A', pct: 4.0 },
+        { ingredientId: 'disodium-edta', phase: 'A', pct: 0.1 },
+        { ingredientId: 'cyclopentasiloxane', phase: 'B', pct: 6.0 },
+        { ingredientId: 'caprylic-triglyceride', phase: 'B', pct: 8.0 },
+        { ingredientId: 'ceteareth-20', phase: 'B', pct: 3.0 },
+        { ingredientId: 'cetearyl-alcohol', phase: 'B', pct: 3.0 },
+        { ingredientId: 'phenoxyethanol', phase: 'C', pct: 1.0 },
+      ],
+    },
+    referenceGoodFormula: {
+      productType: 'leave-on',
+      targetPh: 5.2,
+      batchGrams: 500,
+      phaseTempC: { A: 80, B: 82, C: 36 },
+      rows: [
+        { ingredientId: 'aqua', phase: 'A', pct: 69.5 },
+        { ingredientId: 'glycerin', phase: 'A', pct: 4.0 },
+        { ingredientId: 'pentylene-glycol', phase: 'A', pct: 3.0 },
+        { ingredientId: 'xanthan-gum', phase: 'A', pct: 0.3 },
+        { ingredientId: 'tetrasodium-glda', phase: 'A', pct: 0.2 },
+        { ingredientId: 'sodium-levulinate', phase: 'A', pct: 0.4 },
+        { ingredientId: 'sodium-anisate', phase: 'A', pct: 0.2 },
+        { ingredientId: 'caprylic-triglyceride', phase: 'B', pct: 7.0 },
+        { ingredientId: 'c13-15-alkane', phase: 'B', pct: 4.0 },
+        { ingredientId: 'squalane', phase: 'B', pct: 3.0 },
+        { ingredientId: 'shea-butter', phase: 'B', pct: 2.0 },
+        { ingredientId: 'hydrogenated-lecithin', phase: 'B', pct: 2.5 },
+        { ingredientId: 'cetearyl-alcohol', phase: 'B', pct: 2.5 },
+        { ingredientId: 'ceramide-np', phase: 'B', pct: 0.2 },
+        { ingredientId: 'phytosterols', phase: 'B', pct: 0.5 },
+        { ingredientId: 'glyceryl-caprylate', phase: 'C', pct: 0.5 },
+        { ingredientId: 'tocopherol', phase: 'C', pct: 0.2 },
+      ],
+    },
+    stages: [
+      {
+        index: 0,
+        code: 'dms-1-brief',
+        titleRu: 'Этап 1 · Clean-Beauty бриф (EU 2024/1328 и ISO 16128)',
+        titleEn: 'Stage 1 · Clean-Beauty Brief (EU 2024/1328 & ISO 16128)',
+        roleRu: 'R&D-лидер',
+        roleEn: 'R&D Lead',
+        kind: 'decision',
+        promptRu: 'Сеть дермокосметики заказывает биомиметический DMS-крем для атопичной кожи: «без D5, без ПЭГ, без EDTA, без парабенов, ISO 16128 ≥ 96 %». Какую эмульсионную и сенсорную архитектуру вы закладываете в бриф?',
+        promptEn: 'A dermocosmetic chain commissions a biomimetic DMS cream for atopic skin: "D5-free, PEG-free, EDTA-free, paraben-free, ISO 16128 ≥ 96%". Which emulsion & sensory architecture do you specify?',
+        options: [
+          {
+            id: 'dms-lecithin-bioalkane',
+            labelRu: 'Гидрогенизированный лецитин + церамид NP + фитостеролы + летучий C13-15 Alkane + зелёный хелатор GLDA',
+            labelEn: 'Hydrogenated lecithin + Ceramide NP + phytosterols + volatile C13-15 Alkane + biodegradable GLDA',
+            detailRu: 'Строит PEG-free ламеллярные бислои (3:1:1 барьер), заменяет D5 биоалканом и легко проходит ISO 16128 ≥ 96 %.',
+            detailEn: 'Builds PEG-free lamellar bilayers mimicking skin lipids, replaces D5 cleanly, and hits ISO 16128 ≥ 96%.',
+            scoreDelta: 20,
+            costImpactRubPerKg: 140,
+            feedbackRu: 'Точное попадание в бриф 2026: биомиметическая DMS-сетка без вымывающего эффекта ПЭГ, сухая сенсорика от C13-15 Alkane и биоразлагаемый хелатор GLDA.',
+            feedbackEn: 'Spot-on 2026 architecture: PEG-free DMS bilayers with zero wash-out effect, dry slip from C13-15 Alkane, and biodegradable GLDA chelation.',
+          },
+          {
+            id: 'keep-d5-peg',
+            labelRu: 'Оставить 6 % D5 и Ceteareth-20, но добавить 0,01 % экстракта ромашки для «натурального» позиционирования',
+            labelEn: 'Keep 6% D5 and Ceteareth-20, adding 0.01% chamomile extract for "natural" branding',
+            detailRu: 'Дёшево и привычно, но проваливает и EU 2024/1328, и ISO 16128.',
+            detailEn: 'Cheap and familiar, yet violates EU 2024/1328 and fails ISO 16128.',
+            scoreDelta: 4,
+            costImpactRubPerKg: -180,
+            riskTag: 'greenwashing',
+            feedbackRu: 'Гринвошинг: D5 подпадает под запрет EU 2024/1328, ПЭГ-эмульгатор нарушает бриф, а ISO 16128 упадёт ниже 90 %.',
+            feedbackEn: 'Greenwashing failure: D5 breaches EU 2024/1328, PEG emulsifiers violate the brief, and ISO 16128 drops below 90%.',
+          },
+          {
+            id: 'raw-shea-no-emul',
+            labelRu: 'Смешать 40 % масла ши с водой и 0,5 % ксантана без эмульгатора',
+            labelEn: 'Whip 40% shea butter into water with 0.5% xanthan and no emulsifier',
+            detailRu: '100 % натурально, но эмульсия расслоится при 40 °C.',
+            detailEn: '100% natural, yet phase-separates rapidly at 40 °C.',
+            scoreDelta: 7,
+            costImpactRubPerKg: 90,
+            riskTag: 'no-emul',
+            feedbackRu: 'Ксантан не снижает межфазное натяжение — при нагреве выше температуры плавления ши (35 °C) крем полностью расслоится.',
+            feedbackEn: 'Xanthan alone cannot stabilize 40% melted fat — above 35 °C the emulsion breaks completely.',
+          },
+        ],
+      },
+      {
+        index: 1,
+        code: 'dms-2-lab',
+        titleRu: 'Этап 2 · Сборка DMS-рецептуры в Лаборатории',
+        titleEn: 'Stage 2 · Live Formulation Lab (Green DMS Cream)',
+        roleRu: 'Химик-разработчик',
+        roleEn: 'Formulation Chemist',
+        kind: 'lab-formula',
+        promptRu: 'Откройте стартовый шаблон в Лаборатории рецептур: уберите D5, Ceteareth-20, Disodium EDTA и синтетический консервант; соберите сбалансированную DMS-эмульсию (гидрогенизированный лецитин + церамид + стеролы) с ISO 16128 ≥ 96 %, pH 4,8–5,5 и нагревом фазы B ≥ 80 °C.',
+        promptEn: 'Open the starter formula in Formulation Lab: remove D5, Ceteareth-20, Disodium EDTA, and synthetic preservatives; build a balanced DMS emulsion (hydrogenated lecithin + ceramide + sterols) with ISO 16128 ≥ 96%, pH 4.8–5.5, and Phase B ≥ 80 °C.',
+      },
+      {
+        index: 2,
+        code: 'dms-3-hurdle',
+        titleRu: 'Этап 3 · Барьерная консервация (ISO 11930) и микробиом',
+        titleEn: 'Stage 3 · Hurdle Preservation (ISO 11930) & Microbiome',
+        roleRu: 'Микробиолог / QA',
+        roleEn: 'Microbiologist / QA',
+        kind: 'decision',
+        promptRu: 'Крем на анисате + левулинате натрия и 0,5 % глицерил каприлата показал на 14-й день челлендж-теста ISO 11930 рост плесени A. brasiliensis при pH 5,8. Как исправить систему, сохранив ISO 16128 ≥ 96 %?',
+        promptEn: 'Your sodium anisate + levulinate + 0.5% glyceryl caprylate cream failed day-14 ISO 11930 against A. brasiliensis mold at pH 5.8. How do you fix it while preserving ISO 16128 ≥ 96%?',
+        options: [
+          {
+            id: 'hurdle-ph51-aw-airless',
+            labelRu: 'Снизить и забуферить pH до 5,1 (доля активной анисовой/левулиновой кислот вырастет в 3×), добавить 3 % пентиленгликоля (снижение aw) + GLDA 0,2 % + airless',
+            labelEn: 'Lower and buffer pH to 5.1 (tripling active acid fraction), add 3% bio-pentylene glycol (lower aw) + 0.2% GLDA + airless pack',
+            detailRu: 'Классическая Hurdle Technology: бьёт по плесени, бережёт микробиом и сохраняет ISO 16128 ≥ 96 %.',
+            detailEn: 'Textbook Hurdle Technology: defeats mold, respects skin microbiome, and keeps ISO 16128 ≥ 96%.',
+            scoreDelta: 20,
+            costImpactRubPerKg: 110,
+            feedbackRu: 'Блестяще! При pH 5,1 анисовая кислота (pKa 4,47) даёт кратно больше недиссоциированной формы, а пентиленгликоль и GLDA закрывают Критерий A ISO 11930.',
+            feedbackEn: 'Textbook fix! At pH 5.1 anisic acid (pKa 4.47) delivers far more active undissociated form, while pentylene glycol and GLDA secure ISO 11930 Criterion A.',
+          },
+          {
+            id: 'raise-ph-68',
+            labelRu: 'Поднять pH до 6,8, чтобы «смягчить крем для кожи»',
+            labelEn: 'Raise pH to 6.8 to "make the cream gentler"',
+            detailRu: 'Отключает кислотные консерванты и вредит кислотной мантии кожи.',
+            detailEn: 'Disables acid preservatives and disrupts the skin acid mantle.',
+            scoreDelta: 3,
+            costImpactRubPerKg: 0,
+            riskTag: 'mold-fail',
+            feedbackRu: 'При pH 6,8 органические кислоты полностью диссоциированы и неактивны — плесень вырастет за неделю.',
+            feedbackEn: 'At pH 6.8 organic acids are fully ionized and inactive — mold will bloom within a week.',
+          },
+          {
+            id: 'add-phenoxy-parabens',
+            labelRu: 'Добавить 1 % феноксиэтанола и метилпарабен без согласования с клиентом',
+            labelEn: 'Secretly add 1% phenoxyethanol and methylparaben without telling the client',
+            detailRu: 'Решит микробиологию, но нарушит контрактный бриф и уронит ISO 16128.',
+            detailEn: 'Solves microbiology, yet breaches client contract and cuts ISO 16128.',
+            scoreDelta: 6,
+            costImpactRubPerKg: -30,
+            feedbackRu: 'Нарушение технического задания: клиент отклонит партию при проверке INCI.',
+            feedbackEn: 'Brief breach: client QA will reject the batch on INCI audit.',
+          },
+        ],
+      },
+      {
+        index: 3,
+        code: 'dms-4-homog',
+        titleRu: 'Этап 4 · Реактор 500 кг: гомогенизация бислоёв и охлаждение',
+        titleEn: 'Stage 4 · 500 kg Reactor: Lamellar Homogenization & Cooling',
+        roleRu: 'Технолог производства',
+        roleEn: 'Process Engineer',
+        kind: 'decision',
+        promptRu: 'На варке 500 кг фаза B нагрета до 82 °C (церамид NP полностью растворён). Оператор спрашивает: на каком режиме гомогенизировать и как охлаждать DMS-эмульсию, чтобы не получить крупинки и «резиновую» потерю вязкости?',
+        promptEn: 'In the 500 kg reactor, Phase B is at 82 °C (Ceramide NP fully dissolved). The operator asks for the homogenization and cooling SOP to prevent wax/ceramide grittiness and viscosity loss.',
+        options: [
+          {
+            id: 'hot-homog-slow-cool',
+            labelRu: 'Интенсивная гомогенизация 3–4 прохода при 78–80 °C (выше tпл церамида), затем плавное охлаждение 0,5 °C/мин на якорной мешалке со скребками без повторного высокоскоростного сдвига ниже 45 °C',
+            labelEn: 'High-shear 3–4 passes at 78–80 °C (above ceramide melt), then gentle 0.5 °C/min scraped-anchor cooling with NO high-shear below 45 °C',
+            detailRu: 'Формирует мелкие капли и не рвёт кристаллизующуюся ламеллярную сетку.',
+            detailEn: 'Creates fine droplets and protects the forming lamellar bilayer network.',
+            scoreDelta: 20,
+            costImpactRubPerKg: 20,
+            feedbackRu: 'Эталонный регламент DMS: горячая гомогенизация фиксирует распределение, а бережное охлаждение строит ровные биомиметические бислои без крупинок.',
+            feedbackEn: 'Gold-standard DMS SOP: hot homogenization sets droplet size, while controlled scraped cooling builds smooth biomimetic bilayers with zero grittiness.',
+          },
+          {
+            id: 'cold-homog-30c',
+            labelRu: 'Повторно включить ротор-статор на 3000 об/мин при 30 °C «для глянца»',
+            labelEn: 'Re-run rotor-stator at 3,000 rpm at 30 °C "for extra gloss"',
+            detailRu: 'Механически разрушит сформированную ламеллярную гелевую сеть.',
+            detailEn: 'Mechanically shears apart the freshly formed lamellar gel network.',
+            scoreDelta: 6,
+            costImpactRubPerKg: 90,
+            riskTag: 'lgn-shear',
+            feedbackRu: 'Сдвиг ниже точки кристаллизации разрушает бислои — вязкость крема обваливается вдвое и не восстанавливается.',
+            feedbackEn: 'High shear below crystallization point destroys lamellar bilayers — viscosity drops by 50% irreversibly.',
+          },
+          {
+            id: 'cool-no-scrapers',
+            labelRu: 'Быстро подать ледяную воду 5 °C в рубашку при выключенных скребках',
+            labelEn: 'Shock-cool with 5 °C chilled jacket water with wall scrapers turned off',
+            detailRu: 'Образует ледяную корку церамидов и масла ши на стенке реактора.',
+            detailEn: 'Freezes a solid ceramide/shea crust on the reactor wall.',
+            scoreDelta: 5,
+            costImpactRubPerKg: 120,
+            riskTag: 'wall-crust',
+            feedbackRu: 'Термошок у холодной стенки вызывает мгновенную кристаллизацию церамида NP и масла ши — весь крем окажется в мелкой «манке».',
+            feedbackEn: 'Thermal shock at the cold wall crystallizes Ceramide NP and shea butter into gritty beads throughout the batch.',
+          },
+        ],
+      },
+      {
+        index: 4,
+        code: 'dms-5-claim',
+        titleRu: 'Этап 5 · Аудит этикетки ISO 16128 и выпуск партии',
+        titleEn: 'Stage 5 · ISO 16128 Claim Audit & Batch Release',
+        roleRu: 'QA / Regulatory Manager',
+        roleEn: 'QA / Regulatory Manager',
+        kind: 'decision',
+        promptRu: 'Партия 500 кг прошла ISO 11930 (Критерий A) и термостат 45 °C. Расчёт показал ISO 16128 NOI = 97,8 % (с водой) и 92,4 % (без воды). Маркетинг просит написать «100 % Organic Natural». Ваше финальное решение?',
+        promptEn: 'The 500 kg batch passed ISO 11930 (Criterion A) and 45 °C stability. ISO 16128 calculation gives NOI = 97.8% (with water) and 92.4% (without water). Marketing asks to print "100% Organic Natural". Final QA decision?',
+        options: [
+          {
+            id: 'honest-iso16128',
+            labelRu: 'Отклонить «100 % Organic»; утвердить прозрачную формулировку «97,8 % ингредиентов натурального происхождения (ISO 16128, включая воду)» и приложить протокол расчёта в PIF',
+            labelEn: 'Reject "100% Organic"; approve transparent claim "97.8% ingredients of natural origin (ISO 16128, incl. water)" and archive calculation in PIF',
+            detailRu: 'Полное соответствие EU 655/2013 и ISO 16128 без риска штрафа за гринвошинг.',
+            detailEn: 'Full compliance with EU 655/2013 and ISO 16128 with zero greenwashing liability.',
+            scoreDelta: 20,
+            costImpactRubPerKg: 10,
+            feedbackRu: 'Безупречный выпуск серии 500 кг! Прозрачный расчёт ISO 16128 в PIF защищает бренд перед любым регулятором и ритейлером.',
+            feedbackEn: 'Flawless 500 kg launch! A documented ISO 16128 calculation in the PIF protects the brand during retail and regulatory audits.',
+          },
+          {
+            id: 'allow-100-natural',
+            labelRu: 'Разрешить «100 % Natural», округлив 97,8 % вверх',
+            labelEn: 'Approve "100% Natural" by rounding 97.8% up',
+            detailRu: 'Нарушает критерий достоверности клеймов (EU 655/2013).',
+            detailEn: 'Violates truthfulness criteria under EU 655/2013.',
+            scoreDelta: 4,
+            costImpactRubPerKg: 250,
+            feedbackRu: 'Регуляторный штраф и отзыв тиража упаковки: «100 %» нельзя округлять при наличии синтетических или полусинтетических долей.',
+            feedbackEn: 'Regulatory fine and artwork recall: rounding up to "100%" is legally prohibited when synthetic moieties are present.',
+          },
+          {
+            id: 'remove-all-claims',
+            labelRu: 'Запретить упоминать натуральность вообще и убрать церамиды из INCI',
+            labelEn: 'Ban all naturalness claims and omit ceramides from INCI',
+            detailRu: 'Скрытие компонентов из INCI незаконно и убивает коммерческую ценность.',
+            detailEn: 'Omitting ingredients from INCI is illegal and wastes R&D effort.',
+            scoreDelta: 3,
+            costImpactRubPerKg: 180,
+            feedbackRu: 'Неполный INCI — прямое нарушение ст. 19 EU 1223/2009 и ТР ТС 009/2011.',
+            feedbackEn: 'Incomplete INCI directly violates Art. 19 of EU 1223/2009 and TR CU 009/2011.',
+          },
+        ],
+      },
+    ],
+  },
 ]
 
 export function getCampaign(id: string): CampaignDefinition | undefined {
@@ -681,6 +936,81 @@ export function evaluateCampaignLabFormula(
       errors: ev.errorsCount,
       spf: spfVal,
       uvaRatio,
+      checks,
+      notes,
+    }
+  }
+
+  if (campaignId === 'dms-green-iso16128') {
+    const iso = computeIso16128(formula.rows, catalog)
+    const noBannedClean =
+      pctOf('cyclopentasiloxane') <= 0.1 &&
+      pctOf('disodium-edta') <= 0 &&
+      pctOf('ceteareth-20') <= 0 &&
+      pctOf('peg-100-stearate') <= 0 &&
+      pctOf('steareth-21') <= 0 &&
+      pctOf('polysorbate-20') + pctOf('polysorbate-60') + pctOf('polysorbate-80') <= 0
+    const hasDmsCore =
+      pctOf('hydrogenated-lecithin') >= 1.0 &&
+      pctOf('ceramide-np') + pctOf('ceramide-ap') > 0 &&
+      pctOf('phytosterols') + pctOf('cholesterol') > 0
+    const phAndMeltOk = formula.targetPh >= 4.8 && formula.targetPh <= 5.5 && formula.phaseTempC.B >= 80
+
+    checks.push(
+      {
+        id: 'balanced',
+        labelRu: 'Баланс фаз ровно 100 % и 0 критических ошибок',
+        labelEn: '100% mass balance and 0 critical errors',
+        passed: ev.balanced && ev.errorsCount === 0,
+      },
+      {
+        id: 'iso96',
+        labelRu: `Индекс натуральности ISO 16128 ≥ 96 % (сейчас ${iso.noiWithWaterPct} %)`,
+        labelEn: `ISO 16128 Natural Origin Index ≥ 96% (currently ${iso.noiWithWaterPct}%)`,
+        passed: iso.noiWithWaterPct >= 96,
+      },
+      {
+        id: 'clean-free',
+        labelRu: 'Без D5 (≤ 0,1 %), без Disodium EDTA и без ПЭГ-эмульгаторов',
+        labelEn: 'Free of D5 (≤ 0.1%), Disodium EDTA, and PEG emulsifiers',
+        passed: noBannedClean,
+      },
+      {
+        id: 'dms-core',
+        labelRu: 'Биомиметическое ядро DMS: гидрогенизированный лецитин (≥ 1 %) + церамид + стеролы',
+        labelEn: 'Biomimetic DMS core: hydrogenated lecithin (≥ 1%) + ceramide + sterols',
+        passed: hasDmsCore,
+      },
+      {
+        id: 'ph-melt',
+        labelRu: `pH 4,8–5,5 и нагрев фазы B ≥ 80 °C для церамидов (сейчас pH ${formula.targetPh}, B=${formula.phaseTempC.B} °C)`,
+        labelEn: `pH 4.8–5.5 and Phase B ≥ 80 °C for ceramides (currently pH ${formula.targetPh}, B=${formula.phaseTempC.B} °C)`,
+        passed: phAndMeltOk,
+      },
+    )
+
+    if (iso.noiWithWaterPct < 96) {
+      notes.push(
+        en
+          ? `Carried risk → Stage 5: ISO 16128 NOI (${iso.noiWithWaterPct}%) falls below the 96% retail brief.`
+          : `Переносимый риск → Этап 5: индекс ISO 16128 (${iso.noiWithWaterPct} %) ниже требования брифа 96 %.`,
+      )
+    }
+    if (!noBannedClean) {
+      notes.push(
+        en
+          ? 'Carried risk → Stage 5: D5, EDTA, or PEG emulsifier remains in the formula.'
+          : 'Переносимый риск → Этап 5: в формуле остались D5, Disodium EDTA или ПЭГ-эмульгатор.',
+      )
+    }
+
+    const passedCount = checks.filter((c) => c.passed).length
+    const score = Math.round((passedCount / checks.length) * 20)
+    return {
+      score,
+      passed: passedCount >= 4 && ev.balanced,
+      costPerKg: ev.costPerKg,
+      errors: ev.errorsCount,
       checks,
       notes,
     }

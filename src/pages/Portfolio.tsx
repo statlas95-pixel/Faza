@@ -402,6 +402,7 @@ export default function PortfolioPage() {
               </div>
               <div className="row" style={{ gap: 8 }}>
                 <Link to="/flashcards" className="btn small ghost">⚡ {tr('Флеш-тренажёр SM-2')}</Link>
+                <Link to="/assessment" className="btn small ghost">📝 {tr('Экзамен для команд')}</Link>
                 <button type="button" className="btn small primary" onClick={() => setTab('gallery')}>
                   {tr('Открыть галерею →')}
                 </button>

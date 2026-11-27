@@ -26,6 +26,7 @@ import { topicById, labById } from './content'
 const SandboxPage = lazy(() => import('./pages/Sandbox'))
 const ToolsPage = lazy(() => import('./pages/Tools'))
 const FlashcardsPage = lazy(() => import('./pages/Flashcards'))
+const AssessmentPage = lazy(() => import('./pages/Assessment'))
 const ReactionsPage = lazy(() => import('./pages/Reactions'))
 const CampaignsPage = lazy(() => import('./pages/Campaigns'))
 const PortfolioPage = lazy(() => import('./pages/Portfolio'))
@@ -208,6 +209,7 @@ function Shell() {
             <Route path="/sandbox" element={<SandboxPage />} />
             <Route path="/tools" element={<ToolsPage />} />
             <Route path="/flashcards" element={<FlashcardsPage />} />
+            <Route path="/assessment" element={<AssessmentPage />} />
             <Route path="/reactions" element={<ReactionsPage />} />
             <Route path="/campaigns" element={<CampaignsPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
@@ -255,7 +257,7 @@ function Shell() {
         <footer className="foot">
           <p><b>{site.name}</b>{tr(" · версия 0.3 · учебная платформа. Данные занятий вымышлены и обозначены как учебные.")}</p>
           {acc.status === 'user' && acc.user?.canReadStatistics && <p><Link to="/statistics">{tr("Статистика сайта")}</Link></p>}
-          <p><Link to="/journal">{tr("Журнал")}</Link> · <Link to="/tools">{tr("Инженерные утилиты 2.0")}</Link> · <Link to="/flashcards">{tr("Флеш-тренажёр SM-2")}</Link> · <Link to="/about">{tr("О платформе, методике и изображениях")}</Link> · <Link to="/about#authoring">{tr("Как редактировать материалы")}</Link></p>
+          <p><Link to="/journal">{tr("Журнал")}</Link> · <Link to="/tools">{tr("Инженерные утилиты 2.0")}</Link> · <Link to="/flashcards">{tr("Флеш-тренажёр SM-2")}</Link> · <Link to="/assessment">{tr("Экзамен для команд")}</Link> · <Link to="/about">{tr("О платформе, методике и изображениях")}</Link></p>
         </footer>)}
     </>)
 }

@@ -16,8 +16,8 @@ const catalog: Ingredient[] = YAML.parse(
 const validIds = new Set(catalog.map((i) => i.id))
 
 describe('Launch Campaigns (Direction H)', () => {
-  it('defines 2 complete 5-stage campaigns with valid catalog ingredient IDs', () => {
-    expect(CAMPAIGNS.length).toBe(2)
+  it('defines 3 complete 5-stage campaigns with valid catalog ingredient IDs', () => {
+    expect(CAMPAIGNS.length).toBeGreaterThanOrEqual(3)
     for (const c of CAMPAIGNS) {
       expect(c.stages.length).toBe(5)
       for (const r of [...c.starterFormula.rows, ...c.referenceGoodFormula.rows]) {
