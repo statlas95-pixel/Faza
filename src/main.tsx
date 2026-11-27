@@ -26,9 +26,9 @@ async function start() {
   const { default: App } = await import('./App')
   createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>)
   if ('serviceWorker' in navigator && import.meta.env.PROD && /^https?:$/.test(window.location.protocol)) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {})
-    })
+    const reg = () => { navigator.serviceWorker.register('/sw.js').catch(() => {}) }
+    if (document.readyState === 'complete') reg()
+    else window.addEventListener('load', reg, { once: true })
   }
 }
 void start()
