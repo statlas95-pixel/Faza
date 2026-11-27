@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-label="Схема ограничений D4/D5/D6, микропластиков и расчёта ISO 16128">
+  <rect width="760" height="310" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">Запрет D4/D5/D6, микропластик и расчёт ISO 16128</text>
+
+  <!-- Card 1: EU 2024/1328 Cyclosiloxanes -->
+  <rect x="20" y="46" width="230" height="244" rx="12" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.5"/>
+  <text x="135" y="68" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#C4382A">EU 2024/1328: D4 / D5 / D6</text>
+  <text x="135" y="85" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Циклосилоксаны (vPvB / PBT)</text>
+  <rect x="34" y="96" width="202" height="58" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="135" y="114" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#C4382A">Лимит ≤ 0,1 %</text>
+  <text x="135" y="130" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Смываемые (2026) · D4 запрещён</text>
+  <text x="135" y="145" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Несмываемые D5/D6: стоп в 2027</text>
+
+  <text x="135" y="174" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#047857">↓ Замены (Drop-in биоалканы)</text>
+  <rect x="34" y="184" width="202" height="92" rx="8" fill="#ECFDF5" stroke="#047857" stroke-width="1.2"/>
+  <text x="135" y="204" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#047857">C9-12 Alkane</text>
+  <text x="135" y="219" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">быстрый флеш-эффект (флюиды)</text>
+  <text x="135" y="237" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#047857">Undecane / Tridecane</text>
+  <text x="135" y="254" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#047857">C13-15 Alkane</text>
+  <text x="135" y="269" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">сухое скольжение для кремов</text>
+
+  <!-- Card 2: EU 2023/2055 Microplastics -->
+  <rect x="265" y="46" width="230" height="244" rx="12" fill="#FFF7ED" stroke="#B45309" stroke-width="1.5"/>
+  <text x="380" y="68" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#B45309">EU 2023/2055: Микропластик</text>
+  <text x="380" y="85" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Твёрдые полимерные частицы &lt; 5 мм</text>
+  <rect x="279" y="96" width="202" height="58" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="380" y="114" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#C4382A">Запрет (нерастворимые)</text>
+  <text x="380" y="130" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">PMMA · Nylon-12 · PE beads</text>
+  <text x="380" y="145" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">→ Microcrystalline Cellulose, Silica</text>
+
+  <rect x="279" y="168" width="202" height="108" rx="8" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.2"/>
+  <text x="380" y="188" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#0C5E80">Нюанс: Carbomer разрешён</text>
+  <text x="380" y="207" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">При нейтрализации набухает</text>
+  <text x="380" y="222" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">и переходит в растворимую</text>
+  <text x="380" y="237" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">полимерную сетку без твёрдой</text>
+  <text x="380" y="252" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">границы раздела фаз</text>
+  <text x="380" y="268" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#0C5E80">Исключение по растворимости</text>
+
+  <!-- Card 3: ISO 16128 Calculation -->
+  <rect x="510" y="46" width="230" height="244" rx="12" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.5"/>
+  <text x="625" y="68" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#6D28D9">ISO 16128: NI и NOI</text>
+  <text x="625" y="85" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Влияние воды на итоговый %</text>
+
+  <rect x="524" y="96" width="202" height="58" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="625" y="114" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">Пример крема (100 г)</text>
+  <text x="625" y="130" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Вода 68 г · Натуральные 6 г</text>
+  <text x="625" y="145" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Производные 21,5 г · Синтетика 4,5 г</text>
+
+  <rect x="524" y="164" width="202" height="52" rx="8" fill="#ECFDF5" stroke="#047857" stroke-width="1.2"/>
+  <text x="625" y="182" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#047857">С учётом воды (база 100 г)</text>
+  <text x="625" y="202" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#182026">NI = 74,0 % · NOI = 95,5 %</text>
+
+  <rect x="524" y="224" width="202" height="52" rx="8" fill="#FFFFFF" stroke="#6D28D9" stroke-width="1.2"/>
+  <text x="625" y="242" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#6D28D9">Без воды (база 32 г)</text>
+  <text x="625" y="262" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="700" fill="#182026">NI = 18,8 % · NOI = 85,9 %</text>
+</svg>

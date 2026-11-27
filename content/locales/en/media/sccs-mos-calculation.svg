@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-label="SCCS systemic exposure dose SED and Margin of Safety MoS workflow">
+  <rect width="760" height="310" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">CPSR Toxicological Assessment: SCCS SED &amp; MoS Workflow</text>
+
+  <!-- Top row: 3 input parameters -->
+  <rect x="24" y="46" width="226" height="92" rx="12" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.4"/>
+  <text x="137" y="67" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0C5E80">1. Daily Exposure A × RF</text>
+  <text x="137" y="86" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Face: 1540 mg/d (RF = 1.0)</text>
+  <text x="137" y="103" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Body: 7820 mg/d (RF = 1.0)</text>
+  <text x="137" y="120" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Rinse-off: RF = 0.01</text>
+
+  <rect x="267" y="46" width="226" height="92" rx="12" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.4"/>
+  <text x="380" y="67" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#6D28D9">2. Concentration C</text>
+  <text x="380" y="86" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Active fraction (e.g. 0.01 = 1%)</text>
+  <text x="380" y="103" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Retinol EU 2024/996: 0.3 / 0.05%</text>
+  <text x="380" y="120" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">EU 2023/1545: 82 allergens</text>
+
+  <rect x="510" y="46" width="226" height="92" rx="12" fill="#FFF7ED" stroke="#B45309" stroke-width="1.4"/>
+  <text x="623" y="67" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#B45309">3. Dermal Absorption DAp</text>
+  <text x="623" y="86" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Franz diffusion cell (ex vivo)</text>
+  <text x="623" y="103" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#182026">Default w/o data: 0.50 (SCCS)</text>
+  <text x="623" y="120" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Worst-case default: up to 1.00</text>
+
+  <!-- Connector arrows down -->
+  <line x1="137" y1="138" x2="180" y2="162" stroke="#5B6770" stroke-width="1.6"/>
+  <line x1="380" y1="138" x2="310" y2="162" stroke="#5B6770" stroke-width="1.6"/>
+  <line x1="623" y1="138" x2="360" y2="162" stroke="#5B6770" stroke-width="1.6"/>
+
+  <!-- Bottom Left: SED formula & worked example -->
+  <rect x="24" y="164" width="376" height="124" rx="14" fill="#FFFFFF" stroke="#0C5E80" stroke-width="1.5"/>
+  <text x="212" y="188" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">Systemic Exposure Dose (60 kg bw)</text>
+  <rect x="44" y="198" width="336" height="32" rx="8" fill="#EFF9FF"/>
+  <text x="212" y="219" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#182026">SED = (A · C · DAp) / 60  [mg/kg/d]</text>
+  <text x="212" y="250" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#182026">Case: (1540 · 0.01 · 0.40) / 60 = 0.103 mg/kg/d</text>
+  <text x="212" y="271" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">+ Aggregate exposure &amp; IFRA 51 QRA2 check</text>
+
+  <!-- Arrow between SED and MoS -->
+  <line x1="400" y1="226" x2="424" y2="226" stroke="#182026" stroke-width="2"/>
+  <polygon points="424,221 434,226 424,231" fill="#182026"/>
+
+  <!-- Bottom Right: MoS decision -->
+  <rect x="436" y="164" width="300" height="124" rx="14" fill="#ECFDF5" stroke="#047857" stroke-width="1.6"/>
+  <text x="586" y="188" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#047857">Margin of Safety Gate (MoS)</text>
+  <rect x="454" y="198" width="264" height="32" rx="8" fill="#FFFFFF" stroke="#047857"/>
+  <text x="586" y="219" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#047857">MoS = NOAEL / SED ≥ 100</text>
+  <text x="586" y="250" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#182026">20 / 0.103 = 194.8 ≥ 100 (PASS)</text>
+  <rect x="454" y="260" width="264" height="20" rx="6" fill="#FFF1F0"/>
+  <text x="586" y="274" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#C4382A">MoS &lt; 100 → lower C or rinse-off RF</text>
+</svg>

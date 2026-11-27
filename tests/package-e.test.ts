@@ -13,8 +13,8 @@ import {
 const catalog = YAML.parse(fs.readFileSync('content/ingredients.yaml', 'utf8')) as Ingredient[]
 
 describe('Пакет E: 150 ингредиентов, Лаборатория 5.0 (SPF/пигменты, A/B-радар, CSV, Share URL)', () => {
-  it('расширенный каталог содержит 150 валидных ингредиентов без дублей', () => {
-    expect(catalog).toHaveLength(150)
+  it('расширенный каталог содержит не менее 150 валидных ингредиентов без дублей', () => {
+    expect(catalog.length).toBeGreaterThanOrEqual(150)
     expect(validateIngredients(catalog)).toEqual([])
   })
 

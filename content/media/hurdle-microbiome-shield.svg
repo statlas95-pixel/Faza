@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-label="Барьерная технология консервации (Hurdle Technology) и защита микробиома">
+  <rect width="760" height="310" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">Барьерная консервация (Hurdle Technology) и микробиом</text>
+
+  <!-- 5 Hurdles row -->
+  <rect x="20" y="46" width="134" height="122" rx="10" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.4"/>
+  <text x="87" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#0C5E80">1. Снижение a_w</text>
+  <text x="87" y="84" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Pentylene Glycol</text>
+  <text x="87" y="99" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Propanediol</text>
+  <text x="87" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">связывают воду;</text>
+  <text x="87" y="136" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">a_w ≈ 0,94–0,95</text>
+  <text x="87" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#0C5E80">осмотический стресс</text>
+
+  <rect x="166" y="46" width="134" height="122" rx="10" fill="#ECFDF5" stroke="#047857" stroke-width="1.4"/>
+  <text x="233" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#047857">2. Диолы-бустеры</text>
+  <text x="233" y="84" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">1,2-Hexanediol</text>
+  <text x="233" y="99" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Caprylyl Glycol</text>
+  <text x="233" y="114" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#182026">Hydroxyacetophenone</text>
+  <text x="233" y="136" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">Glyceryl Caprylate</text>
+  <text x="233" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#047857">разрыв мембран</text>
+
+  <rect x="312" y="46" width="134" height="122" rx="10" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.4"/>
+  <text x="379" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#6D28D9">3. Эко-хелатор</text>
+  <text x="379" y="84" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Tetrasodium GLDA</text>
+  <text x="379" y="99" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Sodium Phytate</text>
+  <text x="379" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">связывает Ca²⁺/Mg²⁺</text>
+  <text x="379" y="136" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">в стенке Грам(−)</text>
+  <text x="379" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#6D28D9">ослабляет защиту</text>
+
+  <rect x="458" y="46" width="134" height="122" rx="10" fill="#FFF7ED" stroke="#B45309" stroke-width="1.4"/>
+  <text x="525" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#B45309">4. Окно pH 4,8–5,4</text>
+  <text x="525" y="88" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Кислая среда</text>
+  <text x="525" y="106" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">усиливает кислоты</text>
+  <text x="525" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">(минимум Прил. V)</text>
+  <text x="525" y="138" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">и мантию кожи</text>
+  <text x="525" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#B45309">тормозит бактерии</text>
+
+  <rect x="604" y="46" width="136" height="122" rx="10" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.4"/>
+  <text x="672" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#C4382A">5. Airless-тара</text>
+  <text x="672" y="88" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Нет контакта</text>
+  <text x="672" y="106" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">с пальцами и O₂</text>
+  <text x="672" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">при применении</text>
+  <text x="672" y="138" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">ISO 11930 обязателен</text>
+  <text x="672" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#C4382A">вторичный занос = 0</text>
+
+  <!-- Bottom summary boxes -->
+  <rect x="20" y="186" width="352" height="104" rx="12" fill="#FFFFFF" stroke="#047857" stroke-width="1.4"/>
+  <text x="196" y="208" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#047857">Итог в банке: тест ISO 11930 пройден</text>
+  <text x="196" y="228" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Синергия 5 барьеров закрывает и бактерии, и плесени</text>
+  <text x="196" y="246" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Критерий A / B (с оценкой риска тары) на 28 суток</text>
+  <text x="196" y="268" text-anchor="middle" font-family="monospace" font-size="9.5" font-weight="700" fill="#047857">Минимальный ввод биоцидов Прил. V</text>
+
+  <rect x="388" y="186" width="352" height="104" rx="12" fill="#FFFFFF" stroke="#0C5E80" stroke-width="1.4"/>
+  <text x="564" y="208" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0C5E80">Итог на коже: поддержка микробиома</text>
+  <text x="564" y="228" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">Пребиотики: Inulin · Alpha-Glucan Oligosaccharide</text>
+  <text x="564" y="246" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">Постбиотик: Lactobacillus Ferment</text>
+  <text x="564" y="268" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#B45309">Внимание: сахара требуют защиты от плесеней!</text>
+</svg>

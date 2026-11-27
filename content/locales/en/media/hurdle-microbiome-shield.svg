@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-label="Hurdle preservation technology and skin microbiome protection">
+  <rect width="760" height="310" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">Hurdle Technology Preservation &amp; Skin Microbiome Shield</text>
+
+  <!-- 5 Hurdles row -->
+  <rect x="20" y="46" width="134" height="122" rx="10" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.4"/>
+  <text x="87" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#0C5E80">1. Lower a_w</text>
+  <text x="87" y="84" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Pentylene Glycol</text>
+  <text x="87" y="99" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Propanediol</text>
+  <text x="87" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">binds free water;</text>
+  <text x="87" y="136" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">a_w ≈ 0.94–0.95</text>
+  <text x="87" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#0C5E80">osmotic stress</text>
+
+  <rect x="166" y="46" width="134" height="122" rx="10" fill="#ECFDF5" stroke="#047857" stroke-width="1.4"/>
+  <text x="233" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#047857">2. Diol Boosters</text>
+  <text x="233" y="84" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">1,2-Hexanediol</text>
+  <text x="233" y="99" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Caprylyl Glycol</text>
+  <text x="233" y="114" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#182026">Hydroxyacetophenone</text>
+  <text x="233" y="136" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">Glyceryl Caprylate</text>
+  <text x="233" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#047857">membrane disruption</text>
+
+  <rect x="312" y="46" width="134" height="122" rx="10" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.4"/>
+  <text x="379" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#6D28D9">3. Eco-Chelator</text>
+  <text x="379" y="84" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Tetrasodium GLDA</text>
+  <text x="379" y="99" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Sodium Phytate</text>
+  <text x="379" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">binds Ca²⁺ / Mg²⁺</text>
+  <text x="379" y="136" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">in Gram(-) cell wall</text>
+  <text x="379" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#6D28D9">permeabilizes wall</text>
+
+  <rect x="458" y="46" width="134" height="122" rx="10" fill="#FFF7ED" stroke="#B45309" stroke-width="1.4"/>
+  <text x="525" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#B45309">4. pH 4.8–5.4</text>
+  <text x="525" y="88" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Acidic window</text>
+  <text x="525" y="106" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">boosts organic acids</text>
+  <text x="525" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">(minimal Annex V)</text>
+  <text x="525" y="138" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">&amp; acid mantle</text>
+  <text x="525" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#B45309">suppresses bacteria</text>
+
+  <rect x="604" y="46" width="136" height="122" rx="10" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.4"/>
+  <text x="672" y="66" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#C4382A">5. Airless Pack</text>
+  <text x="672" y="88" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">Blocks fingers</text>
+  <text x="672" y="106" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">&amp; O₂ ingress</text>
+  <text x="672" y="122" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">during consumer use</text>
+  <text x="672" y="138" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">ISO 11930 required</text>
+  <text x="672" y="156" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#C4382A">zero re-contamination</text>
+
+  <!-- Bottom summary boxes -->
+  <rect x="20" y="186" width="352" height="104" rx="12" fill="#FFFFFF" stroke="#047857" stroke-width="1.4"/>
+  <text x="196" y="208" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#047857">In the Jar: Passes ISO 11930</text>
+  <text x="196" y="228" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#182026">5-hurdle synergy controls bacteria, yeast &amp; mold</text>
+  <text x="196" y="246" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Criterion A / B (with pack risk assessment) at 28 days</text>
+  <text x="196" y="268" text-anchor="middle" font-family="monospace" font-size="9.5" font-weight="700" fill="#047857">Minimal Annex V preservative load</text>
+
+  <rect x="388" y="186" width="352" height="104" rx="12" fill="#FFFFFF" stroke="#0C5E80" stroke-width="1.4"/>
+  <text x="564" y="208" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0C5E80">On Skin: Microbiome-Friendly</text>
+  <text x="564" y="228" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">Prebiotics: Inulin · Alpha-Glucan Oligosaccharide</text>
+  <text x="564" y="246" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#182026">Postbiotic: Lactobacillus Ferment</text>
+  <text x="564" y="268" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#B45309">Caution: sugars require strong antifungal boost!</text>
+</svg>

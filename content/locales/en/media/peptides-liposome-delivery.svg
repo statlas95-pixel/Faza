@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-label="Peptide classes, PDRN, liposome delivery, and formulation compatibility">
+  <rect width="760" height="310" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#182026">Peptides, PDRN, Liposome Delivery &amp; Formulation Pitfalls</text>
+
+  <!-- Left panel: Active classes -->
+  <rect x="20" y="46" width="234" height="244" rx="12" fill="#EFF9FF" stroke="#0C5E80" stroke-width="1.5"/>
+  <text x="137" y="68" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0C5E80">Active Classes (ppm)</text>
+
+  <rect x="32" y="80" width="210" height="44" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="137" y="98" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">Signal (Matrixyl-type)</text>
+  <text x="137" y="114" text-anchor="middle" font-family="monospace" font-size="9" fill="#5B6770">Palmitoyl Tripeptide-1</text>
+
+  <rect x="32" y="132" width="210" height="44" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="137" y="150" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">Neuro-inhibiting (SNARE)</text>
+  <text x="137" y="166" text-anchor="middle" font-family="monospace" font-size="9" fill="#5B6770">Acetyl Hexapeptide-8</text>
+
+  <rect x="32" y="184" width="210" height="44" rx="8" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1.2"/>
+  <text x="137" y="202" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#6D28D9">Cu²⁺ Carrier (GHK-Cu)</text>
+  <text x="137" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">Copper Tripeptide-1</text>
+
+  <rect x="32" y="236" width="210" height="42" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="137" y="253" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#182026">PDRN &amp; Exosomes</text>
+  <text x="137" y="269" text-anchor="middle" font-family="monospace" font-size="9" fill="#5B6770">Sodium DNA · plant ELVs</text>
+
+  <!-- Center panel: Vesicle schematic -->
+  <rect x="268" y="46" width="224" height="244" rx="12" fill="#ECFDF5" stroke="#047857" stroke-width="1.5"/>
+  <text x="380" y="68" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#047857">Vesicular Delivery</text>
+  <text x="380" y="84" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#5B6770">Liposome / Niosome (50–200 nm)</text>
+
+  <circle cx="380" cy="156" r="56" fill="#FFFFFF" stroke="#047857" stroke-width="4"/>
+  <circle cx="380" cy="156" r="44" fill="#EFF9FF" stroke="#0C5E80" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="380" y="152" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#0C5E80">Aqueous Core</text>
+  <text x="380" y="167" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">peptide / PDRN</text>
+
+  <rect x="284" y="224" width="192" height="54" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="380" y="241" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#047857">SLN — Solid Lipid Core</text>
+  <text x="380" y="256" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">for lipophilic chains;</text>
+  <text x="380" y="270" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">niosomes resist hydrolysis</text>
+
+  <!-- Right panel: Formulation pitfalls -->
+  <rect x="506" y="46" width="234" height="244" rx="12" fill="#FFF1F0" stroke="#C4382A" stroke-width="1.5"/>
+  <text x="623" y="68" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#C4382A">Formulation Pitfalls</text>
+
+  <rect x="518" y="84" width="210" height="68" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="623" y="102" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#C4382A">1. GHK-Cu Stripping</text>
+  <text x="623" y="118" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#182026">EDTA / GLDA &amp; pH &lt; 5.0 (L-AA)</text>
+  <text x="623" y="133" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">steal Cu²⁺ → grey color</text>
+  <text x="623" y="146" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#047857">Target: pH 5.5–7.0, no EDTA</text>
+
+  <rect x="518" y="160" width="210" height="68" rx="8" fill="#FFFFFF" stroke="#DCE6EE"/>
+  <text x="623" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#B45309">2. High-Shear Rupture</text>
+  <text x="623" y="194" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#182026">Rotor-stator &amp; T &gt; 45 °C shred</text>
+  <text x="623" y="209" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5B6770">liposome &amp; exosome bilayers</text>
+  <text x="623" y="222" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="700" fill="#047857">Phase C ≤ 40 °C · anchor stir</text>
+
+  <rect x="518" y="236" width="210" height="42" rx="8" fill="#FFF7ED" stroke="#B45309" stroke-width="1.2"/>
+  <text x="623" y="253" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#B45309">3. Premix ppm Math Error</text>
+  <text x="623" y="269" text-anchor="middle" font-family="monospace" font-size="9" fill="#182026">15 ppm ÷ 500 ppm = 3.0% load</text>
+</svg>

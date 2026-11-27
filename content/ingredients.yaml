@@ -1843,3 +1843,514 @@
   typicalRange: [0.5, 5.0]
   costPerKg: 1950
   note: "Эфир лимонной кислоты: ингибирует эстеразы бактерий пота и стабилизирует pH рецептур с мочевиной, отщепляя кислоту при щелочном сдвиге."
+
+
+# ---------- Пакет Q: 40 современных ингредиентов 2026 (пептиды, биоалканы, барьерные липиды, зелёная консервация, K-Beauty) ----------
+
+- id: ghk-cu
+  inci: Copper Tripeptide-1
+  name: "Медный трипептид GHK-Cu (100 % акт. экв.)"
+  role: active
+  recommendedPhase: C
+  ionic: cationic
+  maxTempC: 40
+  phRange: [5.5, 7.2]
+  typicalRange: [0.05, 0.2]
+  costPerKg: 280000
+  noi: 0
+  note: "Сигнально-транспортный пептид ремоделирования дермы с голубым оттенком; несовместим с хелаторами (EDTA/GLDA), L-аскорбиновой кислотой и pH < 5,0."
+
+- id: palmitoyl-tripeptide-1
+  inci: Palmitoyl Tripeptide-1
+  name: "Пальмитоил трипептид-1 (сигнальный пептид)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  phRange: [4.5, 7.5]
+  typicalRange: [0.5, 3.0]
+  costPerKg: 38000
+  noi: 0
+  note: "Липофильно модифицированный сигнальный пептид стимуляции синтеза коллагена I/III; вводится в фазу C ≤ 45 °C."
+
+- id: acetyl-hexapeptide-8
+  inci: Acetyl Hexapeptide-8
+  name: "Ацетил гексапептид-8 (нейропептид-миорелаксант)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  phRange: [5.0, 7.0]
+  typicalRange: [2.0, 10.0]
+  costPerKg: 19500
+  noi: 0
+  note: "Водорастворимый нейропептид (поставляется в виде раствора); модулирует комплекс SNARE и смягчает мимические заломы."
+
+- id: palmitoyl-tetrapeptide-7
+  inci: Palmitoyl Tetrapeptide-7
+  name: "Пальмитоил тетрапептид-7 (успокаивающий пептид)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  phRange: [4.5, 7.5]
+  typicalRange: [0.5, 3.0]
+  costPerKg: 42000
+  noi: 0
+  note: "Синергист пальмитоил трипептида-1 (связка Matrixyl 3000): снижает продукцию провоспалительного цитокина IL-6."
+
+- id: pdrn
+  inci: Sodium DNA
+  name: "PDRN (полидезоксирибонуклеотид, биоактив)"
+  role: active
+  recommendedPhase: C
+  ionic: anionic
+  maxTempC: 40
+  phRange: [5.5, 7.5]
+  isElectrolyte: true
+  typicalRange: [0.1, 1.0]
+  costPerKg: 145000
+  noi: 1
+  note: "Фрагменты ДНК (50–1500 кДа) для регенерации и восстановления кожного барьера; чувствителен к нагреву > 40 °C и сильному сдвигу."
+
+- id: liposome-complex
+  inci: "Aqua, Phospholipids, Glycerin"
+  name: "Липосомальный носитель активов (фосфатидилхолин)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  phRange: [5.0, 7.5]
+  typicalRange: [1.0, 5.0]
+  costPerKg: 14500
+  noi: 1
+  note: "Везикулярная система доставки гидрофильных и амфифильных активов в роговой слой; разрушается при гомогенизации и выше 40 °C."
+
+- id: c13-15-alkane
+  inci: C13-15 Alkane
+  name: "C13-15 Алкан (летучий биоэмолент, замена D5)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.0
+  typicalRange: [2.0, 15.0]
+  costPerKg: 2100
+  noi: 1
+  note: "Биоферментированный летучий углеводород из сахарного тростника: сухая шелковистая сенсорика взамен циклопентасилоксана D5 (EU 2024/1328)."
+
+- id: undecane-tridecane
+  inci: "Undecane, Tridecane"
+  name: "Ундекан и тридекан (Cetiol Ultimate, замена D5)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.0
+  typicalRange: [1.0, 10.0]
+  costPerKg: 2450
+  noi: 1
+  note: "Сверхлёгкий быстрорастекающийся биоалкан (100 % натурального происхождения по ISO 16128) с мгновенным сухим финишем."
+
+- id: hemisqualane
+  inci: "Hydrogenated Farnesene"
+  name: "Гемисквалан (Neossance, био-замена силиконов)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 9.5
+  typicalRange: [2.0, 15.0]
+  costPerKg: 2900
+  noi: 1
+  note: "Биотехнологический разветвлённый алкан: снижает липкость масел и УФ-фильтров, придаёт скольжение волосам и коже."
+
+- id: c9-12-alkane
+  inci: C9-12 Alkane
+  name: "C9-12 Алкан (сверхлетучий биоэмолент)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.0
+  typicalRange: [1.0, 10.0]
+  costPerKg: 2700
+  noi: 1
+  note: "Самая высокая летучесть среди зелёных углеводородов — прямой аналог циклометикона в флюидах и тональных кремах."
+
+- id: tetrasodium-glda
+  inci: Tetrasodium Glutamate Diacetate
+  name: "Тетранатрий глутамат диацетат (GLDA, зелёный хелатор)"
+  role: chelator
+  recommendedPhase: A
+  ionic: anionic
+  isElectrolyte: true
+  typicalRange: [0.1, 0.3]
+  costPerKg: 1450
+  noi: 0.86
+  note: "Биоразлагаемый хелатор на основе L-глутаминовой кислоты (замена Disodium EDTA): связывает Ca²⁺/Mg²⁺/Fe³⁺ и усиливает консервацию."
+
+- id: 1-2-hexanediol
+  inci: 1,2-Hexanediol
+  name: "1,2-Гександиол (мультифункциональный бустер)"
+  role: humectant
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 60
+  typicalRange: [0.5, 2.0]
+  costPerKg: 2800
+  noi: 0
+  note: "Ключевой диол барьерной консервации (Hurdle Technology): снижает активность воды и в паре с каприлилгликолем/гидроксиацетофеноном заменяет классические консерванты."
+
+- id: hydroxyacetophenone
+  inci: Hydroxyacetophenone
+  name: "Гидроксиацетофенон (SymSave H, антиоксидант-бустер)"
+  role: antioxidant
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 60
+  typicalRange: [0.3, 0.8]
+  costPerKg: 4900
+  noi: 0
+  note: "Антиоксидант, успокаивающий компонент и мощный синергист консервантов в широком окне pH 3–8."
+
+- id: glyceryl-caprylate
+  inci: Glyceryl Caprylate
+  name: "Глицерил каприлат (натуральный антимикробный эфир)"
+  role: preservative
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 55
+  phRange: [4.5, 7.0]
+  typicalRange: [0.3, 0.8]
+  costPerKg: 3200
+  noi: 1
+  note: "Натуральный моноэфир (NOI = 1,0) для барьерной консервации; эффективен против бактерий и дрожжей, в дозе > 0,5 % может слегка разжижать эмульсию."
+
+- id: sodium-anisate
+  inci: Sodium Anisate
+  name: "Анисат натрия (натуральный антимикотик)"
+  role: preservative
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [4.0, 5.5]
+  pKa: 4.47
+  isElectrolyte: true
+  typicalRange: [0.1, 0.4]
+  costPerKg: 5400
+  noi: 1
+  note: "Натриевая соль анисовой кислоты (NOI = 1,0): усиливает защиту против дрожжей и плесени при pH ≤ 5,5; ниже pH 4,2 возможна кристаллизация."
+
+- id: sodium-levulinate
+  inci: Sodium Levulinate
+  name: "Левулинат натрия (натуральный антибактериальный агент)"
+  role: preservative
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [4.0, 5.8]
+  pKa: 4.64
+  isElectrolyte: true
+  typicalRange: [0.2, 0.6]
+  costPerKg: 3600
+  noi: 1
+  note: "Натриевая соль левулиновой кислоты (NOI = 1,0): работает в классической «зелёной» паре с анисатом натрия при pH 4,5–5,5."
+
+- id: inulin
+  inci: Inulin
+  name: "Инулин (пребиотик из корня цикория)"
+  role: active
+  recommendedPhase: A
+  ionic: nonionic
+  maxTempC: 60
+  typicalRange: [0.5, 3.0]
+  costPerKg: 2100
+  noi: 1
+  note: "Растительный фруктоолигосахарид: селективно поддерживает комменсальный микробиом кожи и кондиционирует волосы без утяжеления."
+
+- id: alpha-glucan-oligosaccharide
+  inci: Alpha-Glucan Oligosaccharide
+  name: "Альфа-глюкан олигосахарид (Bioecolia, пребиотик)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 50
+  typicalRange: [0.5, 3.0]
+  costPerKg: 9800
+  noi: 1
+  note: "Ферментативный пребиотик, стимулирующий рост Staphylococcus epidermidis и защищающий кожный барьер."
+
+- id: lactobacillus-ferment
+  inci: Lactobacillus Ferment
+  name: "Фермент лактобактерий (постбиотик)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  phRange: [4.0, 7.0]
+  typicalRange: [1.0, 4.0]
+  costPerKg: 7400
+  noi: 1
+  note: "Постбиотический фильтрат с антимикробными пептидами и органическими кислотами: поддерживает микробиом и барьерную функцию."
+
+- id: bifida-ferment-lysate
+  inci: Bifida Ferment Lysate
+  name: "Лизат бифидобактерий (постбиотик)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 40
+  phRange: [4.5, 7.0]
+  typicalRange: [2.0, 10.0]
+  costPerKg: 11200
+  noi: 1
+  note: "Классический K-Beauty и престижный постбиотический актив: снижает реактивность кожи и ускоряет восстановление после УФ-стресса."
+
+- id: cholesterol
+  inci: Cholesterol
+  name: "Холестерин (барьерный липид DMS)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 6.0
+  typicalRange: [0.1, 1.0]
+  costPerKg: 18500
+  noi: 1
+  note: "Физиологический стерол рогового слоя: в молярной тройке 3:1:1 с церамидами и свободными жирными кислотами восстанавливает ламеллярный барьер."
+
+- id: phytosterols
+  inci: Phytosterols
+  name: "Фитостеролы растительные (веганский аналог холестерина)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 6.5
+  typicalRange: [0.2, 2.0]
+  costPerKg: 12400
+  noi: 1
+  note: "Растительные стеролы (β-ситостерол, кампестерол) для биомиметических DMS-эмульсий без компонентов животного происхождения."
+
+- id: ceramide-ap
+  inci: Ceramide AP
+  name: "Церамид AP (α-гидроксиацил-фитосфингозин)"
+  role: active
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 7.0
+  typicalRange: [0.05, 0.3]
+  costPerKg: 165000
+  noi: 1
+  note: "Высокополярный церамид для формирования плотных орторомбических бислоёв рогового слоя; требует нагрева фазы B ≥ 80 °C."
+
+- id: phytosphingosine
+  inci: Phytosphingosine
+  name: "Фитосфингозин (предшественник церамидов)"
+  role: active
+  recommendedPhase: B
+  ionic: cationic
+  reqHlb: 7.0
+  typicalRange: [0.05, 0.2]
+  costPerKg: 92000
+  noi: 1
+  note: "Природный сфинголипид с противовоспалительным и антимикробным действием против C. acnes; вводится в горячую масляную фазу B."
+
+- id: sodium-coco-sulfate
+  inci: Sodium Coco-Sulfate
+  name: "Кокосульфат натрия (SCS, гранулы для твёрдых шампуней)"
+  role: surfactant
+  recommendedPhase: A
+  ionic: anionic
+  isElectrolyte: true
+  phRange: [5.0, 9.0]
+  typicalRange: [10.0, 40.0]
+  costPerKg: 1350
+  noi: 0.98
+  note: "Твёрдый анионный ПАВ из кокосового масла (90–95 % акт.): формирует плотный каркас и обильную пену в твёрдых шампунях в паре с мягким SCI."
+
+- id: sucrose-laurate
+  inci: Sucrose Laurate
+  name: "Лаурат сахарозы (эмульгатор сукрогелей)"
+  role: emulsifier
+  recommendedPhase: A
+  ionic: nonionic
+  hlb: 15.0
+  typicalRange: [2.0, 6.0]
+  costPerKg: 8900
+  noi: 1
+  note: "Сахарный эфир высокого ГЛБ (NOI = 1,0): позволяет создавать безводные/маловодные прозрачные масляные гели (сукрогели), мгновенно превращающиеся в молочко при контакте с водой."
+
+- id: peg-10-dimethicone
+  inci: PEG-10 Dimethicone
+  name: "ПЭГ-10 диметикон (эмульгатор W/Si и Water-Break)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 4.5
+  typicalRange: [1.5, 4.0]
+  costPerKg: 4600
+  noi: 0
+  note: "Силиконовый эмульгатор с низким ГЛБ: позволяет строить высоконаполненные W/Si кремы Water-Break с выбросом капель воды при нанесении."
+
+- id: cellulose-microspheres
+  inci: Cellulose
+  name: "Целлюлозные микросферы (биоразлагаемый софт-фокус)"
+  role: thickener
+  recommendedPhase: C
+  ionic: nonionic
+  typicalRange: [1.0, 5.0]
+  costPerKg: 5800
+  noi: 1
+  note: "Пористые сферические частицы (5–15 мкм) природного происхождения: заменяют запрещённые микропластики PMMA и Nylon-12 (EU 2023/2055)."
+
+- id: pullulan
+  inci: Pullulan
+  name: "Пуллулан (биополимер мгновенного лифтинга)"
+  role: thickener
+  recommendedPhase: A
+  ionic: nonionic
+  phRange: [3.0, 10.0]
+  typicalRange: [0.5, 3.0]
+  costPerKg: 8200
+  noi: 1
+  note: "Водорастворимый полисахарид ферментации Aureobasidium pullulans: создаёт невесомую кислородопроницаемую плёнку с мгновенным эффектом подтяжки."
+
+- id: tara-gum
+  inci: Caesalpinia Spinosa Gum
+  name: "Камедь тары (натуральный галактоманнан)"
+  role: thickener
+  recommendedPhase: A
+  ionic: nonionic
+  phRange: [3.5, 10.0]
+  typicalRange: [0.2, 1.0]
+  costPerKg: 3400
+  noi: 1
+  note: "Неионогенный растительный полисахарид (NOI = 1,0): устойчив к электролитам и кислотам, даёт более шёлковое ощущение без тягучести ксантана."
+
+- id: polyacrylate-crosspolymer-6
+  inci: Polyacrylate Crosspolymer-6
+  name: "Полиакрилат кроссполимер-6 (кислотостойкий полимер)"
+  role: thickener
+  recommendedPhase: A
+  ionic: anionic
+  phRange: [2.5, 8.5]
+  typicalRange: [0.3, 1.5]
+  costPerKg: 7600
+  noi: 0
+  note: "Современный полиэлектролитный загуститель, устойчивый к AHA/BHA-кислотам до pH 2,5 и умеренным электролитам с богатой кремовой сенсорикой."
+
+- id: triasorb
+  inci: Phenylene Bis-Diphenyltriazine
+  name: "TriAsorB (широкоспектральный фильтр UVB + UVA + HEV)"
+  role: uv_filter
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 9.0
+  maxTempC: 80
+  typicalRange: [1.0, 5.0]
+  costPerKg: 24000
+  noi: 0
+  note: "Органический микронизированный фильтр нового поколения, закрывающий UVB, UVA I и видимый синий свет HEV до 450 нм."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. VI, п. 31)"
+      leaveOnMax: 5.0
+      rinseOffMax: 5.0
+      note: "До 5,0 % в готовой продукции; запрещён в продуктах с риском ингаляции."
+
+- id: octisalate
+  inci: Ethylhexyl Salicylate
+  name: "Октисалат (жидкий УФ-B фильтр и солюбилизатор)"
+  role: uv_filter
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 8.5
+  maxTempC: 80
+  typicalRange: [2.0, 5.0]
+  costPerKg: 2800
+  noi: 0
+  note: "Жидкий фотостабильный УФ-B фильтр и отличный растворитель твёрдых кристаллических УФ-фильтров (авобензон, Tinosorb S, Uvinul T 150)."
+  regulatory:
+    - standard: "EU 1223/2009 (Прил. VI, п. 20) · ТР ТС 009/2011 (Прил. 5)"
+      leaveOnMax: 5.0
+      rinseOffMax: 5.0
+      note: "Максимум 5,0 % в готовом продукте."
+
+- id: dibutyl-adipate
+  inci: Dibutyl Adipate
+  name: "Дибутиладипат (Cetiol B, полярный растворитель УФ)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 10.5
+  typicalRange: [3.0, 15.0]
+  costPerKg: 1950
+  noi: 0
+  note: "Один из лучших полярных эмолентов-растворителей для кристаллических УФ-фильтров (растворимость Uvinul T 150 и Tinosorb S выше, чем в C12-15 бензоате)."
+
+- id: diisopropyl-adipate
+  inci: Diisopropyl Adipate
+  name: "Диизопропиладипат (лёгкий полярный растворитель)"
+  role: emollient
+  recommendedPhase: B
+  ionic: nonionic
+  reqHlb: 11.0
+  typicalRange: [2.0, 10.0]
+  costPerKg: 2150
+  noi: 0
+  note: "Сухой полярный диэфир: эффективно растворяет УФ-фильтры, салициловую кислоту и азелаиновую кислоту, уменьшая жирность SPF-флюидов."
+
+- id: 3-o-ethyl-ascorbic-acid
+  inci: 3-O-Ethyl Ascorbic Acid
+  name: "3-O-Этиласкорбиновая кислота (стабильный витамин C)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 45
+  phRange: [4.0, 6.0]
+  typicalRange: [1.0, 5.0]
+  costPerKg: 28500
+  noi: 0
+  note: "Амфифильное эфирное производное витамина C (86 % эквивалента L-AA): работает при мягком pH 4,5–5,5 и почти не желтеет при хранении."
+
+- id: ascorbyl-tetraisopalmitate
+  inci: Ascorbyl Tetraisopalmitate
+  name: "Аскорбил тетраизопальмитат (VC-IP, жирорастворимый вит. C)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 50
+  reqHlb: 7.0
+  typicalRange: [0.5, 3.0]
+  costPerKg: 64000
+  noi: 0.5
+  note: "Высокостабильный жирорастворимый эфир витамина C с превосходной проницаемостью в липидный барьер и минимальным раздражением."
+
+- id: madecassoside
+  inci: Madecassoside
+  name: "Мадекассосид (очищенный актив центеллы Cica)"
+  role: active
+  recommendedPhase: C
+  ionic: nonionic
+  maxTempC: 50
+  phRange: [4.5, 7.0]
+  typicalRange: [0.05, 0.5]
+  costPerKg: 115000
+  noi: 1
+  note: "Очищенный пентациклический тритерпен Centella asiatica: стимулирует синтез коллагена и быстро снимает эритему и воспаление."
+
+- id: trehalose
+  inci: Trehalose
+  name: "Трегалоза (осмопротекторный дисахарид)"
+  role: humectant
+  recommendedPhase: A
+  ionic: nonionic
+  typicalRange: [1.0, 5.0]
+  costPerKg: 1450
+  noi: 1
+  note: "Природный невосстанавливающий дисахарид (не вступает в реакцию Майяра с аминокислотами!): защищает мембраны клеток от обезвоживания."
+
+- id: polyglyceryl-4-oleate
+  inci: Polyglyceryl-4 Oleate
+  name: "Полиглицерил-4 олеат (зелёный эмульгатор для гидрофильных масел)"
+  role: emulsifier
+  recommendedPhase: B
+  ionic: nonionic
+  hlb: 5.5
+  typicalRange: [3.0, 15.0]
+  costPerKg: 3600
+  noi: 1
+  note: "PEG-free солюбилизатор и эмульгатор (NOI = 1,0): основа безводных гидрофильных очищающих масел и нежных W/O-систем."

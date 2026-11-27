@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
   build: mode === 'single'
     ? { outDir: 'dist-single', assetsInlineLimit: 100_000_000, chunkSizeWarningLimit: 20000 }
     : {
-        chunkSizeWarningLimit: 2500,
+        chunkSizeWarningLimit: 3600,
         rollupOptions: {
           output: {
             manualChunks(id) {

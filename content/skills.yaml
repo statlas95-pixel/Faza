@@ -323,3 +323,34 @@
   outcome: различать Приложения II–VI, PIF/CPSR, декларацию ЕАС и СГР, а также связывать ISO 11930, ISO/TR 18811 и ISO 22716
   topics: [regulatory-gmp-map]
   labs: [label-claims-audit, gmp-batch-record]
+
+- id: d4-d5-microplastics-iso16128
+  name: Заменять D4/D5/D6 и микропластики и рассчитывать индекс ISO 16128
+  outcome: подбирать летучие биоалканы и целлюлозные микросферы по EU 2024/1328 и EU 2023/2055 и считать индекс натурального происхождения с водой и без воды
+  topics: [d4-d5-microplastics-iso16128]
+  labs: [label-claims-audit]
+- id: peptides-pdrn-delivery
+  name: Вводить пептиды, PDRN и липосомальные носители без потери активности
+  outcome: учитывать несовместимость GHK-Cu с хелаторами и низким pH и исключать разрушение липосом при нагреве и гомогенизации
+  topics: [peptides-pdrn-delivery]
+  labs: [stability-triage]
+- id: hurdle-preservation-microbiome
+  name: Строить барьерную консервацию (Hurdle Technology) с защитой микробиома
+  outcome: сочетать снижение активности воды, мультифункциональные диолы, зелёные хелаторы и пребиотики для прохождения ISO 11930
+  topics: [hurdle-preservation-microbiome]
+  labs: [challenge-test-iso11930]
+- id: biomimetic-dms-waterless-sci
+  name: Разрабатывать биомиметические DMS-эмульсии и твёрдые шампуни на SCI
+  outcome: балансировать фосфолипидно-церамидные бислои без ПЭГ и проектировать безводные бары с pH 5,5 на базе Sodium Cocoyl Isethionate
+  topics: [biomimetic-dms-waterless-sci]
+  labs: [batch-2417]
+- id: toxicology-pif-cpsr-mos
+  name: Рассчитывать системную экспозицию (SED) и запас безопасности (MoS) для CPSR
+  outcome: вычислять SED и MoS ≥ 100 по SCCS Notes of Guidance, проверять категории IFRA 51 и пороги 82 аллергенов EU 2023/1545
+  topics: [toxicology-pif-cpsr-mos]
+  labs: [label-claims-audit]
+- id: kbeauty-hybrid-textures
+  name: Проектировать трансформирующиеся текстуры K-Beauty (Water-Break и сукрогели)
+  outcome: настраивать предел текучести W/Si-кремов Water-Break и собирать безводные сукрогели масло-в-молочко на лаурате сахарозы
+  topics: [kbeauty-hybrid-textures]
+  labs: [rheo-cabinet]

@@ -40,6 +40,9 @@ const POLAR_SOLVENTS = new Set([
   'isopropyl-myristate',
   'octocrylene',
   'homosalate',
+  'octisalate',
+  'dibutyl-adipate',
+  'diisopropyl-adipate',
   'triethyl-citrate',
 ])
 
@@ -48,6 +51,8 @@ const UV_SPF_CONTRIB: Record<string, { spfPerPct: number; uvaPerPct: number }> =
   'tinosorb-s': { spfPerPct: 3.6, uvaPerPct: 2.3 },
   'uvinul-a-plus': { spfPerPct: 1.4, uvaPerPct: 2.5 },
   'tinosorb-m': { spfPerPct: 2.8, uvaPerPct: 1.9 },
+  triasorb: { spfPerPct: 2.6, uvaPerPct: 2.1 },
+  octisalate: { spfPerPct: 1.1, uvaPerPct: 0.1 },
   octinoxate: { spfPerPct: 2.5, uvaPerPct: 0.2 },
   octocrylene: { spfPerPct: 1.8, uvaPerPct: 0.5 },
   homosalate: { spfPerPct: 1.3, uvaPerPct: 0.15 },

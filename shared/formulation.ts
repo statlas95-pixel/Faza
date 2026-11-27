@@ -53,6 +53,8 @@ export interface Ingredient {
   isElectrolyte?: boolean
   typicalRange: [number, number]
   costPerKg: number
+  /** ISO 16128 Natural Origin Index (0..1), optional — fallback heuristic used if omitted */
+  noi?: number
   note: string
   regulatory?: RegulatoryRule[]
 }
@@ -605,6 +607,56 @@ export function evaluateFormula(input: FormulaInput, catalog: Ingredient[]): For
       detail: en
         ? `${parfumPct}% fragrance added to an aqueous base without a solubilizer. Pre-mix with PEG-40 Hydrogenated Castor Oil (typically 3:1–5:1 to fragrance).`
         : `Добавлено ${parfumPct} % отдушки в водную базу без солюбилизатора. Введите PEG-40 Hydrogenated Castor Oil (ориентир 3:1–5:1 к отдушке) через предварительный премикс.`,
+    })
+  }
+
+  // 6b. Правила 2026 года: GHK-Cu, циклосилоксан D5 (EU 2024/1328), липосомы и DMS
+  if ((totalByIngredient.get('ghk-cu') ?? 0) > 0) {
+    const hasChelator =
+      (totalByIngredient.get('disodium-edta') ?? 0) > 0 ||
+      (totalByIngredient.get('tetrasodium-glda') ?? 0) > 0 ||
+      (totalByIngredient.get('sodium-phytate') ?? 0) > 0
+    const hasLAa = (totalByIngredient.get('ascorbic-acid') ?? 0) > 0
+    if (hasChelator || hasLAa || pH < 5.0) {
+      issues.push({
+        code: 'conflict:ghk-cu-chelation',
+        severity: 'warn',
+        ingredientId: 'ghk-cu',
+        title: en
+          ? 'Copper Tripeptide-1 (GHK-Cu) incompatibility: chelation / low pH'
+          : 'Несовместимость медного пептида GHK-Cu: хелатор или кислый pH',
+        detail: en
+          ? 'EDTA/GLDA/phytate strip the Cu²⁺ ion from GHK-Cu, while pH < 5.0 or L-ascorbic acid destabilizes the complex (loss of blue tint and activity). Target pH 5.5–7.0 without strong chelators.'
+          : 'Хелаторы (EDTA/GLDA/фитат) вырывают ион Cu²⁺ из комплекса GHK-Cu, а pH < 5,0 и L-аскорбиновая кислота разрушают пептид (потеря голубого оттенка и активности). Оптимум — pH 5,5–7,0 без сильных хелаторов.',
+      })
+    }
+  }
+  const d5Pct = totalByIngredient.get('cyclopentasiloxane') ?? 0
+  if (d5Pct > 0.1) {
+    issues.push({
+      code: 'reg:d4-d5-d6',
+      severity: input.productType === 'rinse-off' ? 'error' : 'warn',
+      ingredientId: 'cyclopentasiloxane',
+      title: en
+        ? `Cyclopentasiloxane (D5) ${d5Pct}% exceeds EU 2024/1328 0.1% cap`
+        : `Циклопентасилоксан (D5) ${d5Pct} % превышает лимит 0,1 % (EU 2024/1328)`,
+      detail: en
+        ? 'D5 is restricted to ≤ 0.1% in rinse-off cosmetics (REACH) and subject to EU 2024/1328 leave-on phase-out (June 2027). Replace with volatile bio-alkanes (C13-15 Alkane, Undecane/Tridecane, C9-12 Alkane).'
+        : 'D5 ограничен ≤ 0,1 % в смываемых средствах и подлежит выводу из несмываемых в ЕС по Регламенту (EU) 2024/1328 (с июня 2027 г.). Замените на летучие биоалканы (C13-15 Alkane, Undecane/Tridecane, C9-12 Alkane).',
+    })
+  }
+  const lipoRows = rows.filter((r) => r.pct > 0 && r.ingredient.id === 'liposome-complex')
+  if (lipoRows.some((r) => r.phase !== 'C' || r.phaseTempC > 40)) {
+    issues.push({
+      code: 'process:liposome-shear',
+      severity: 'warn',
+      ingredientId: 'liposome-complex',
+      title: en
+        ? 'Liposome rupture risk: add only in Phase C ≤ 40 °C under gentle stirring'
+        : 'Риск разрушения липосом: ввод только в фазе C ≤ 40 °C при слабом перемешивании',
+      detail: en
+        ? 'Phospholipid vesicles rupture above 40 °C and under rotor-stator homogenization. Introduce liposomes after homogenization at ≤ 40 °C using slow anchor mixing.'
+        : 'Фосфолипидные везикулы разрушаются при нагреве > 40 °C и в роторно-статорном гомогенизаторе. Вводите липосомы в фазу C ≤ 40 °C при мягком якорном перемешивании.',
     })
   }
 

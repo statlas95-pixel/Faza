@@ -29,7 +29,7 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
     title: 'Эмульсии и дисперсные системы',
     shortTitle: 'Эмульсии',
     description: 'Механизмы нестабильности, подбор ГЛБ, ламеллярные сетки, диспергирование порошков и испытания стабильности.',
-    skills: ['mech', 'struct', 'emul', 'stabtest', 'disperse', 'emulsifier-selection', 'colloidstab', 'oil-oxidation', 'particle-sizing', 'powder-wetting', 'sunscreens-spf', 'pigment-dispersions', 'anhydrous-sticks-balms', 'inverse-emulsions-wo'],
+    skills: ['mech', 'struct', 'emul', 'stabtest', 'disperse', 'emulsifier-selection', 'colloidstab', 'oil-oxidation', 'particle-sizing', 'powder-wetting', 'sunscreens-spf', 'pigment-dispersions', 'anhydrous-sticks-balms', 'inverse-emulsions-wo', 'biomimetic-dms-waterless-sci', 'kbeauty-hybrid-textures'],
   },
   {
     id: 'surfactants',
@@ -50,7 +50,7 @@ export const COMPETENCY_DOMAINS: CompetencyDomainDef[] = [
     title: 'Консервация, активы, pH и сырьё',
     shortTitle: 'Консервация',
     description: 'Активная форма консервантов при заданном pH, стабильность активов, буферы, вода как сырьё, чтение INCI и спецификаций сырья.',
-    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve', 'unstable-actives', 'fragrances-allergens', 'cosmetic-organic-chemistry', 'skin-barrier-biology', 'stoichiometry-active-matter', 'regulatory-gmp-map'],
+    skills: ['micro', 'water', 'acidbase', 'solcalc', 'inci', 'ingredient-documents', 'dissolve', 'unstable-actives', 'fragrances-allergens', 'cosmetic-organic-chemistry', 'skin-barrier-biology', 'stoichiometry-active-matter', 'regulatory-gmp-map', 'd4-d5-microplastics-iso16128', 'peptides-pdrn-delivery', 'hurdle-preservation-microbiome', 'toxicology-pif-cpsr-mos'],
   },
   {
     id: 'scaleup',
