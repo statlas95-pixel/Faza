@@ -415,7 +415,7 @@ export default function ReactionsPage() {
           <p className="eyebrow">{en ? def.categoryEn : def.categoryRu}</p>
           <h2>{en ? def.titleEn : def.titleRu}</h2>
           <p className="small muted">{en ? def.subtitleEn : def.subtitleRu}</p>
-          <div className="rx-eq num">{def.equation}</div>
+          <div className="rx-eq num">{en ? def.equationEn : def.equation}</div>
         </div>
 
         {/* Визуал механизма + график кинетики */}

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Fragrance pyramid and EU 2023/1545">
   
   <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
-  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Fragrance Volatility Pyramid & EU 2023/1545 (81 Allergens)</text>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Fragrance Volatility Pyramid &amp; EU 2023/1545 (81 Allergens)</text>
   <g transform="translate(36,48)">
         <polygon points="154,14 210,74 98,74" fill="#8ED6F8" stroke="#0284C7" stroke-width="1.6"/>
         <polygon points="94,78 214,78 248,136 60,136" fill="#C4B5FD" stroke="#7C3AED" stroke-width="1.6"/>

@@ -30,6 +30,19 @@ dup(topics, 'topics'); dup(labs, 'labs')
 const mediaFiles = new Set(fs.readdirSync(path.join(C, 'media')))
 for (const m of media) { if (!mediaFiles.has(m.file)) err('media.yaml', `нет файла media/${m.file}`); for (const k of ['author', 'source', 'license', 'attribution', 'alt']) if (!m[k]) err('media.yaml', `у «${m.file}» нет поля ${k}`) }
 for (const f of mediaFiles) if (!media.find((m) => m.file === f)) err('media.yaml', `файл media/${f} не внесён в реестр`)
+// Проверка XML-безопасности текста внутри всех SVG (RU + EN)
+for (const dir of [path.join(C, 'media'), path.join(C, 'locales', 'en', 'media')]) {
+  if (!fs.existsSync(dir)) continue
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.svg'))) {
+    const raw = fs.readFileSync(path.join(dir, f), 'utf8')
+    for (const m of raw.matchAll(/<text[^>]*>([\s\S]*?)<\/text>/g)) {
+      const inner = m[1].replace(/<tspan[^>]*>|<\/tspan>/g, '')
+      if (/[<]/.test(inner) || /&(?!(amp|lt|gt|quot|apos|#\d+|#x[\da-fA-F]+);)/.test(inner)) {
+        err(`${dir}/${f}`, `неэкранированный XML-символ в <text>: ${inner.trim().slice(0, 60)}`)
+      }
+    }
+  }
+}
 
 function checkText(file, text) {
   for (const m of text.matchAll(/\[\[([\w-]+)(?:\|[^\]]+)?\]\]/g)) if (!termIds.has(m[1])) err(file, `неизвестный термин [[${m[1]}]]`)

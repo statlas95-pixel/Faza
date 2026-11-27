@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Lipid peroxidation curve">
   
   <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
-  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">PUFA Oxidation Kinetics: Peroxide Value (PV) & Induction Period</text>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">PUFA Oxidation Kinetics: Peroxide Value (PV) &amp; Induction Period</text>
   <g transform="translate(56,48)">
         <rect x="0" y="0" width="648" height="196" rx="14" fill="#FFFFFF" stroke="#DCE6EE"/>
         <line x1="60" y1="158" x2="606" y2="158" stroke="#64748B" stroke-width="1.6"/>

@@ -20,7 +20,7 @@
         <g fill="#FFFFFF" stroke="#64748B" stroke-width="1.4">
           <circle cx="110" cy="134" r="4"/><circle cx="136" cy="116" r="3.5"/><circle cx="164" cy="142" r="4"/><circle cx="196" cy="122" r="3.5"/><circle cx="226" cy="138" r="4"/><circle cx="148" cy="86" r="3.5"/><circle cx="204" cy="92" r="4"/>
         </g>
-        <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3412">Сила Архимеда < τ₀ → пузырьки застревают в креме</text>
+        <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3412">Сила Архимеда &lt; τ₀ → пузырьки застревают в креме</text>
       </g>
       <g transform="translate(392,46)">
         <rect width="340" height="202" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>

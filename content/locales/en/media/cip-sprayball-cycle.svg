@@ -12,7 +12,7 @@
   @media (prefers-reduced-motion:reduce){.flow,.rise,.rise2,.pulse,.spin{animation:none!important}}
 </style>
   <rect width="760" height="270" rx="18" fill="#F7FAFC" stroke="#DCE6EE"/>
-  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Clean-in-Place (CIP): Sprayball Jets & Sinner Circle (TACT)</text>
+  <text x="380" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="15.5" font-weight="700" fill="#182026">Clean-in-Place (CIP): Sprayball Jets &amp; Sinner Circle (TACT)</text>
   <g transform="translate(36,46)">
         <rect width="316" height="202" rx="14" fill="#EFF9FF" stroke="#8ED6F8" stroke-width="1.6"/>
         <path d="M88,48 L228,48 L228,158 Q228,176 158,184 Q88,176 88,158 Z" fill="#FFFFFF" stroke="#0C5E80" stroke-width="2.4"/>

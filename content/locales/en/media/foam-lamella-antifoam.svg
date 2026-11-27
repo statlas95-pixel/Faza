@@ -28,7 +28,7 @@
         <path d="M300,70 L194,84 L194,118 L300,132 Z" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
         <ellipse cx="170" cy="101" rx="28" ry="22" fill="#F59E0B" stroke="#B45309" stroke-width="2" class="pulse"/>
         <text x="170" y="105" text-anchor="middle" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#FFF">SiO₂+Oil</text>
-        <text x="170" y="160" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3528" font-weight="600">Entry E > 0 & Spreading S > 0 → film snaps!</text>
+        <text x="170" y="160" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9A3528" font-weight="600">Entry E > 0 &amp; Spreading S > 0 → film snaps!</text>
         <text x="170" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#5B6770">Simethicone / silica at 0.02–0.1%</text>
       </g>
 </svg>

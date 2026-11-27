@@ -42,6 +42,7 @@ export interface ReactionDefinition {
   subtitleRu: string
   subtitleEn: string
   equation: string
+  equationEn: string
   mechanismSummaryRu: string
   mechanismSummaryEn: string
   timeUnitRu: string
@@ -140,6 +141,7 @@ export const REACTIONS_CATALOG: ReactionDefinition[] = [
     subtitleRu: 'Образование анионного мыла-эмульгатора прямо на границе фаз масло/вода',
     subtitleEn: 'Formation of anionic soap emulsifier directly at the oil/water interface',
     equation: 'C₁₇H₃₅COOH (масло) + N(CH₂CH₂OH)₃ (вода) ⇌ C₁₇H₃₅COO⁻ [HN⁺(CH₂CH₂OH)₃] (граница фаз)',
+    equationEn: 'C₁₇H₃₅COOH (oil) + N(CH₂CH₂OH)₃ (water) ⇌ C₁₇H₃₅COO⁻ [HN⁺(CH₂CH₂OH)₃] (interface)',
     mechanismSummaryRu: 'Липофильная стеариновая кислота диффундирует из масляной капли к границе раздела, где протонирует водорастворимый триэтаноламин (TEA). Возникающий амфифильный стеарат TEA резко снижает межфазное натяжение и самособирается в плёнку O/W.',
     mechanismSummaryEn: 'Lipophilic stearic acid diffuses from oil droplets to the interface, where it protonates water-soluble triethanolamine (TEA). The resulting amphiphilic TEA-stearate sharply lowers interfacial tension and self-assembles into an O/W film.',
     timeUnitRu: 'мин',
@@ -165,6 +167,7 @@ export const REACTIONS_CATALOG: ReactionDefinition[] = [
     subtitleRu: 'Депротонирование карбоксильных групп, распрямление полимерного клубка и экранирование электролитом',
     subtitleEn: 'Carboxyl deprotonation, electrostatic coil expansion, and electrolyte Debye screening',
     equation: '—[CH₂—CH(COOH)]ₙ— + n OH⁻ ⇌ —[CH₂—CH(COO⁻)]ₙ— + n H₂O   (+ Na⁺ → сжатие ДЭС)',
+    equationEn: '—[CH₂—CH(COOH)]ₙ— + n OH⁻ ⇌ —[CH₂—CH(COO⁻)]ₙ— + n H₂O   (+ Na⁺ → EDL screening)',
     mechanismSummaryRu: 'При pH 3–4 сшитая полиакриловая кислота свёрнута в плотные клубки. Ввод щёлочи ионизирует группы —COOH → —COO⁻: электростатическое отталкивание расправляет цепи в 10 раз, формируя гель с пределом текучести. Ионы Na⁺ сжимают двойной электрический слой (κ⁻¹) и мгновенно схлопывают гель.',
     mechanismSummaryEn: 'At pH 3–4 cross-linked polyacrylic acid stays tightly coiled. Adding base ionizes —COOH → —COO⁻: electrostatic repulsion unfolds chains 10× into a yield-stress hydrogel. Na⁺ ions compress the electrical double layer (κ⁻¹) and collapse the gel.',
     timeUnitRu: 'pH',
@@ -190,6 +193,7 @@ export const REACTIONS_CATALOG: ReactionDefinition[] = [
     subtitleRu: 'Инициация ионами металлов, автокаталитический рост гидропероксидов и защита токоферолом + EDTA',
     subtitleEn: 'Metal-catalyzed initiation, autocatalytic hydroperoxide propagation, and tocopherol + EDTA quenching',
     equation: 'LH → L• + O₂ → LOO• → LOOH (прогоркание);   LOO• + ArOH (Vit E) → LOOH + ArO• (обрыв)',
+    equationEn: 'LH → L• + O₂ → LOO• → LOOH (rancidity);   LOO• + ArOH (Vit E) → LOOH + ArO• (termination)',
     mechanismSummaryRu: 'Полиненасыщенные масла (линолевая, линоленовая к-ты) имеют уязвимые бис-аллильные связи C—H. Следы Fe²⁺/Cu²⁺ запускают цепь радикалов LOO•. Пока жив токоферол, идёт индукционный период; как только он исчерпан, пероксидное число (PV) растёт лавинообразно. EDTA связывает металлы и продлевает защиту в разы.',
     mechanismSummaryEn: 'Polyunsaturated oils have weak bis-allylic C—H bonds. Trace Fe²⁺/Cu²⁺ sparks LOO• radical chains. Tocopherol sustains an induction period until depleted, after which peroxide value (PV) surges exponentially. EDTA chelates metals and multiplies shelf life.',
     timeUnitRu: 'дн.',
@@ -216,6 +220,7 @@ export const REACTIONS_CATALOG: ReactionDefinition[] = [
     subtitleRu: 'Выделение аммиака из мочевины, никотиновая кислота при кислом pH и роль лактатного буфера',
     subtitleEn: 'Ammonia release from urea, nicotinic acid formation at acidic pH, and lactate buffer defense',
     equation: 'CO(NH₂)₂ + H₂O → 2 NH₃↑ + CO₂ (рост pH);   Niacinamide + H₂O →(H⁺) Nicotinic Acid (гиперемия)',
+    equationEn: 'CO(NH₂)₂ + H₂O → 2 NH₃↑ + CO₂ (pH rise);   Niacinamide + H₂O →(H⁺) Nicotinic Acid (flushing)',
     mechanismSummaryRu: 'Мочевина гидролизуется с выделением аммиака, который защелачивает крем и дополнительно ускоряет распад (автокатализ) — спасением служит лактатный/цитратный буфер при pH 6,0. Ниацинамид, напротив, стабилен при pH 5–7, но при pH < 4,5 и нагреве гидролизуется в никотиновую кислоту, вызывающую покраснение кожи.',
     mechanismSummaryEn: 'Urea hydrolyzes into ammonia, pushing pH upward in an autocatalytic loop — stabilized by a pH 6.0 lactate/citrate buffer. Niacinamide is stable at pH 5–7, but below pH 4.5 and elevated heat hydrolyzes into flushing nicotinic acid.',
     timeUnitRu: 'дн.',
@@ -241,6 +246,7 @@ export const REACTIONS_CATALOG: ReactionDefinition[] = [
     subtitleRu: 'Последовательное окисление в янтарные хромофоры и синергия pH ≤ 3,5 + феруловая + Airless',
     subtitleEn: 'Sequential oxidation to amber chromophores and synergy of pH ≤ 3.5 + ferulic acid + Airless',
     equation: 'L-AA (прозрачная) →(O₂, OH⁻) DHA → DKG + фураны (пожелтение / потемнение)',
+    equationEn: 'L-AA (clear) →(O₂, OH⁻) DHA → DKG + furans (yellowing / browning)',
     mechanismSummaryRu: 'При pH > 3,5 растёт доля аскорбат-аниона (pKa₁ = 4,1), который окисляется кислородом воздуха на порядок быстрее протонированной формы. Дегидроаскорбиновая кислота (ДГК) необратимо размыкает кольцо до 2,3-дикетогулоновой кислоты (ДКГ), окрашивая сыворотку от соломенного до тёмно-янтарного.',
     mechanismSummaryEn: 'Above pH 3.5 the ascorbate anion fraction (pKa₁ = 4.1) rises and oxidizes an order of magnitude faster with dissolved O₂. Dehydroascorbic acid (DHA) irreversibly ring-opens to 2,3-diketogulonic acid (DKG), turning serum from pale straw to dark amber.',
     timeUnitRu: 'дн.',
@@ -267,6 +273,7 @@ export const REACTIONS_CATALOG: ReactionDefinition[] = [
     subtitleRu: 'Реакция альдегидов отдушек (ванилин) с аминами и защита за счёт солюбилизации в ядре мицелл выше ККМ',
     subtitleEn: 'Fragrance aldehyde (vanillin) + amine condensation and compartmentalization inside micelles above CMC',
     equation: 'R—CHO (альдегид) + R′—NH₂ (амин/пептид) ⇌ R—CH=N—R′ (основание Шиффа, жёлтое) + H₂O',
+    equationEn: 'R—CHO (aldehyde) + R′—NH₂ (amine/peptide) ⇌ R—CH=N—R′ (Schiff base, yellow) + H₂O',
     mechanismSummaryRu: 'Альдегиды отдушек (ванилин, коричный альдегид, цитраль) конденсируются с первичными аминами (аминокислоты, пептиды, TEA), образуя жёлто-коричневые основания Шиффа. Выше ККМ липофильный альдегид распределяется в гидрофобное ядро мицелл неионогенного ПАВ, физически изолируясь от водорастворимых аминов (псевдофазная модель Березина).',
     mechanismSummaryEn: 'Fragrance aldehydes (vanillin, cinnamal, citral) condense with primary amines (amino acids, peptides, TEA) into yellow-brown Schiff bases. Above CMC, lipophilic aldehydes partition into nonionic micelle cores, physically shielding them from aqueous amines (Berezin pseudophase model).',
     timeUnitRu: 'дн.',
@@ -786,7 +793,7 @@ export function simulateReaction(
       { labelRu: 'Доля в ядре мицелл (экран)', labelEn: 'Micelle-shielded share', value: `${shieldedPct} %`, tone: shieldedPct >= 60 ? 'ok' : 'warn' },
       { labelRu: 'Выход основания Шиффа (90 дн.)', labelEn: 'Schiff base formed (90 d)', value: `${schiffEnd} %`, tone: schiffEnd < 12 ? 'ok' : schiffEnd < 28 ? 'warn' : 'bad' },
       { labelRu: 'Сохранность аромата', labelEn: 'Fragrance intact', value: `${aldEnd} %`, tone: aldEnd >= 85 ? 'ok' : 'warn' },
-      { labelRu: 'Режим солюбилизатора', labelEn: 'Solubilizer regime', value: cmcRatio >= 1 ? `> ККМ (${cmcRatio}×)` : `< ККМ`, tone: cmcRatio >= 2 ? 'ok' : 'warn' },
+      { labelRu: 'Режим солюбилизатора', labelEn: 'Solubilizer regime', value: cmcRatio >= 1 ? `> ${language === 'en' ? 'CMC' : 'ККМ'} (${cmcRatio}×)` : `< ${language === 'en' ? 'CMC' : 'ККМ'}`, tone: cmcRatio >= 2 ? 'ok' : 'warn' },
     ],
     swatchHex: yellowingSwatch(colorIdx),
     swatchLabelRu: colorIdx < 0.2 ? 'Белый крем (стабильный цвет)' : colorIdx < 0.5 ? 'Кремово-бежевое пожелтение' : 'Коричневое потемнение (Шифф)',

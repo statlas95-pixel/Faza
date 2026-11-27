@@ -19,7 +19,7 @@
         <rect x="92" y="54" width="156" height="86" rx="43" fill="#FFFFFF" stroke="#059669" stroke-width="2.4"/>
         <g transform="translate(136,97)" class="spin"><ellipse cx="0" cy="0" rx="22" ry="12" fill="#10B981"/><ellipse cx="0" cy="0" rx="12" ry="22" fill="#10B981"/></g>
         <g transform="translate(204,97)" class="spin"><ellipse cx="0" cy="0" rx="22" ry="12" fill="#34D399"/><ellipse cx="0" cy="0" rx="12" ry="22" fill="#34D399"/></g>
-        <text x="170" y="164" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#065F46">Low shear · Preserves LGN & viscosity</text>
+        <text x="170" y="164" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#065F46">Low shear · Preserves LGN &amp; viscosity</text>
         <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#475569">Creams, gels, shampoos (> 0.5 Pa·s)</text>
       </g>
       <g transform="translate(392,48)">
@@ -30,6 +30,6 @@
           <line x1="-28" y1="0" x2="28" y2="0"/><line x1="0" y1="-28" x2="0" y2="28"/><line x1="-20" y1="-20" x2="20" y2="20"/><line x1="-20" y1="20" x2="20" y2="-20"/>
         </g>
         <text x="170" y="164" text-anchor="middle" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#0C5E80">Best for WPU loops, toners, CIP</text>
-        <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#B91C1C">High shear breaks creams & foams surfactants!</text>
+        <text x="170" y="182" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#B91C1C">High shear breaks creams &amp; foams surfactants!</text>
       </g>
 </svg>
