@@ -18,7 +18,7 @@ export interface CampaignProgressRecord {
 import type { Evidence, Result, DiagTrack } from './mastery'
 export interface Profile { goal?: string; context?: string; at?: number }
 export interface Diag { answers: Record<string, { result: Result; note?: string; value?: string; at: number }>; track?: DiagTrack; changedAt?: number; startedAt?: number; finishedAt?: number }
-export interface Settings { level: 'novice' | 'practitioner' | 'expert'; hints: boolean; aiModel?: string; cardToasts?: boolean }
+export interface Settings { level: 'novice' | 'practitioner' | 'expert'; hints: boolean; aiModel?: string; cardToasts?: boolean; sound?: boolean }
 export interface FlashcardProgressRecord {
   reps: number
   intervalDays: number

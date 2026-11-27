@@ -1,9 +1,37 @@
 {
+  "id": "/",
   "name": "Фаза — Косметическая химия и процессы",
   "short_name": "Фаза",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
+  "background_color": "#09111B",
   "theme_color": "#0E8B99",
-  "description": "Интерактивная образовательная платформа и лаборатория рецептур для химиков-технологов косметического производства."
+  "categories": ["education", "productivity", "science"],
+  "description": "Интерактивная образовательная платформа, лаборатория рецептур и инженерные утилиты для химиков-технологов косметического производства.",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Лаборатория рецептур",
+      "short_name": "Лаборатория",
+      "url": "/#/sandbox"
+    },
+    {
+      "name": "Инженерные утилиты 2.0",
+      "short_name": "Утилиты",
+      "url": "/#/tools"
+    },
+    {
+      "name": "Флеш-тренажёр SM-2",
+      "short_name": "Флеш-карты",
+      "url": "/#/flashcards"
+    }
+  ]
 }

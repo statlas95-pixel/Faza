@@ -11009,5 +11009,20 @@
   "Все карточки в этой колоде повторены на сегодня!": "All cards in this deck are reviewed for today!",
   "Алгоритм SM-2 запланировал следующие повторения по кривой забывания Эббингауза. Вы можете выбрать другую колоду или перейти к практике.": "SM-2 has scheduled your next reviews along the Ebbinghaus forgetting curve. Pick another deck or head back to practice.",
   "Проверить все колоды": "Check all decks",
-  "Перейти в Лабораторию": "Open Formulation Lab"
+  "Перейти в Лабораторию": "Open Formulation Lab",
+  "3D-микромир косметической химии": "Cosmetic Chemistry 3D Micro-World",
+  "Интерактивный 3D-микромир": "Interactive 3D Micro-World",
+  "Поверните структуру мышью или пальцем, чтобы рассмотреть пространственное строение мицелл, бислоёв, липосом и молекул активов.": "Drag with mouse or finger to rotate micelles, lamellar bilayers, liposomes, and key active molecules in 3D.",
+  "Приблизить": "Zoom in",
+  "Отдалить": "Zoom out",
+  "Пауза 3D": "Pause 3D",
+  "Вращать 3D": "Rotate 3D",
+  "Выбор 3D-модели": "Select 3D model",
+  "Перетаскивайте для вращения в 3D": "Drag to rotate in 3D",
+  "Интерфейс, тактильный звук и офлайн-приложение (PWA)": "Interface, Tactile Audio & Offline App (PWA)",
+  "Тактильный микрозвук интерфейса": "Tactile UI micro-sound",
+  "Деликатный кристальный клик при переключении тем и флеш-карт (выключен по умолчанию)": "Subtle crystal click when toggling theme or rating flashcards (off by default)",
+  "Установить «Фазу» как приложение (PWA)": "Install Faza as an App (PWA)",
+  "✓ Приложение установлено на устройство и готово к работе в цехе офлайн.": "✓ App installed on your device and ready for offline plant/lab use.",
+  "PWA-кеширование активно: в Chrome / Edge / Safari выберите «Установить приложение» или «На экран Домой» для работы в лаборатории без сети.": "PWA caching is active: in Chrome / Edge / Safari choose 'Install App' or 'Add to Home Screen' for offline lab use."
 }

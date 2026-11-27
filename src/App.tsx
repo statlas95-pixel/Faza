@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { HashRouter, Routes, Route, NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { site } from './content'
 import { update } from './store'
+import { playTactile, withViewTransition } from './tactile'
 import { recordActivity } from './statistics'
 import { publicPage } from '../shared/statistics'
 import { TechCalculator } from './components/TechCalculator'
@@ -147,7 +148,10 @@ function Shell() {
       className="theme-toggle theme-icon-btn"
       aria-label={theme === 'dark' ? tr('Включить светлую тему') : tr('Включить тёмную тему («Ночная смена»)')}
       title={theme === 'dark' ? tr('Светлая тема') : tr('Тёмная тема («Ночная смена»)')}
-      onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+      onClick={() => {
+        playTactile('tap')
+        withViewTransition(() => setTheme((t) => (t === 'dark' ? 'light' : 'dark')))
+      }}
     >
       {theme === 'dark' ? (
         <svg className="ico-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">

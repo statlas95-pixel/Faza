@@ -10,6 +10,7 @@ import {
   type ReactionSimulationResult,
 } from '../../shared/reactions-sim'
 import { topicById } from '../content'
+import { Micro3DViewer } from '../components/Micro3DViewer'
 import { showToast } from '../components/Toast'
 import { useTitle } from './util'
 
@@ -585,6 +586,8 @@ export default function ReactionsPage() {
           </div>
         )}
       </section>
+
+      <Micro3DViewer />
     </div>
   )
 }

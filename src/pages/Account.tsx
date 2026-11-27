@@ -77,6 +77,18 @@ export default function AccountPage() {
   const a = useAccount(), p = useProgress(), nav = useNavigate()
   const [logoutError, setLogoutError] = useState('')
   const [ai, setAi] = useState<any>(null)
+  const [installPrompt, setInstallPrompt] = useState<any>(null)
+  const [pwaInstalled, setPwaInstalled] = useState(false)
+  useEffect(() => {
+    const onPrompt = (e: Event) => { e.preventDefault(); setInstallPrompt(e) }
+    const onInstalled = () => { setPwaInstalled(true); setInstallPrompt(null) }
+    window.addEventListener('beforeinstallprompt', onPrompt)
+    window.addEventListener('appinstalled', onInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onPrompt)
+      window.removeEventListener('appinstalled', onInstalled)
+    }
+  }, [])
   useEffect(() => { if (a.status !== 'offline' && a.status !== 'checking') fetch('/api/ai/status').then((r) => r.json()).then(setAi).catch(() => setAi(null)) }, [a.status])
   return (
     <div className="page account">
@@ -110,5 +122,34 @@ export default function AccountPage() {
           <p className="small">{tr("Удаляет прогресс, историю попыток и подборку на сервере. Аккаунт остаётся.")}</p>
           <ConfirmButton label={tr("Удалить мои учебные данные")} ask={tr("Удалить прогресс и историю без возможности восстановления?")} onConfirm={async () => { await api('DELETE', '/api/me'); resetProgress() }} /></section>
       </>)}
+      <section className="panel" style={{ marginTop: 18 }}>
+        <h3>{tr("Интерфейс, тактильный звук и офлайн-приложение (PWA)")}</h3>
+        <label className="choice sm">
+          <input type="checkbox" checked={Boolean(p.settings.sound)} onChange={(e) => setSettings({ sound: e.target.checked })} />
+          <span>
+            {tr("Тактильный микрозвук интерфейса")}
+            <small>{tr("Деликатный кристальный клик при переключении тем и флеш-карт (выключен по умолчанию)")}</small>
+          </span>
+        </label>
+        <div className="row" style={{ marginTop: 12, gap: 10, alignItems: 'center' }}>
+          {installPrompt ? (
+            <button
+              type="button"
+              className="btn small primary"
+              onClick={async () => {
+                try { await installPrompt.prompt(); setInstallPrompt(null) } catch { /* ignore */ }
+              }}
+            >
+              📲 {tr("Установить «Фазу» как приложение (PWA)")}
+            </button>
+          ) : (
+            <span className="small muted">
+              {pwaInstalled
+                ? tr("✓ Приложение установлено на устройство и готово к работе в цехе офлайн.")
+                : tr("PWA-кеширование активно: в Chrome / Edge / Safari выберите «Установить приложение» или «На экран Домой» для работы в лаборатории без сети.")}
+            </span>
+          )}
+        </div>
+      </section>
     </div>)
 }

@@ -9,6 +9,7 @@ import {
   type FlashcardDeckId,
 } from '../../shared/flashcards'
 import { update, useProgress } from '../store'
+import { playTactile } from '../tactile'
 import { useTitle } from './util'
 
 export default function FlashcardsPage() {
@@ -33,6 +34,7 @@ export default function FlashcardsPage() {
 
   function rate(quality: 0 | 3 | 4 | 5) {
     if (!current) return
+    playTactile(quality >= 4 ? 'ok' : 'tap')
     const nextRec = reviewCardSM2(progress.flashcards?.[current.id], quality)
     update((p) => {
       if (!p.flashcards) p.flashcards = {}
